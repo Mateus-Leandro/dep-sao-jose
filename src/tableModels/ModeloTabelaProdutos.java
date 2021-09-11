@@ -1,0 +1,108 @@
+package tableModels;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import javax.swing.table.AbstractTableModel;
+
+import entidades.Produto;
+import entidades.Setor;
+
+public class ModeloTabelaProdutos extends AbstractTableModel {
+
+	private String colunas[] = { "Cod", "Nome","Cod.Barras", "Setor", "Fator", "Preço", "Bloqueado", "Dt. Cad." };
+	private ArrayList<Produto> produtos;
+	private final int COLUNA_CODIGO = 0;
+	private final int COLUNA_NOME = 1;
+	private final int COLUNA_CODIGO_BARRAS = 2;
+	private final int COLUNA_SETOR = 3;
+	private final int COLUNA_FATOR_VENDA = 4;
+	private final int COLUNA_PRECO_VENDA = 5;
+	private final int COLUNA_BLOQUEADO_VENDA = 6;
+	private final int COLUNA_DATA_CADASTRO = 7;
+	
+	
+	public ModeloTabelaProdutos(ArrayList<Produto> produtos) {
+		this.produtos = produtos;
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return false;
+	}
+
+	@Override
+	public int getColumnCount() {
+		return colunas.length;
+	}
+
+	@Override
+	public int getRowCount() {
+		return produtos.size();
+	}
+
+	public String getColumnName(int indice) {
+		return colunas[indice];
+	}
+
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		switch (columnIndex) {
+		case COLUNA_CODIGO:
+			return Integer.class;
+		case COLUNA_NOME:
+			return String.class;
+		case COLUNA_CODIGO_BARRAS:
+			return String.class;
+		case COLUNA_SETOR:
+			return Setor.class;
+		case COLUNA_FATOR_VENDA:
+			return String.class;
+		case COLUNA_PRECO_VENDA:
+			return Double.class;
+		case COLUNA_BLOQUEADO_VENDA:
+			return Boolean.class;
+		case COLUNA_DATA_CADASTRO:
+			return java.util.Date.class;
+		default:
+			return String.class;
+		}
+	}
+	
+	@Override
+	public Object getValueAt(int rowIndex, int colimnIndex) {
+		Produto produto = this.produtos.get(rowIndex);
+
+		switch (colimnIndex) {
+		case COLUNA_CODIGO:
+			return produto.getIdProduto();
+		case COLUNA_NOME:
+			return produto.getDescricao();
+		case COLUNA_CODIGO_BARRAS:
+			return produto.getCodigo_barra();
+		case COLUNA_SETOR:
+			return produto.getSetor();
+		case COLUNA_FATOR_VENDA:
+			return produto.getUnidadeVenda();
+		case COLUNA_PRECO_VENDA:
+			return produto.getPreco();
+		case COLUNA_BLOQUEADO_VENDA:
+			return produto.getBloqueadoVenda();
+		case COLUNA_DATA_CADASTRO:
+			return produto.getDataCadastro();
+		}
+		return null;
+	}
+	
+	public void addProduto(Produto p) {
+		this.produtos.add(p);
+		this.fireTableDataChanged();
+	}
+	
+	public void removeProduto(int row) {
+		this.produtos.remove(row);
+		this.fireTableRowsDeleted(row, row);
+	}
+
+}
