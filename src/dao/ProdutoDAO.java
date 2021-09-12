@@ -72,6 +72,60 @@ public class ProdutoDAO {
 		}
 		return produto;
 	}
+	
+	
+	public boolean alterarProduto (Produto produto) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+	
+		try {
+			conn.setAutoCommit(false);
+			
+			ps = conn.prepareStatement("UPDATE produto SET descricao = ?, "
+					+ "codigoBarras = ?, preco = ?, codSetor = ?, unidadeVenda = ?, bloqueadoVenda = ? "
+					+ "WHERE idProduto = ?");
+			ps.setString(1, produto.getDescricao());
+			ps.setString(2, produto.getCodigo_barra());
+			ps.setDouble(3, produto.getPreco());
+			ps.setInt(4, produto.getSetor().getCodSetor());
+			ps.setString(5, produto.getUnidadeVenda());
+			ps.setBoolean(6, produto.getBloqueadoVenda());
+			ps.setInt(7, produto.getIdProduto());
+			ps.executeUpdate();
+			conn.commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+				return false;
+			} catch (SQLException e1) {
+				e1.getMessage();
+			}
+		}
+		JOptionPane.showMessageDialog(null, "Produto alterado!");
+		return true;
+	}
+	
+	
+	
+	//--------Deletar--------------
+		public boolean deletarProduto(int id) {
+			conn = DB.getConnection();
+			PreparedStatement ps = null;
+			try {
+				ps = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
+				ps.setInt(1, id);
+				ps.execute();
+				conn.commit();
+				return true;
+			} catch (Exception e) {
+				e.getMessage();
+				return false;
+			}
+		}
+		
+		
+		
 
 //---------Listar---------------
 	public ResultSet listarTodosProdutos() throws SQLException {
@@ -91,19 +145,5 @@ public class ProdutoDAO {
 		return rs;
 	}
 
-//--------Deletar--------------
-	public boolean deletarProduto(int id) {
-		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		try {
-			ps = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
-			ps.setInt(1, id);
-			ps.execute();
-			conn.commit();
-		} catch (Exception e) {
-			e.getMessage();
-			return false;
-		}
-		return true;
-	}
+
 }

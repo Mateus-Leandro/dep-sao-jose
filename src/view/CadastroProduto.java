@@ -119,7 +119,7 @@ public class CadastroProduto extends JFrame {
 		panel.add(txtCodigo);
 
 		lblNomeProduto = new JLabel("Nome");
-		lblNomeProduto.setBounds(221, 11, 43, 17);
+		lblNomeProduto.setBounds(285, 11, 43, 17);
 		lblNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(lblNomeProduto);
 
@@ -203,7 +203,7 @@ public class CadastroProduto extends JFrame {
 		btnNovo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnNovo.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent clickNovoProduto) {
+			public void mousePressed(MouseEvent clickNovoProduto) {
 				limparCampos();
 				ativarCampos();
 				btnCancelar.setVisible(true);
@@ -220,7 +220,7 @@ public class CadastroProduto extends JFrame {
 		btnSalvar.setEnabled(false);
 		btnSalvar.addMouseListener(new MouseAdapter() {
 
-			public void mouseClicked(MouseEvent click_salvar) {
+			public void mousePressed(MouseEvent click_salvar) {
 
 				if (btnSalvar.isEnabled()) {
 					if (fTxtNomeProduto.getText().trim().isEmpty() || fTxtPrecoVenda.getText().trim().isEmpty()) {
@@ -234,11 +234,13 @@ public class CadastroProduto extends JFrame {
 							JOptionPane.showMessageDialog(null, "Necessario informar preço de venda!");
 						}
 					} else {
-						modelo.addProduto(gravarNovoProduto());
+						gravarNovoProduto();
+						recarregarTabela();
 						limparCampos();
 						btnCancelar.setVisible(false);
 						btnNovo.setEnabled(true);
 						btnSalvar.setEnabled(false);
+
 					}
 				}
 			}
@@ -251,21 +253,19 @@ public class CadastroProduto extends JFrame {
 		btnExcluir.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseClicked(MouseEvent clickDeletar) {
-				if (btnExcluir.isEnabled()) {
+			public void mousePressed(MouseEvent clickDeletar) {
 					try {
 						ProdutoDAO produto_dao = new ProdutoDAO();
 						if (produto_dao.deletarProduto(
 								(Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0))) {
-							JOptionPane.showMessageDialog(null, "Produto Excluído!");
+							JOptionPane.showMessageDialog(null, "Produto excluído!");
 							modelo.removeProduto(tabelaProdutos.getSelectedRow());
+							btnExcluir.setEnabled(false);
+							btnEditar.setEnabled(false);
 						}
 					} catch (Exception e) {
 						e.getMessage();
 					}
-
-				}
-
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -278,9 +278,11 @@ public class CadastroProduto extends JFrame {
 		btnEditar.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseClicked(MouseEvent clickEditar) {
+			public void mousePressed(MouseEvent Presseditar) {
 				if (btnEditar.isEnabled()) {
 					btnCancelar.setVisible(true);
+					btnExcluir.setEnabled(false);
+					btnNovo.setEnabled(false);
 					ativarCampos();
 				}
 
@@ -343,10 +345,12 @@ public class CadastroProduto extends JFrame {
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent clickCancelar) {
+			public void mousePressed(MouseEvent clickCancelar) {
 				desativarCampos();
+				limparCampos();
 				btnCancelar.setVisible(false);
 				btnNovo.setEnabled(true);
+				btnExcluir.setEnabled(false);
 			}
 		});
 		btnCancelar.setBounds(214, 149, 87, 29);
@@ -360,20 +364,14 @@ public class CadastroProduto extends JFrame {
 			e.getMessage();
 		}
 		fTxtNomeProduto = new JFormattedTextField(mascara_descricao_produto);
-		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				fTxtNomeProduto.setCaretPosition(0);
-			}
-		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		fTxtNomeProduto.setBounds(261, 11, 437, 20);
+		fTxtNomeProduto.setBounds(338, 11, 360, 20);
 		fTxtNomeProduto.setEnabled(false);
 		panel.add(fTxtNomeProduto);
 
 		btnSair.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent clickSair) {
+			public void mousePressed(MouseEvent clickSair) {
 				dispose();
 				clickSair.consume();
 			}
@@ -390,7 +388,7 @@ public class CadastroProduto extends JFrame {
 		tabelaProdutos.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		tabelaProdutos.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent clickMouseLinhaTabela) {
+			public void mousePressed(MouseEvent clickMouseLinhaTabela) {
 				if (!btnSalvar.isEnabled()) {
 					ProdutoDAO produto_dao = new ProdutoDAO();
 					Produto produto = new Produto();
@@ -414,18 +412,7 @@ public class CadastroProduto extends JFrame {
 
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setBounds(20, 317, 595, 146);
-
-		// Configurando largura das colunas
-		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(10);
-		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
-		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(60);
-		tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
-		tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(10);
-		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(25);
-		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(20);
-		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(30);
-		tabelaProdutos.setAutoCreateRowSorter(true);
-
+		ConfiguralarguracolunaTabela(tabelaProdutos);
 		scrollPaneProdutos = new JScrollPane(tabelaProdutos);
 		scrollPaneProdutos.setBounds(10, 288, 708, 243);
 		getContentPane().add(scrollPaneProdutos);
@@ -449,25 +436,33 @@ public class CadastroProduto extends JFrame {
 		String fator_venda = cbxFatorDeVenda.getSelectedItem().toString();
 		String codigo_barras = fTxtCodigoBarras.getText().trim();
 
-		Produto novo_produto = new Produto(null, nome, setor, preco_venda, bloqueado, null, codigo_barras, fator_venda);
-
-		novo_produto = produto_dao.inserirProduto(novo_produto);
-
+		Produto produto = new Produto(null, nome, setor, preco_venda, bloqueado, null, codigo_barras, fator_venda);
 		fTxtPrecoVenda.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		fTxtNomeProduto.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
-		if (novo_produto.getIdProduto() != null) {
-			String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
+		try {
+			if (txtCodigo.getText().isEmpty()) {
 
-			try {
-				novo_produto.setDataCadastro(sdf.parse(data_formatada));
-			} catch (ParseException e) {
-				e.getMessage();
+				// Gravando produto no banco de dados.
+				produto = produto_dao.inserirProduto(produto);
+
+				String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
+				produto.setDataCadastro(sdf.parse(data_formatada));
+
+				return produto;
+
+			} else {
+				produto.setIdProduto(Integer.parseInt(txtCodigo.getText().trim()));
+				produto_dao.alterarProduto(produto);
+				desativarCampos();
+				return produto;
 			}
-			return novo_produto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			e.getMessage();
+		} finally {
+			ConfiguralarguracolunaTabela(tabelaProdutos);
 		}
+		return null;
 	}
 
 	// Alimentar lista de produtos
@@ -505,6 +500,16 @@ public class CadastroProduto extends JFrame {
 		return produtos;
 	}
 
+	// Recarrega a tabela de produtos.
+	public void recarregarTabela() {
+		produtos.clear();
+		produtos = alimentarListaProdutos(produtos);
+		modelo = new ModeloTabelaProdutos(produtos);
+		tabelaProdutos.setModel(modelo);
+		ConfiguralarguracolunaTabela(tabelaProdutos);
+		modelo.fireTableDataChanged();
+	}
+
 	public void ativarCampos() {
 		fTxtNomeProduto.setEnabled(true);
 		fTxtCodigoBarras.setEnabled(true);
@@ -531,5 +536,18 @@ public class CadastroProduto extends JFrame {
 		fTxtCodigoBarras.setText(null);
 		fTxtPrecoVenda.setText(null);
 		checkBoxBloqueadoVenda.setSelected(false);
+	}
+
+	// Configurando largura das colunas
+	public void ConfiguralarguracolunaTabela(JTable tabelaProdutos) {
+		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(10);
+		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(60);
+		tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
+		tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(10);
+		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(25);
+		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(20);
+		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(30);
+		tabelaProdutos.setAutoCreateRowSorter(true);
 	}
 }

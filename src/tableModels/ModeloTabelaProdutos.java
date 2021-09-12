@@ -3,8 +3,11 @@ package tableModels;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import entidades.Produto;
 import entidades.Setor;
@@ -21,6 +24,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	private final int COLUNA_PRECO_VENDA = 5;
 	private final int COLUNA_BLOQUEADO_VENDA = 6;
 	private final int COLUNA_DATA_CADASTRO = 7;
+	
 	
 	
 	public ModeloTabelaProdutos(ArrayList<Produto> produtos) {
@@ -103,6 +107,11 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	public void removeProduto(int row) {
 		this.produtos.remove(row);
 		this.fireTableRowsDeleted(row, row);
+	}
+	
+	public void recarregarTabela(JTable tabela, ArrayList<Produto> produtos) {
+		ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
+		tabela.setModel(modelo);
 	}
 
 }
