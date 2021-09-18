@@ -1,34 +1,28 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Barras_Produto {
-	private Integer idProduto;
-	private List<String> barras = new ArrayList<>();
+	private String barras = new String();
+	private Date dt_vinculacao = new Date();
 	
-	Barras_Produto(){
-	}
-	
-	public Barras_Produto(Integer idProduto, List<String> barras) {
-		this.idProduto = idProduto;
-		this.barras = barras;
-	}
-
-	public Integer getIdProduto() {
-		return idProduto;
-	}
-
-	public void setIdProduto(Integer idProduto) {
-		this.idProduto = idProduto;
-	}
-
-	public List<String> getBarras() {
+	public String getBarras() {
 		return barras;
 	}
-
-	public void setBarras(List<String> barras) {
+	public void setBarras(String barras) {
 		this.barras = barras;
 	}
-	
+	public Date getDt_vinculacao() {
+		return dt_vinculacao;
+	}
+	public void setDt_vinculacao(Date dt_vinculacao) {
+		this.dt_vinculacao = dt_vinculacao;
+	}
+	public Barras_Produto(String barras, Date dt_vinculacao) {
+		this.barras = barras;
+		this.dt_vinculacao = dt_vinculacao;
+	}
+
 }

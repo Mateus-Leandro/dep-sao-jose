@@ -40,7 +40,7 @@ public class ProdutoDAO {
 							+ "unidadeVenda, preco, bloqueadoVenda,dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, produto.getDescricao().trim());
-			ps.setString(2, produto.getCodigo_barra().trim());
+			ps.setString(2, produto.getCodigo_barra());
 			ps.setInt(3, produto.getSetor().getCodSetor());
 			ps.setString(4, produto.getUnidadeVenda());
 			ps.setDouble(5, produto.getPreco());
@@ -58,7 +58,7 @@ public class ProdutoDAO {
 					+ produto.getIdProduto() + "\nProduto: " + produto.getDescricao());
 
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao inserir novo produto!");
+			JOptionPane.showMessageDialog(null, "Erro ao inserir novo produto!" + e.getMessage());
 			try {
 				conn.rollback();
 			} catch (SQLException erroRollBack) {
@@ -72,15 +72,15 @@ public class ProdutoDAO {
 		}
 		return produto;
 	}
-	
-	
-	public boolean alterarProduto (Produto produto) {
+
+	// -----------Alterar---------------
+	public boolean alterarProduto(Produto produto) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
-	
+
 		try {
 			conn.setAutoCommit(false);
-			
+
 			ps = conn.prepareStatement("UPDATE produto SET descricao = ?, "
 					+ "codigoBarras = ?, preco = ?, codSetor = ?, unidadeVenda = ?, bloqueadoVenda = ? "
 					+ "WHERE idProduto = ?");
@@ -93,7 +93,7 @@ public class ProdutoDAO {
 			ps.setInt(7, produto.getIdProduto());
 			ps.executeUpdate();
 			conn.commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			try {
 				conn.rollback();
@@ -105,30 +105,25 @@ public class ProdutoDAO {
 		JOptionPane.showMessageDialog(null, "Produto alterado!");
 		return true;
 	}
-	
-	
-	
-	//--------Deletar--------------
-		public boolean deletarProduto(int id) {
-			conn = DB.getConnection();
-			PreparedStatement ps = null;
-			try {
-				ps = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
-				ps.setInt(1, id);
-				ps.execute();
-				conn.commit();
-				return true;
-			} catch (Exception e) {
-				e.getMessage();
-				return false;
-			}
+
+	// --------Deletar--------------
+	public boolean deletarProduto(int id) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
+			ps.setInt(1, id);
+			ps.execute();
+			conn.commit();
+			return true;
+		} catch (Exception e) {
+			e.getMessage();
+			return false;
 		}
-		
-		
-		
+	}
 
 //---------Listar---------------
-	public ResultSet listarTodosProdutos() throws SQLException {
+	public ResultSet listarTodosProdutos() {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 
@@ -145,5 +140,149 @@ public class ProdutoDAO {
 		return rs;
 	}
 
+	// -----Listar produto por nome-----
+	public ResultSet listarProdutosNome(String nome) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT idProduto, descricao, codigoBarras, produto.codSetor ,"
+					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+					+ "from produto inner join setor on produto.codSetor = setor.codSetor WHERE produto.descricao LIKE ? ORDER BY descricao");
+			ps.setString(1, nome);
+			rs = ps.executeQuery();
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return rs;
+	}
+
+	// -----Listar produto por código interno----
+	public ResultSet listarProdutosCodigo(String codInterno) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT idProduto, descricao, codigoBarras, produto.codSetor ,"
+					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+					+ "from produto inner join setor on produto.codSetor = setor.codSetor WHERE produto.idProduto LIKE ? ORDER BY descricao");
+			ps.setString(1, codInterno);
+			rs = ps.executeQuery();
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return rs;
+	}
+
+	// -----Listar produto por código de barras----
+	public ResultSet listarProdutosBarras(String barras) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT idProduto, descricao, codigoBarras, produto.codSetor ,"
+					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+					+ "from produto inner join setor on produto.codSetor = setor.codSetor WHERE produto.codigoBarras LIKE ? ORDER BY descricao");
+			ps.setString(1, barras);
+			rs = ps.executeQuery();
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return rs;
+	}
+
+	// --Testar se o codigo de barras ja existe em outro item
+	public boolean testaBarrasInclusao(String barras) {
+
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		ResultSet rs = null;
+
+		if (barras.toString() != null) {
+			try {
+				ps = conn.prepareStatement("SELECT codigoBarras FROM produto WHERE codigoBarras = ?");
+				ps.setString(1, barras);
+				rs = ps.executeQuery();
+
+				if (rs.next()) {
+					return false;
+				} else {
+					ps = conn.prepareStatement("SELECT barras FROM barras_produto WHERE barras = ?");
+					ps.setString(1, barras);
+					rs = ps.executeQuery();
+					if (rs.next()) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+			} catch (Exception e) {
+				e.getMessage();
+				return false;
+			}
+
+		} else {
+			return true;
+		}
+	}
+
+	public boolean testaBarrasAlteracao(Integer codigo, String barras) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		ResultSet rs = null;
+
+		if (barras.toString() != null) {
+
+			try {
+				ps = conn.prepareStatement("SELECT codigoBarras FROM produto WHERE codigoBarras = ? AND idProduto = ?");
+				ps.setString(1, barras);
+				ps.setInt(2, codigo);
+				rs = ps.executeQuery();
+
+				if (rs.next()) {
+					return true;
+				} else {
+					ps = conn.prepareStatement("SELECT codigoBarras FROM produto WHERE codigoBarras = ?");
+					ps.setString(1, barras);
+					rs = ps.executeQuery();
+					if (rs.next()) {
+						return false;
+					} else {
+						ps = conn.prepareStatement(
+								"SELECT barras FROM barras_produto WHERE barras = ? AND idProduto = ?");
+						ps.setString(1, barras);
+						ps.setInt(2, codigo);
+						rs = ps.executeQuery();
+						if (rs.next()) {
+							return true;
+						} else {
+							ps = conn.prepareStatement("SELECT barras FROM barras_produto WHERE barras = ?");
+							ps.setString(1, barras);
+							rs = ps.executeQuery();
+							if (rs.next()) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.getMessage();
+				return false;
+			}
+		} else {
+			return true;
+		}
+
+	}
 
 }
