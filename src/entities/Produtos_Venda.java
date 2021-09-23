@@ -1,4 +1,4 @@
-package entidades;
+package entities;
 
 public class Produtos_Venda {
 	private int idVenda;

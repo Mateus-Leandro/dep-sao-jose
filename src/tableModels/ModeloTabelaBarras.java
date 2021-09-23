@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entidades.Barras_Produto;
-import entidades.Produto;
-import entidades.Setor;
+import entities.Barras_Produto;
+import entities.Produto;
+import entities.Setor;
 
 public class ModeloTabelaBarras extends AbstractTableModel {
 

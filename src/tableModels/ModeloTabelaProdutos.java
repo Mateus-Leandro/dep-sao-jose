@@ -1,6 +1,8 @@
 package tableModels;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +11,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import entidades.Produto;
-import entidades.Setor;
+import entities.Produto;
+import entities.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
 
@@ -64,7 +66,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_FATOR_VENDA:
 			return String.class;
 		case COLUNA_PRECO_VENDA:
-			return Double.class;
+			return String.class;
 		case COLUNA_BLOQUEADO_VENDA:
 			return Boolean.class;
 		case COLUNA_DATA_CADASTRO:
@@ -77,6 +79,8 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columIndex) {
 		Produto produto = this.produtos.get(rowIndex);
+		
+		NumberFormat nf = new DecimalFormat("R$ 0.00");
 
 		switch (columIndex) {
 		case COLUNA_CODIGO:
@@ -90,7 +94,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_FATOR_VENDA:
 			return produto.getUnidadeVenda();
 		case COLUNA_PRECO_VENDA:
-			return produto.getPreco();
+			return nf.format(produto.getPreco());
 		case COLUNA_BLOQUEADO_VENDA:
 			return produto.getBloqueadoVenda();
 		case COLUNA_DATA_CADASTRO:
@@ -104,9 +108,9 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 	
-	public void removeProduto(int row) {
-		this.produtos.remove(row);
-		this.fireTableRowsDeleted(row, row);
+	public void removeProduto(Integer codigo_produto) {
+		this.produtos.removeIf(produto -> produto.getIdProduto().equals(codigo_produto));
+		this.fireTableDataChanged();
 	}
 	
 	public void recarregarTabela(JTable tabela, ArrayList<Produto> produtos) {

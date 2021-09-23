@@ -1,4 +1,4 @@
-package entidades;
+package entities;
 
 import java.util.Date;
 
@@ -96,14 +96,38 @@ public class Produto {
 		this.codigo_barra = codigo_barra;
 	}
 
-
-	
 	@Override
 	public String toString() {
-		return "Produto [idProduto=" + idProduto + ", descricao=" + descricao + ", codSetor=" + setor + ", preco="
-				+ preco + ", bloqueadoVenda=" + bloqueadoVenda + ", dataCadastro=" + dataCadastro + ", codigo_barra="
-				+ codigo_barra;
+		return "Produto [idProduto=" + idProduto + ", descricao=" + descricao + ", setor=" + setor + ", unidadeVenda="
+				+ unidadeVenda + ", preco=" + preco + ", bloqueadoVenda=" + bloqueadoVenda + ", dataCadastro="
+				+ dataCadastro + ", codigo_barra=" + codigo_barra + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idProduto == null) ? 0 : idProduto.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Produto other = (Produto) obj;
+		if (idProduto == null) {
+			if (other.idProduto != null)
+				return false;
+		} else if (!idProduto.equals(other.idProduto))
+			return false;
+		return true;
+	}
+
 	
 	
 }

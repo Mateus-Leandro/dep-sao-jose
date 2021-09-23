@@ -1,6 +1,5 @@
-package view;
+package view.dialog;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -19,15 +18,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.text.MaskFormatter;
 
 import dao.SetorDAO;
-import entidades.Setor;
+import entities.Setor;
 import tableModels.ModeloTabelaSetores;
 
 public class CadastroSetor extends JDialog {
@@ -105,7 +102,7 @@ public class CadastroSetor extends JDialog {
 			fTxtNomeSetor.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent clickNomeSetor) {
-					if(fTxtNomeSetor.getText().trim().isEmpty()) {
+					if (fTxtNomeSetor.getText().trim().isEmpty()) {
 						fTxtNomeSetor.setCaretPosition(0);
 					}
 				}
@@ -178,12 +175,10 @@ public class CadastroSetor extends JDialog {
 					flag = opcao == JOptionPane.YES_OPTION;
 
 					if (flag) {
-						if(setor_dao.excluirSetor(codigo_setor)) {
+						if (setor_dao.excluirSetor(codigo_setor)) {
 							JOptionPane.showMessageDialog(null, "Setor excluído!", "Exclusão de setor",
 									JOptionPane.ERROR_MESSAGE);
 							modelo.removeSetor(tabelaSetores.getSelectedRow());
-						}else {
-							JOptionPane.showMessageDialog(null, "Verifique se existem produtos que usam este setor.","Erro ao excluir setor!",JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				}
@@ -199,18 +194,34 @@ public class CadastroSetor extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickSalvar) {
 
+				SetorDAO setor_dao = new SetorDAO();
+				Setor setor = new Setor();
+
 				if (fTxtNomeSetor.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(btnSalvar, "Necessário informar nome do setor.", "Setor sem nome!",
 							JOptionPane.WARNING_MESSAGE);
 				} else {
-					SetorDAO setor_dao = new SetorDAO();
-					Setor setor = new Setor();
 
 					setor = novoSetor(setor);
-					setor.setCodSetor(setor_dao.inserirSetor(setor));   
-					modelo.addSetor(setor);
-					JOptionPane.showMessageDialog(null, "Setor adiconado!\n" + "código: " + setor.getCodSetor() + " "
-							+ "\nNome: " + setor.getNome());
+
+					if (fTxtCodigoSetor.getText().trim().isEmpty()) {
+						setor = setor_dao.inserirSetor(setor);
+						
+						if(setor != null) {
+							modelo.addSetor(setor);
+							JOptionPane.showMessageDialog(null, "Setor adiconado!\n" + "código: " + setor.getCodSetor()
+									+ " " + "\nNome: " + setor.getNome());
+						}
+						
+						
+
+					} else {
+						setor_dao.alterarSetor(setor);
+						JOptionPane.showMessageDialog(null, "Setor alterado!","Alteração de setores.",JOptionPane.NO_OPTION);
+						fTxtCodigoSetor.setText(null);
+						fTxtCodigoSetor.setText(null);
+						recarregarTabela();
+					}
 					btnSalvar.setVisible(false);
 					btnCancelar.setVisible(false);
 					btnEditar.setVisible(true);
@@ -266,13 +277,14 @@ public class CadastroSetor extends JDialog {
 			public void mousePressed(MouseEvent clickTabelaSetores) {
 				btnExcluir.setEnabled(true);
 				btnEditar.setEnabled(true);
-				if(btnNovo.isVisible()) {
+				if (btnNovo.isVisible()) {
 					fTxtCodigoSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 0).toString());
 					fTxtNomeSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 1).toString());
 				}
-				
+
 			}
 		});
+		
 		ConfiguralarguracolunaTabela(tabelaSetores);
 		tabelaSetores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabelaSetores.getTableHeader().setReorderingAllowed(false);
@@ -284,6 +296,8 @@ public class CadastroSetor extends JDialog {
 
 	}
 
+	
+	
 	// ---------Funções------------
 	public ArrayList<Setor> alimenta_setores(ArrayList<Setor> lista_setor) {
 		SetorDAO setor_dao = new SetorDAO();
@@ -292,7 +306,11 @@ public class CadastroSetor extends JDialog {
 	}
 
 	public Setor novoSetor(Setor novo_setor) {
-		novo_setor.setCodSetor(null);
+		if(! fTxtCodigoSetor.getText().trim().isEmpty()) {
+			novo_setor.setCodSetor(Integer.parseInt(fTxtCodigoSetor.getText().trim()));
+		}else {
+			novo_setor.setCodSetor(null);
+		}
 		novo_setor.setNome(fTxtNomeSetor.getText().trim());
 		return novo_setor;
 	}
@@ -304,11 +322,21 @@ public class CadastroSetor extends JDialog {
 		tabelaSetores.setAutoCreateRowSorter(true);
 	}
 
-	// ------Icones--------
-	Icon icone_salvar = new ImageIcon(getClass().getResource("/icones/salvar.png"));
-	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icones/cancelar.png"));
-	Icon icone_mais = new ImageIcon(getClass().getResource("/icones/mais.png"));
-	Icon icone_editar = new ImageIcon(getClass().getResource("/icones/editar.png"));
-	Icon icone_excluir = new ImageIcon(getClass().getResource("/icones/excluir.png"));
+	// Recarrega a tabela de setores.
+	public void recarregarTabela() {
+		setores.clear();
+		setores = alimenta_setores(setores);
+		modelo = new ModeloTabelaSetores(setores);
+		tabelaSetores.setModel(modelo);
+		ConfiguralarguracolunaTabela(tabelaSetores);
+		modelo.fireTableDataChanged();
+	}
+	
+	// ------icons--------
+	Icon icone_salvar = new ImageIcon(getClass().getResource("/icons/salvar.png"));
+	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icons/cancelar.png"));
+	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
+	Icon icone_editar = new ImageIcon(getClass().getResource("/icons/editar.png"));
+	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
 	private JFormattedTextField fTxtCodigoSetor;
 }

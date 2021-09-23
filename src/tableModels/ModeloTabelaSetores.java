@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entidades.Setor;
+import entities.Setor;
 
 public class ModeloTabelaSetores extends AbstractTableModel {
 
