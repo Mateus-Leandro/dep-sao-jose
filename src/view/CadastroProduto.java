@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -230,7 +232,7 @@ public class CadastroProduto extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent clickDeletar) {
-
+				excluir_item();
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -318,6 +320,13 @@ public class CadastroProduto extends JFrame {
 		btnReload.setIcon(icone_reload);
 		panel.add(btnReload);
 
+		btnReload.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickSair) {
+				recarregarTabela();
+			}
+		});
+
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnCancelar.addMouseListener(new MouseAdapter() {
@@ -381,13 +390,6 @@ public class CadastroProduto extends JFrame {
 		btnMaisBarras.setIcon(icone_mais);
 		panel.add(btnMaisBarras);
 
-		btnReload.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickSair) {
-				recarregarTabela();
-			}
-		});
-
 		lblCadatroDeProduto = new JLabel("Cadastro de Produtos");
 		lblCadatroDeProduto.setBounds(10, 11, 708, 32);
 		lblCadatroDeProduto.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -435,7 +437,7 @@ public class CadastroProduto extends JFrame {
 	public Produto gravarNovoProduto() {
 		// Criando produto
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
 		ProdutoDAO produto_dao = new ProdutoDAO();
 		String nome = fTxtNomeProduto.getText().trim();
@@ -471,9 +473,13 @@ public class CadastroProduto extends JFrame {
 					btnNovo.setEnabled(true);
 					btnSalvar.setEnabled(false);
 					lblPesquisarPor.setVisible(true);
+					lblPesquisarPor.setEnabled(true);
 					txtPesquisar.setVisible(true);
+					txtPesquisar.setEnabled(true);
 					cbxTipoPesquisa.setVisible(true);
+					cbxTipoPesquisa.setEnabled(true);
 					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
+					recarregarTabela();
 					return produto;
 				} else {
 					JOptionPane.showMessageDialog(null, "Código de barras informado ja utilizado em outro item!",
@@ -498,6 +504,7 @@ public class CadastroProduto extends JFrame {
 					txtPesquisar.setVisible(true);
 					cbxTipoPesquisa.setVisible(true);
 					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
+					recarregarTabela();
 					return produto;
 				} else {
 					JOptionPane.showMessageDialog(null, "Código de barras informado ja utilizado em outro item!",
@@ -533,30 +540,22 @@ public class CadastroProduto extends JFrame {
 				break;
 			case 2:
 				produtos = produto_dao.listarProdutosBarras(produtos, pesquisado);
-
-				ArrayList<Produto> barras_vinculados = new ArrayList<Produto>();
-				barras_vinculados = produto_dao.listarProdutosBarrasVinculados(barras_vinculados, pesquisado);
-
-				produtos.addAll(barras_vinculados);
+				produtos = produto_dao.listarProdutosBarrasVinculados(produtos, pesquisado);
 			}
 
-			return produtos;
+			return (ArrayList<Produto>) produtos.stream().distinct().collect(Collectors.toList());
 		}
 
 	}
 
 	// Recarrega a tabela de produtos.
 	public void recarregarTabela() {
-		if (btnReload.isEnabled()) {
-			btnReload.doClick();
-			produtos.clear();
-			produtos = alimentarListaProdutos(produtos);
-			modelo = new ModeloTabelaProdutos(produtos);
-			tabelaProdutos.setModel(modelo);
-			ConfiguralarguracolunaTabela(tabelaProdutos);
-			modelo.fireTableDataChanged();
-		}
-
+		produtos.clear();
+		produtos = alimentarListaProdutos(produtos);
+		modelo = new ModeloTabelaProdutos(produtos);
+		tabelaProdutos.setModel(modelo);
+		ConfiguralarguracolunaTabela(tabelaProdutos);
+		modelo.fireTableDataChanged();
 	}
 
 	// Recarrega tabela pesquisando por nome
@@ -614,7 +613,7 @@ public class CadastroProduto extends JFrame {
 	// Ação para salvar um novo produto
 	public void salvar_produto() {
 
-		if (btnSalvar.isEnabled()) {
+		if (btnSalvar.isVisible()) {
 			boolean preco_vazio = fTxtPrecoVenda.getText().trim().isEmpty();
 
 			Double preco;
@@ -637,7 +636,6 @@ public class CadastroProduto extends JFrame {
 				}
 			} else {
 				gravarNovoProduto();
-				recarregarTabela();
 			}
 
 		}
@@ -648,7 +646,6 @@ public class CadastroProduto extends JFrame {
 	public void novo_item() {
 
 		if (txtPesquisar.getText().trim().isEmpty()) {
-			fTxtNomeProduto.setFocusable(true);
 			btnCancelar.setVisible(true);
 			btnNovo.setEnabled(false);
 			btnEditar.setVisible(false);
@@ -707,7 +704,6 @@ public class CadastroProduto extends JFrame {
 	public void editar_item() {
 
 		if (btnEditar.isEnabled() && tabelaProdutos.getSelectedRow() != -1) {
-
 			btnCancelar.setVisible(true);
 			btnExcluir.setVisible(false);
 			btnNovo.setEnabled(false);
@@ -756,25 +752,17 @@ public class CadastroProduto extends JFrame {
 
 	// Configurando largura das colunas
 	public void ConfiguralarguracolunaTabela(JTable tabelaProdutos) {
-		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(8);
-		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(140);
-		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(50);
+		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(4);
+		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(130);
+		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(56);
 		tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
 		tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(10);
-		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(25);
-		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(25);
-		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(30);
+		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(30);
+		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(20);
+		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(28);
 		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
 		tabelaProdutos.setRowSorter(sorter);
 	}
-
-	// ------icons---------
-	Icon icone_salvar = new ImageIcon(getClass().getResource("/icons/salvar.png"));
-	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icons/cancelar.png"));
-	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
-	Icon icone_editar = new ImageIcon(getClass().getResource("/icons/editar.png"));
-	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
-	Icon icone_reload = new ImageIcon(getClass().getResource("/icons/reload.png"));
 
 	// ---------Atalhos do teclado--------
 	public void tecla_pressionada() {
@@ -793,6 +781,7 @@ public class CadastroProduto extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent atalho_recarregar) {
+				btnReload.doClick();
 				recarregarTabela();
 			}
 		});
@@ -854,4 +843,12 @@ public class CadastroProduto extends JFrame {
 
 		);
 	}
+
+	// ------icons---------
+	Icon icone_salvar = new ImageIcon(getClass().getResource("/icons/salvar.png"));
+	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icons/cancelar.png"));
+	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
+	Icon icone_editar = new ImageIcon(getClass().getResource("/icons/editar.png"));
+	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
+	Icon icone_reload = new ImageIcon(getClass().getResource("/icons/reload.png"));
 }

@@ -71,7 +71,7 @@ public class CadastroSetor extends JDialog {
 	public CadastroSetor() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 451, 358);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -134,6 +134,7 @@ public class CadastroSetor extends JDialog {
 				lblNomeSetor.setEnabled(true);
 				fTxtCodigoSetor.setText(null);
 				fTxtNomeSetor.setText(null);
+				fTxtNomeSetor.requestFocusInWindow();
 			}
 		});
 		btnNovo.setBounds(10, 43, 89, 23);
@@ -291,7 +292,7 @@ public class CadastroSetor extends JDialog {
 		tabelaSetores.setBounds(10, 142, 414, 108);
 
 		scrollPaneSetores = new JScrollPane(tabelaSetores);
-		scrollPaneSetores.setBounds(10, 141, 414, 109);
+		scrollPaneSetores.setBounds(10, 141, 414, 168);
 		contentPane.add(scrollPaneSetores);
 
 	}

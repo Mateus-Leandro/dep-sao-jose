@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -16,7 +17,7 @@ import entities.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
 
-	private String colunas[] = { "Cod", "Nome","Cod.Barras", "Setor", "Fator", "Preço", "Bloqueado", "Dt. Cad." };
+	private String colunas[] = { "Cod", "Nome", "Cod.Barras", "Setor", "Fator", "Preço", "Bloqueado", "Dt. Cad." };
 	private ArrayList<Produto> produtos;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
@@ -26,9 +27,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	private final int COLUNA_PRECO_VENDA = 5;
 	private final int COLUNA_BLOQUEADO_VENDA = 6;
 	private final int COLUNA_DATA_CADASTRO = 7;
-	
-	
-	
+
 	public ModeloTabelaProdutos(ArrayList<Produto> produtos) {
 		this.produtos = produtos;
 	}
@@ -75,11 +74,11 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 			return String.class;
 		}
 	}
-	
+
 	@Override
 	public Object getValueAt(int rowIndex, int columIndex) {
 		Produto produto = this.produtos.get(rowIndex);
-		
+
 		NumberFormat nf = new DecimalFormat("R$ 0.00");
 
 		switch (columIndex) {
@@ -102,17 +101,17 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		}
 		return null;
 	}
-	
+
 	public void addProduto(Produto p) {
 		this.produtos.add(p);
 		this.fireTableDataChanged();
 	}
-	
+
 	public void removeProduto(Integer codigo_produto) {
 		this.produtos.removeIf(produto -> produto.getIdProduto().equals(codigo_produto));
 		this.fireTableDataChanged();
 	}
-	
+
 	public void recarregarTabela(JTable tabela, ArrayList<Produto> produtos) {
 		ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 		tabela.setModel(modelo);

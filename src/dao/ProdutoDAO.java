@@ -53,10 +53,11 @@ public class ProdutoDAO {
 
 				if (produto.getCodigo_barra() != null) {
 					ps = conn.prepareStatement(
-							"INSERT INTO barras_produto (idProduto, barras, dt_vinculacao) VALUES (?, ?, ?)");
+							"INSERT INTO barras_produto (idProduto, barras, principal, dt_vinculacao) VALUES (?, ?, ?, ?)");
 					ps.setInt(1, produto.getIdProduto());
 					ps.setString(2, produto.getCodigo_barra());
-					ps.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+					ps.setBoolean(3, true);
+					ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
 					ps.execute();
 
 				}
@@ -95,27 +96,36 @@ public class ProdutoDAO {
 			conn.setAutoCommit(false);
 
 			ps = conn.prepareStatement("UPDATE produto SET descricao = ?, "
-					+ "codigoBarras = ?, preco = ?, codSetor = ?, unidadeVenda = ?, bloqueadoVenda = ? "
-					+ "WHERE idProduto = ?");
+					+ "preco = ?, codSetor = ?, unidadeVenda = ?, bloqueadoVenda = ? " + "WHERE idProduto = ?");
 			ps.setString(1, produto.getDescricao());
-			ps.setString(2, produto.getCodigo_barra());
-			ps.setDouble(3, produto.getPreco());
-			ps.setInt(4, produto.getSetor().getCodSetor());
-			ps.setString(5, produto.getUnidadeVenda());
-			ps.setBoolean(6, produto.getBloqueadoVenda());
-			ps.setInt(7, produto.getIdProduto());
+			ps.setDouble(2, produto.getPreco());
+			ps.setInt(3, produto.getSetor().getCodSetor());
+			ps.setString(4, produto.getUnidadeVenda());
+			ps.setBoolean(5, produto.getBloqueadoVenda());
+			ps.setInt(6, produto.getIdProduto());
 			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("UPDATE barras_produto "
+					+ "SET barras = ? "
+					+ "WHERE idProduto = ? "
+					+ "AND principal IS TRUE");
+			ps.setString(1, produto.getCodigo_barra());
+			ps.setInt(2, produto.getIdProduto());
+			ps.execute();
+			
 			conn.commit();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Erro ao alterar produto!" + e.getMessage(), "Alteração de produto",
+					JOptionPane.WARNING_MESSAGE);
 			try {
 				conn.rollback();
 				return false;
 			} catch (SQLException e1) {
-				e1.getMessage();
+				e.printStackTrace();
 			}
 		}
-		JOptionPane.showMessageDialog(null, "Produto alterado!");
+		JOptionPane.showMessageDialog(null, "Produto alterado!","Alteração de produto",JOptionPane.NO_OPTION);
 		return true;
 	}
 
@@ -154,22 +164,21 @@ public class ProdutoDAO {
 
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS TRUE "
-					+ "ORDER BY descricao");
+			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+					+ "produto.codSetor, setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+					+ "FROM produto " + "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+					+ "WHERE barras_produto.principal IS NOT FALSE " + "ORDER BY descricao");
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
-				produto.setCodigo_barra(rs.getString("barras"));
+				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-			
+
 				produto.setPreco(rs.getDouble("preco"));
 
 				produto.setBloqueadoVenda(rs.getBoolean(8));
@@ -180,7 +189,7 @@ public class ProdutoDAO {
 			return produtos;
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar produtos", "Carregar produtos.",
+			JOptionPane.showMessageDialog(null, "Erro ao carregar produtos" + e.getMessage(), "Carregar produtos. ",
 					JOptionPane.WARNING_MESSAGE);
 			return null;
 		}
@@ -197,7 +206,7 @@ public class ProdutoDAO {
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS TRUE AND produto.descricao LIKE ? "
+					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? "
 					+ "ORDER BY descricao");
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
@@ -209,7 +218,7 @@ public class ProdutoDAO {
 				produto.setCodigo_barra(rs.getString("barras"));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-			
+
 				produto.setPreco(rs.getDouble("preco"));
 
 				produto.setBloqueadoVenda(rs.getBoolean(8));
@@ -222,6 +231,7 @@ public class ProdutoDAO {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produto por nome!", "Pesquisa produto por nome.",
 					JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -230,14 +240,15 @@ public class ProdutoDAO {
 	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
-
+	
+		
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS TRUE AND produto.idProduto LIKE ? "
+					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? "
 					+ "ORDER BY descricao");
 			ps.setString(1, codInterno);
 			rs = ps.executeQuery();
@@ -248,7 +259,7 @@ public class ProdutoDAO {
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("codigoBarras"));
+				produto.setCodigo_barra(rs.getString("barras"));
 				produto.setPreco(rs.getDouble("preco"));
 
 				produto.setBloqueadoVenda(rs.getBoolean(8));
@@ -261,6 +272,7 @@ public class ProdutoDAO {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produtos por código!", "Pesquisa por código interno",
 					JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -277,7 +289,7 @@ public class ProdutoDAO {
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS TRUE AND barras_produto.barras LIKE ? "
+					+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
 					+ "ORDER BY descricao");
 			ps.setString(1, barras);
 			rs = ps.executeQuery();
@@ -288,7 +300,7 @@ public class ProdutoDAO {
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("codigoBarras"));
+				produto.setCodigo_barra(rs.getString("barras"));
 				produto.setPreco(rs.getDouble("preco"));
 
 				produto.setBloqueadoVenda(rs.getBoolean(8));
@@ -301,6 +313,7 @@ public class ProdutoDAO {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produto por código de barras!",
 					"Pesquisa por código de barras.", JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 			return null;
 		}
 
@@ -317,7 +330,7 @@ public class ProdutoDAO {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS FALSE AND barras_produto.barras LIKE ? "
 					+ "ORDER BY descricao");
 			ps.setString(1, barras);
@@ -329,7 +342,7 @@ public class ProdutoDAO {
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("codigoBarras"));
+				produto.setCodigo_barra(rs.getString("barras"));
 				produto.setPreco(rs.getDouble("preco"));
 
 				produto.setBloqueadoVenda(rs.getBoolean(8));
@@ -364,7 +377,7 @@ public class ProdutoDAO {
 
 				if (rs.next()) {
 					return false;
-				}else {
+				} else {
 					return true;
 				}
 			} catch (Exception e) {
@@ -399,7 +412,7 @@ public class ProdutoDAO {
 					rs = ps.executeQuery();
 					if (rs.next()) {
 						return false;
-					}else {
+					} else {
 						return true;
 					}
 				}
