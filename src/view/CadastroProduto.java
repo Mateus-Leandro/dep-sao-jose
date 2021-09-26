@@ -15,7 +15,6 @@ import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
@@ -37,10 +36,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.MaskFormatter;
@@ -53,6 +55,7 @@ import formatFields.FormataContabil;
 import tableModels.ModeloTabelaProdutos;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
+import java.awt.event.ActionListener;
 
 public class CadastroProduto extends JFrame {
 	/**
@@ -163,7 +166,12 @@ public class CadastroProduto extends JFrame {
 		cbxSetor.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent focoCbxSetor) {
+
+				Setor setor_antigo = (Setor) cbxSetor.getSelectedItem();
 				alimentaSetores();
+				if (!txtCodigo.getText().trim().isEmpty()) {
+					cbxSetor.setSelectedItem(setor_antigo);
+				}
 			}
 		});
 		alimentaSetores();
@@ -182,10 +190,15 @@ public class CadastroProduto extends JFrame {
 
 		lblPrecoVenda = new JLabel("Pre\u00E7o de Venda");
 		lblPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrecoVenda.setBounds(10, 104, 128, 17);
+		lblPrecoVenda.setBounds(10, 104, 97, 17);
 		panel.add(lblPrecoVenda);
 
 		fTxtPrecoVenda = new JFormattedTextField();
+		fTxtPrecoVenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent enterSalvarPreco) {
+				salvar_produto();
+			}
+		});
 		fTxtPrecoVenda.setDocument(new FormataContabil(9, 2));
 		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		fTxtPrecoVenda.setEnabled(false);
@@ -202,6 +215,7 @@ public class CadastroProduto extends JFrame {
 		panel.add(checkBoxBloqueadoVenda);
 
 		btnNovo = new JButton("Novo");
+		btnNovo.setToolTipText("");
 		btnNovo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnNovo.addMouseListener(new MouseAdapter() {
 			@Override
@@ -224,7 +238,7 @@ public class CadastroProduto extends JFrame {
 			}
 		});
 
-		btnSalvar.setBounds(107, 149, 97, 29);
+		btnSalvar.setBounds(117, 149, 97, 29);
 		panel.add(btnSalvar);
 
 		btnExcluir = new JButton("Excluir");
@@ -335,7 +349,7 @@ public class CadastroProduto extends JFrame {
 				cancelar_produto();
 			}
 		});
-		btnCancelar.setBounds(214, 149, 109, 29);
+		btnCancelar.setBounds(224, 149, 109, 29);
 		btnCancelar.setVisible(false);
 		btnCancelar.setIcon(icone_cancelar);
 		panel.add(btnCancelar);
@@ -399,10 +413,89 @@ public class CadastroProduto extends JFrame {
 		produtos = alimentarListaProdutos(produtos);
 		tabelaProdutos = new JTable(modelo);
 		tabelaProdutos.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		tabelaProdutos.addMouseListener(new MouseAdapter() {
+
+		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
+		tabelaProdutos.setBounds(20, 317, 595, 146);
+		ConfiguralarguracolunaTabela(tabelaProdutos);
+		scrollPaneProdutos = new JScrollPane(tabelaProdutos);
+		scrollPaneProdutos.setBounds(10, 288, 708, 243);
+		getContentPane().add(scrollPaneProdutos);
+
+		lblEsc = new JLabel("Esc:");
+		lblEsc.setFont(new Font("Arial", Font.BOLD, 12));
+		lblEsc.setBounds(10, 529, 30, 14);
+		getContentPane().add(lblEsc);
+
+		lblCancelar = new JLabel("Cancelar");
+		lblCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCancelar.setBounds(41, 529, 53, 14);
+		lblCancelar.setForeground(Color.GRAY);
+		getContentPane().add(lblCancelar);
+
+		lblF1 = new JLabel("F1:");
+		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF1.setBounds(194, 529, 23, 14);
+		getContentPane().add(lblF1);
+
+		lblNovo = new JLabel("Novo");
+		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNovo.setForeground(new Color(255, 69, 0));
+		lblNovo.setBounds(217, 529, 36, 14);
+		getContentPane().add(lblNovo);
+
+		lblF3 = new JLabel("F3:");
+		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF3.setBounds(263, 529, 23, 14);
+		getContentPane().add(lblF3);
+
+		lblEditar = new JLabel("Editar");
+		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblEditar.setForeground(new Color(139, 69, 19));
+		lblEditar.setBounds(286, 529, 36, 14);
+		getContentPane().add(lblEditar);
+
+		lblExcluir = new JLabel("Excluir");
+		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblExcluir.setForeground(Color.RED);
+		lblExcluir.setBounds(361, 529, 46, 14);
+		getContentPane().add(lblExcluir);
+
+		lblF12 = new JLabel("F12:");
+		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF12.setBounds(332, 529, 23, 14);
+		getContentPane().add(lblF12);
+
+		lblF5 = new JLabel("F5:");
+		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF5.setBounds(574, 529, 23, 14);
+		getContentPane().add(lblF5);
+
+		lblRecarregar = new JLabel("Recarregar produtos");
+		lblRecarregar.setForeground(Color.BLUE);
+		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblRecarregar.setBounds(596, 529, 122, 14);
+		getContentPane().add(lblRecarregar);
+
+		lblEnter = new JLabel("Enter:");
+		lblEnter.setFont(new Font("Arial", Font.BOLD, 12));
+		lblEnter.setBounds(103, 529, 36, 14);
+		getContentPane().add(lblEnter);
+
+		lblSalvar = new JLabel("Salvar");
+		lblSalvar.setForeground(new Color(0, 128, 0));
+		lblSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSalvar.setBounds(142, 529, 36, 14);
+		getContentPane().add(lblSalvar);
+
+		tabelaProdutos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
 			@Override
-			public void mousePressed(MouseEvent clickLinhaTabela) {
-				if (btnNovo.isEnabled()) {
+			public void valueChanged(ListSelectionEvent e) {
+
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+
+				if (!lsm.isSelectionEmpty() && btnNovo.isEnabled()) {
+
 					txtCodigo.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0).toString());
 					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 1).toString());
 					Object barras = tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2);
@@ -419,17 +512,9 @@ public class CadastroProduto extends JFrame {
 					btnExcluir.setVisible(true);
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
-
 				}
 			}
 		});
-
-		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
-		tabelaProdutos.setBounds(20, 317, 595, 146);
-		ConfiguralarguracolunaTabela(tabelaProdutos);
-		scrollPaneProdutos = new JScrollPane(tabelaProdutos);
-		scrollPaneProdutos.setBounds(10, 288, 708, 243);
-		getContentPane().add(scrollPaneProdutos);
 
 	}
 
@@ -656,6 +741,7 @@ public class CadastroProduto extends JFrame {
 			txtPesquisar.setEnabled(false);
 			cbxTipoPesquisa.setEnabled(false);
 			lblPesquisarPor.setEnabled(false);
+			fTxtCodigoBarras.setEnabled(true);
 			btnNovo.doClick();
 			fTxtNomeProduto.requestFocusInWindow();
 			recarregarTabela();
@@ -714,6 +800,7 @@ public class CadastroProduto extends JFrame {
 			cbxTipoPesquisa.setEnabled(false);
 			lblPesquisarPor.setEnabled(false);
 			btnReload.setVisible(false);
+			fTxtNomeProduto.requestFocusInWindow();
 			ativarCampos();
 		}
 	}
@@ -721,7 +808,6 @@ public class CadastroProduto extends JFrame {
 // Ação para ativar campos.
 	public void ativarCampos() {
 		fTxtNomeProduto.setEnabled(true);
-		fTxtCodigoBarras.setEnabled(true);
 		fTxtPrecoVenda.setEnabled(true);
 		cbxFatorDeVenda.setEnabled(true);
 		cbxSetor.setEnabled(true);
@@ -851,4 +937,16 @@ public class CadastroProduto extends JFrame {
 	Icon icone_editar = new ImageIcon(getClass().getResource("/icons/editar.png"));
 	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
 	Icon icone_reload = new ImageIcon(getClass().getResource("/icons/reload.png"));
+	private JLabel lblEsc;
+	private JLabel lblCancelar;
+	private JLabel lblF1;
+	private JLabel lblNovo;
+	private JLabel lblF3;
+	private JLabel lblEditar;
+	private JLabel lblExcluir;
+	private JLabel lblF12;
+	private JLabel lblF5;
+	private JLabel lblRecarregar;
+	private JLabel lblEnter;
+	private JLabel lblSalvar;
 }

@@ -205,7 +205,7 @@ public class ProdutoDAO {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? "
 					+ "ORDER BY descricao");
 			ps.setString(1, nome);
