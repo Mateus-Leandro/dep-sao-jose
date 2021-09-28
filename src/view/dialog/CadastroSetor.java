@@ -171,6 +171,7 @@ public class CadastroSetor extends JDialog {
 		btnSalvar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickSalvar) {
+				salva_setor();
 
 			}
 		});
@@ -211,7 +212,7 @@ public class CadastroSetor extends JDialog {
 			public void valueChanged(ListSelectionEvent e) {
 				btnExcluir.setEnabled(true);
 				btnEditar.setEnabled(true);
-				if (btnNovo.isVisible()) {
+				if (btnNovo.isVisible() && tabelaSetores.getSelectedRow() != -1) {
 					fTxtCodigoSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 0).toString());
 					fTxtNomeSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 1).toString());
 				}
@@ -240,46 +241,46 @@ public class CadastroSetor extends JDialog {
 
 		lblEnter = new JLabel("Enter:");
 		lblEnter.setFont(new Font("Arial", Font.BOLD, 12));
-		lblEnter.setBounds(103, 304, 36, 14);
+		lblEnter.setBounds(111, 304, 36, 14);
 		contentPane.add(lblEnter);
 
 		lblSalvar = new JLabel("Salvar");
 		lblSalvar.setForeground(new Color(0, 128, 0));
 		lblSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblSalvar.setBounds(142, 304, 36, 14);
+		lblSalvar.setBounds(150, 304, 36, 14);
 		contentPane.add(lblSalvar);
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(194, 304, 23, 14);
+		lblF1.setBounds(202, 304, 23, 14);
 		contentPane.add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(new Color(255, 69, 0));
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(217, 304, 36, 14);
+		lblNovo.setBounds(225, 304, 36, 14);
 		contentPane.add(lblNovo);
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(263, 304, 23, 14);
+		lblF3.setBounds(271, 304, 23, 14);
 		contentPane.add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(286, 304, 36, 14);
+		lblEditar.setBounds(294, 304, 36, 14);
 		contentPane.add(lblEditar);
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(332, 304, 23, 14);
+		lblF12.setBounds(348, 304, 23, 14);
 		contentPane.add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(Color.RED);
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(361, 304, 46, 14);
+		lblExcluir.setBounds(378, 304, 46, 14);
 		contentPane.add(lblExcluir);
 
 	}
