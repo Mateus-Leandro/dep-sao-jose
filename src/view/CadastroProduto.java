@@ -86,12 +86,26 @@ public class CadastroProduto extends JFrame {
 	private JFormattedTextField fTxtCodigoBarras;
 	private JTable tabelaProdutos;
 	private JScrollPane scrollPaneProdutos;
-	ArrayList<Produto> produtos = new ArrayList<Produto>();
-	ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
+	private JLabel lblEsc;
+	private JLabel lblCancelar;
+	private JLabel lblF1;
+	private JLabel lblNovo;
+	private JLabel lblF3;
+	private JLabel lblEditar;
+	private JLabel lblExcluir;
+	private JLabel lblF12;
+	private JLabel lblF5;
+	private JLabel lblRecarregar;
+	private JLabel lblEnter;
+	private JLabel lblSalvar;
 	private JButton btnCancelar;
 	private JFormattedTextField fTxtNomeProduto;
 	private JButton btnMaisSetor;
 	private JButton btnMaisBarras;
+	ArrayList<Produto> produtos = new ArrayList<Produto>();
+	ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
+	
+	
 
 	/**
 	 * Launch the application.
@@ -163,6 +177,7 @@ public class CadastroProduto extends JFrame {
 		panel.add(lblSetor);
 
 		cbxSetor = new JComboBox<Setor>();
+		cbxSetor.setMaximumRowCount(7);
 		cbxSetor.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent focoCbxSetor) {
@@ -490,9 +505,9 @@ public class CadastroProduto extends JFrame {
 		tabelaProdutos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
+			public void valueChanged(ListSelectionEvent selecaoLinhaTabela) {
 
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				ListSelectionModel lsm = (ListSelectionModel) selecaoLinhaTabela.getSource();
 
 				if (!lsm.isSelectionEmpty() && btnNovo.isEnabled()) {
 
@@ -512,6 +527,9 @@ public class CadastroProduto extends JFrame {
 					btnExcluir.setVisible(true);
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
+					fTxtNomeProduto.setEnabled(true);
+					fTxtCodigoBarras.setEnabled(true);
+					fTxtPrecoVenda.setEnabled(true);
 				}
 			}
 		});
@@ -930,23 +948,11 @@ public class CadastroProduto extends JFrame {
 		);
 	}
 
-	// ------icons---------
+	// ------icones---------
 	Icon icone_salvar = new ImageIcon(getClass().getResource("/icons/salvar.png"));
 	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icons/cancelar.png"));
 	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
 	Icon icone_editar = new ImageIcon(getClass().getResource("/icons/editar.png"));
 	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
 	Icon icone_reload = new ImageIcon(getClass().getResource("/icons/reload.png"));
-	private JLabel lblEsc;
-	private JLabel lblCancelar;
-	private JLabel lblF1;
-	private JLabel lblNovo;
-	private JLabel lblF3;
-	private JLabel lblEditar;
-	private JLabel lblExcluir;
-	private JLabel lblF12;
-	private JLabel lblF5;
-	private JLabel lblRecarregar;
-	private JLabel lblEnter;
-	private JLabel lblSalvar;
 }
