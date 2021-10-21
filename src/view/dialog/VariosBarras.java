@@ -1,5 +1,6 @@
 package view.dialog;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -36,10 +37,7 @@ import javax.swing.text.MaskFormatter;
 
 import dao.BarrasDAO;
 import entities.Barras_Produto;
-import tableModels.ModeloTabelaBarras;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.Color;
+import tables.tableModels.ModeloTabelaBarras;
 
 public class VariosBarras extends JDialog {
 
@@ -61,6 +59,13 @@ public class VariosBarras extends JDialog {
 	private JFormattedTextField fTxtCodigoVinculado;
 	private JLabel lblVinculado;
 	private JButton btnExcluir;
+	private JButton btnTornaPrincipal = new JButton("Tornar Principal");
+	private JLabel lblF1;
+	private JLabel lblNovo;
+	private JLabel lblF12;
+	private JLabel lblExcluir;
+	private JLabel lblEsc;
+	private JLabel lblCancelar;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	BarrasDAO barras_dao = new BarrasDAO();
 	ArrayList<Barras_Produto> lista = new ArrayList<Barras_Produto>();
@@ -88,7 +93,6 @@ public class VariosBarras extends JDialog {
 	public VariosBarras(String cod, String cod_barras_principal, String nome) {
 		lista = barras_dao.lista_barras(cod, lista);
 		tecla_pressionada();
-		alimentaTabela(cod);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 452, 329);
@@ -97,6 +101,18 @@ public class VariosBarras extends JDialog {
 		setContentPane(contentPane);
 		setModal(true);
 		contentPane.setLayout(null);
+		
+				btnExcluir = new JButton("Excluir");
+				btnExcluir.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent clickExcluir) {
+						exclui_barras();
+					}
+				});
+				btnExcluir.setIcon(icone_excluir);
+				btnExcluir.setBounds(312, 139, 112, 23);
+				btnExcluir.setVisible(false);
+				contentPane.add(btnExcluir);
 
 		lblCadatroDeProduto = new JLabel("Cod. Barras Vinculados");
 		lblCadatroDeProduto.setBounds(10, 11, 414, 32);
@@ -151,18 +167,22 @@ public class VariosBarras extends JDialog {
 
 		tabelaVariosBarras = new JTable(modelo_tabela);
 
-		
+		tabelaVariosBarras.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-			tabelaVariosBarras.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-				public void valueChanged(ListSelectionEvent e) {
-					if (tabelaVariosBarras.getSelectedRow() != -1 && btnNovo.isVisible()) {
-					barras_selecionado = tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 0).toString();
-					btnExcluir.setEnabled(true);
+			public void valueChanged(ListSelectionEvent e) {
+				if (tabelaVariosBarras.getSelectedRow() != -1 && btnNovo.isVisible()) {
+					barras_selecionado = tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 0)
+							.toString();
+					btnExcluir.setVisible(true);
+					if((boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
+						btnTornaPrincipal.setVisible(false);
+					}else {
+						btnTornaPrincipal.setVisible(true);
 					}
 				}
-			});
-		
+			}
+		});
+
 		tabelaVariosBarras.setBounds(10, 129, 414, 131);
 		tabelaVariosBarras.getTableHeader().setReorderingAllowed(false);
 		tabelaVariosBarras.getTableHeader().setResizingAllowed(false);
@@ -172,6 +192,7 @@ public class VariosBarras extends JDialog {
 		contentPane.add(scrollPaneVariosBarras);
 
 		btnSalvar = new JButton("Salvar");
+		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnSalvar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -184,6 +205,7 @@ public class VariosBarras extends JDialog {
 		contentPane.add(btnSalvar);
 
 		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCancelar) {
@@ -196,6 +218,7 @@ public class VariosBarras extends JDialog {
 		contentPane.add(btnCancelar);
 
 		btnNovo = new JButton("Novo");
+		btnNovo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnNovo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNovo) {
@@ -224,18 +247,6 @@ public class VariosBarras extends JDialog {
 		lblVinculado.setBounds(10, 117, 129, 23);
 		lblVinculado.setVisible(false);
 		contentPane.add(lblVinculado);
-
-		btnExcluir = new JButton("Excluir");
-		btnExcluir.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickExcluir) {
-				exclui_barras();
-			}
-		});
-		btnExcluir.setEnabled(false);
-		btnExcluir.setIcon(icone_excluir);
-		btnExcluir.setBounds(312, 139, 112, 23);
-		contentPane.add(btnExcluir);
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
@@ -270,22 +281,30 @@ public class VariosBarras extends JDialog {
 		lblCancelar.setBounds(41, 275, 53, 14);
 		contentPane.add(lblCancelar);
 
+		btnTornaPrincipal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickTornarPrincipal) {
+
+				if (barras_dao.tornar_principal(cod, barras_selecionado)) {
+					JOptionPane.showMessageDialog(null, "Código de barras principal alterado com sucesso.",
+							"Alteração do código de barras principal", JOptionPane.INFORMATION_MESSAGE);
+					txtCodigoBarrasPrincipal.setText(barras_selecionado);
+					lista = barras_dao.lista_barras(cod, lista);
+					modelo_tabela.fireTableDataChanged();
+				}
+
+			}
+		});
+		btnTornaPrincipal.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnTornaPrincipal.setBounds(149, 139, 155, 23);
+		btnTornaPrincipal.setIcon(icone_principal);
+		btnTornaPrincipal.setVisible(false);
+		contentPane.add(btnTornaPrincipal);
+
 		// Alinhando código de barras para esquerda.
 		DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
 		esquerda.setHorizontalAlignment(SwingConstants.LEFT);
 		tabelaVariosBarras.getColumnModel().getColumn(0).setCellRenderer(esquerda);
-	}
-
-	// -----------------Funções--------------------
-
-	public ArrayList<Barras_Produto> alimentaTabela(String cod_produto) {
-
-		ArrayList<entities.Barras_Produto> lista = new ArrayList<entities.Barras_Produto>();
-		BarrasDAO barras_dao = new BarrasDAO();
-
-		lista = barras_dao.lista_barras(cod_produto, lista);
-
-		return lista;
 	}
 
 	public void novo_barras() {
@@ -296,6 +315,7 @@ public class VariosBarras extends JDialog {
 		fTxtCodigoVinculado.setVisible(true);
 		lblVinculado.setVisible(true);
 		fTxtCodigoVinculado.requestFocus();
+		btnTornaPrincipal.setVisible(false);
 	}
 
 	public void cancela_barras() {
@@ -348,7 +368,7 @@ public class VariosBarras extends JDialog {
 				btnNovo.setVisible(true);
 				fTxtCodigoVinculado.setVisible(false);
 				lblVinculado.setVisible(false);
-				
+
 			}
 
 		} else {
@@ -409,11 +429,6 @@ public class VariosBarras extends JDialog {
 	Icon icone_cancelar = new ImageIcon(getClass().getResource("/icons/cancelar.png"));
 	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
 	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
-	private JLabel lblF1;
-	private JLabel lblNovo;
-	private JLabel lblF12;
-	private JLabel lblExcluir;
-	private JLabel lblEsc;
-	private JLabel lblCancelar;
-
+	Icon icone_principal = new ImageIcon(getClass().getResource("/icons/principal.png"));
+	
 }

@@ -33,7 +33,8 @@ import javax.swing.text.MaskFormatter;
 
 import dao.SetorDAO;
 import entities.Setor;
-import tableModels.ModeloTabelaSetores;
+import tables.tableModels.ModeloTabelaSetores;
+
 import java.awt.Color;
 
 public class CadastroSetor extends JDialog {

@@ -67,8 +67,8 @@ public class BarrasDAO {
 			ps.setString(1, barras);
 			ps.execute();
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "Código de barras removido.",
-					"Exclusão de código de barras vinculado.", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Código de barras removido.", "Exclusão de código de barras vinculado.",
+					JOptionPane.WARNING_MESSAGE);
 			return true;
 		} catch (Exception erro) {
 			JOptionPane.showMessageDialog(null, "Erro ao remover código de barras!",
@@ -107,6 +107,8 @@ public class BarrasDAO {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		
+		lista.clear();
 
 		try {
 			ps = conn.prepareStatement(
@@ -125,6 +127,36 @@ public class BarrasDAO {
 			JOptionPane.showMessageDialog(null, "Erro ao alimentar lista de códigos de barras!", "Erro",
 					JOptionPane.WARNING_MESSAGE);
 			return null;
+		}
+	}
+
+	public boolean tornar_principal(String cod_produto, String barras) {
+
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement("UPDATE barras_produto SET principal = 0 WHERE idProduto = ?");
+			ps.setString(1, cod_produto);
+			ps.execute();
+
+			ps = conn.prepareStatement("UPDATE barras_produto SET principal = 1 WHERE barras = ?");
+			ps.setString(1, barras);
+			ps.execute();
+
+			conn.commit();
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+			return false;
 		}
 	}
 

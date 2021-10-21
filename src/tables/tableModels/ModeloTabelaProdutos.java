@@ -1,22 +1,18 @@
-package tableModels;
+package tables.tableModels;
 
-import java.sql.Date;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
 import entities.Produto;
 import entities.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
-
+	
 	private String colunas[] = { "Cod", "Nome", "Cod.Barras", "Setor", "Fator", "Preço", "Bloqueado", "Dt. Cad." };
 	private ArrayList<Produto> produtos;
 	private final int COLUNA_CODIGO = 0;
@@ -65,7 +61,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_FATOR_VENDA:
 			return String.class;
 		case COLUNA_PRECO_VENDA:
-			return String.class;
+			return BigDecimal.class;
 		case COLUNA_BLOQUEADO_VENDA:
 			return Boolean.class;
 		case COLUNA_DATA_CADASTRO:
@@ -80,7 +76,6 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		Produto produto = this.produtos.get(rowIndex);
 
 		NumberFormat nf = new DecimalFormat("R$ 0.00");
-
 		switch (columIndex) {
 		case COLUNA_CODIGO:
 			return produto.getIdProduto();
@@ -116,5 +111,8 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 		tabela.setModel(modelo);
 	}
+	
+	
+	
 
 }

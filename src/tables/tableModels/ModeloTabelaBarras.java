@@ -1,4 +1,4 @@
-package tableModels;
+package tables.tableModels;
 
 import java.sql.Date;
 import java.util.ArrayList;

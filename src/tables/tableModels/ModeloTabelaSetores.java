@@ -1,4 +1,4 @@
-package tableModels;
+package tables.tableModels;
 
 import java.util.ArrayList;
 

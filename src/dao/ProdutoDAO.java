@@ -22,10 +22,6 @@ public class ProdutoDAO {
 	public ProdutoDAO() {
 	}
 
-	public ProdutoDAO(Connection conn) {
-		this.conn = conn;
-	}
-
 //------------Inserir-----------------
 	public Produto inserirProduto(Produto produto) {
 		conn = DB.getConnection();
@@ -64,12 +60,6 @@ public class ProdutoDAO {
 
 			}
 			conn.commit();
-
-			JOptionPane
-					.showMessageDialog(
-							null, "Produto cadastrado com sucesso! " + "\nCódigo: " + produto.getIdProduto()
-									+ "\nProduto: " + produto.getDescricao(),
-							"Cadastro de produtos", JOptionPane.NO_OPTION);
 
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Erro ao inserir novo produto!" + e.getMessage());

@@ -1,8 +1,6 @@
-CREATE DATABASE  IF NOT EXISTS `banco_deposito` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `banco_deposito`;
 -- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: banco_deposito
+-- Host: localhost    Database: banco_deposito
 -- ------------------------------------------------------
 -- Server version	8.0.26
 
@@ -41,7 +39,7 @@ CREATE TABLE `barras_produto` (
 
 LOCK TABLES `barras_produto` WRITE;
 /*!40000 ALTER TABLE `barras_produto` DISABLE KEYS */;
-INSERT INTO `barras_produto` VALUES (14,'15',0,'2021-10-02'),(10,'157',0,'2021-09-26'),(8,'158',0,'2021-09-24'),(10,'15810',0,'2021-09-24'),(10,'1589',1,'2021-09-24'),(8,'56',1,'2021-09-24'),(17,'6578',1,'2021-09-26'),(14,'65789',1,'2021-09-26'),(14,'89',0,'2021-09-26');
+INSERT INTO `barras_produto` VALUES (27,'1010101010',1,'2021-10-21'),(27,'131135615',0,'2021-10-21'),(19,'146466',1,'2021-10-19'),(18,'1598',0,'2021-10-18'),(26,'1664',1,'2021-10-21'),(22,'17',1,'2021-10-21'),(23,'171',1,'2021-10-21'),(20,'645545',1,'2021-10-21'),(20,'65665',0,'2021-10-19'),(17,'6578',1,'2021-09-26'),(18,'664',1,'2021-10-21');
 /*!40000 ALTER TABLE `barras_produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,11 +54,11 @@ CREATE TABLE `clientes` (
   `idClientes` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `apelido` varchar(20) DEFAULT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
+  `documento` varchar(18) DEFAULT NULL,
+  `inscricaoEstadual` varchar(15) DEFAULT NULL,
   `cep` varchar(9) DEFAULT NULL,
   `cidade` varchar(30) NOT NULL,
-  `tipoLogradouro` varchar(15) NOT NULL,
-  `descricaoLogradouro` varchar(50) NOT NULL,
+  `endereco` varchar(50) NOT NULL,
   `referencia` varchar(50) DEFAULT NULL,
   `numero` varchar(8) DEFAULT NULL,
   `bairro` varchar(30) DEFAULT NULL,
@@ -69,8 +67,9 @@ CREATE TABLE `clientes` (
   `telefone` varchar(13) DEFAULT NULL,
   `dataCadastro` date NOT NULL,
   PRIMARY KEY (`idClientes`),
-  UNIQUE KEY `Cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  UNIQUE KEY `Cpf_UNIQUE` (`documento`),
+  UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +78,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
+INSERT INTO `clientes` VALUES (1,'Mateus Leandro Chagas Andrade','Chagas','151.253.906-66',NULL,'32371-570','Contagem','Rioa Jaguaribe','Casa Verde','100A','Eldoradinho','mateus.chagas@gmail.com','(31)98444-8086',NULL,'2021-10-18');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +128,7 @@ CREATE TABLE `produto` (
   PRIMARY KEY (`idProduto`),
   KEY `codSetor_idx` (`codSetor`),
   CONSTRAINT `codSetor` FOREIGN KEY (`codSetor`) REFERENCES `setor` (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +137,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (8,'Parafusos grande',6.58,25,'UN',0,'2021-09-24'),(10,'Teste brras',15.3,2,'UN',0,'2021-09-24'),(13,'Pe de cabra',15.32,1,'UN',0,'2021-09-25'),(14,'Teste fator',15.8,30,'PC',0,'2021-09-26'),(17,'Novo produto',8.5,27,'UN',0,'2021-09-26');
+INSERT INTO `produto` VALUES (17,'Novo produto',8.5,27,'UN',0,'2021-09-26'),(18,'Furadeira mondial',153.03,45,'UN',0,'2021-10-18'),(19,'Produto teste',157.3,25,'CX',0,'2021-10-19'),(20,'Novo produto teste',150.75,46,'KG',1,'2021-10-19'),(22,'Garrafa de pinga com coco',2.5,46,'UN',0,'2021-10-21'),(23,'Barras',25,48,'MT',0,'2021-10-21'),(24,'Teste novo produto',15.2,27,'UN',0,'2021-10-21'),(26,'155',15.3,1,'UN',0,'2021-10-21'),(27,'celular chagas@##',999999.99,2,'KG',0,'2021-10-21');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +179,7 @@ CREATE TABLE `setor` (
   `codSetor` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
   PRIMARY KEY (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +188,7 @@ CREATE TABLE `setor` (
 
 LOCK TABLES `setor` WRITE;
 /*!40000 ALTER TABLE `setor` DISABLE KEYS */;
-INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(25,'Parafusos'),(27,'Lixas'),(30,'Teste'),(44,'Teste 6');
+INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(25,'Parafusos'),(27,'Lixas'),(30,'Teste'),(45,'Furadeiras'),(46,'cimentos'),(47,'parafusos 2'),(48,'Eletrico');
 /*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,6 +228,10 @@ LOCK TABLES `vendas` WRITE;
 UNLOCK TABLES;
 
 --
+-- Dumping events for database 'banco_deposito'
+--
+
+--
 -- Dumping routines for database 'banco_deposito'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -240,4 +244,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-08  6:18:07
+-- Dump completed on 2021-10-21 16:13:41

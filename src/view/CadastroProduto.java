@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -37,7 +38,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -52,10 +52,10 @@ import dao.SetorDAO;
 import entities.Produto;
 import entities.Setor;
 import formatFields.FormataContabil;
-import tableModels.ModeloTabelaProdutos;
+import tables.tableModels.ModeloTabelaProdutos;
+import tables.tableSorters.SorterMonetario;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
-import java.awt.event.ActionListener;
 
 public class CadastroProduto extends JFrame {
 	/**
@@ -104,8 +104,6 @@ public class CadastroProduto extends JFrame {
 	private JButton btnMaisBarras;
 	ArrayList<Produto> produtos = new ArrayList<Produto>();
 	ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
-	
-	
 
 	/**
 	 * Launch the application.
@@ -141,7 +139,7 @@ public class CadastroProduto extends JFrame {
 		tecla_pressionada();
 
 		panel = new JPanel();
-		panel.setBounds(10, 54, 708, 223);
+		panel.setBounds(10, 54, 708, 221);
 		panel.setBorder(UIManager.getBorder("PopupMenu.border"));
 		getContentPane().add(panel);
 		panel.setLayout(null);
@@ -168,15 +166,28 @@ public class CadastroProduto extends JFrame {
 		lblFatorDeVenda = new JLabel("Fator de Venda");
 		lblFatorDeVenda.setToolTipText("");
 		lblFatorDeVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFatorDeVenda.setBounds(246, 106, 97, 17);
+		lblFatorDeVenda.setBounds(246, 91, 97, 17);
 		panel.add(lblFatorDeVenda);
 
 		lblSetor = new JLabel("Setor");
 		lblSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSetor.setBounds(10, 56, 33, 17);
+		lblSetor.setBounds(10, 51, 33, 17);
 		panel.add(lblSetor);
 
 		cbxSetor = new JComboBox<Setor>();
+		cbxSetor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent enterCbxSetor) {
+				if (enterCbxSetor.getKeyCode() == enterCbxSetor.VK_ENTER) {
+					if(fTxtCodigoBarras.isEnabled()) {
+						fTxtCodigoBarras.requestFocus();
+					}
+					else {
+						fTxtPrecoVenda.requestFocus();
+					}
+				}
+			}
+		});
 		cbxSetor.setMaximumRowCount(7);
 		cbxSetor.addFocusListener(new FocusAdapter() {
 			@Override
@@ -191,42 +202,72 @@ public class CadastroProduto extends JFrame {
 		});
 		alimentaSetores();
 		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		cbxSetor.setBounds(53, 55, 214, 22);
+		cbxSetor.setBounds(53, 50, 214, 22);
 		cbxSetor.setEnabled(false);
 		panel.add(cbxSetor);
 
 		cbxFatorDeVenda = new JComboBox();
+		cbxFatorDeVenda.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent enterFatorVenda) {
+				if (enterFatorVenda.getKeyCode() == enterFatorVenda.VK_ENTER) {
+					btnSalvar.requestFocus();
+				}
+			}
+		});
 		cbxFatorDeVenda.setEnabled(false);
 		cbxFatorDeVenda.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		cbxFatorDeVenda
 				.setModel(new DefaultComboBoxModel(new String[] { "UN ", "CX ", "FD ", "PC", "KG ", "MT", "L" }));
-		cbxFatorDeVenda.setBounds(348, 104, 48, 22);
+		cbxFatorDeVenda.setBounds(348, 89, 48, 22);
 		panel.add(cbxFatorDeVenda);
 
 		lblPrecoVenda = new JLabel("Pre\u00E7o de Venda");
 		lblPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrecoVenda.setBounds(10, 104, 97, 17);
+		lblPrecoVenda.setBounds(10, 89, 97, 17);
 		panel.add(lblPrecoVenda);
 
 		fTxtPrecoVenda = new JFormattedTextField();
-		fTxtPrecoVenda.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent enterSalvarPreco) {
-				salvar_produto();
+		fTxtPrecoVenda.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent enterPrecoVenda) {
+
+				Double preco = null;
+				preco = testa_preco_vazio(preco);
+
+				if (enterPrecoVenda.getKeyCode() == enterPrecoVenda.VK_ENTER) {
+					
+					if(preco < 0.01){
+						fTxtPrecoVenda.setBorder(new LineBorder(Color.RED));
+						JOptionPane.showMessageDialog(null, "Necessario informar preço de venda!","Preço de venda zerado.",JOptionPane.WARNING_MESSAGE);
+					}else {
+						cbxFatorDeVenda.requestFocus();
+					}
+				}
 			}
 		});
+
 		fTxtPrecoVenda.setDocument(new FormataContabil(9, 2));
 		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		fTxtPrecoVenda.setEnabled(false);
-		fTxtPrecoVenda.setBounds(117, 103, 87, 20);
+		fTxtPrecoVenda.setBounds(117, 88, 87, 20);
 		fTxtPrecoVenda.setHorizontalAlignment(JTextField.RIGHT);
 		panel.add(fTxtPrecoVenda);
 
 		checkBoxBloqueadoVenda = new JCheckBox("Bloqueado para venda");
+		checkBoxBloqueadoVenda.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterBloqVenda) {
+				if (enterBloqVenda.getKeyCode() == enterBloqVenda.VK_ENTER) {
+					btnSalvar.requestFocus();
+				}
+			}
+		});
 		checkBoxBloqueadoVenda.setEnabled(false);
 		checkBoxBloqueadoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		checkBoxBloqueadoVenda.setToolTipText(
 				"Caso marcado a caixa ao lado, n\u00E3o ser\u00E1 poss\u00EDvel realizar vendas com este produto!");
-		checkBoxBloqueadoVenda.setBounds(517, 103, 163, 23);
+		checkBoxBloqueadoVenda.setBounds(517, 88, 163, 23);
 		panel.add(checkBoxBloqueadoVenda);
 
 		btnNovo = new JButton("Novo");
@@ -238,7 +279,7 @@ public class CadastroProduto extends JFrame {
 				novo_item();
 			}
 		});
-		btnNovo.setBounds(10, 149, 87, 29);
+		btnNovo.setBounds(10, 134, 87, 29);
 		btnNovo.setIcon(icone_mais);
 		panel.add(btnNovo);
 
@@ -253,7 +294,7 @@ public class CadastroProduto extends JFrame {
 			}
 		});
 
-		btnSalvar.setBounds(117, 149, 97, 29);
+		btnSalvar.setBounds(117, 134, 97, 29);
 		panel.add(btnSalvar);
 
 		btnExcluir = new JButton("Excluir");
@@ -265,7 +306,7 @@ public class CadastroProduto extends JFrame {
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnExcluir.setBounds(601, 149, 97, 29);
+		btnExcluir.setBounds(601, 134, 97, 29);
 		btnExcluir.setEnabled(false);
 		btnExcluir.setIcon(icone_excluir);
 		panel.add(btnExcluir);
@@ -281,7 +322,7 @@ public class CadastroProduto extends JFrame {
 			}
 		});
 		btnEditar.setEnabled(false);
-		btnEditar.setBounds(504, 149, 87, 29);
+		btnEditar.setBounds(504, 134, 87, 29);
 		btnEditar.setIcon(icone_editar);
 		panel.add(btnEditar);
 
@@ -294,12 +335,12 @@ public class CadastroProduto extends JFrame {
 		});
 		txtPesquisar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtPesquisar.setColumns(10);
-		txtPesquisar.setBounds(203, 191, 437, 20);
+		txtPesquisar.setBounds(203, 189, 437, 20);
 		panel.add(txtPesquisar);
 
 		lblPesquisarPor = new JLabel("Pesquisar por");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPesquisarPor.setBounds(10, 191, 87, 14);
+		lblPesquisarPor.setBounds(10, 189, 87, 14);
 		lblPesquisarPor.setEnabled(true);
 		panel.add(lblPesquisarPor);
 
@@ -312,13 +353,13 @@ public class CadastroProduto extends JFrame {
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "Cod. Interno", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
-		cbxTipoPesquisa.setBounds(99, 189, 97, 22);
+		cbxTipoPesquisa.setBounds(99, 187, 97, 22);
 		panel.add(cbxTipoPesquisa);
 
 		lblCdigoDeBarras = new JLabel("C\u00F3digo de Barras");
 		lblCdigoDeBarras.setToolTipText("");
 		lblCdigoDeBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCdigoDeBarras.setBounds(407, 57, 109, 17);
+		lblCdigoDeBarras.setBounds(407, 52, 109, 17);
 		panel.add(lblCdigoDeBarras);
 
 		MaskFormatter mascara_cod_barras = null;
@@ -328,6 +369,14 @@ public class CadastroProduto extends JFrame {
 			e.getMessage();
 		}
 		fTxtCodigoBarras = new JFormattedTextField(mascara_cod_barras);
+		fTxtCodigoBarras.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent enterCodigoBarras) {
+				if (enterCodigoBarras.getKeyCode() == enterCodigoBarras.VK_ENTER) {
+					fTxtPrecoVenda.requestFocus();
+				}
+			}
+		});
 		fTxtCodigoBarras.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent ganhoFocoCodigoBarras) {
@@ -339,13 +388,13 @@ public class CadastroProduto extends JFrame {
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		fTxtCodigoBarras.setEnabled(false);
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCodigoBarras.setBounds(517, 56, 138, 20);
+		fTxtCodigoBarras.setBounds(517, 51, 138, 20);
 		panel.add(fTxtCodigoBarras);
 
 		btnReload = new JButton();
 		btnReload.setVisible(true);
 		btnReload.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnReload.setBounds(650, 186, 48, 29);
+		btnReload.setBounds(650, 184, 48, 29);
 		btnReload.setIcon(icone_reload);
 		panel.add(btnReload);
 
@@ -364,7 +413,7 @@ public class CadastroProduto extends JFrame {
 				cancelar_produto();
 			}
 		});
-		btnCancelar.setBounds(224, 149, 109, 29);
+		btnCancelar.setBounds(224, 134, 109, 29);
 		btnCancelar.setVisible(false);
 		btnCancelar.setIcon(icone_cancelar);
 		panel.add(btnCancelar);
@@ -376,6 +425,14 @@ public class CadastroProduto extends JFrame {
 			e.getMessage();
 		}
 		fTxtNomeProduto = new JFormattedTextField(mascara_descricao_produto);
+		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent enterNomeProduto) {
+				if (enterNomeProduto.getKeyCode() == enterNomeProduto.VK_ENTER) {
+					cbxSetor.requestFocus();
+				}
+			}
+		});
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeProduto) {
@@ -399,7 +456,7 @@ public class CadastroProduto extends JFrame {
 				}
 			}
 		});
-		btnMaisSetor.setBounds(274, 55, 33, 23);
+		btnMaisSetor.setBounds(274, 50, 33, 23);
 		btnMaisSetor.setIcon(icone_mais);
 		panel.add(btnMaisSetor);
 
@@ -415,7 +472,7 @@ public class CadastroProduto extends JFrame {
 			}
 		});
 		btnMaisBarras.setEnabled(false);
-		btnMaisBarras.setBounds(665, 57, 33, 20);
+		btnMaisBarras.setBounds(665, 52, 33, 20);
 		btnMaisBarras.setIcon(icone_mais);
 		panel.add(btnMaisBarras);
 
@@ -427,7 +484,6 @@ public class CadastroProduto extends JFrame {
 
 		produtos = alimentarListaProdutos(produtos);
 		tabelaProdutos = new JTable(modelo);
-		tabelaProdutos.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setBounds(20, 317, 595, 146);
@@ -518,18 +574,15 @@ public class CadastroProduto extends JFrame {
 					cbxSetor.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 3));
 					cbxFatorDeVenda.getModel()
 							.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 4));
-					fTxtPrecoVenda.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 5).toString()
-							.replace("R$ ", ""));
+					fTxtPrecoVenda.setText(
+
+							tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 5).toString().replace("R$ ",
+									""));
 					checkBoxBloqueadoVenda
 							.setSelected((boolean) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 6));
-					btnMaisBarras.setEnabled(true);
-					btnEditar.setVisible(true);
-					btnExcluir.setVisible(true);
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
-					fTxtNomeProduto.setEnabled(true);
-					fTxtCodigoBarras.setEnabled(true);
-					fTxtPrecoVenda.setEnabled(true);
+					btnMaisBarras.setEnabled(true);
 				}
 			}
 		});
@@ -568,6 +621,17 @@ public class CadastroProduto extends JFrame {
 			if (txtCodigo.getText().trim().isEmpty()) {
 				if (barras_valido) {
 					produto = produto_dao.inserirProduto(produto);
+
+					if (produto.getIdProduto() != null) {
+
+						JOptionPane.showMessageDialog(null,
+								"Produto cadastrado com sucesso! " + "\nCódigo: " + produto.getIdProduto()
+										+ "\nProduto: " + produto.getDescricao(),
+								"Cadastro de produtos", JOptionPane.NO_OPTION);
+						btnEditar.setVisible(true);
+						btnExcluir.setVisible(true);
+					}
+
 					String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
 					produto.setDataCadastro(sdf.parse(data_formatada));
 					limparCampos();
@@ -606,6 +670,8 @@ public class CadastroProduto extends JFrame {
 					lblPesquisarPor.setVisible(true);
 					txtPesquisar.setVisible(true);
 					cbxTipoPesquisa.setVisible(true);
+					btnExcluir.setVisible(true);
+					btnEditar.setVisible(true);
 					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
 					recarregarTabela();
 					return produto;
@@ -717,15 +783,9 @@ public class CadastroProduto extends JFrame {
 	public void salvar_produto() {
 
 		if (btnSalvar.isVisible()) {
-			boolean preco_vazio = fTxtPrecoVenda.getText().trim().isEmpty();
 
-			Double preco;
-
-			if (!preco_vazio) {
-				preco = Double.parseDouble(fTxtPrecoVenda.getText().replaceAll("\\.", "").replaceAll(",", "."));
-			} else {
-				preco = 0.00;
-			}
+			Double preco = null;
+			preco = testa_preco_vazio(preco);
 
 			if (fTxtNomeProduto.getText().trim().isEmpty() || preco < 0.01) {
 				if (fTxtNomeProduto.getText().trim().isEmpty()) {
@@ -735,7 +795,7 @@ public class CadastroProduto extends JFrame {
 
 				if (preco < 0.01) {
 					fTxtPrecoVenda.setBorder(new LineBorder(Color.RED));
-					JOptionPane.showMessageDialog(null, "Necessario informar preço de venda!");
+					JOptionPane.showMessageDialog(null, "Necessario informar preço de venda!","Preço de venda zerado.",JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
 				gravarNovoProduto();
@@ -809,11 +869,10 @@ public class CadastroProduto extends JFrame {
 
 		if (btnEditar.isEnabled() && tabelaProdutos.getSelectedRow() != -1) {
 			btnCancelar.setVisible(true);
-			btnExcluir.setVisible(false);
+			btnExcluir.setEnabled(false);
 			btnNovo.setEnabled(false);
-			btnEditar.setVisible(false);
+			btnEditar.setEnabled(false);
 			btnSalvar.setVisible(true);
-			btnMaisBarras.setEnabled(true);
 			txtPesquisar.setEnabled(false);
 			cbxTipoPesquisa.setEnabled(false);
 			lblPesquisarPor.setEnabled(false);
@@ -856,6 +915,8 @@ public class CadastroProduto extends JFrame {
 
 	// Configurando largura das colunas
 	public void ConfiguralarguracolunaTabela(JTable tabelaProdutos) {
+		SorterMonetario spv = new SorterMonetario();
+
 		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(4);
 		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(130);
 		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(56);
@@ -864,8 +925,21 @@ public class CadastroProduto extends JFrame {
 		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(30);
 		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(20);
 		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(28);
-		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
+		sorter.setComparator(5, spv);
 		tabelaProdutos.setRowSorter(sorter);
+
+	}
+
+	public Double testa_preco_vazio(Double preco) {
+		boolean preco_vazio = fTxtPrecoVenda.getText().trim().isEmpty();
+
+		if (!preco_vazio) {
+			preco = Double.parseDouble(fTxtPrecoVenda.getText().replaceAll("\\.", "").replaceAll(",", "."));
+		} else {
+			preco = 0.00;
+		}
+		return preco;
 	}
 
 	// ---------Atalhos do teclado--------
@@ -918,8 +992,12 @@ public class CadastroProduto extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent atalho_salvar) {
-				btnSalvar.doClick();
-				salvar_produto();
+
+				if (btnSalvar.isFocusOwner()) {
+					btnSalvar.doClick();
+					salvar_produto();
+				}
+
 			}
 		}
 

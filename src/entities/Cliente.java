@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Clientes {
+public class Cliente {
 	private Integer idCliente = null;
 	private String nome;
 	private String apelido;
@@ -12,11 +12,10 @@ public class Clientes {
 	private String cpf_cnpj;
 	private String inscricao_estadual;
 	private String cep;
-	private String municipio;
-	private enum tipoLogradouro {RUA, AVENIDA, VIELA, TRAVESSA, QUADRA, OUTRO};
-	private String descricaoLogradouro;
+	private String cidade;
+	private String Endereco;
 	private String referencia;
-	private Integer numero;
+	private String numero;
 	private String bairro;
 	private String email;
 	private String celular;
@@ -24,6 +23,34 @@ public class Clientes {
 	private Date dataCadastro;
 	
 	private List<Vendas> vendas =  new ArrayList<Vendas>();
+
+	
+	
+	
+	public Cliente(Integer idCliente, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
+			String inscricao_estadual, String cep, String cidade, String endereco,
+			String referencia, String numero, String bairro, String email, String celular, Date dataCadastro, List<Vendas> vendas) {
+		this.idCliente = idCliente;
+		this.nome = nome;
+		this.apelido = apelido;
+		this.pessoa_juridica = pessoa_juridica;
+		this.cpf_cnpj = cpf_cnpj;
+		this.inscricao_estadual = inscricao_estadual;
+		this.cep = cep;
+		this.cidade = cidade;
+		Endereco = endereco;
+		this.referencia = referencia;
+		this.numero = numero;
+		this.bairro = bairro;
+		this.email = email;
+		this.celular = celular;
+		this.telefone = telefone;
+		this.dataCadastro = dataCadastro;
+		this.vendas = vendas;
+	}
+	
+	public Cliente() {
+	}
 
 	public Integer getIdCliente() {
 		return idCliente;
@@ -81,20 +108,21 @@ public class Clientes {
 		this.cep = cep;
 	}
 
-	public String getMunicipio() {
-		return municipio;
+	public String getCidade() {
+		return cidade;
 	}
 
-	public void setMunicipio(String municipio) {
-		this.municipio = municipio;
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+	
+	
+	public String getEndereco() {
+		return Endereco;
 	}
 
-	public String getDescricaoLogradouro() {
-		return descricaoLogradouro;
-	}
-
-	public void setDescricaoLogradouro(String descricaoLogradouro) {
-		this.descricaoLogradouro = descricaoLogradouro;
+	public void setEndereco(String Endereco) {
+		this.Endereco = Endereco;
 	}
 
 	public String getReferencia() {
@@ -105,11 +133,11 @@ public class Clientes {
 		this.referencia = referencia;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
@@ -159,6 +187,31 @@ public class Clientes {
 
 	public void setVendas(List<Vendas> vendas) {
 		this.vendas = vendas;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idCliente == null) ? 0 : idCliente.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (idCliente == null) {
+			if (other.idCliente != null)
+				return false;
+		} else if (!idCliente.equals(other.idCliente))
+			return false;
+		return true;
 	}
 	
 	
