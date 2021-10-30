@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `banco_deposito` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `banco_deposito`;
 -- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: localhost    Database: banco_deposito
+-- Host: 127.0.0.1    Database: banco_deposito
 -- ------------------------------------------------------
 -- Server version	8.0.26
 
@@ -51,7 +53,7 @@ DROP TABLE IF EXISTS `clientes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clientes` (
-  `idClientes` int NOT NULL AUTO_INCREMENT,
+  `idCliente` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `apelido` varchar(20) DEFAULT NULL,
   `documento` varchar(18) DEFAULT NULL,
@@ -66,7 +68,7 @@ CREATE TABLE `clientes` (
   `celular` varchar(14) DEFAULT NULL,
   `telefone` varchar(13) DEFAULT NULL,
   `dataCadastro` date NOT NULL,
-  PRIMARY KEY (`idClientes`),
+  PRIMARY KEY (`idCliente`),
   UNIQUE KEY `Cpf_UNIQUE` (`documento`),
   UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
@@ -214,7 +216,7 @@ CREATE TABLE `vendas` (
   `dataVenda` datetime NOT NULL,
   PRIMARY KEY (`idVenda`),
   KEY `fk_Vendas_Clientes1_idx` (`idClientes`),
-  CONSTRAINT `fk_Vendas_Clientes1` FOREIGN KEY (`idClientes`) REFERENCES `clientes` (`idClientes`)
+  CONSTRAINT `fk_Vendas_Clientes1` FOREIGN KEY (`idClientes`) REFERENCES `clientes` (`idCliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -244,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-21 16:13:41
+-- Dump completed on 2021-10-26 19:11:33

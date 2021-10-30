@@ -20,7 +20,9 @@ public class Cliente {
 	private String email;
 	private String celular;
 	private String telefone;
+	private Boolean bloqueado;
 	private Date dataCadastro;
+	
 	
 	private List<Vendas> vendas =  new ArrayList<Vendas>();
 
@@ -29,7 +31,7 @@ public class Cliente {
 	
 	public Cliente(Integer idCliente, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
 			String inscricao_estadual, String cep, String cidade, String endereco,
-			String referencia, String numero, String bairro, String email, String celular, Date dataCadastro, List<Vendas> vendas) {
+			String referencia, String numero, String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro, List<Vendas> vendas) {
 		this.idCliente = idCliente;
 		this.nome = nome;
 		this.apelido = apelido;
@@ -45,6 +47,7 @@ public class Cliente {
 		this.email = email;
 		this.celular = celular;
 		this.telefone = telefone;
+		this.bloqueado = bloqueado;
 		this.dataCadastro = dataCadastro;
 		this.vendas = vendas;
 	}
@@ -179,6 +182,14 @@ public class Cliente {
 
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+	
+	public Boolean getBloqueado() {
+		return bloqueado;
+	}
+	
+	public void setBloqueado (Boolean bloqueado) {
+		this.bloqueado = bloqueado;
 	}
 
 	public List<Vendas> getVendas() {

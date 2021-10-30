@@ -6,7 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="src/db/mysql-connector-java-8.0.25.jar"/>
-	<classpathentry kind="lib" path="src/view/dom4j-2.1.3.jar"/>
+	<classpathentry kind="lib" path="src/External_libs/dom4j-2.1.3.jar"/>
+	<classpathentry kind="lib" path="src/External_libs/mysql-connector-java-8.0.25.jar"/>
+	<classpathentry kind="lib" path="src/External_libs/org.json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
