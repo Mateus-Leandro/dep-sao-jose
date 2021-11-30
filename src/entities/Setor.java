@@ -30,14 +30,14 @@ public class Setor {
 
 	@Override
 	public String toString() {
-		return nome;
+		return this.getNome();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codSetor == null) ? 0 : codSetor.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -50,12 +50,14 @@ public class Setor {
 		if (getClass() != obj.getClass())
 			return false;
 		Setor other = (Setor) obj;
-		if (codSetor == null) {
-			if (other.codSetor != null)
+		if (nome == null) {
+			if (other.nome != null)
 				return false;
-		} else if (!codSetor.equals(other.codSetor))
+		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
 	}
+
+
 	
 }

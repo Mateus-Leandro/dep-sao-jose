@@ -12,17 +12,22 @@ import entities.Produto;
 import entities.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
-	
-	private String colunas[] = { "Cod", "Nome", "Cod.Barras", "Setor", "Fator", "Preço", "Bloqueado", "Dt. Cad." };
+
+	private String colunas[] = { "Cod", "Nome", "Fator", "Setor", "Pr.Custo", "Mg%", "Pr.Sug.", "Pr.Venda", "Mg% P.",
+			"Cod. Barras", "Bloq.", "Dt. Cad." };
 	private ArrayList<Produto> produtos;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
-	private final int COLUNA_CODIGO_BARRAS = 2;
+	private final int COLUNA_FATOR = 2;
 	private final int COLUNA_SETOR = 3;
-	private final int COLUNA_FATOR_VENDA = 4;
-	private final int COLUNA_PRECO_VENDA = 5;
-	private final int COLUNA_BLOQUEADO_VENDA = 6;
-	private final int COLUNA_DATA_CADASTRO = 7;
+	private final int COLUNA_PRECO_CUSTO = 4;
+	private final int COLUNA_MARGEM = 5;
+	private final int COLUNA_PRECO_SUGERIDO = 6;
+	private final int COLUNA_PRECO_VENDA = 7;
+	private final int COLUNA_MARGEM_PRATICADA = 8;
+	private final int COLUNA_CODIGO_BARRAS = 9;
+	private final int COLUNA_BLOQUEADO_VENDA = 10;
+	private final int COLUNA_DATA_CADASTRO = 11;
 
 	public ModeloTabelaProdutos(ArrayList<Produto> produtos) {
 		this.produtos = produtos;
@@ -49,6 +54,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
+
 		switch (columnIndex) {
 		case COLUNA_CODIGO:
 			return Integer.class;
@@ -57,10 +63,18 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_CODIGO_BARRAS:
 			return String.class;
 		case COLUNA_SETOR:
-			return Setor.class;
-		case COLUNA_FATOR_VENDA:
 			return String.class;
+		case COLUNA_FATOR:
+			return String.class;
+		case COLUNA_PRECO_CUSTO:
+			return BigDecimal.class;
 		case COLUNA_PRECO_VENDA:
+			return BigDecimal.class;
+		case COLUNA_MARGEM:
+			return BigDecimal.class;
+		case COLUNA_PRECO_SUGERIDO:
+			return BigDecimal.class;
+		case COLUNA_MARGEM_PRATICADA:
 			return BigDecimal.class;
 		case COLUNA_BLOQUEADO_VENDA:
 			return Boolean.class;
@@ -76,6 +90,8 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		Produto produto = this.produtos.get(rowIndex);
 
 		NumberFormat nf = new DecimalFormat("R$ 0.00");
+		NumberFormat nf2 = new DecimalFormat("0.00");
+
 		switch (columIndex) {
 		case COLUNA_CODIGO:
 			return produto.getIdProduto();
@@ -84,11 +100,19 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_CODIGO_BARRAS:
 			return produto.getCodigo_barra();
 		case COLUNA_SETOR:
-			return produto.getSetor();
-		case COLUNA_FATOR_VENDA:
+			return produto.getSetor().getNome();
+		case COLUNA_FATOR:
 			return produto.getUnidadeVenda();
+		case COLUNA_PRECO_CUSTO:
+			return nf.format(produto.getPrCusto());
 		case COLUNA_PRECO_VENDA:
-			return nf.format(produto.getPreco());
+			return nf.format(produto.getPrecoVenda());
+		case COLUNA_MARGEM:
+			return nf2.format(produto.getMargem());
+		case COLUNA_PRECO_SUGERIDO:
+			return nf.format(produto.getPrSugerido());
+		case COLUNA_MARGEM_PRATICADA:
+			return nf2.format(produto.getMargemPraticada());
 		case COLUNA_BLOQUEADO_VENDA:
 			return produto.getBloqueadoVenda();
 		case COLUNA_DATA_CADASTRO:
@@ -111,8 +135,5 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 		tabela.setModel(modelo);
 	}
-	
-	
-	
 
 }

@@ -98,6 +98,11 @@ public class Panel_clientes extends JPanel {
 	private ModeloTabelaClientes modelo = new ModeloTabelaClientes(lista_clientes);
 	private JButton btnLimpaDocumento;
 	private JCheckBox checkBoxBloqueado;
+	private JLabel lblInformacoesBasicas;
+	private JSeparator separador_clientes_3;
+	private JLabel lblInfoEndereco;
+	private JSeparator separador_clientes_4;
+	private JButton btnReload;
 
 	/**
 	 * Create the panel.
@@ -127,7 +132,7 @@ public class Panel_clientes extends JPanel {
 		});
 		btnEditar.setEnabled(false);
 		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditar.setBounds(15, 325, 101, 29);
+		btnEditar.setBounds(16, 393, 101, 29);
 		btnEditar.setIcon(icones.getIcone_editar());
 		add(btnEditar);
 
@@ -161,7 +166,7 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluir.setBounds(131, 325, 104, 29);
+		btnExcluir.setBounds(132, 393, 104, 29);
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setEnabled(false);
 		add(btnExcluir);
@@ -195,25 +200,26 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		fTxtPesquisa.setBounds(210, 398, 442, 20);
+		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPesquisa.setBounds(211, 464, 454, 20);
 		add(fTxtPesquisa);
 
 		txtCodigo = new JTextField();
-		txtCodigo.setBounds(62, 122, 65, 20);
+		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtCodigo.setBounds(63, 152, 65, 20);
 		txtCodigo.setEnabled(false);
 		txtCodigo.setEditable(false);
 		add(txtCodigo);
 		txtCodigo.setColumns(10);
 
 		lblCodigoCliente = new JLabel("C\u00F3digo");
-		lblCodigoCliente.setBounds(15, 124, 46, 20);
+		lblCodigoCliente.setBounds(16, 154, 46, 20);
 		lblCodigoCliente.setToolTipText("Gerado Autom\u00E1ticamente");
 		lblCodigoCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCodigoCliente);
 
 		checkBoxJuridica = new JCheckBox("Pessoa Jur\u00EDdica");
-		checkBoxJuridica.setBounds(145, 121, 119, 23);
+		checkBoxJuridica.setBounds(146, 151, 119, 23);
 		checkBoxJuridica.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		checkBoxJuridica.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent juridico) {
@@ -241,7 +247,7 @@ public class Panel_clientes extends JPanel {
 		add(checkBoxJuridica);
 
 		lblDocumento = new JLabel("Documento");
-		lblDocumento.setBounds(296, 125, 78, 17);
+		lblDocumento.setBounds(297, 155, 78, 17);
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblDocumento);
 
@@ -273,8 +279,8 @@ public class Panel_clientes extends JPanel {
 
 			}
 		});
-		fTxtDocumento.setBounds(375, 122, 125, 20);
-		fTxtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		fTxtDocumento.setBounds(376, 152, 125, 20);
+		fTxtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtDocumento.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtDocumento.addKeyListener(new KeyAdapter() {
 			@Override
@@ -320,7 +326,7 @@ public class Panel_clientes extends JPanel {
 		add(fTxtDocumento);
 
 		lblIe = new JLabel("I. E.");
-		lblIe.setBounds(549, 125, 24, 17);
+		lblIe.setBounds(550, 155, 24, 17);
 		lblIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblIe.setVisible(false);
 		add(lblIe);
@@ -343,8 +349,8 @@ public class Panel_clientes extends JPanel {
 		});
 
 		fTxtIe = new JFormattedTextField(mascara_ie);
-		fTxtIe.setBounds(579, 122, 129, 20);
-		fTxtIe.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		fTxtIe.setBounds(580, 152, 129, 20);
+		fTxtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtIe.setFocusLostBehavior(JFormattedTextField.PERSIST);
 
 		fTxtIe.setEnabled(false);
@@ -356,7 +362,7 @@ public class Panel_clientes extends JPanel {
 		add(separador_clientes);
 
 		lblNome = new JLabel("Nome");
-		lblNome.setBounds(14, 158, 40, 20);
+		lblNome.setBounds(15, 188, 40, 20);
 		lblNome.setToolTipText("");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNome);
@@ -368,8 +374,9 @@ public class Panel_clientes extends JPanel {
 			e.printStackTrace();
 		}
 		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNomeCliente.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNomeCliente.setBounds(56, 156, 317, 20);
+		fTxtNomeCliente.setBounds(57, 186, 317, 20);
 		fTxtNomeCliente.setEnabled(false);
 		add(fTxtNomeCliente);
 
@@ -381,19 +388,20 @@ public class Panel_clientes extends JPanel {
 		}
 
 		lblApelido = new JLabel("Apelido");
-		lblApelido.setBounds(397, 159, 46, 20);
+		lblApelido.setBounds(398, 189, 46, 20);
 		lblApelido.setToolTipText("");
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblApelido);
 
 		fTxtApelido = new JFormattedTextField(mascara_apelido);
+		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtApelido.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtApelido.setBounds(443, 156, 265, 20);
+		fTxtApelido.setBounds(444, 186, 265, 20);
 		fTxtApelido.setEnabled(false);
 		add(fTxtApelido);
 
 		lblCep = new JLabel("Cep");
-		lblCep.setBounds(15, 187, 28, 20);
+		lblCep.setBounds(16, 255, 28, 20);
 		lblCep.setToolTipText("");
 		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCep);
@@ -429,6 +437,7 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCep = new JFormattedTextField(mascara_cep);
+		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCep.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -444,13 +453,13 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCep.setBounds(45, 189, 78, 20);
+		fTxtCep.setBounds(46, 257, 78, 20);
 		fTxtCep.setEnabled(false);
 		add(fTxtCep);
 
 		btnLimpaCep = new JButton();
 		btnLimpaCep.setVisible(false);
-		btnLimpaCep.setBounds(131, 188, 24, 19);
+		btnLimpaCep.setBounds(132, 256, 24, 19);
 		btnLimpaCep.setIcon(icones.getIcone_limpar());
 		btnLimpaCep.addMouseListener(new MouseAdapter() {
 			@Override
@@ -475,19 +484,20 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCidade.setBounds(261, 189, 239, 20);
+		fTxtCidade.setBounds(262, 257, 239, 20);
 		fTxtCidade.setEnabled(false);
 		add(fTxtCidade);
 
 		lblCidade = new JLabel("Cidade");
-		lblCidade.setBounds(210, 191, 44, 20);
+		lblCidade.setBounds(211, 259, 44, 20);
 		lblCidade.setToolTipText("");
 		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCidade);
 
 		lblEndereco = new JLabel("Endereco");
-		lblEndereco.setBounds(15, 227, 65, 20);
+		lblEndereco.setBounds(16, 295, 65, 20);
 		lblEndereco.setToolTipText("");
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEndereco);
@@ -501,13 +511,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEndereco.setBounds(78, 225, 348, 20);
+		fTxtEndereco.setBounds(79, 293, 348, 20);
 		fTxtEndereco.setEnabled(false);
 		add(fTxtEndereco);
 
 		lblNumero = new JLabel("N\u00B0");
-		lblNumero.setBounds(470, 225, 16, 20);
+		lblNumero.setBounds(471, 293, 16, 20);
 		lblNumero.setToolTipText("");
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNumero);
@@ -520,13 +531,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNumero.setBounds(488, 224, 70, 20);
+		fTxtNumero.setBounds(489, 292, 70, 20);
 		fTxtNumero.setEnabled(false);
 		add(fTxtNumero);
 
 		lblReferencia = new JLabel("Referencia");
-		lblReferencia.setBounds(15, 260, 65, 20);
+		lblReferencia.setBounds(16, 328, 65, 20);
 		lblReferencia.setToolTipText("");
 		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblReferencia);
@@ -540,13 +552,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtReferencia.setBounds(85, 258, 342, 20);
+		fTxtReferencia.setBounds(86, 326, 342, 20);
 		fTxtReferencia.setEnabled(false);
 		add(fTxtReferencia);
 
 		lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(443, 260, 40, 20);
+		lblBairro.setBounds(444, 328, 40, 20);
 		lblBairro.setToolTipText("");
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblBairro);
@@ -559,13 +572,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(488, 256, 220, 20);
+		fTxtBairro.setBounds(489, 324, 220, 20);
 		fTxtBairro.setEnabled(false);
 		add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
-		lblCelular.setBounds(15, 293, 46, 20);
+		lblCelular.setBounds(16, 361, 46, 20);
 		lblCelular.setToolTipText("");
 		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCelular);
@@ -578,13 +592,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCelular = new JFormattedTextField(mascara_celular);
+		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCelular.setBounds(61, 293, 104, 20);
+		fTxtCelular.setBounds(62, 361, 104, 20);
 		fTxtCelular.setEnabled(false);
 		add(fTxtCelular);
 
 		lblTelFixo = new JLabel("Tel. Fixo");
-		lblTelFixo.setBounds(193, 294, 50, 20);
+		lblTelFixo.setBounds(194, 362, 50, 20);
 		lblTelFixo.setToolTipText("");
 		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblTelFixo);
@@ -597,13 +612,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtTelFixo.setBounds(250, 293, 104, 20);
+		fTxtTelFixo.setBounds(251, 361, 104, 20);
 		fTxtTelFixo.setEnabled(false);
 		add(fTxtTelFixo);
 
 		lblEmai = new JLabel("Email");
-		lblEmai.setBounds(371, 295, 40, 20);
+		lblEmai.setBounds(372, 363, 40, 20);
 		lblEmai.setToolTipText("");
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEmai);
@@ -616,8 +632,9 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEmail.setBounds(411, 294, 297, 20);
+		fTxtEmail.setBounds(412, 362, 297, 20);
 		fTxtEmail.setEnabled(false);
 		add(fTxtEmail);
 
@@ -637,7 +654,7 @@ public class Panel_clientes extends JPanel {
 		ConfiguralarguracolunaTabela(tabelaClientes);
 
 		scrollPane = new JScrollPane(tabelaClientes);
-		scrollPane.setBounds(15, 434, 693, 183);
+		scrollPane.setBounds(16, 495, 693, 153);
 		add(scrollPane);
 
 		tabelaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -748,7 +765,7 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(481, 325, 108, 29);
+		btnSalvar.setBounds(482, 393, 108, 29);
 		btnSalvar.setIcon(icones.getIcone_salvar());
 		btnSalvar.setVisible(false);
 		add(btnSalvar);
@@ -769,7 +786,7 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(594, 325, 114, 29);
+		btnCancelar.setBounds(595, 393, 114, 29);
 		btnCancelar.setIcon(icones.getIcone_cancelar());
 		btnCancelar.setVisible(false);
 		add(btnCancelar);
@@ -777,28 +794,28 @@ public class Panel_clientes extends JPanel {
 		lblPesquisarPor = new JLabel("Pesquisar por");
 		lblPesquisarPor.setToolTipText("");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPesquisarPor.setBounds(15, 398, 89, 20);
+		lblPesquisarPor.setBounds(16, 464, 89, 20);
 		add(lblPesquisarPor);
 
 		cbxTipoPesquisa = new JComboBox();
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "Apelido", "C\u00F3digo" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
-		cbxTipoPesquisa.setBounds(104, 396, 96, 22);
+		cbxTipoPesquisa.setBounds(105, 462, 96, 22);
 		add(cbxTipoPesquisa);
 
 		lblClienteCadastrados = new JLabel("Clientes Cadastrados");
 		lblClienteCadastrados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClienteCadastrados.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblClienteCadastrados.setBounds(254, 361, 225, 29);
+		lblClienteCadastrados.setBounds(254, 422, 225, 29);
 		add(lblClienteCadastrados);
 
 		separador_clientes_1 = new JSeparator();
-		separador_clientes_1.setBounds(15, 376, 239, 9);
+		separador_clientes_1.setBounds(15, 437, 239, 9);
 		add(separador_clientes_1);
 
 		separador_clientes_2 = new JSeparator();
-		separador_clientes_2.setBounds(476, 376, 232, 9);
+		separador_clientes_2.setBounds(476, 437, 232, 9);
 		add(separador_clientes_2);
 
 		btnLimpaDocumento = new JButton();
@@ -808,7 +825,7 @@ public class Panel_clientes extends JPanel {
 				limpar_campos();
 			}
 		});
-		btnLimpaDocumento.setBounds(510, 124, 24, 19);
+		btnLimpaDocumento.setBounds(511, 154, 24, 19);
 		btnLimpaDocumento.setIcon(icones.getIcone_limpar());
 		btnLimpaDocumento.setVisible(false);
 		add(btnLimpaDocumento);
@@ -828,6 +845,37 @@ public class Panel_clientes extends JPanel {
 		checkBoxBloqueado.setEnabled(false);
 		checkBoxBloqueado.setBounds(549, 73, 159, 23);
 		add(checkBoxBloqueado);
+		
+		lblInformacoesBasicas = new JLabel("Informa\u00E7\u00F5es B\u00E1sicas");
+		lblInformacoesBasicas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInformacoesBasicas.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblInformacoesBasicas.setBounds(15, 110, 188, 29);
+		add(lblInformacoesBasicas);
+		
+		separador_clientes_3 = new JSeparator();
+		separador_clientes_3.setBounds(207, 127, 502, 9);
+		add(separador_clientes_3);
+		
+		lblInfoEndereco = new JLabel("Endere\u00E7o e Contato");
+		lblInfoEndereco.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInfoEndereco.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblInfoEndereco.setBounds(10, 215, 184, 29);
+		add(lblInfoEndereco);
+		
+		separador_clientes_4 = new JSeparator();
+		separador_clientes_4.setBounds(194, 234, 516, 9);
+		add(separador_clientes_4);
+		
+		btnReload = new JButton();
+		btnReload.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickRecarregarTabela) {
+				recarregarTabela();
+			}
+		});
+		btnReload.setIcon(icones.getIcone_reload());
+		btnReload.setBounds(675, 462, 34, 22);
+		add(btnReload);
 
 	}
 

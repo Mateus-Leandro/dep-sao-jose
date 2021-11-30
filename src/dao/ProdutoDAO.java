@@ -33,14 +33,19 @@ public class ProdutoDAO {
 			produto.setIdProduto(null);
 			ps = conn.prepareStatement(
 					"INSERT INTO produto (descricao, codSetor, "
-							+ "unidadeVenda, preco, bloqueadoVenda,dataCadastro) VALUES (?,?, ?, ?, ?, ?)",
+							+ "unidadeVenda, prVenda, prCusto, margem, prSugerido, margemPraticada, "
+							+ " bloqueadoVenda, dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, produto.getDescricao().trim());
 			ps.setInt(2, produto.getSetor().getCodSetor());
 			ps.setString(3, produto.getUnidadeVenda());
-			ps.setDouble(4, produto.getPreco());
-			ps.setBoolean(5, produto.getBloqueadoVenda());
-			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+			ps.setDouble(4, produto.getPrecoVenda());
+			ps.setDouble(5, produto.getPrCusto());
+			ps.setDouble(6, produto.getMargem());
+			ps.setDouble(7, produto.getPrSugerido());
+			ps.setDouble(8, produto.getMargemPraticada());
+			ps.setBoolean(9, produto.getBloqueadoVenda());
+			ps.setDate(10, new java.sql.Date(System.currentTimeMillis()));
 			ps.execute();
 			rs = ps.getGeneratedKeys();
 
@@ -85,26 +90,29 @@ public class ProdutoDAO {
 		try {
 			conn.setAutoCommit(false);
 
-			ps = conn.prepareStatement("UPDATE produto SET descricao = ?, "
-					+ "preco = ?, codSetor = ?, unidadeVenda = ?, bloqueadoVenda = ? " + "WHERE idProduto = ?");
+			ps = conn.prepareStatement("UPDATE produto SET descricao = ?, codSetor = ?, unidadeVenda = ?, "
+					+ "prVenda = ?, prCusto = ?, margem = ?, prSugerido = ?, margemPraticada = ?, bloqueadoVenda = ? "
+					+ "WHERE idProduto = ?");
 			ps.setString(1, produto.getDescricao());
-			ps.setDouble(2, produto.getPreco());
-			ps.setInt(3, produto.getSetor().getCodSetor());
-			ps.setString(4, produto.getUnidadeVenda());
-			ps.setBoolean(5, produto.getBloqueadoVenda());
-			ps.setInt(6, produto.getIdProduto());
+			ps.setInt(2, produto.getSetor().getCodSetor());
+			ps.setString(3, produto.getUnidadeVenda());
+			ps.setDouble(4, produto.getPrecoVenda());
+			ps.setDouble(5, produto.getPrCusto());
+			ps.setDouble(6, produto.getMargem());
+			ps.setDouble(7, produto.getPrSugerido());
+			ps.setDouble(8, produto.getMargemPraticada());
+			ps.setBoolean(9, produto.getBloqueadoVenda());
+			ps.setInt(10, produto.getIdProduto());
 			ps.executeUpdate();
-			
-			ps = conn.prepareStatement("UPDATE barras_produto "
-					+ "SET barras = ? "
-					+ "WHERE idProduto = ? "
-					+ "AND principal IS TRUE");
+
+			ps = conn.prepareStatement(
+					"UPDATE barras_produto " + "SET barras = ? " + "WHERE idProduto = ? " + "AND principal IS TRUE");
 			ps.setString(1, produto.getCodigo_barra());
 			ps.setInt(2, produto.getIdProduto());
 			ps.execute();
-			
+
 			conn.commit();
-			
+
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao alterar produto!" + e.getMessage(), "Alteração de produto",
 					JOptionPane.WARNING_MESSAGE);
@@ -115,7 +123,7 @@ public class ProdutoDAO {
 				e.printStackTrace();
 			}
 		}
-		JOptionPane.showMessageDialog(null, "Produto alterado!","Alteração de produto",JOptionPane.NO_OPTION);
+		JOptionPane.showMessageDialog(null, "Produto alterado!", "Alteração de produto", JOptionPane.NO_OPTION);
 		return true;
 	}
 
@@ -155,8 +163,9 @@ public class ProdutoDAO {
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-					+ "produto.codSetor, setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-					+ "FROM produto " + "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS NOT FALSE " + "ORDER BY descricao");
 			rs = ps.executeQuery();
@@ -168,11 +177,13 @@ public class ProdutoDAO {
 				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-
-				produto.setPreco(rs.getDouble("preco"));
-
-				produto.setBloqueadoVenda(rs.getBoolean(8));
-				String data_formatada = sdf.format(rs.getDate(9));
+				produto.setPrCusto(rs.getDouble("prCusto"));
+				produto.setMargem(rs.getDouble("margem"));
+				produto.setPrSugerido(rs.getDouble("prSugerido"));
+				produto.setPrecoVenda(rs.getDouble("prVenda"));
+				produto.setMargemPraticada(rs.getDouble("margemPraticada"));
+				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
+				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
 				produtos.add(produto);
 			}
@@ -192,12 +203,13 @@ public class ProdutoDAO {
 
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
+			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? "
-					+ "ORDER BY descricao");
+					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao");
+			
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
 
@@ -205,15 +217,18 @@ public class ProdutoDAO {
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
-				produto.setCodigo_barra(rs.getString("barras"));
+				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-
-				produto.setPreco(rs.getDouble("preco"));
-
-				produto.setBloqueadoVenda(rs.getBoolean(8));
-				String data_formatada = sdf.format(rs.getDate(9));
+				produto.setPrCusto(rs.getDouble("prCusto"));
+				produto.setMargem(rs.getDouble("margem"));
+				produto.setPrSugerido(rs.getDouble("prSugerido"));
+				produto.setPrecoVenda(rs.getDouble("prVenda"));
+				produto.setMargemPraticada(rs.getDouble("margemPraticada"));
+				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
+				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
+
 				produtos.add(produto);
 			}
 			return produtos;
@@ -230,16 +245,18 @@ public class ProdutoDAO {
 	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
-	
-		
+
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? "
-					+ "ORDER BY descricao");
+			
+			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
+			
+	
 			ps.setString(1, codInterno);
 			rs = ps.executeQuery();
 
@@ -247,14 +264,18 @@ public class ProdutoDAO {
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
+				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("barras"));
-				produto.setPreco(rs.getDouble("preco"));
-
-				produto.setBloqueadoVenda(rs.getBoolean(8));
-				String data_formatada = sdf.format(rs.getDate(9));
+				produto.setPrCusto(rs.getDouble("prCusto"));
+				produto.setMargem(rs.getDouble("margem"));
+				produto.setPrSugerido(rs.getDouble("prSugerido"));
+				produto.setPrecoVenda(rs.getDouble("prVenda"));
+				produto.setMargemPraticada(rs.getDouble("margemPraticada"));
+				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
+				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
+				
 				produtos.add(produto);
 			}
 			return produtos;
@@ -288,13 +309,16 @@ public class ProdutoDAO {
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
+				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("barras"));
-				produto.setPreco(rs.getDouble("preco"));
-
-				produto.setBloqueadoVenda(rs.getBoolean(8));
-				String data_formatada = sdf.format(rs.getDate(9));
+				produto.setPrCusto(rs.getDouble("prCusto"));
+				produto.setMargem(rs.getDouble("margem"));
+				produto.setPrSugerido(rs.getDouble("prSugerido"));
+				produto.setPrecoVenda(rs.getDouble("prVenda"));
+				produto.setMargemPraticada(rs.getDouble("margemPraticada"));
+				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
+				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
 				produtos.add(produto);
 			}
@@ -317,12 +341,14 @@ public class ProdutoDAO {
 		ResultSet rs = null;
 
 		try {
+			
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS FALSE AND barras_produto.barras LIKE ? "
 					+ "ORDER BY descricao");
+			
 			ps.setString(1, barras);
 			rs = ps.executeQuery();
 
@@ -330,14 +356,18 @@ public class ProdutoDAO {
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
+				produto.setCodigo_barra(rs.getString(3));
 				produto.setSetor(new Setor(rs.getInt("codSetor"), rs.getString("nome")));
 				produto.setUnidadeVenda(rs.getString("unidadeVenda"));
-				produto.setCodigo_barra(rs.getString("barras"));
-				produto.setPreco(rs.getDouble("preco"));
-
-				produto.setBloqueadoVenda(rs.getBoolean(8));
-				String data_formatada = sdf.format(rs.getDate(9));
+				produto.setPrCusto(rs.getDouble("prCusto"));
+				produto.setMargem(rs.getDouble("margem"));
+				produto.setPrSugerido(rs.getDouble("prSugerido"));
+				produto.setPrecoVenda(rs.getDouble("prVenda"));
+				produto.setMargemPraticada(rs.getDouble("margemPraticada"));
+				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
+				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
+				
 				produtos.add(produto);
 			}
 
