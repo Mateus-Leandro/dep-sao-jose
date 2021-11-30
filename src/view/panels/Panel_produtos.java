@@ -365,7 +365,7 @@ public class Panel_produtos extends JPanel {
 							.replace("R$ ", ""));
 					fTxtPrecoVenda.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 7).toString()
 							.replace("R$ ", ""));
-					fTxtMargemPraticada.setToolTipText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 8)
+					fTxtMargemPraticada.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 8)
 							.toString().replaceAll(",", "\\."));
 					fTxtcodigoBarras.setText((String) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 9));
 					btnEditar.setEnabled(true);
