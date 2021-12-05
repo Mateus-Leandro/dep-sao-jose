@@ -63,7 +63,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_CODIGO_BARRAS:
 			return String.class;
 		case COLUNA_SETOR:
-			return String.class;
+			return Setor.class;
 		case COLUNA_FATOR:
 			return String.class;
 		case COLUNA_PRECO_CUSTO:
@@ -100,7 +100,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_CODIGO_BARRAS:
 			return produto.getCodigo_barra();
 		case COLUNA_SETOR:
-			return produto.getSetor().getNome();
+			return produto.getSetor();
 		case COLUNA_FATOR:
 			return produto.getUnidadeVenda();
 		case COLUNA_PRECO_CUSTO:
