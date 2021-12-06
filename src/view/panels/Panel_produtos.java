@@ -311,6 +311,7 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickNovo) {
 				novo_item();
+				fTxtNomeProduto.requestFocus();
 			}
 		});
 		btnNovo.setIcon(icones.getIcone_mais());
@@ -344,6 +345,7 @@ public class Panel_produtos extends JPanel {
 
 		tabelaProdutos = new JTable(modelo);
 		tabelaProdutos.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setAutoResizeMode(tabelaProdutos.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(tabelaProdutos);
 		scrollPane.setBounds(16, 483, 693, 170);
@@ -361,6 +363,8 @@ public class Panel_produtos extends JPanel {
 
 					txtCodigo.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0).toString());
 					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 1).toString());
+					cbxFatorVenda.getModel()
+					.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2));
 					cbxSetor.getModel().setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 3));
 					fTxtPrecoCusto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 4).toString()
 							.replace("R$ ", ""));
@@ -491,7 +495,7 @@ public class Panel_produtos extends JPanel {
 
 			}
 		});
-		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxSetor.setBounds(59, 189, 210, 20);
 		add(cbxSetor);
 
@@ -864,7 +868,10 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getColumnModel().getColumn(10).setPreferredWidth(40); // Bloqueado
 		tabelaProdutos.getColumnModel().getColumn(11).setPreferredWidth(80); // Data Cadastro
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
-		sorter.setComparator(5, spv);
+		sorter.setComparator(4, spv);
+		sorter.setComparator(6, spv);
+		sorter.setComparator(7, spv);
+		
 		tabelaProdutos.setRowSorter(sorter);
 	}
 

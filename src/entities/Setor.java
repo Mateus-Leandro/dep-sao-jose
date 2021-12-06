@@ -30,7 +30,7 @@ public class Setor {
 
 	@Override
 	public String toString() {
-		return this.getNome();
+		return nome;
 	}
 
 	@Override

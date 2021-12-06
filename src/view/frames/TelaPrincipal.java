@@ -10,6 +10,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import view.panels.Panel_clientes;
+import view.panels.Panel_orc_vend;
 import view.panels.Panel_produtos;
 
 public class TelaPrincipal extends JFrame {
@@ -56,12 +57,16 @@ public class TelaPrincipal extends JFrame {
 
 		Panel_clientes clientes = new Panel_clientes();
 		clientes.setVisible(true);
-		
+		 
 		Panel_produtos produtos = new Panel_produtos();
 		produtos.setVisible(true);
 		
+		Panel_orc_vend orc_vend = new Panel_orc_vend();
+		orc_vend.setVisible(true);
+		
 		tabbedPane.addTab("Clientes", clientes);
 		tabbedPane.addTab("Produtos", produtos);
+		tabbedPane.addTab("Orçamento/Venda", orc_vend);
 		
 	}
 

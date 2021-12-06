@@ -144,6 +144,7 @@ public class ClienteDAO {
 				cliente.setNome(rs.getString("nome"));
 				cliente.setApelido(rs.getString("apelido"));
 				cliente.setCpf_cnpj(rs.getString("documento"));
+				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
 				cliente.setCep(rs.getString("cep"));
 				cliente.setCidade(rs.getString("cidade"));
 				cliente.setEndereco(rs.getString("endereco"));
@@ -180,6 +181,7 @@ public class ClienteDAO {
 				cliente.setNome(rs.getString("nome"));
 				cliente.setApelido(rs.getString("apelido"));
 				cliente.setCpf_cnpj(rs.getString("documento"));
+				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
 				cliente.setCep(rs.getString("cep"));
 				cliente.setCidade(rs.getString("cidade"));
 				cliente.setEndereco(rs.getString("endereco"));
@@ -217,6 +219,7 @@ public class ClienteDAO {
 				cliente.setNome(rs.getString("nome"));
 				cliente.setApelido(rs.getString("apelido"));
 				cliente.setCpf_cnpj(rs.getString("documento"));
+				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
 				cliente.setCep(rs.getString("cep"));
 				cliente.setCidade(rs.getString("cidade"));
 				cliente.setEndereco(rs.getString("endereco"));
@@ -254,6 +257,7 @@ public class ClienteDAO {
 				cliente.setNome(rs.getString("nome"));
 				cliente.setApelido(rs.getString("apelido"));
 				cliente.setCpf_cnpj(rs.getString("documento"));
+				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
 				cliente.setCep(rs.getString("cep"));
 				cliente.setCidade(rs.getString("cidade"));
 				cliente.setEndereco(rs.getString("endereco"));

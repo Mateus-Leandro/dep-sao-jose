@@ -114,16 +114,15 @@ public class ProdutoDAO {
 			conn.commit();
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao alterar produto!" + e.getMessage(), "Alteração de produto",
-					JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 			try {
 				conn.rollback();
 				return false;
 			} catch (SQLException e1) {
 				e.printStackTrace();
 			}
+			return false;
 		}
-		JOptionPane.showMessageDialog(null, "Produto alterado!", "Alteração de produto", JOptionPane.NO_OPTION);
 		return true;
 	}
 

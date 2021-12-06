@@ -682,6 +682,7 @@ public class Panel_clientes extends JPanel {
 					checkBoxBloqueado
 							.setSelected((Boolean) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 1));
 					fTxtDocumento.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 11));
+					fTxtIe.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 12));
 					fTxtNomeCliente.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 2));
 					fTxtApelido.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 3));
 					fTxtCep.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 10));
@@ -693,6 +694,7 @@ public class Panel_clientes extends JPanel {
 					fTxtCelular.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 4));
 					fTxtTelFixo.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 14));
 					fTxtEmail.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 13));
+					
 
 					Integer codigo = Integer.parseInt(tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString());
 

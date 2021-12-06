@@ -11,7 +11,7 @@ import javax.swing.text.PlainDocument;
  * @version 1.0
 */
 
-public class FormataContabil extends PlainDocument {
+public class FormataNumeral extends PlainDocument {
 
   private int iMaxLength;
   private int iQtdDec;
@@ -19,19 +19,19 @@ public class FormataContabil extends PlainDocument {
   private String sDec;
   
   // Construtor para indicando apenas o tamanho máximo (incluindo o  ponto decimal), será assumido como padrao 2 decimais
-  public FormataContabil(int maxLen)
+  public FormataNumeral(int maxLen)
   {
     this(maxLen, 2, '.', ',');
   }
   
   // Construtor para indicando apenas o tamanho máximo (incluindo o  ponto decimal) e a quantidade de decimais
-  public FormataContabil(int maxLen, int qtdDec)
+  public FormataNumeral(int maxLen, int qtdDec)
   {
     this(maxLen, qtdDec, '.', ',');
   }
   
   // Construtor para indicando apenas o tamanho máximo (incluindo o  ponto decimal), a quantidade de decimais, o separador de milhares e dos decimais
-  public FormataContabil(int maxLen, int qtdDec, char mil, char dec){
+  public FormataNumeral(int maxLen, int qtdDec, char mil, char dec){
     super();
     
     iMaxLength = 0;
