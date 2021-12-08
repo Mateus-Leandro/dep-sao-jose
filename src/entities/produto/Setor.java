@@ -1,4 +1,4 @@
-package entities;
+package entities.produto;
 
 public class Setor {
 	Integer codSetor;

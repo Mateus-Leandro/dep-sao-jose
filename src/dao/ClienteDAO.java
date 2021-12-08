@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.Cliente;
+import entities.cliente.Cliente;
 
 public class ClienteDAO {
 

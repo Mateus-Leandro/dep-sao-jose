@@ -36,7 +36,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
 import dao.BarrasDAO;
-import entities.Barras_Produto;
+import entities.produto.Barras_Produto;
 import tables.tableModels.ModeloTabelaBarras;
 
 public class VariosBarras extends JDialog {

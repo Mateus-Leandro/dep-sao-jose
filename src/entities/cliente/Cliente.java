@@ -1,4 +1,4 @@
-package entities;
+package entities.cliente;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,14 +24,12 @@ public class Cliente {
 	private Date dataCadastro;
 	
 	
-	private List<Vendas> vendas =  new ArrayList<Vendas>();
 
-	
 	
 	
 	public Cliente(Integer idCliente, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
 			String inscricao_estadual, String cep, String cidade, String endereco,
-			String referencia, String numero, String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro, List<Vendas> vendas) {
+			String referencia, String numero, String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro) {
 		this.idCliente = idCliente;
 		this.nome = nome;
 		this.apelido = apelido;
@@ -49,7 +47,6 @@ public class Cliente {
 		this.telefone = telefone;
 		this.bloqueado = bloqueado;
 		this.dataCadastro = dataCadastro;
-		this.vendas = vendas;
 	}
 	
 	public Cliente() {
@@ -190,14 +187,6 @@ public class Cliente {
 	
 	public void setBloqueado (Boolean bloqueado) {
 		this.bloqueado = bloqueado;
-	}
-
-	public List<Vendas> getVendas() {
-		return vendas;
-	}
-
-	public void setVendas(List<Vendas> vendas) {
-		this.vendas = vendas;
 	}
 
 	@Override

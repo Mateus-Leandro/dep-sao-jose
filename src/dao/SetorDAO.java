@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.Setor;
+import entities.produto.Setor;
 
 public class SetorDAO {
 	private Connection conn;

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.Produto;
-import entities.Setor;
+import entities.produto.Produto;
+import entities.produto.Setor;
 
 public class ProdutoDAO {
 

@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `barras_produto`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `barras_produto` (
   `idProduto` int NOT NULL,
-  `barras` varchar(14) NOT NULL,
+  `barras` varchar(14) DEFAULT NULL,
   `principal` tinyint DEFAULT NULL,
   `dt_vinculacao` date DEFAULT NULL,
   UNIQUE KEY `Barras_UNIQUE` (`barras`),
@@ -41,7 +41,7 @@ CREATE TABLE `barras_produto` (
 
 LOCK TABLES `barras_produto` WRITE;
 /*!40000 ALTER TABLE `barras_produto` DISABLE KEYS */;
-INSERT INTO `barras_produto` VALUES (27,'1010101010',1,'2021-10-21'),(27,'131135615',0,'2021-10-21'),(19,'146466',1,'2021-10-19'),(18,'1598',0,'2021-10-18'),(26,'1664',1,'2021-10-21'),(22,'17',1,'2021-10-21'),(23,'171',1,'2021-10-21'),(20,'645545',1,'2021-10-21'),(20,'65665',0,'2021-10-19'),(17,'6578',1,'2021-09-26'),(18,'664',1,'2021-10-21');
+INSERT INTO `barras_produto` VALUES (3,'123',1,'2021-12-05'),(5,'1234',1,'2021-12-05');
 /*!40000 ALTER TABLE `barras_produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,13 +54,14 @@ DROP TABLE IF EXISTS `clientes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clientes` (
   `idCliente` int NOT NULL AUTO_INCREMENT,
+  `bloqueado` tinyint NOT NULL,
   `nome` varchar(45) NOT NULL,
   `apelido` varchar(20) DEFAULT NULL,
   `documento` varchar(18) DEFAULT NULL,
   `inscricaoEstadual` varchar(15) DEFAULT NULL,
   `cep` varchar(9) DEFAULT NULL,
-  `cidade` varchar(30) NOT NULL,
-  `endereco` varchar(50) NOT NULL,
+  `cidade` varchar(30) DEFAULT NULL,
+  `endereco` varchar(50) DEFAULT NULL,
   `referencia` varchar(50) DEFAULT NULL,
   `numero` varchar(8) DEFAULT NULL,
   `bairro` varchar(30) DEFAULT NULL,
@@ -71,7 +72,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `Cpf_UNIQUE` (`documento`),
   UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,36 +81,37 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,'Mateus Leandro Chagas Andrade','Chagas','151.253.906-66',NULL,'32371-570','Contagem','Rioa Jaguaribe','Casa Verde','100A','Eldoradinho','mateus.chagas@gmail.com','(31)98444-8086',NULL,'2021-10-18');
+INSERT INTO `clientes` VALUES (1,1,'Mateus Leandro Chagas','Chagas','151.253.906-66',NULL,'32371-560','Contagem','Rua Rio Capibaribe','Casa Verde, Portão Branco','100A','Eldoradinho','mateusleandro2205@gmail.com','(31)98444-8086',NULL,'2021-10-30'),(4,0,'Mauro','Maurão','116.166.464-46',NULL,'32371-570','Contagem','Rua Rio Jaguaribe','Casa verde','100A','Eldoradinho','mauro@gmail.com','(31)98444-8086',NULL,'2021-11-17'),(5,0,'AVANCO INFORMATICA S.A',NULL,'42.790.097/0001-23','152030661.61-61','30140-000','Belo Horizonte','Avenida Brasil','CONJ: 01;','131','Santa Efigênia','adm@avancoinfo.com.br','(31)99999-9999','(31)3025-1188','2021-12-01');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `parcelas_venda`
+-- Table structure for table `orcamento`
 --
 
-DROP TABLE IF EXISTS `parcelas_venda`;
+DROP TABLE IF EXISTS `orcamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `parcelas_venda` (
-  `idVenda` int NOT NULL,
-  `valorParcela` double NOT NULL,
-  `paga` tinyint NOT NULL,
-  `numeroDaParcela` int NOT NULL,
-  `formaPagamento` enum('Dinheiro','Cartao','Cheque','Transferencia','Pix','Outros') NOT NULL,
-  `dataVencimento` date NOT NULL,
-  KEY `fk_Parcelas_Vendas_Vendas1_idx` (`idVenda`),
-  CONSTRAINT `fk_Parcelas_Vendas_Vendas1` FOREIGN KEY (`idVenda`) REFERENCES `vendas` (`idVenda`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `orcamento` (
+  `idOrcamento` int NOT NULL AUTO_INCREMENT,
+  `quantidadeProdutos` int NOT NULL,
+  `totalMercadoriasBruto` double NOT NULL,
+  `totalMercadoriasLiquido` double NOT NULL,
+  `frete` double DEFAULT NULL,
+  `descontoFinal` double DEFAULT NULL,
+  `valorTotal` double DEFAULT NULL,
+  `dataInclusao` datetime NOT NULL,
+  PRIMARY KEY (`idOrcamento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `parcelas_venda`
+-- Dumping data for table `orcamento`
 --
 
-LOCK TABLES `parcelas_venda` WRITE;
-/*!40000 ALTER TABLE `parcelas_venda` DISABLE KEYS */;
-/*!40000 ALTER TABLE `parcelas_venda` ENABLE KEYS */;
+LOCK TABLES `orcamento` WRITE;
+/*!40000 ALTER TABLE `orcamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -122,7 +124,11 @@ DROP TABLE IF EXISTS `produto`;
 CREATE TABLE `produto` (
   `idProduto` int NOT NULL AUTO_INCREMENT,
   `descricao` varchar(50) NOT NULL,
-  `preco` double DEFAULT NULL,
+  `PrCusto` double DEFAULT NULL,
+  `prVenda` double DEFAULT NULL,
+  `margem` double DEFAULT NULL,
+  `prSugerido` double DEFAULT NULL,
+  `margemPraticada` double DEFAULT NULL,
   `codSetor` int DEFAULT NULL,
   `unidadeVenda` enum('UN','CX','FD','PC','KG','MT','L') NOT NULL,
   `bloqueadoVenda` tinyint NOT NULL DEFAULT '0',
@@ -130,7 +136,7 @@ CREATE TABLE `produto` (
   PRIMARY KEY (`idProduto`),
   KEY `codSetor_idx` (`codSetor`),
   CONSTRAINT `codSetor` FOREIGN KEY (`codSetor`) REFERENCES `setor` (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,35 +145,37 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (17,'Novo produto',8.5,27,'UN',0,'2021-09-26'),(18,'Furadeira mondial',153.03,45,'UN',0,'2021-10-18'),(19,'Produto teste',157.3,25,'CX',0,'2021-10-19'),(20,'Novo produto teste',150.75,46,'KG',1,'2021-10-19'),(22,'Garrafa de pinga com coco',2.5,46,'UN',0,'2021-10-21'),(23,'Barras',25,48,'MT',0,'2021-10-21'),(24,'Teste novo produto',15.2,27,'UN',0,'2021-10-21'),(26,'155',15.3,1,'UN',0,'2021-10-21'),(27,'celular chagas@##',999999.99,2,'KG',0,'2021-10-21');
+INSERT INTO `produto` VALUES (1,'Teste fator',15.2,20,25,19,31.58,2,'MT',0,'2021-12-04'),(2,'Teste Novo Item',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Teste Margem',0,150,10,0,100,1,'UN',0,'2021-12-05'),(4,'Teste novo item',0,0.15,0,0,100,1,'UN',0,'2021-12-05'),(5,'Teste inclusão',0,15.2,0,0,100,1,'UN',0,'2021-12-05');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `produtos_venda`
+-- Table structure for table `produto_orcamento`
 --
 
-DROP TABLE IF EXISTS `produtos_venda`;
+DROP TABLE IF EXISTS `produto_orcamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `produtos_venda` (
+CREATE TABLE `produto_orcamento` (
   `idVenda` int NOT NULL,
-  `produto` int NOT NULL,
+  `idProdutoOrcamento` int NOT NULL,
   `quantidade` double NOT NULL,
-  KEY `IdProdutos_Venda_idx` (`idVenda`),
-  KEY `IdProdutos_produto_idx` (`produto`),
-  CONSTRAINT `IdProdutos_produto` FOREIGN KEY (`produto`) REFERENCES `produto` (`idProduto`),
-  CONSTRAINT `IdProdutos_Venda` FOREIGN KEY (`idVenda`) REFERENCES `vendas` (`idVenda`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `precoUnitario` double NOT NULL,
+  `descontoProduto` double DEFAULT NULL,
+  `totalProduto` double NOT NULL,
+  KEY `idProduto_idx` (`idProdutoOrcamento`),
+  KEY `Venda_idx` (`idVenda`),
+  CONSTRAINT `Venda` FOREIGN KEY (`idVenda`) REFERENCES `orcamento` (`idOrcamento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `produtos_venda`
+-- Dumping data for table `produto_orcamento`
 --
 
-LOCK TABLES `produtos_venda` WRITE;
-/*!40000 ALTER TABLE `produtos_venda` DISABLE KEYS */;
-/*!40000 ALTER TABLE `produtos_venda` ENABLE KEYS */;
+LOCK TABLES `produto_orcamento` WRITE;
+/*!40000 ALTER TABLE `produto_orcamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `produto_orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -181,7 +189,7 @@ CREATE TABLE `setor` (
   `codSetor` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
   PRIMARY KEY (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,52 +198,9 @@ CREATE TABLE `setor` (
 
 LOCK TABLES `setor` WRITE;
 /*!40000 ALTER TABLE `setor` DISABLE KEYS */;
-INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(25,'Parafusos'),(27,'Lixas'),(30,'Teste'),(45,'Furadeiras'),(46,'cimentos'),(47,'parafusos 2'),(48,'Eletrico');
+INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(25,'Parafusos'),(27,'Lixas'),(45,'Furadeiras'),(46,'cimentos');
 /*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `vendas`
---
-
-DROP TABLE IF EXISTS `vendas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `vendas` (
-  `idVenda` int NOT NULL AUTO_INCREMENT,
-  `idClientes` int NOT NULL,
-  `valorProdutos` double NOT NULL,
-  `valorFinal` double NOT NULL,
-  `frete` double DEFAULT NULL,
-  `desconto` double DEFAULT NULL,
-  `acrescimo` double DEFAULT NULL,
-  `tipoPagamento` enum('A Vista','A Prazo') NOT NULL COMMENT '"A vista ou a Prazo."',
-  `numeroDeParcelas` int NOT NULL,
-  `pago` tinyint NOT NULL,
-  `observacao` varchar(150) DEFAULT NULL,
-  `dataVenda` datetime NOT NULL,
-  PRIMARY KEY (`idVenda`),
-  KEY `fk_Vendas_Clientes1_idx` (`idClientes`),
-  CONSTRAINT `fk_Vendas_Clientes1` FOREIGN KEY (`idClientes`) REFERENCES `clientes` (`idCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendas`
---
-
-LOCK TABLES `vendas` WRITE;
-/*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping events for database 'banco_deposito'
---
-
---
--- Dumping routines for database 'banco_deposito'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -246,4 +211,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-26 19:11:33
+-- Dump completed on 2021-12-06  7:31:19

@@ -37,14 +37,15 @@ import javax.swing.text.MaskFormatter;
 
 import dao.ProdutoDAO;
 import dao.SetorDAO;
-import entities.Produto;
-import entities.Setor;
-import formatFields.FormataNumeral;
+import entities.produto.Produto;
+import entities.produto.Setor;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableSorters.SorterMonetario;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
+import view.formatFields.FormataNumeral;
+import view.tools.Jtext_tools;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
@@ -93,6 +94,7 @@ public class Panel_produtos extends JPanel {
 	private JFormattedTextField fTxtMargemPraticada;
 	private JComboBox cbxFatorVenda;
 	private JComboBox<Setor> cbxSetor = new JComboBox<Setor>();
+	private Jtext_tools text_tools = new Jtext_tools();
 
 	/**
 	 * Create the panel.
@@ -125,6 +127,12 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
+				text_tools.move_cursor_inicio(fTxtNomeProduto);
+			}
+		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNomeProduto.setEnabled(false);
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -149,6 +157,12 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtCodigoBarras = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarras.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent ganhoFocoCodigoBarras) {
+				text_tools.move_cursor_inicio(fTxtCodigoBarras);
+			}
+		});
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCodigoBarras.setEnabled(false);
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -396,6 +410,12 @@ public class Panel_produtos extends JPanel {
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
 		add(cbxTipoPesquisa);
+		fTxtPesquisa.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent ganhoFocoPesquisa) {
+				text_tools.move_cursor_inicio(fTxtPesquisa);
+			}
+		});
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaBarraPesquisa) {

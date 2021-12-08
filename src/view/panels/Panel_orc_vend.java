@@ -2,6 +2,8 @@ package view.panels;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -37,12 +39,12 @@ import javax.swing.text.MaskFormatter;
 
 import dao.ClienteDAO;
 import dao.ProdutoDAO;
-import entities.Cliente;
-import entities.Produto;
+import entities.cliente.Cliente;
 import entities.orcamentos.Produto_Orcamento;
-import formatFields.FormataNumeral;
+import entities.produto.Produto;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
+import view.formatFields.FormataNumeral;
 
 public class Panel_orc_vend extends JPanel {
 	private JTabbedPane tabbedPane;
@@ -160,6 +162,7 @@ public class Panel_orc_vend extends JPanel {
 	private JLabel lblTotal;
 	private JLabel lblCodBarra;
 	private JFormattedTextField fTxtCodigoBarra;
+	private Produto produto_selecionado = new Produto();
 
 	/**
 	 * Create the panel.
@@ -488,6 +491,7 @@ public class Panel_orc_vend extends JPanel {
 		cliente.add(lblValorComprado);
 
 		fTxtTotalVendido = new JFormattedTextField();
+		fTxtTotalVendido.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalVendido.setEditable(false);
 		fTxtTotalVendido.setToolTipText("N\u00E3o considera or\u00E7amentos");
 		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -503,6 +507,7 @@ public class Panel_orc_vend extends JPanel {
 		cliente.add(lblValorEmAberto);
 
 		fTxtValorEmAberto = new JFormattedTextField();
+		fTxtValorEmAberto.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtValorEmAberto.setEditable(false);
 		fTxtValorEmAberto.setToolTipText("N\u00E3o considera or\u00E7amentos");
 		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -518,6 +523,7 @@ public class Panel_orc_vend extends JPanel {
 		cliente.add(lblPrimeiraCompra);
 
 		fTxtPrimeiraCompra = new JFormattedTextField();
+		fTxtPrimeiraCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtPrimeiraCompra.setEditable(false);
 		fTxtPrimeiraCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
 		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -545,6 +551,7 @@ public class Panel_orc_vend extends JPanel {
 		cliente.add(lblUltimaCompra);
 
 		fTxtUltimaCompra = new JFormattedTextField();
+		fTxtUltimaCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtUltimaCompra.setEditable(false);
 		fTxtUltimaCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
 		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -560,6 +567,7 @@ public class Panel_orc_vend extends JPanel {
 		cliente.add(lblValorDaMaior);
 
 		fTxtMaiorCompra = new JFormattedTextField();
+		fTxtMaiorCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtMaiorCompra.setEditable(false);
 		fTxtMaiorCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
 		fTxtMaiorCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -606,25 +614,31 @@ public class Panel_orc_vend extends JPanel {
 		ltProdutos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickListaProduto) {
-				NumberFormat nf = new DecimalFormat("0.00");
 
-				scrollPaneListaProdutos.setVisible(false);
-				Produto produto_selecionado = ltProdutos.getSelectedValue();
-				fTxtCodigoProduto.setText(produto_selecionado.getIdProduto().toString());
-				fTxtNomeProduto.setText(produto_selecionado.getDescricao());
-				fTxtCodigoBarra.setText(produto_selecionado.getCodigo_barra());
-				cbxFatorVenda.getModel().setSelectedItem(produto_selecionado.getUnidadeVenda());
-				fTxtPrecoUnitario.setText(nf.format(produto_selecionado.getPrecoVenda()));
-				if (produto_selecionado.getUnidadeVenda().equals("KG")
-						|| produto_selecionado.getUnidadeVenda().equals("MT")
-						|| produto_selecionado.getUnidadeVenda().equals("LT")) {
-					checkBoxQuantidadeFracionada.setSelected(true);
+				produto_selecionado = ltProdutos.getSelectedValue();
+
+				if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
+					JOptionPane.showMessageDialog(null, "Produto já incluso.",
+							"Produto selecionado já presente no orçamento.", JOptionPane.WARNING_MESSAGE);
 				} else {
-					checkBoxQuantidadeFracionada.setSelected(false);
-				}
-				fTxtQuantidade.requestFocus();
-			}
+					NumberFormat nf = new DecimalFormat("0.00");
 
+					scrollPaneListaProdutos.setVisible(false);
+					fTxtCodigoProduto.setText(produto_selecionado.getIdProduto().toString());
+					fTxtNomeProduto.setText(produto_selecionado.getDescricao());
+					fTxtCodigoBarra.setText(produto_selecionado.getCodigo_barra());
+					cbxFatorVenda.getModel().setSelectedItem(produto_selecionado.getUnidadeVenda());
+					fTxtPrecoUnitario.setText(nf.format(produto_selecionado.getPrecoVenda()));
+					if (produto_selecionado.getUnidadeVenda().equals("KG")
+							|| produto_selecionado.getUnidadeVenda().equals("MT")
+							|| produto_selecionado.getUnidadeVenda().equals("LT")) {
+						checkBoxQuantidadeFracionada.setSelected(true);
+					} else {
+						checkBoxQuantidadeFracionada.setSelected(false);
+					}
+					fTxtQuantidade.requestFocus();
+				}
+			}
 		});
 		ltProdutos.setBounds(438, 77, 267, 79);
 
@@ -640,6 +654,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(panelTotalItem);
 
 		fTxtTotalItem = new JFormattedTextField();
+		fTxtTotalItem.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalItem.setEditable(false);
 		fTxtTotalItem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalItem.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -674,40 +689,55 @@ public class Panel_orc_vend extends JPanel {
 
 		panelDesconto = new JPanel();
 		panelDesconto.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelDesconto.setBounds(10, 138, 309, 29);
+		panelDesconto.setBounds(10, 138, 349, 29);
 		produtos.add(panelDesconto);
 		panelDesconto.setLayout(null);
 
 		fTxtPorcentagemDesconto = new JFormattedTextField();
+		fTxtPorcentagemDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtPorcentagemDesconto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaPorcentDesconto) {
+				calcula_valor_desconto();
+				calcula_total();
+			}
+		});
 		fTxtPorcentagemDesconto.setEnabled(false);
-		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(2, 0));
+		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(6, 2));
 		fTxtPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPorcentagemDesconto.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPorcentagemDesconto.setColumns(10);
-		fTxtPorcentagemDesconto.setBounds(109, 5, 44, 20);
+		fTxtPorcentagemDesconto.setBounds(145, 5, 58, 20);
 		panelDesconto.add(fTxtPorcentagemDesconto);
 
 		fTxtValorDesconto = new JFormattedTextField();
+		fTxtValorDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtValorDesconto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaDesconto) {
+				calcula_total();
+				calcula_porcentagem_desconto();
+			}
+		});
 		fTxtValorDesconto.setEnabled(false);
 		fTxtValorDesconto.setDocument(new FormataNumeral(9, 2));
-		fTxtValorDesconto.setBounds(212, 5, 85, 20);
+		fTxtValorDesconto.setBounds(254, 5, 85, 20);
 		panelDesconto.add(fTxtValorDesconto);
 		fTxtValorDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtValorDesconto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtValorDesconto.setColumns(10);
 
 		lblValorDesconto = new JLabel("Valor");
-		lblValorDesconto.setBounds(178, 6, 37, 19);
+		lblValorDesconto.setBounds(220, 6, 37, 19);
 		panelDesconto.add(lblValorDesconto);
 		lblValorDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		lblDesconto = new JLabel("Desconto");
-		lblDesconto.setBounds(7, 5, 64, 19);
+		lblDesconto = new JLabel("Desconto Unit\u00E1rio");
+		lblDesconto.setBounds(7, 5, 109, 19);
 		panelDesconto.add(lblDesconto);
 		lblDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
 		lblPorcentagemDesconto = new JLabel("%");
-		lblPorcentagemDesconto.setBounds(90, 6, 18, 19);
+		lblPorcentagemDesconto.setBounds(126, 6, 18, 19);
 		panelDesconto.add(lblPorcentagemDesconto);
 		lblPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
@@ -724,6 +754,12 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent perdaFocoNomeProduto) {
+				scrollPaneListaProdutos.setVisible(false);
+			}
+		});
 		fTxtNomeProduto.setEnabled(false);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
@@ -765,6 +801,13 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(cbxFatorVenda);
 
 		fTxtQuantidade = new JFormattedTextField();
+		fTxtQuantidade.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtQuantidade.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaQuantidade) {
+				calcula_total();
+			}
+		});
 		fTxtQuantidade.setEnabled(false);
 		fTxtQuantidade.setDocument(new FormataNumeral(6, 0));
 		fTxtQuantidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -784,6 +827,13 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblPrecoUnitario);
 
 		fTxtPrecoUnitario = new JFormattedTextField();
+		fTxtPrecoUnitario.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtPrecoUnitario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaPrecoUnitario) {
+				calcula_total();
+			}
+		});
 		fTxtPrecoUnitario.setEnabled(false);
 		fTxtPrecoUnitario.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoUnitario.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -797,9 +847,19 @@ public class Panel_orc_vend extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickIncluirProduto) {
 				Produto_Orcamento produto_incluso = new Produto_Orcamento();
-				if (novo_produto(produto_incluso)) {
-					modelo_tabela.addProduto(produto_incluso);
+
+				if (produto_selecionado != null) {
+					if (novo_produto(produto_incluso)) {
+						modelo_tabela.addProduto(produto_incluso);
+						limpar_dados_produto();
+						produto_selecionado = null;
+						fTxtQuantidadeTotal.setText(Integer.toString(modelo_tabela.getRowCount()));
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Necessário selecionar um produto.",
+							"Nenhum produto selecionado", JOptionPane.WARNING_MESSAGE);
 				}
+
 			}
 		});
 		btnIncluir.setEnabled(false);
@@ -936,6 +996,12 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(fTxtQuantidadeTotal);
 
 		fTxtCodigoProduto = new JFormattedTextField();
+		fTxtCodigoProduto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent perdaFocoNomeProduto) {
+				scrollPaneListaProdutos.setVisible(false);
+			}
+		});
 		fTxtCodigoProduto.setEnabled(false);
 		fTxtCodigoProduto.addKeyListener(new KeyAdapter() {
 			@Override
@@ -993,6 +1059,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtCodigoBarra = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarra.setEditable(false);
 		fTxtCodigoBarra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoBarra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarra.setEnabled(false);
@@ -1041,11 +1108,13 @@ public class Panel_orc_vend extends JPanel {
 			public void mousePressed(MouseEvent clickCancelar) {
 				desativar_campos();
 				limpar_campos();
+				modelo_tabela.limparTabela(tabelaProdutosInclusos);
 				tabbedPane.setEnabled(false);
 				btnCancelar.setVisible(false);
 				btnSalvar.setVisible(false);
 				btnNovo.setVisible(true);
 				tabbedPane.setSelectedIndex(0);
+				produto_selecionado = null;
 			}
 		});
 		btnCancelar.setIcon(icones.getIcone_cancelar());
@@ -1077,9 +1146,9 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		if (quantidade > 0 && preco_unitario > 0) {
-			String codigo = fTxtCodigoProduto.getText().trim();
-			String nome_produto = fTxtNomeProduto.getText().trim();
-			String codigo_barras = fTxtCodigoBarra.getText().trim();
+			String codigo = produto_selecionado.getIdProduto().toString();
+			String nome_produto = produto_selecionado.getDescricao();
+			String codigo_barras = produto_selecionado.getCodigo_barra();
 			String fator = cbxFatorVenda.getSelectedItem().toString();
 
 			Double valor_desconto = 0.00;
@@ -1099,7 +1168,7 @@ public class Panel_orc_vend extends JPanel {
 				novo_produto.setValor_total(total_produto);
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 				fTxtQuantidade.setBorder(new LineBorder(Color.lightGray));
-				
+
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return false;
@@ -1107,15 +1176,19 @@ public class Panel_orc_vend extends JPanel {
 			return true;
 		} else {
 			if (quantidade <= 0.00) {
-				JOptionPane.showMessageDialog(null, "Quantidade zerada.",
-						"Necessário informar quantidade.", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Quantidade zerada.", "Necessário informar quantidade.",
+						JOptionPane.WARNING_MESSAGE);
 				fTxtQuantidade.setBorder(new LineBorder(Color.RED));
+			}else {
+				fTxtQuantidade.setBorder(new LineBorder(Color.lightGray));
 			}
 
 			if (preco_unitario <= 0.00) {
-				JOptionPane.showMessageDialog(null, "Preço unitário zerado!",
-						"Necessário informar preço unitário.", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Preço unitário zerado!", "Necessário informar preço unitário.",
+						JOptionPane.WARNING_MESSAGE);
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.RED));
+			}else {
+				fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 			}
 			return false;
 		}
@@ -1174,6 +1247,7 @@ public class Panel_orc_vend extends JPanel {
 	public void limpar_campos() {
 		limpar_dados_cliente();
 		limpar_dados_produto();
+		limpar_totais_orcamento();
 	}
 
 	public void limpar_dados_produto() {
@@ -1181,10 +1255,14 @@ public class Panel_orc_vend extends JPanel {
 		fTxtNomeProduto.setText(null);
 		fTxtCodigoBarra.setText(null);
 		cbxFatorVenda.getModel().setSelectedItem("UN");
-		fTxtQuantidade.setSelectedTextColor(null);
+		fTxtQuantidade.setText(null);
 		fTxtPrecoUnitario.setText(null);
 		fTxtPorcentagemDesconto.setText(null);
 		fTxtValorDesconto.setText(null);
+		fTxtTotalItem.setText(null);
+	}
+
+	public void limpar_totais_orcamento() {
 		fTxtQuantidadeTotal.setText(null);
 		fTxtTotalMercadoriasBruto.setText(null);
 		fTxtTotalMercadoriasLiquido.setText(null);
@@ -1217,6 +1295,103 @@ public class Panel_orc_vend extends JPanel {
 		fTxtUltimaCompra.setText(null);
 		txtpObservaoFinanceira.setText(null);
 		fTxtNomeCliente.requestFocus();
+	}
+
+	public boolean produto_ja_incluso(Integer codigo, ArrayList<Produto_Orcamento> produtos_inclusos) {
+		for (Produto_Orcamento produto_orcamento : produtos_inclusos) {
+			if (produto_orcamento.getCodigo() == codigo) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void calcula_porcentagem_desconto() {
+		NumberFormat nf = new DecimalFormat("#,###0.00");
+		NumberFormat nf2 = new DecimalFormat("0.00");
+
+		Double preco_unitario = 0.00;
+		Double valor_desconto = 0.00;
+		Double porcentagem_desconto = 0.00;
+
+		try {
+			if (!fTxtPrecoUnitario.getText().isEmpty()) {
+				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			}
+			if (!fTxtValorDesconto.getText().isEmpty()) {
+				valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		porcentagem_desconto = (valor_desconto * 100.00) / preco_unitario;
+
+		if (porcentagem_desconto < 99.99) {
+
+			fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
+		} else {
+			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
+		}
+		fTxtPorcentagemDesconto.setText(nf2.format(porcentagem_desconto));
+
+	}
+
+	public void calcula_valor_desconto() {
+		NumberFormat nf = new DecimalFormat("#,###0.00");
+		NumberFormat nf2 = new DecimalFormat("0.00");
+
+		Double preco_unitario = 0.00;
+		Double valor_desconto = 0.00;
+		Double porcentagem_desconto = 0.00;
+
+		try {
+			if (!fTxtPrecoUnitario.getText().isEmpty()) {
+				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			}
+			if (!fTxtPorcentagemDesconto.getText().isEmpty()) {
+				porcentagem_desconto = nf.parse(fTxtPorcentagemDesconto.getText()).doubleValue();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		valor_desconto = preco_unitario * (porcentagem_desconto / 100.00);
+
+		if (porcentagem_desconto < 99.99) {
+			fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
+		} else {
+			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
+		}
+		fTxtValorDesconto.setText(nf2.format(valor_desconto));
+	}
+
+	public void calcula_total() {
+		NumberFormat nf = new DecimalFormat("#,###0.00");
+		NumberFormat nf2 = new DecimalFormat("0.00");
+		Double preco_unitario = 0.00;
+		Double quantidade = 0.00;
+		Double valor_desconto = 0.00;
+
+		try {
+			if (!fTxtPrecoUnitario.getText().isEmpty()) {
+				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			}
+
+			if (!fTxtQuantidade.getText().isEmpty()) {
+				quantidade = nf.parse(fTxtQuantidade.getText()).doubleValue();
+			}
+
+			if (!fTxtValorDesconto.getText().isEmpty()) {
+				valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Double total_produto = ((preco_unitario - valor_desconto) * quantidade);
+
+		fTxtTotalItem.setText(nf2.format(total_produto));
 	}
 
 	public void ativar_campos() {

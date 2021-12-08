@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.Produto;
-import entities.Setor;
+import entities.produto.Produto;
+import entities.produto.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
 

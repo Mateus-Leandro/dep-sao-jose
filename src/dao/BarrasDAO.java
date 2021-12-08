@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.Barras_Produto;
+import entities.produto.Barras_Produto;
 
 public class BarrasDAO {
 

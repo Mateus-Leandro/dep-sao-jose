@@ -32,7 +32,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
 import dao.SetorDAO;
-import entities.Setor;
+import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
 
 import java.awt.Color;

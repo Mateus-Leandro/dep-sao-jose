@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.Cliente;
+import entities.cliente.Cliente;
 
 public class ModeloTabelaClientes extends AbstractTableModel {
 

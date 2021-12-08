@@ -1,5 +1,6 @@
 package tables.tableModels;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -60,13 +61,13 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		case COLUNA_UNID:
 			return String.class;
 		case COLUNA_QUANTIDADE:
-			return Double.class;
+			return BigDecimal.class;
 		case COLUNA_PRECO_UNIT:
-			return Double.class;
+			return BigDecimal.class;
 		case COLUNA_DESC:
-			return Double.class;
+			return BigDecimal.class;
 		case COLUNA_TOTAL:
-			return Double.class;
+			return BigDecimal.class;
 		default:
 			return String.class;
 		}
@@ -77,6 +78,7 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		Produto_Orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
 
 		NumberFormat nf = new DecimalFormat("R$ 0.00");
+		NumberFormat nf2 = new DecimalFormat("0.00");
 
 		switch (columIndex) {
 		case COLUNA_NUMERO_ITEM:
@@ -90,13 +92,13 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		case COLUNA_UNID:
 			return produto_orcamento.getFator_venda();
 		case COLUNA_QUANTIDADE:
-			return produto_orcamento.getQuantidade();
+			return nf2.format (produto_orcamento.getQuantidade());
 		case COLUNA_PRECO_UNIT:
-			return produto_orcamento.getPreco_unitario();
+			return nf.format(produto_orcamento.getPreco_unitario());
 		case COLUNA_DESC:
-			return produto_orcamento.getValor_desconto();
+			return nf.format(produto_orcamento.getValor_desconto());
 		case COLUNA_TOTAL:
-			return produto_orcamento.getValor_total();
+			return nf.format(produto_orcamento.getValor_total());
 		}
 		return null;
 	}
@@ -116,5 +118,11 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		ModeloTabelaProdutos_Orcamento modelo = new ModeloTabelaProdutos_Orcamento(produtos_orcamento);
 		tabela.setModel(modelo);
 	}
-
+	
+	
+	public void limparTabela(JTable tabela) {
+		ModeloTabelaProdutos_Orcamento modelo = new ModeloTabelaProdutos_Orcamento(new ArrayList<Produto_Orcamento>());
+		tabela.setModel(modelo);
+	}
+	
 }
