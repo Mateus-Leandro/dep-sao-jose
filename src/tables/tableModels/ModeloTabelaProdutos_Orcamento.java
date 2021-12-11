@@ -124,9 +124,9 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
-	public void removeProduto(Integer codigo_produto) {
-		this.produtos_orcamento.removeIf(produto_orcamento -> produto_orcamento.getCodigo().equals(codigo_produto));
-		this.fireTableDataChanged();
+	public void removeProduto(int index_produto) {
+			this.produtos_orcamento.remove(index_produto);
+			this.fireTableDataChanged();
 	}
 
 	public void recarregarTabela(JTable tabela, ArrayList<Produto_Orcamento> produtos_orcamento) {

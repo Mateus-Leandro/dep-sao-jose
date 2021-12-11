@@ -627,6 +627,9 @@ public class Panel_orc_vend extends JPanel {
 				if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
 					JOptionPane.showMessageDialog(null, "Produto já incluso.",
 							"Produto selecionado já presente no orçamento.", JOptionPane.WARNING_MESSAGE);
+					produto_selecionado = null;
+					limpar_dados_produto();
+					fTxtNomeProduto.requestFocus();
 				} else {
 					NumberFormat nf = new DecimalFormat("0.00");
 
@@ -954,6 +957,21 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(btnEditar);
 
 		btnExcluir = new JButton("Excluir");
+		btnExcluir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickExcluir) {
+
+				if (btnExcluir.isEnabled() && !lsm.isSelectionEmpty()) {
+
+					int linha_selecionada = tabelaProdutosInclusos.getSelectedRow();
+					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 1).toString())) {
+						JOptionPane.showMessageDialog(null, "Produto removido corretamente do orçamento.",
+								"Produto removido.", JOptionPane.NO_OPTION);
+						fTxtQuantidadeTotal.setText(Integer.toString(modelo_tabela.getRowCount()));
+					}
+				}
+			}
+		});
 		btnExcluir.setEnabled(false);
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -1234,7 +1252,7 @@ public class Panel_orc_vend extends JPanel {
 
 			if (editando_item) {
 				codigo = fTxtCodigoProduto.getText();
-				nome_produto = fTxtNomeProduto.getText();
+				nome_produto = fTxtNomeProduto.getText().trim();
 				codigo_barras = fTxtCodigoBarra.getText();
 
 			} else {
@@ -1608,7 +1626,7 @@ public class Panel_orc_vend extends JPanel {
 
 		fTxtNomeProduto.setEditable(false);
 		fTxtCodigoProduto.setEditable(false);
-		
+
 		fTxtQuantidade.requestFocus();
 	}
 
@@ -1645,6 +1663,27 @@ public class Panel_orc_vend extends JPanel {
 
 		fTxtNomeProduto.setEditable(true);
 		fTxtCodigoProduto.setEditable(true);
+	}
+
+	public Boolean excluir_produto(String codigo) {
+
+		int opcao = JOptionPane.showConfirmDialog(null,
+				"Deseja remover o seguinte produto do orçamento?\n" + "Cod = "
+						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1) + "\n"
+						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2),
+				"Remoção de produtos", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+
+		Boolean flag = opcao == JOptionPane.YES_OPTION;
+
+		if (flag) {
+			for (Produto_Orcamento produto_excluido : lista_produtos_inclusos) {
+				if (produto_excluido.getCodigo().equals(Integer.parseInt(codigo))) {
+					modelo_tabela.removeProduto(lista_produtos_inclusos.indexOf(produto_excluido));
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void ConfiguraLarguraColunaTabela(JTable tabela_produtos_inclusos) {
