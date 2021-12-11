@@ -12,7 +12,8 @@ import entities.orcamentos.Produto_Orcamento;
 
 public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
-	private String colunas[] = { "It. Nº","Cod.", "Nome","Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto", "Total" };
+	private String colunas[] = { "It. Nº", "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
+			"Total" };
 	private ArrayList<Produto_Orcamento> produtos_orcamento;
 	private final int COLUNA_NUMERO_ITEM = 0;
 	private final int COLUNA_CODIGO = 1;
@@ -80,6 +81,15 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		NumberFormat nf = new DecimalFormat("R$ 0.00");
 		NumberFormat nf2 = new DecimalFormat("0.00");
 
+		Boolean fracionado = false;
+
+		if (produto_orcamento.getFator_venda().equals("MT") || produto_orcamento.getFator_venda().equals("KG")
+				|| produto_orcamento.getFator_venda().equals("L")) {
+			fracionado = true;
+		} else {
+			fracionado = false;
+		}
+
 		switch (columIndex) {
 		case COLUNA_NUMERO_ITEM:
 			return rowIndex + 1;
@@ -92,7 +102,13 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		case COLUNA_UNID:
 			return produto_orcamento.getFator_venda();
 		case COLUNA_QUANTIDADE:
-			return nf2.format (produto_orcamento.getQuantidade());
+			if (fracionado) {
+				return nf2.format(produto_orcamento.getQuantidade());
+			} else {
+				return nf2.format(produto_orcamento.getQuantidade()).substring(0,
+						nf2.format(produto_orcamento.getQuantidade()).length() - 3);
+			}
+
 		case COLUNA_PRECO_UNIT:
 			return nf.format(produto_orcamento.getPreco_unitario());
 		case COLUNA_DESC:
@@ -107,22 +123,15 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		this.produtos_orcamento.add(p);
 		this.fireTableDataChanged();
 	}
-	
+
 	public void removeProduto(Integer codigo_produto) {
 		this.produtos_orcamento.removeIf(produto_orcamento -> produto_orcamento.getCodigo().equals(codigo_produto));
 		this.fireTableDataChanged();
 	}
 
-
 	public void recarregarTabela(JTable tabela, ArrayList<Produto_Orcamento> produtos_orcamento) {
 		ModeloTabelaProdutos_Orcamento modelo = new ModeloTabelaProdutos_Orcamento(produtos_orcamento);
 		tabela.setModel(modelo);
 	}
-	
-	
-	public void limparTabela(JTable tabela) {
-		ModeloTabelaProdutos_Orcamento modelo = new ModeloTabelaProdutos_Orcamento(new ArrayList<Produto_Orcamento>());
-		tabela.setModel(modelo);
-	}
-	
+
 }

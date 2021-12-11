@@ -10,6 +10,22 @@ public class Produto_Orcamento {
 	Double valor_desconto;
 	Double valor_total;
 	
+	
+	public Produto_Orcamento() {
+		
+	}
+	
+	public Produto_Orcamento(Integer codigo, String nome, String fator_venda, String codigo_barras, Double quantidade,
+			Double preco_unitario, Double valor_desconto, Double valor_total) {
+		this.codigo = codigo;
+		this.nome = nome;
+		this.fator_venda = fator_venda;
+		this.codigo_barras = codigo_barras;
+		this.quantidade = quantidade;
+		this.preco_unitario = preco_unitario;
+		this.valor_desconto = valor_desconto;
+		this.valor_total = valor_total;
+	}
 	public Double getValor_total() {
 		return ((preco_unitario - valor_desconto) * quantidade);
 	}
@@ -58,5 +74,32 @@ public class Produto_Orcamento {
 	public void setValor_desconto(Double valor_desconto) {
 		this.valor_desconto = valor_desconto;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Produto_Orcamento other = (Produto_Orcamento) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
+	
+	
 	
 }
