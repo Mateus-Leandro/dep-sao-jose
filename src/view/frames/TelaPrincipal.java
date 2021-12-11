@@ -47,7 +47,6 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBorder(UIManager.getBorder("CheckBoxMenuItem.border"));
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
