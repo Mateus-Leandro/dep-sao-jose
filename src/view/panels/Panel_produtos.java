@@ -93,6 +93,7 @@ public class Panel_produtos extends JPanel {
 	private JLabel lblMargemPraticada;
 	private JFormattedTextField fTxtMargemPraticada;
 	private JComboBox cbxFatorVenda;
+	private JComboBox cbsFatorVenda;
 	private JComboBox<Setor> cbxSetor = new JComboBox<Setor>();
 	private Jtext_tools text_tools = new Jtext_tools();
 
@@ -103,7 +104,7 @@ public class Panel_produtos extends JPanel {
 		setLayout(null);
 
 		txtCodigo = new JTextField();
-		txtCodigo.setEnabled(false);
+		txtCodigo.setEditable(false);
 		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtCodigo.setBounds(63, 152, 77, 20);
 		add(txtCodigo);
@@ -127,14 +128,14 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
-		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
+		fTxtNomeProduto.setEditable(false);
+		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
+			public void mousePressed(MouseEvent clickNomeProduto) {
 				text_tools.move_cursor_inicio(fTxtNomeProduto);
 			}
 		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtNomeProduto.setEnabled(false);
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setBounds(365, 152, 344, 20);
 		add(fTxtNomeProduto);
@@ -157,14 +158,14 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtCodigoBarras = new JFormattedTextField(mascara_barras);
-		fTxtCodigoBarras.addFocusListener(new FocusAdapter() {
+		fTxtCodigoBarras.setEditable(false);
+		fTxtCodigoBarras.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoCodigoBarras) {
+			public void mousePressed(MouseEvent clickCodigoBarras) {
 				text_tools.move_cursor_inicio(fTxtCodigoBarras);
 			}
 		});
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtCodigoBarras.setEnabled(false);
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarras.setBounds(557, 187, 117, 20);
 		add(fTxtCodigoBarras);
@@ -207,7 +208,7 @@ public class Panel_produtos extends JPanel {
 		add(lblPrecoCusto);
 
 		fTxtPrecoCusto = new JFormattedTextField();
-		fTxtPrecoCusto.setEnabled(false);
+		fTxtPrecoCusto.setEditable(false);
 		fTxtPrecoCusto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCusto) {
@@ -228,7 +229,7 @@ public class Panel_produtos extends JPanel {
 		add(lblMargem);
 
 		fTxtMargem = new JFormattedTextField();
-		fTxtMargem.setEnabled(false);
+		fTxtMargem.setEditable(false);
 		fTxtMargem.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaMargem) {
@@ -248,7 +249,6 @@ public class Panel_produtos extends JPanel {
 		add(lblPrecoSugerido);
 
 		fTxtPrecoSugerido = new JFormattedTextField();
-		fTxtPrecoSugerido.setEnabled(false);
 		fTxtPrecoSugerido.setEditable(false);
 		fTxtPrecoSugerido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoSugerido.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -263,6 +263,7 @@ public class Panel_produtos extends JPanel {
 		add(lblPrVenda);
 
 		fTxtPrecoVenda = new JFormattedTextField();
+		fTxtPrecoVenda.setEditable(false);
 		fTxtPrecoVenda.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoVenda) {
@@ -270,7 +271,6 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtPrecoVenda.setEnabled(false);
 		fTxtPrecoVenda.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoVenda.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoVenda.setBounds(612, 299, 97, 20);
@@ -284,10 +284,8 @@ public class Panel_produtos extends JPanel {
 
 		fTxtMargemPraticada = new JFormattedTextField();
 		fTxtMargemPraticada.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtMargemPraticada.setEnabled(false);
 		fTxtMargemPraticada.setEditable(false);
 		fTxtMargemPraticada.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtMargemPraticada.setEnabled(false);
 		fTxtMargemPraticada.setBounds(642, 337, 67, 20);
 		add(fTxtMargemPraticada);
 
@@ -378,7 +376,7 @@ public class Panel_produtos extends JPanel {
 					txtCodigo.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0).toString());
 					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 1).toString());
 					cbxFatorVenda.getModel()
-					.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2));
+							.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2));
 					cbxSetor.getModel().setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 3));
 					fTxtPrecoCusto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 4).toString()
 							.replace("R$ ", ""));
@@ -494,12 +492,12 @@ public class Panel_produtos extends JPanel {
 		btnCancelar.setBounds(595, 378, 113, 29);
 		add(btnCancelar);
 
-		cbxFatorVenda = new JComboBox();
-		cbxFatorVenda.setEnabled(false);
-		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxFatorVenda.setModel(new DefaultComboBoxModel(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
-		cbxFatorVenda.setBounds(113, 231, 57, 22);
-		add(cbxFatorVenda);
+		cbsFatorVenda = new JComboBox();
+		cbsFatorVenda.setEnabled(false);
+		cbsFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbsFatorVenda.setModel(new DefaultComboBoxModel(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
+		cbsFatorVenda.setBounds(113, 231, 57, 22);
+		add(cbsFatorVenda);
 		cbxSetor.setEnabled(false);
 
 		cbxSetor.addFocusListener(new FocusAdapter() {
@@ -524,26 +522,22 @@ public class Panel_produtos extends JPanel {
 	// --------------Funções--------------
 
 	public void ativarCampos() {
-		fTxtCodigoBarras.setEnabled(true);
-		fTxtMargem.setEnabled(true);
-		fTxtNomeProduto.setEnabled(true);
-		fTxtPrecoCusto.setEnabled(true);
-		fTxtPrecoVenda.setEnabled(true);
-		fTxtPrecoSugerido.setEnabled(true);
-		fTxtMargemPraticada.setEnabled(true);
-		cbxFatorVenda.setEnabled(true);
+		fTxtCodigoBarras.setEditable(true);
+		fTxtMargem.setEditable(true);
+		fTxtNomeProduto.setEditable(true);
+		fTxtPrecoCusto.setEditable(true);
+		fTxtPrecoVenda.setEditable(true);
+		cbsFatorVenda.setEnabled(true);
 		cbxSetor.setEnabled(true);
 	}
 
 	public void desativarCampos() {
-		fTxtCodigoBarras.setEnabled(false);
-		fTxtMargem.setEnabled(false);
-		fTxtNomeProduto.setEnabled(false);
-		fTxtPrecoCusto.setEnabled(false);
-		fTxtPrecoVenda.setEnabled(false);
-		fTxtPrecoSugerido.setEnabled(false);
-		fTxtMargemPraticada.setEnabled(false);
-		cbxFatorVenda.setEnabled(false);
+		fTxtCodigoBarras.setEditable(false);
+		fTxtMargem.setEditable(false);
+		fTxtNomeProduto.setEditable(false);
+		fTxtPrecoCusto.setEditable(false);
+		fTxtPrecoVenda.setEditable(false);
+		cbsFatorVenda.setEnabled(false);
 		cbxSetor.setEnabled(false);
 	}
 
@@ -556,7 +550,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.setText(null);
 		fTxtPrecoSugerido.setText(null);
 		fTxtMargemPraticada.setText(null);
-		cbxFatorVenda.setSelectedIndex(0);
+		cbsFatorVenda.setSelectedIndex(0);
 		cbxSetor.getModel().setSelectedItem("");
 	}
 
@@ -720,7 +714,7 @@ public class Panel_produtos extends JPanel {
 			e.printStackTrace();
 		}
 
-		String unidadeVenda = cbxFatorVenda.getSelectedItem().toString();
+		String unidadeVenda = cbsFatorVenda.getSelectedItem().toString();
 		Boolean bloqueadoVenda = false;
 		Date dataCadastro = null;
 
@@ -891,7 +885,7 @@ public class Panel_produtos extends JPanel {
 		sorter.setComparator(4, spv);
 		sorter.setComparator(6, spv);
 		sorter.setComparator(7, spv);
-		
+
 		tabelaProdutos.setRowSorter(sorter);
 	}
 

@@ -55,6 +55,7 @@ public class Panel_clientes extends JPanel {
 	private JFormattedTextField fTxtDocumento;
 	private JLabel lblIe;
 	private JFormattedTextField fTxtIe;
+	private JFormattedTextField fTxtIe_1;
 	private JSeparator separador_clientes;
 	private JLabel lblNome;
 	private JFormattedTextField fTxtNomeCliente;
@@ -210,7 +211,6 @@ public class Panel_clientes extends JPanel {
 		txtCodigo = new JTextField();
 		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtCodigo.setBounds(63, 152, 65, 20);
-		txtCodigo.setEnabled(false);
 		txtCodigo.setEditable(false);
 		add(txtCodigo);
 		txtCodigo.setColumns(10);
@@ -262,6 +262,13 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtDocumento = new JFormattedTextField(mascara_cpf);
+		fTxtDocumento.setEditable(false);
+		fTxtDocumento.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickDocumento) {
+				fTxtDocumento.setCaretPosition(0);
+			}
+		});
 		fTxtDocumento.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent perdaFocoDocumento) {
@@ -280,11 +287,6 @@ public class Panel_clientes extends JPanel {
 					}
 				}
 
-			}
-			@Override
-			public void focusGained(FocusEvent ganhoFocoDocumento) {
-				text_tools.move_cursor_inicio(fTxtDocumento);
-				
 			}
 		});
 		fTxtDocumento.setBounds(376, 152, 125, 20);
@@ -330,7 +332,6 @@ public class Panel_clientes extends JPanel {
 				}
 			}
 		});
-		fTxtDocumento.setEnabled(false);
 		add(fTxtDocumento);
 
 		lblIe = new JLabel("I. E.");
@@ -356,20 +357,19 @@ public class Panel_clientes extends JPanel {
 			}
 		});
 
-		fTxtIe = new JFormattedTextField(mascara_ie);
-		fTxtIe.addFocusListener(new FocusAdapter() {
+		fTxtIe_1 = new JFormattedTextField(mascara_ie);
+		fTxtIe_1.setEditable(false);
+		fTxtIe_1.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoIe) {
-				text_tools.move_cursor_inicio(fTxtIe);
+			public void mousePressed(MouseEvent clickIe) {
+				fTxtIe.setCaretPosition(0);
 			}
 		});
-		fTxtIe.setBounds(580, 152, 129, 20);
-		fTxtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtIe.setFocusLostBehavior(JFormattedTextField.PERSIST);
-
-		fTxtIe.setEnabled(false);
-		fTxtIe.setVisible(false);
-		add(fTxtIe);
+		fTxtIe_1.setBounds(580, 152, 129, 20);
+		fTxtIe_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtIe_1.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtIe_1.setVisible(false);
+		add(fTxtIe_1);
 
 		separador_clientes = new JSeparator();
 		separador_clientes.setBounds(10, 50, 698, 9);
@@ -388,16 +388,16 @@ public class Panel_clientes extends JPanel {
 			e.printStackTrace();
 		}
 		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
-		fTxtNomeCliente.addFocusListener(new FocusAdapter() {
+		fTxtNomeCliente.setEditable(false);
+		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoNomeCliente) {
+			public void mousePressed(MouseEvent clickNomeCliente) {
 				text_tools.move_cursor_inicio(fTxtNomeCliente);
 			}
 		});
 		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNomeCliente.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeCliente.setBounds(57, 186, 317, 20);
-		fTxtNomeCliente.setEnabled(false);
 		add(fTxtNomeCliente);
 
 		MaskFormatter mascara_apelido = null;
@@ -414,16 +414,16 @@ public class Panel_clientes extends JPanel {
 		add(lblApelido);
 
 		fTxtApelido = new JFormattedTextField(mascara_apelido);
-		fTxtApelido.addFocusListener(new FocusAdapter() {
+		fTxtApelido.setEditable(false);
+		fTxtApelido.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoApelido) {
+			public void mousePressed(MouseEvent clickApelido) {
 				text_tools.move_cursor_inicio(fTxtApelido);
 			}
 		});
 		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtApelido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtApelido.setBounds(444, 186, 265, 20);
-		fTxtApelido.setEnabled(false);
 		add(fTxtApelido);
 
 		lblCep = new JLabel("Cep");
@@ -463,6 +463,13 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCep = new JFormattedTextField(mascara_cep);
+		fTxtCep.setEditable(false);
+		fTxtCep.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickCep) {
+			text_tools.move_cursor_inicio(fTxtCep);
+			}
+		});
 		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCep.addKeyListener(new KeyAdapter() {
 			@Override
@@ -480,7 +487,6 @@ public class Panel_clientes extends JPanel {
 		});
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCep.setBounds(46, 257, 78, 20);
-		fTxtCep.setEnabled(false);
 		add(fTxtCep);
 
 		btnLimpaCep = new JButton();
@@ -510,16 +516,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCidade = new JFormattedTextField(mascara_cidade);
-		fTxtCidade.addFocusListener(new FocusAdapter() {
+		fTxtCidade.setEditable(false);
+		fTxtCidade.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoCidade) {
+			public void mousePressed(MouseEvent clickCidade) {
 				text_tools.move_cursor_inicio(fTxtCidade);
 			}
 		});
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCidade.setBounds(262, 257, 239, 20);
-		fTxtCidade.setEnabled(false);
 		add(fTxtCidade);
 
 		lblCidade = new JLabel("Cidade");
@@ -543,16 +549,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEndereco = new JFormattedTextField(mascara_endereco);
-		fTxtEndereco.addFocusListener(new FocusAdapter() {
+		fTxtEndereco.setEditable(false);
+		fTxtEndereco.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoEndereco) {
+			public void mousePressed(MouseEvent clickEndereco) {
 				text_tools.move_cursor_inicio(fTxtEndereco);
 			}
 		});
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEndereco.setBounds(79, 293, 348, 20);
-		fTxtEndereco.setEnabled(false);
 		add(fTxtEndereco);
 
 		lblNumero = new JLabel("N\u00B0");
@@ -569,16 +575,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtNumero = new JFormattedTextField(mascara_numero);
-		fTxtNumero.addFocusListener(new FocusAdapter() {
+		fTxtNumero.setEditable(false);
+		fTxtNumero.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoNumero) {
+			public void mousePressed(MouseEvent clickNumero) {
 				text_tools.move_cursor_inicio(fTxtNumero);
 			}
 		});
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNumero.setBounds(489, 292, 70, 20);
-		fTxtNumero.setEnabled(false);
 		add(fTxtNumero);
 
 		lblReferencia = new JLabel("Referencia");
@@ -596,16 +602,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtReferencia = new JFormattedTextField(mascara_referencia);
-		fTxtReferencia.addFocusListener(new FocusAdapter() {
+		fTxtReferencia.setEditable(false);
+		fTxtReferencia.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoReferencia) {
+			public void mousePressed(MouseEvent clickReferencia) {
 				text_tools.move_cursor_inicio(fTxtReferencia);
 			}
 		});
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtReferencia.setBounds(86, 326, 342, 20);
-		fTxtReferencia.setEnabled(false);
 		add(fTxtReferencia);
 
 		lblBairro = new JLabel("Bairro");
@@ -622,16 +628,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtBairro = new JFormattedTextField(mascara_bairro);
-		fTxtBairro.addFocusListener(new FocusAdapter() {
+		fTxtBairro.setEditable(false);
+		fTxtBairro.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoBairro) {
+			public void mousePressed(MouseEvent clickBairro) {
 				text_tools.move_cursor_inicio(fTxtBairro);
 			}
 		});
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtBairro.setBounds(489, 324, 220, 20);
-		fTxtBairro.setEnabled(false);
 		add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
@@ -648,16 +654,16 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCelular = new JFormattedTextField(mascara_celular);
-		fTxtCelular.addFocusListener(new FocusAdapter() {
+		fTxtCelular.setEditable(false);
+		fTxtCelular.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoCelular) {
-				text_tools.move_cursor_inicio(fTxtCelular);
+			public void mousePressed(MouseEvent clickCelular) {
+				fTxtCelular.setCaretPosition(0);
 			}
 		});
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCelular.setBounds(62, 361, 104, 20);
-		fTxtCelular.setEnabled(false);
 		add(fTxtCelular);
 
 		lblTelFixo = new JLabel("Tel. Fixo");
@@ -674,16 +680,17 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
-		fTxtTelFixo.addFocusListener(new FocusAdapter() {
+		fTxtTelFixo.setEditable(false);
+		fTxtTelFixo.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoTelFixo) {
-				text_tools.move_cursor_inicio(fTxtTelFixo);
+			public void mousePressed(MouseEvent clickTelefone) {
+				fTxtTelFixo.setCaretPosition(0);
 			}
 		});
+	
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTelFixo.setBounds(251, 361, 104, 20);
-		fTxtTelFixo.setEnabled(false);
 		add(fTxtTelFixo);
 
 		lblEmai = new JLabel("Email");
@@ -700,16 +707,17 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEmail = new JFormattedTextField(mascara_email);
-		fTxtEmail.addFocusListener(new FocusAdapter() {
+		fTxtEmail.setEditable(false);
+		fTxtEmail.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent ganhoFocoEmail) {
+			public void mousePressed(MouseEvent clickEmail) {
 				text_tools.move_cursor_inicio(fTxtEmail);
 			}
 		});
+	
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEmail.setBounds(412, 362, 297, 20);
-		fTxtEmail.setEnabled(false);
 		add(fTxtEmail);
 
 		// alimentando lista de clientes.
@@ -982,19 +990,19 @@ public class Panel_clientes extends JPanel {
 
 	public void ativar_campos() {
 		checkBoxJuridica.setEnabled(true);
-		fTxtDocumento.setEnabled(true);
-		fTxtIe.setEnabled(true);
-		fTxtNomeCliente.setEnabled(true);
-		fTxtApelido.setEnabled(true);
-		fTxtCep.setEnabled(true);
-		fTxtCidade.setEnabled(true);
-		fTxtEndereco.setEnabled(true);
-		fTxtNumero.setEnabled(true);
-		fTxtReferencia.setEnabled(true);
-		fTxtBairro.setEnabled(true);
-		fTxtCelular.setEnabled(true);
-		fTxtTelFixo.setEnabled(true);
-		fTxtEmail.setEnabled(true);
+		fTxtDocumento.setEditable(true);
+		fTxtIe_1.setEditable(true);
+		fTxtNomeCliente.setEditable(true);
+		fTxtApelido.setEditable(true);
+		fTxtCep.setEditable(true);
+		fTxtCidade.setEditable(true);
+		fTxtEndereco.setEditable(true);
+		fTxtNumero.setEditable(true);
+		fTxtReferencia.setEditable(true);
+		fTxtBairro.setEditable(true);
+		fTxtCelular.setEditable(true);
+		fTxtTelFixo.setEditable(true);
+		fTxtEmail.setEditable(true);
 		btnCancelar.setVisible(true);
 		btnSalvar.setVisible(true);
 		checkBoxBloqueado.setEnabled(true);
@@ -1002,19 +1010,19 @@ public class Panel_clientes extends JPanel {
 
 	public void desativar_campos() {
 		checkBoxJuridica.setEnabled(false);
-		fTxtDocumento.setEnabled(false);
-		fTxtIe.setEnabled(false);
-		fTxtNomeCliente.setEnabled(false);
-		fTxtApelido.setEnabled(false);
-		fTxtCep.setEnabled(false);
-		fTxtCidade.setEnabled(false);
-		fTxtEndereco.setEnabled(false);
-		fTxtNumero.setEnabled(false);
-		fTxtReferencia.setEnabled(false);
-		fTxtBairro.setEnabled(false);
-		fTxtCelular.setEnabled(false);
-		fTxtTelFixo.setEnabled(false);
-		fTxtEmail.setEnabled(false);
+		fTxtDocumento.setEditable(false);
+		fTxtIe_1.setEditable(false);
+		fTxtNomeCliente.setEditable(false);
+		fTxtApelido.setEditable(false);
+		fTxtCep.setEditable(false);
+		fTxtCidade.setEditable(false);
+		fTxtEndereco.setEditable(false);
+		fTxtNumero.setEditable(false);
+		fTxtReferencia.setEditable(false);
+		fTxtBairro.setEditable(false);
+		fTxtCelular.setEditable(false);
+		fTxtTelFixo.setEditable(false);
+		fTxtEmail.setEditable(false);
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		checkBoxBloqueado.setEnabled(false);
@@ -1025,7 +1033,7 @@ public class Panel_clientes extends JPanel {
 		checkBoxJuridica.setSelected(false);
 		txtCodigo.setText(null);
 		fTxtDocumento.setText(null);
-		fTxtIe.setText(null);
+		fTxtIe_1.setText(null);
 		fTxtNomeCliente.setText(null);
 		fTxtApelido.setText(null);
 		fTxtCep.setText(null);
@@ -1066,9 +1074,9 @@ public class Panel_clientes extends JPanel {
 			documento = fTxtDocumento.getText().trim();
 		}
 
-		if (fTxtIe.isVisible()) {
-			if (!fTxtIe.getText().equals("         .  -  ")) {
-				inscricao_estadual = fTxtIe.getText().trim();
+		if (fTxtIe_1.isVisible()) {
+			if (!fTxtIe_1.getText().equals("         .  -  ")) {
+				inscricao_estadual = fTxtIe_1.getText().trim();
 			}
 		}
 
