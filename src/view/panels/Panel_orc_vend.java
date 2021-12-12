@@ -828,7 +828,7 @@ public class Panel_orc_vend extends JPanel {
 				fTxtNumero.setText(cliente_encontrado.getNumero());
 				fTxtEmail.setText(cliente_encontrado.getEmail());
 				fTxtCelular.setText(cliente_encontrado.getCelular());
-				fTxtTelFixo.setText(cliente_encontrado.getCelular());
+				fTxtTelFixo.setText(cliente_encontrado.getTelefone());
 				if (cliente_encontrado.getCpf_cnpj().length() > 14) {
 					lblIe.setVisible(true);
 					txtIe.setText(cliente_encontrado.getInscricao_estadual());
