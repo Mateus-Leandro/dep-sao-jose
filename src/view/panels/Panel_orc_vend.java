@@ -59,7 +59,6 @@ public class Panel_orc_vend extends JPanel {
 	private JLabel lblNomeCliente;
 	private JFormattedTextField fTxtNomeCliente;
 	private JLabel lblApelido;
-	private JTextField txtApelido;
 	private JLabel lblDocumento;
 	private JTextField txtDocumento;
 	private JLabel lblIe;
@@ -176,6 +175,7 @@ public class Panel_orc_vend extends JPanel {
 	private Double valor_frete = 0.00;
 	private NumberFormat nf = new DecimalFormat("#,##0.00");
 	NumberFormat nf2 = new DecimalFormat("0.00");
+	private JFormattedTextField fTxtApelido;
 
 	/**
 	 * Create the panel.
@@ -199,7 +199,7 @@ public class Panel_orc_vend extends JPanel {
 			public void mousePressed(MouseEvent clickListaClientes) {
 				scrollPaneListaClientes.setVisible(false);
 				Cliente cliente_encontrado = ltClientes.getSelectedValue();
-				txtApelido.setText(cliente_encontrado.getApelido());
+				fTxtApelido.setText(cliente_encontrado.getApelido());
 				fTxtNomeCliente.setText(cliente_encontrado.getNome());
 				txtDocumento.setText(cliente_encontrado.getCpf_cnpj());
 				fTxtEndereco.setText(cliente_encontrado.getEndereco());
@@ -253,11 +253,17 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickNomeCliente) {
+				text_tools.move_cursor_inicio(fTxtNomeCliente);
+			}
+		});
 		fTxtNomeCliente.setEnabled(false);
 		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaNomeCliente) {
-				alimentar_lista_clientes();
+				alimentar_lista_clientes(null);
 			}
 		});
 		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -269,14 +275,6 @@ public class Panel_orc_vend extends JPanel {
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblApelido.setBounds(417, 61, 48, 19);
 		cliente.add(lblApelido);
-
-		txtApelido = new JTextField();
-		txtApelido.setEnabled(false);
-		txtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtApelido.setEditable(false);
-		txtApelido.setColumns(10);
-		txtApelido.setBounds(466, 60, 237, 20);
-		cliente.add(txtApelido);
 
 		lblDocumento = new JLabel("Documento");
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -319,6 +317,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtCep = new JFormattedTextField(mascara_cep);
+		fTxtCep.setEditable(false);
 		fTxtCep.setEnabled(false);
 		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -339,6 +338,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade.setEditable(false);
 		fTxtCidade.setEnabled(false);
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -360,6 +360,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco.setEditable(false);
 		fTxtEndereco.setEnabled(false);
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -381,6 +382,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		fTxtReferencia.setEditable(false);
 		fTxtReferencia.setEnabled(false);
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -401,6 +403,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero.setEditable(false);
 		fTxtNumero.setEnabled(false);
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -421,6 +424,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro.setEditable(false);
 		fTxtBairro.setEnabled(false);
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -441,6 +445,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtCelular = new JFormattedTextField(mascara_celular);
+		fTxtCelular.setEditable(false);
 		fTxtCelular.setEnabled(false);
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -461,6 +466,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo.setEditable(false);
 		fTxtTelFixo.setEnabled(false);
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -481,6 +487,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail.setEditable(false);
 		fTxtEmail.setEnabled(false);
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -617,6 +624,24 @@ public class Panel_orc_vend extends JPanel {
 		btnLimpaCliente.setIcon(icones.getIcone_limpar());
 		btnLimpaCliente.setBounds(325, 61, 27, 19);
 		cliente.add(btnLimpaCliente);
+		
+		fTxtApelido = new JFormattedTextField();
+		fTxtApelido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaApelidoCliente) {
+				
+				if(! fTxtApelido.getText().trim().isEmpty()) {
+					alimentar_lista_clientes(fTxtApelido.getText().trim() + "%");
+				}else {
+					alimentar_lista_clientes(null);
+				}
+			}
+		});
+		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtApelido.setEnabled(false);
+		fTxtApelido.setColumns(10);
+		fTxtApelido.setBounds(463, 61, 240, 20);
+		cliente.add(fTxtApelido);
 
 		produtos = new JPanel();
 		tabbedPane.addTab("Produtos", produtos);
@@ -1325,25 +1350,34 @@ public class Panel_orc_vend extends JPanel {
 		}
 	}
 
-	public void alimentar_lista_clientes() {
-		if (!fTxtNomeCliente.getText().trim().isEmpty()) {
-			list_model.clear();
-			lista_clientes.clear();
-			ClienteDAO cliente_dao = new ClienteDAO();
-			lista_clientes = cliente_dao.listarClientes_nome(lista_clientes, fTxtNomeCliente.getText().trim() + "%");
-
-			for (Cliente cliente : lista_clientes) {
-				list_model.addElement(cliente);
-			}
-
-			if (!list_model.isEmpty()) {
-				scrollPaneListaClientes.setVisible(true);
+	public void alimentar_lista_clientes(String apelido) {
+		
+		ClienteDAO cliente_dao = new ClienteDAO();
+		list_model.clear();
+		lista_clientes.clear();
+		
+		if(apelido == null) {
+			if (!fTxtNomeCliente.getText().trim().isEmpty()) {	
+				lista_clientes = cliente_dao.listarClientes_nome(lista_clientes, fTxtNomeCliente.getText().trim() + "%");
 			} else {
 				scrollPaneListaClientes.setVisible(false);
 			}
+		}else {
+			lista_clientes = cliente_dao.listarClientes_apelido(lista_clientes, apelido);
+		}
+		
+		
+		for (Cliente cliente : lista_clientes) {
+			list_model.addElement(cliente);
+		}
+		
+		
+		if (!list_model.isEmpty()) {
+			scrollPaneListaClientes.setVisible(true);
 		} else {
 			scrollPaneListaClientes.setVisible(false);
 		}
+		
 		ltClientes.setModel(list_model);
 	}
 
@@ -1405,7 +1439,7 @@ public class Panel_orc_vend extends JPanel {
 	public void limpar_dados_cliente() {
 		scrollPaneListaClientes.setVisible(false);
 		fTxtNomeCliente.setText(null);
-		txtApelido.setText(null);
+		fTxtApelido.setText(null);
 		fTxtNomeCliente.setText(null);
 		txtDocumento.setText(null);
 		txtIe.setText(null);
@@ -1559,7 +1593,7 @@ public class Panel_orc_vend extends JPanel {
 	public void ativar_campos() {
 		// Campos clientes
 		fTxtNomeCliente.setEnabled(true);
-		txtApelido.setEnabled(true);
+		fTxtApelido.setEnabled(true);
 		txtDocumento.setEnabled(true);
 		txtIe.setEnabled(true);
 		fTxtCep.setEnabled(true);
@@ -1589,6 +1623,7 @@ public class Panel_orc_vend extends JPanel {
 		fTxtQuantidadeTotal.setEnabled(true);
 		fTxtTotalMercadoriasLiquido.setEnabled(true);
 		fTxtTotalMercadoriasBruto.setEnabled(true);
+		fTxtTotalItem.setEnabled(true);
 		fTxtFrete.setEnabled(true);
 		fTxtDescontoFinal.setEnabled(true);
 		fTxtTotalOrcamento.setEnabled(true);
@@ -1598,7 +1633,7 @@ public class Panel_orc_vend extends JPanel {
 	public void desativar_campos() {
 		// Campos clientes
 		fTxtNomeCliente.setEnabled(false);
-		txtApelido.setEnabled(false);
+		fTxtApelido.setEnabled(false);
 		txtDocumento.setEnabled(false);
 		txtIe.setEnabled(false);
 		fTxtCep.setEnabled(false);
