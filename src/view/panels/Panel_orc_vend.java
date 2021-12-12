@@ -189,460 +189,6 @@ public class Panel_orc_vend extends JPanel {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(tabbedPane);
 
-		cliente = new JPanel();
-		tabbedPane.addTab("Cliente", cliente);
-		cliente.setLayout(null);
-
-		ltClientes = new JList();
-		ltClientes.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickListaClientes) {
-				scrollPaneListaClientes.setVisible(false);
-				Cliente cliente_encontrado = ltClientes.getSelectedValue();
-				fTxtApelido.setText(cliente_encontrado.getApelido());
-				fTxtNomeCliente.setText(cliente_encontrado.getNome());
-				txtDocumento.setText(cliente_encontrado.getCpf_cnpj());
-				fTxtEndereco.setText(cliente_encontrado.getEndereco());
-				fTxtReferencia.setText(cliente_encontrado.getReferencia());
-				fTxtCidade.setText(cliente_encontrado.getCidade());
-				fTxtBairro.setText(cliente_encontrado.getBairro());
-				fTxtCep.setText(cliente_encontrado.getCep());
-				fTxtNumero.setText(cliente_encontrado.getNumero());
-				fTxtEmail.setText(cliente_encontrado.getEmail());
-				fTxtCelular.setText(cliente_encontrado.getCelular());
-				fTxtTelFixo.setText(cliente_encontrado.getCelular());
-				if (cliente_encontrado.getCpf_cnpj().length() > 14) {
-					lblIe.setVisible(true);
-					txtIe.setText(cliente_encontrado.getInscricao_estadual());
-					txtIe.setVisible(true);
-				} else {
-					lblIe.setVisible(false);
-					txtIe.setText(null);
-					txtIe.setVisible(false);
-				}
-
-			}
-		});
-		ltClientes.setBounds(48, 79, 267, 66);
-
-		scrollPaneListaClientes = new JScrollPane(ltClientes);
-		scrollPaneListaClientes.setBounds(48, 79, 267, 66);
-		scrollPaneListaClientes.setVisible(false);
-		cliente.add(scrollPaneListaClientes);
-
-		lblCliente = new JLabel("Informa\u00E7\u00F5es do Cliente");
-		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblCliente.setBounds(236, 11, 225, 29);
-		cliente.add(lblCliente);
-
-		separadorInformacoesDoCliente = new JSeparator();
-		separadorInformacoesDoCliente.setBounds(10, 41, 715, 9);
-		cliente.add(separadorInformacoesDoCliente);
-
-		lblNomeCliente = new JLabel("Nome");
-		lblNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeCliente.setBounds(10, 61, 48, 19);
-		cliente.add(lblNomeCliente);
-
-		MaskFormatter mascara_nome = null;
-		try {
-			mascara_nome = new MaskFormatter("*********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
-		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickNomeCliente) {
-				text_tools.move_cursor_inicio(fTxtNomeCliente);
-			}
-		});
-		fTxtNomeCliente.setEnabled(false);
-		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent digitaNomeCliente) {
-				alimentar_lista_clientes(null);
-			}
-		});
-		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtNomeCliente.setColumns(10);
-		fTxtNomeCliente.setBounds(48, 61, 267, 20);
-		cliente.add(fTxtNomeCliente);
-
-		lblApelido = new JLabel("Apelido");
-		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblApelido.setBounds(417, 61, 48, 19);
-		cliente.add(lblApelido);
-
-		lblDocumento = new JLabel("Documento");
-		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDocumento.setBounds(10, 93, 78, 19);
-		cliente.add(lblDocumento);
-
-		txtDocumento = new JTextField();
-		txtDocumento.setEnabled(false);
-		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtDocumento.setEditable(false);
-		txtDocumento.setColumns(10);
-		txtDocumento.setBounds(88, 91, 133, 20);
-		cliente.add(txtDocumento);
-
-		lblIe = new JLabel("I.E.");
-		lblIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblIe.setBounds(544, 93, 27, 19);
-		cliente.add(lblIe);
-
-		txtIe = new JTextField();
-		txtIe.setEnabled(false);
-		txtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtIe.setEditable(false);
-		txtIe.setColumns(10);
-		txtIe.setBounds(570, 91, 133, 20);
-		cliente.add(txtIe);
-
-		lblCep = new JLabel("Cep");
-		lblCep.setToolTipText("");
-		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCep.setBounds(10, 125, 28, 20);
-		cliente.add(lblCep);
-
-		MaskFormatter mascara_cep = null;
-
-		try {
-			mascara_cep = new MaskFormatter("#####-###");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCep = new JFormattedTextField(mascara_cep);
-		fTxtCep.setEditable(false);
-		fTxtCep.setEnabled(false);
-		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCep.setBounds(40, 127, 78, 20);
-		cliente.add(fTxtCep);
-
-		lblCidade = new JLabel("Cidade");
-		lblCidade.setToolTipText("");
-		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCidade.setBounds(205, 129, 44, 20);
-		cliente.add(lblCidade);
-
-		MaskFormatter mascara_cidade = null;
-		try {
-			mascara_cidade = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCidade = new JFormattedTextField(mascara_cidade);
-		fTxtCidade.setEditable(false);
-		fTxtCidade.setEnabled(false);
-		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCidade.setBounds(256, 127, 239, 20);
-		cliente.add(fTxtCidade);
-
-		lblEndereco = new JLabel("Endereco");
-		lblEndereco.setToolTipText("");
-		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEndereco.setBounds(10, 165, 65, 20);
-		cliente.add(lblEndereco);
-
-		MaskFormatter mascara_endereco = null;
-
-		try {
-			mascara_endereco = new MaskFormatter("*************************************************");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-
-		fTxtEndereco = new JFormattedTextField(mascara_endereco);
-		fTxtEndereco.setEditable(false);
-		fTxtEndereco.setEnabled(false);
-		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEndereco.setBounds(73, 163, 348, 20);
-		cliente.add(fTxtEndereco);
-
-		lblReferencia = new JLabel("Referencia");
-		lblReferencia.setToolTipText("");
-		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblReferencia.setBounds(9, 198, 65, 20);
-		cliente.add(lblReferencia);
-
-		MaskFormatter mascara_referencia = null;
-
-		try {
-			mascara_referencia = new MaskFormatter("*************************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtReferencia = new JFormattedTextField(mascara_referencia);
-		fTxtReferencia.setEditable(false);
-		fTxtReferencia.setEnabled(false);
-		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtReferencia.setBounds(79, 196, 342, 20);
-		cliente.add(fTxtReferencia);
-
-		lblNumero = new JLabel("N\u00B0");
-		lblNumero.setToolTipText("");
-		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNumero.setBounds(463, 165, 16, 20);
-		cliente.add(lblNumero);
-
-		MaskFormatter mascara_numero = null;
-		try {
-			mascara_numero = new MaskFormatter("********");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNumero = new JFormattedTextField(mascara_numero);
-		fTxtNumero.setEditable(false);
-		fTxtNumero.setEnabled(false);
-		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNumero.setBounds(481, 164, 90, 20);
-		cliente.add(fTxtNumero);
-
-		lblBairro = new JLabel("Bairro");
-		lblBairro.setToolTipText("");
-		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblBairro.setBounds(437, 198, 40, 20);
-		cliente.add(lblBairro);
-
-		MaskFormatter mascara_bairro = null;
-		try {
-			mascara_bairro = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtBairro = new JFormattedTextField(mascara_bairro);
-		fTxtBairro.setEditable(false);
-		fTxtBairro.setEnabled(false);
-		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(482, 194, 220, 20);
-		cliente.add(fTxtBairro);
-
-		lblCelular = new JLabel("Celular");
-		lblCelular.setToolTipText("");
-		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCelular.setBounds(9, 231, 46, 20);
-		cliente.add(lblCelular);
-
-		MaskFormatter mascara_celular = null;
-		try {
-			mascara_celular = new MaskFormatter("(##)#####-####");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCelular = new JFormattedTextField(mascara_celular);
-		fTxtCelular.setEditable(false);
-		fTxtCelular.setEnabled(false);
-		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCelular.setBounds(55, 231, 104, 20);
-		cliente.add(fTxtCelular);
-
-		lblTelFixo = new JLabel("Tel. Fixo");
-		lblTelFixo.setToolTipText("");
-		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTelFixo.setBounds(187, 232, 50, 20);
-		cliente.add(lblTelFixo);
-
-		MaskFormatter mascara_telefone = null;
-		try {
-			mascara_telefone = new MaskFormatter("(##)####-####");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
-		fTxtTelFixo.setEditable(false);
-		fTxtTelFixo.setEnabled(false);
-		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtTelFixo.setBounds(244, 231, 104, 20);
-		cliente.add(fTxtTelFixo);
-
-		lblEmai = new JLabel("Email");
-		lblEmai.setToolTipText("");
-		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEmai.setBounds(365, 233, 40, 20);
-		cliente.add(lblEmai);
-
-		MaskFormatter mascara_email = null;
-		try {
-			mascara_email = new MaskFormatter("********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtEmail = new JFormattedTextField(mascara_email);
-		fTxtEmail.setEditable(false);
-		fTxtEmail.setEnabled(false);
-		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEmail.setBounds(405, 232, 297, 20);
-		cliente.add(fTxtEmail);
-
-		lblResumoFinanceiro = new JLabel("Resumo Financeiro");
-		lblResumoFinanceiro.setHorizontalAlignment(SwingConstants.CENTER);
-		lblResumoFinanceiro.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblResumoFinanceiro.setBounds(236, 268, 225, 29);
-		cliente.add(lblResumoFinanceiro);
-
-		separadorResumoFinanceiro = new JSeparator();
-		separadorResumoFinanceiro.setBounds(10, 302, 715, 9);
-		cliente.add(separadorResumoFinanceiro);
-
-		lblValorComprado = new JLabel("Total j\u00E1 vendido");
-		lblValorComprado.setToolTipText("");
-		lblValorComprado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorComprado.setBounds(10, 364, 104, 20);
-		cliente.add(lblValorComprado);
-
-		fTxtTotalVendido = new JFormattedTextField();
-		fTxtTotalVendido.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtTotalVendido.setEditable(false);
-		fTxtTotalVendido.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtTotalVendido.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtTotalVendido.setEnabled(false);
-		fTxtTotalVendido.setBounds(115, 364, 100, 20);
-		cliente.add(fTxtTotalVendido);
-
-		lblValorEmAberto = new JLabel("Valor em aberto");
-		lblValorEmAberto.setToolTipText("");
-		lblValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorEmAberto.setBounds(10, 330, 104, 20);
-		cliente.add(lblValorEmAberto);
-
-		fTxtValorEmAberto = new JFormattedTextField();
-		fTxtValorEmAberto.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtValorEmAberto.setEditable(false);
-		fTxtValorEmAberto.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtValorEmAberto.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtValorEmAberto.setEnabled(false);
-		fTxtValorEmAberto.setBounds(116, 328, 99, 20);
-		cliente.add(fTxtValorEmAberto);
-
-		lblPrimeiraCompra = new JLabel("Data da primeira compra");
-		lblPrimeiraCompra.setToolTipText("");
-		lblPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrimeiraCompra.setBounds(438, 331, 151, 20);
-		cliente.add(lblPrimeiraCompra);
-
-		fTxtPrimeiraCompra = new JFormattedTextField();
-		fTxtPrimeiraCompra.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtPrimeiraCompra.setEditable(false);
-		fTxtPrimeiraCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtPrimeiraCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPrimeiraCompra.setEnabled(false);
-		fTxtPrimeiraCompra.setBounds(599, 329, 104, 20);
-		cliente.add(fTxtPrimeiraCompra);
-
-		lblSomentesVendaspendentes = new JLabel("* Vendas (pendentes + pagas)");
-		lblSomentesVendaspendentes.setToolTipText("");
-		lblSomentesVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblSomentesVendaspendentes.setBounds(225, 365, 158, 20);
-		cliente.add(lblSomentesVendaspendentes);
-
-		lblVendaspendentes = new JLabel("* Vendas (pendentes)");
-		lblVendaspendentes.setToolTipText("");
-		lblVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes.setBounds(225, 328, 111, 20);
-		cliente.add(lblVendaspendentes);
-
-		lblUltimaCompra = new JLabel("Data da \u00FAltima compra");
-		lblUltimaCompra.setToolTipText("");
-		lblUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUltimaCompra.setBounds(438, 364, 145, 20);
-		cliente.add(lblUltimaCompra);
-
-		fTxtUltimaCompra = new JFormattedTextField();
-		fTxtUltimaCompra.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtUltimaCompra.setEditable(false);
-		fTxtUltimaCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtUltimaCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtUltimaCompra.setEnabled(false);
-		fTxtUltimaCompra.setBounds(599, 362, 104, 20);
-		cliente.add(fTxtUltimaCompra);
-
-		lblValorDaMaior = new JLabel("Valor da maior compra");
-		lblValorDaMaior.setToolTipText("");
-		lblValorDaMaior.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorDaMaior.setBounds(10, 397, 141, 20);
-		cliente.add(lblValorDaMaior);
-
-		fTxtMaiorCompra = new JFormattedTextField();
-		fTxtMaiorCompra.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtMaiorCompra.setEditable(false);
-		fTxtMaiorCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtMaiorCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtMaiorCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtMaiorCompra.setEnabled(false);
-		fTxtMaiorCompra.setBounds(155, 395, 100, 20);
-		cliente.add(fTxtMaiorCompra);
-
-		lblVendaspendentes_1 = new JLabel("* Venda (pendente ou paga)");
-		lblVendaspendentes_1.setToolTipText("");
-		lblVendaspendentes_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes_1.setBounds(263, 397, 145, 20);
-		cliente.add(lblVendaspendentes_1);
-
-		lblObservacaoFinanceira = new JLabel("Observa\u00E7\u00E3o Financeira");
-		lblObservacaoFinanceira.setToolTipText("");
-		lblObservacaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObservacaoFinanceira.setBounds(11, 427, 141, 20);
-		cliente.add(lblObservacaoFinanceira);
-
-		txtpObservaoFinanceira = new JTextPane();
-		txtpObservaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtpObservaoFinanceira.setBounds(10, 450, 693, 49);
-		cliente.add(txtpObservaoFinanceira);
-
-		btnLimpaCliente = new JButton();
-		btnLimpaCliente.setEnabled(false);
-		btnLimpaCliente.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickLimpaDadosCliente) {
-				limpar_dados_cliente();
-			}
-		});
-		btnLimpaCliente.setIcon(icones.getIcone_limpar());
-		btnLimpaCliente.setBounds(325, 61, 27, 19);
-		cliente.add(btnLimpaCliente);
-		
-		fTxtApelido = new JFormattedTextField();
-		fTxtApelido.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent digitaApelidoCliente) {
-				
-				if(! fTxtApelido.getText().trim().isEmpty()) {
-					alimentar_lista_clientes(fTxtApelido.getText().trim() + "%");
-				}else {
-					alimentar_lista_clientes(null);
-				}
-			}
-		});
-		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtApelido.setEnabled(false);
-		fTxtApelido.setColumns(10);
-		fTxtApelido.setBounds(463, 61, 240, 20);
-		cliente.add(fTxtApelido);
-
 		produtos = new JPanel();
 		tabbedPane.addTab("Produtos", produtos);
 		produtos.setLayout(null);
@@ -1261,6 +807,460 @@ public class Panel_orc_vend extends JPanel {
 		btnCancelar.setVisible(false);
 		add(btnCancelar);
 
+		cliente = new JPanel();
+		tabbedPane.addTab("Cliente", cliente);
+		cliente.setLayout(null);
+
+		ltClientes = new JList();
+		ltClientes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickListaClientes) {
+				scrollPaneListaClientes.setVisible(false);
+				Cliente cliente_encontrado = ltClientes.getSelectedValue();
+				fTxtApelido.setText(cliente_encontrado.getApelido());
+				fTxtNomeCliente.setText(cliente_encontrado.getNome());
+				txtDocumento.setText(cliente_encontrado.getCpf_cnpj());
+				fTxtEndereco.setText(cliente_encontrado.getEndereco());
+				fTxtReferencia.setText(cliente_encontrado.getReferencia());
+				fTxtCidade.setText(cliente_encontrado.getCidade());
+				fTxtBairro.setText(cliente_encontrado.getBairro());
+				fTxtCep.setText(cliente_encontrado.getCep());
+				fTxtNumero.setText(cliente_encontrado.getNumero());
+				fTxtEmail.setText(cliente_encontrado.getEmail());
+				fTxtCelular.setText(cliente_encontrado.getCelular());
+				fTxtTelFixo.setText(cliente_encontrado.getCelular());
+				if (cliente_encontrado.getCpf_cnpj().length() > 14) {
+					lblIe.setVisible(true);
+					txtIe.setText(cliente_encontrado.getInscricao_estadual());
+					txtIe.setVisible(true);
+				} else {
+					lblIe.setVisible(false);
+					txtIe.setText(null);
+					txtIe.setVisible(false);
+				}
+
+			}
+		});
+		ltClientes.setBounds(48, 79, 267, 66);
+
+		scrollPaneListaClientes = new JScrollPane(ltClientes);
+		scrollPaneListaClientes.setBounds(48, 79, 267, 66);
+		scrollPaneListaClientes.setVisible(false);
+		cliente.add(scrollPaneListaClientes);
+
+		lblCliente = new JLabel("Informa\u00E7\u00F5es do Cliente");
+		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblCliente.setBounds(236, 11, 225, 29);
+		cliente.add(lblCliente);
+
+		separadorInformacoesDoCliente = new JSeparator();
+		separadorInformacoesDoCliente.setBounds(10, 41, 715, 9);
+		cliente.add(separadorInformacoesDoCliente);
+
+		lblNomeCliente = new JLabel("Nome");
+		lblNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNomeCliente.setBounds(10, 61, 48, 19);
+		cliente.add(lblNomeCliente);
+
+		MaskFormatter mascara_nome = null;
+		try {
+			mascara_nome = new MaskFormatter("*********************************************");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickNomeCliente) {
+				text_tools.move_cursor_inicio(fTxtNomeCliente);
+			}
+		});
+		fTxtNomeCliente.setEnabled(false);
+		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaNomeCliente) {
+				alimentar_lista_clientes(null);
+			}
+		});
+		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtNomeCliente.setColumns(10);
+		fTxtNomeCliente.setBounds(48, 61, 267, 20);
+		cliente.add(fTxtNomeCliente);
+
+		lblApelido = new JLabel("Apelido");
+		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblApelido.setBounds(417, 61, 48, 19);
+		cliente.add(lblApelido);
+
+		lblDocumento = new JLabel("Documento");
+		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDocumento.setBounds(10, 93, 78, 19);
+		cliente.add(lblDocumento);
+
+		txtDocumento = new JTextField();
+		txtDocumento.setEnabled(false);
+		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtDocumento.setEditable(false);
+		txtDocumento.setColumns(10);
+		txtDocumento.setBounds(88, 91, 133, 20);
+		cliente.add(txtDocumento);
+
+		lblIe = new JLabel("I.E.");
+		lblIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIe.setBounds(544, 93, 27, 19);
+		cliente.add(lblIe);
+
+		txtIe = new JTextField();
+		txtIe.setEnabled(false);
+		txtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtIe.setEditable(false);
+		txtIe.setColumns(10);
+		txtIe.setBounds(570, 91, 133, 20);
+		cliente.add(txtIe);
+
+		lblCep = new JLabel("Cep");
+		lblCep.setToolTipText("");
+		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCep.setBounds(10, 125, 28, 20);
+		cliente.add(lblCep);
+
+		MaskFormatter mascara_cep = null;
+
+		try {
+			mascara_cep = new MaskFormatter("#####-###");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtCep = new JFormattedTextField(mascara_cep);
+		fTxtCep.setEditable(false);
+		fTxtCep.setEnabled(false);
+		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtCep.setBounds(40, 127, 78, 20);
+		cliente.add(fTxtCep);
+
+		lblCidade = new JLabel("Cidade");
+		lblCidade.setToolTipText("");
+		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCidade.setBounds(205, 129, 44, 20);
+		cliente.add(lblCidade);
+
+		MaskFormatter mascara_cidade = null;
+		try {
+			mascara_cidade = new MaskFormatter("******************************");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade.setEditable(false);
+		fTxtCidade.setEnabled(false);
+		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtCidade.setBounds(256, 127, 239, 20);
+		cliente.add(fTxtCidade);
+
+		lblEndereco = new JLabel("Endereco");
+		lblEndereco.setToolTipText("");
+		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEndereco.setBounds(10, 165, 65, 20);
+		cliente.add(lblEndereco);
+
+		MaskFormatter mascara_endereco = null;
+
+		try {
+			mascara_endereco = new MaskFormatter("*************************************************");
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+
+		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco.setEditable(false);
+		fTxtEndereco.setEnabled(false);
+		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtEndereco.setBounds(73, 163, 348, 20);
+		cliente.add(fTxtEndereco);
+
+		lblReferencia = new JLabel("Referencia");
+		lblReferencia.setToolTipText("");
+		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblReferencia.setBounds(9, 198, 65, 20);
+		cliente.add(lblReferencia);
+
+		MaskFormatter mascara_referencia = null;
+
+		try {
+			mascara_referencia = new MaskFormatter("*************************************************");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		fTxtReferencia.setEditable(false);
+		fTxtReferencia.setEnabled(false);
+		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtReferencia.setBounds(79, 196, 342, 20);
+		cliente.add(fTxtReferencia);
+
+		lblNumero = new JLabel("N\u00B0");
+		lblNumero.setToolTipText("");
+		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNumero.setBounds(463, 165, 16, 20);
+		cliente.add(lblNumero);
+
+		MaskFormatter mascara_numero = null;
+		try {
+			mascara_numero = new MaskFormatter("********");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero.setEditable(false);
+		fTxtNumero.setEnabled(false);
+		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtNumero.setBounds(481, 164, 90, 20);
+		cliente.add(fTxtNumero);
+
+		lblBairro = new JLabel("Bairro");
+		lblBairro.setToolTipText("");
+		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBairro.setBounds(437, 198, 40, 20);
+		cliente.add(lblBairro);
+
+		MaskFormatter mascara_bairro = null;
+		try {
+			mascara_bairro = new MaskFormatter("******************************");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro.setEditable(false);
+		fTxtBairro.setEnabled(false);
+		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtBairro.setBounds(482, 194, 220, 20);
+		cliente.add(fTxtBairro);
+
+		lblCelular = new JLabel("Celular");
+		lblCelular.setToolTipText("");
+		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCelular.setBounds(9, 231, 46, 20);
+		cliente.add(lblCelular);
+
+		MaskFormatter mascara_celular = null;
+		try {
+			mascara_celular = new MaskFormatter("(##)#####-####");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtCelular = new JFormattedTextField(mascara_celular);
+		fTxtCelular.setEditable(false);
+		fTxtCelular.setEnabled(false);
+		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtCelular.setBounds(55, 231, 104, 20);
+		cliente.add(fTxtCelular);
+
+		lblTelFixo = new JLabel("Tel. Fixo");
+		lblTelFixo.setToolTipText("");
+		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTelFixo.setBounds(187, 232, 50, 20);
+		cliente.add(lblTelFixo);
+
+		MaskFormatter mascara_telefone = null;
+		try {
+			mascara_telefone = new MaskFormatter("(##)####-####");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo.setEditable(false);
+		fTxtTelFixo.setEnabled(false);
+		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtTelFixo.setBounds(244, 231, 104, 20);
+		cliente.add(fTxtTelFixo);
+
+		lblEmai = new JLabel("Email");
+		lblEmai.setToolTipText("");
+		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEmai.setBounds(365, 233, 40, 20);
+		cliente.add(lblEmai);
+
+		MaskFormatter mascara_email = null;
+		try {
+			mascara_email = new MaskFormatter("********************************************");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail.setEditable(false);
+		fTxtEmail.setEnabled(false);
+		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtEmail.setBounds(405, 232, 297, 20);
+		cliente.add(fTxtEmail);
+
+		lblResumoFinanceiro = new JLabel("Resumo Financeiro");
+		lblResumoFinanceiro.setHorizontalAlignment(SwingConstants.CENTER);
+		lblResumoFinanceiro.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblResumoFinanceiro.setBounds(236, 268, 225, 29);
+		cliente.add(lblResumoFinanceiro);
+
+		separadorResumoFinanceiro = new JSeparator();
+		separadorResumoFinanceiro.setBounds(10, 302, 715, 9);
+		cliente.add(separadorResumoFinanceiro);
+
+		lblValorComprado = new JLabel("Total j\u00E1 vendido");
+		lblValorComprado.setToolTipText("");
+		lblValorComprado.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblValorComprado.setBounds(10, 364, 104, 20);
+		cliente.add(lblValorComprado);
+
+		fTxtTotalVendido = new JFormattedTextField();
+		fTxtTotalVendido.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtTotalVendido.setEditable(false);
+		fTxtTotalVendido.setToolTipText("N\u00E3o considera or\u00E7amentos");
+		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtTotalVendido.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtTotalVendido.setEnabled(false);
+		fTxtTotalVendido.setBounds(115, 364, 100, 20);
+		cliente.add(fTxtTotalVendido);
+
+		lblValorEmAberto = new JLabel("Valor em aberto");
+		lblValorEmAberto.setToolTipText("");
+		lblValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblValorEmAberto.setBounds(10, 330, 104, 20);
+		cliente.add(lblValorEmAberto);
+
+		fTxtValorEmAberto = new JFormattedTextField();
+		fTxtValorEmAberto.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtValorEmAberto.setEditable(false);
+		fTxtValorEmAberto.setToolTipText("N\u00E3o considera or\u00E7amentos");
+		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtValorEmAberto.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtValorEmAberto.setEnabled(false);
+		fTxtValorEmAberto.setBounds(116, 328, 99, 20);
+		cliente.add(fTxtValorEmAberto);
+
+		lblPrimeiraCompra = new JLabel("Data da primeira compra");
+		lblPrimeiraCompra.setToolTipText("");
+		lblPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPrimeiraCompra.setBounds(438, 331, 151, 20);
+		cliente.add(lblPrimeiraCompra);
+
+		fTxtPrimeiraCompra = new JFormattedTextField();
+		fTxtPrimeiraCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtPrimeiraCompra.setEditable(false);
+		fTxtPrimeiraCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
+		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPrimeiraCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtPrimeiraCompra.setEnabled(false);
+		fTxtPrimeiraCompra.setBounds(599, 329, 104, 20);
+		cliente.add(fTxtPrimeiraCompra);
+
+		lblSomentesVendaspendentes = new JLabel("* Vendas (pendentes + pagas)");
+		lblSomentesVendaspendentes.setToolTipText("");
+		lblSomentesVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblSomentesVendaspendentes.setBounds(225, 365, 158, 20);
+		cliente.add(lblSomentesVendaspendentes);
+
+		lblVendaspendentes = new JLabel("* Vendas (pendentes)");
+		lblVendaspendentes.setToolTipText("");
+		lblVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblVendaspendentes.setBounds(225, 328, 111, 20);
+		cliente.add(lblVendaspendentes);
+
+		lblUltimaCompra = new JLabel("Data da \u00FAltima compra");
+		lblUltimaCompra.setToolTipText("");
+		lblUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblUltimaCompra.setBounds(438, 364, 145, 20);
+		cliente.add(lblUltimaCompra);
+
+		fTxtUltimaCompra = new JFormattedTextField();
+		fTxtUltimaCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtUltimaCompra.setEditable(false);
+		fTxtUltimaCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
+		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtUltimaCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtUltimaCompra.setEnabled(false);
+		fTxtUltimaCompra.setBounds(599, 362, 104, 20);
+		cliente.add(fTxtUltimaCompra);
+
+		lblValorDaMaior = new JLabel("Valor da maior compra");
+		lblValorDaMaior.setToolTipText("");
+		lblValorDaMaior.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblValorDaMaior.setBounds(10, 397, 141, 20);
+		cliente.add(lblValorDaMaior);
+
+		fTxtMaiorCompra = new JFormattedTextField();
+		fTxtMaiorCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtMaiorCompra.setEditable(false);
+		fTxtMaiorCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
+		fTxtMaiorCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtMaiorCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtMaiorCompra.setEnabled(false);
+		fTxtMaiorCompra.setBounds(155, 395, 100, 20);
+		cliente.add(fTxtMaiorCompra);
+
+		lblVendaspendentes_1 = new JLabel("* Venda (pendente ou paga)");
+		lblVendaspendentes_1.setToolTipText("");
+		lblVendaspendentes_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblVendaspendentes_1.setBounds(263, 397, 145, 20);
+		cliente.add(lblVendaspendentes_1);
+
+		lblObservacaoFinanceira = new JLabel("Observa\u00E7\u00E3o Financeira");
+		lblObservacaoFinanceira.setToolTipText("");
+		lblObservacaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObservacaoFinanceira.setBounds(11, 427, 141, 20);
+		cliente.add(lblObservacaoFinanceira);
+
+		txtpObservaoFinanceira = new JTextPane();
+		txtpObservaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtpObservaoFinanceira.setBounds(10, 450, 693, 49);
+		cliente.add(txtpObservaoFinanceira);
+
+		btnLimpaCliente = new JButton();
+		btnLimpaCliente.setEnabled(false);
+		btnLimpaCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickLimpaDadosCliente) {
+				limpar_dados_cliente();
+			}
+		});
+		btnLimpaCliente.setIcon(icones.getIcone_limpar());
+		btnLimpaCliente.setBounds(325, 61, 27, 19);
+		cliente.add(btnLimpaCliente);
+
+		fTxtApelido = new JFormattedTextField();
+		fTxtApelido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaApelidoCliente) {
+
+				if (!fTxtApelido.getText().trim().isEmpty()) {
+					alimentar_lista_clientes(fTxtApelido.getText().trim() + "%");
+				} else {
+					alimentar_lista_clientes(null);
+				}
+			}
+		});
+		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtApelido.setEnabled(false);
+		fTxtApelido.setColumns(10);
+		fTxtApelido.setBounds(463, 61, 240, 20);
+		cliente.add(fTxtApelido);
+
 	}
 
 	// Funções ------------------------------
@@ -1351,33 +1351,32 @@ public class Panel_orc_vend extends JPanel {
 	}
 
 	public void alimentar_lista_clientes(String apelido) {
-		
+
 		ClienteDAO cliente_dao = new ClienteDAO();
 		list_model.clear();
 		lista_clientes.clear();
-		
-		if(apelido == null) {
-			if (!fTxtNomeCliente.getText().trim().isEmpty()) {	
-				lista_clientes = cliente_dao.listarClientes_nome(lista_clientes, fTxtNomeCliente.getText().trim() + "%");
+
+		if (apelido == null) {
+			if (!fTxtNomeCliente.getText().trim().isEmpty()) {
+				lista_clientes = cliente_dao.listarClientes_nome(lista_clientes,
+						fTxtNomeCliente.getText().trim() + "%");
 			} else {
 				scrollPaneListaClientes.setVisible(false);
 			}
-		}else {
+		} else {
 			lista_clientes = cliente_dao.listarClientes_apelido(lista_clientes, apelido);
 		}
-		
-		
+
 		for (Cliente cliente : lista_clientes) {
 			list_model.addElement(cliente);
 		}
-		
-		
+
 		if (!list_model.isEmpty()) {
 			scrollPaneListaClientes.setVisible(true);
 		} else {
 			scrollPaneListaClientes.setVisible(false);
 		}
-		
+
 		ltClientes.setModel(list_model);
 	}
 
