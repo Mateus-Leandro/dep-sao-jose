@@ -1,5 +1,9 @@
 package entities.orcamentos;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Produto_Orcamento {
 	Integer codigo;
 	String nome;
@@ -9,7 +13,6 @@ public class Produto_Orcamento {
 	Double preco_unitario;
 	Double valor_desconto;
 	Double valor_total;
-	
 	
 	public Produto_Orcamento() {
 		
@@ -27,7 +30,7 @@ public class Produto_Orcamento {
 		this.valor_total = valor_total;
 	}
 	public Double getValor_total() {
-		return ((preco_unitario - valor_desconto) * quantidade);
+		return valor_total;
 	}
 	public void setValor_total(Double valor_total) {
 		this.valor_total = valor_total;

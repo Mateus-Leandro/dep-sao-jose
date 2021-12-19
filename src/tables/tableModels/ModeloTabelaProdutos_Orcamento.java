@@ -1,6 +1,7 @@
 package tables.tableModels;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -11,6 +12,11 @@ import javax.swing.table.AbstractTableModel;
 import entities.orcamentos.Produto_Orcamento;
 
 public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
+	
+	
+	private NumberFormat nf = new DecimalFormat("R$ 0.00");
+	private NumberFormat nf2 = new DecimalFormat("0.00");
+	
 
 	private String colunas[] = { "It. Nº", "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
 			"Total" };
@@ -78,8 +84,11 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columIndex) {
 		Produto_Orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
 
-		NumberFormat nf = new DecimalFormat("R$ 0.00");
-		NumberFormat nf2 = new DecimalFormat("0.00");
+	
+		
+		nf.setRoundingMode(RoundingMode.DOWN);
+		nf2.setRoundingMode(RoundingMode.DOWN);
+		
 
 		Boolean fracionado = false;
 
