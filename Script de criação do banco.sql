@@ -72,7 +72,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `Cpf_UNIQUE` (`documento`),
   UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,8 +81,35 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,1,'Mateus Leandro Chagas','Chagas','151.253.906-66',NULL,'32371-560','Contagem','Rua Rio Capibaribe','Casa Verde, Portão Branco','100A','Eldoradinho','mateusleandro2205@gmail.com','(31)98444-8086',NULL,'2021-10-30'),(4,0,'Mauro','Maurão','116.166.464-46',NULL,'32371-570','Contagem','Rua Rio Jaguaribe','Casa verde','100A','Eldoradinho','mauro@gmail.com','(31)98444-8086',NULL,'2021-11-17'),(5,0,'AVANCO INFORMATICA S.A',NULL,'42.790.097/0001-23','152030661.61-61','30140-000','Belo Horizonte','Avenida Brasil','CONJ: 01;','131','Santa Efigênia','adm@avancoinfo.com.br','(31)99999-9999','(31)3025-1188','2021-12-01');
+INSERT INTO `clientes` VALUES (1,0,'Cliente não identificado','TEste','151.253.906-66',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'(99)99999-9999',NULL,'2021-12-13');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `financeiro`
+--
+
+DROP TABLE IF EXISTS `financeiro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `financeiro` (
+  `idOrcamento` int NOT NULL,
+  `numeroDaParcela` int NOT NULL,
+  `valor` double NOT NULL,
+  `pago` tinyint NOT NULL,
+  `dataVencimento` date NOT NULL,
+  KEY `Numero Orcamento_idx` (`idOrcamento`),
+  CONSTRAINT `Numero Orcamento` FOREIGN KEY (`idOrcamento`) REFERENCES `orcamento` (`idOrcamento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `financeiro`
+--
+
+LOCK TABLES `financeiro` WRITE;
+/*!40000 ALTER TABLE `financeiro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `financeiro` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -94,15 +121,20 @@ DROP TABLE IF EXISTS `orcamento`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orcamento` (
   `idOrcamento` int NOT NULL AUTO_INCREMENT,
+  `idCliente` int NOT NULL,
   `quantidadeProdutos` int NOT NULL,
   `totalMercadoriasBruto` double NOT NULL,
   `totalMercadoriasLiquido` double NOT NULL,
   `frete` double DEFAULT NULL,
   `descontoFinal` double DEFAULT NULL,
-  `valorTotal` double DEFAULT NULL,
-  `dataInclusao` datetime NOT NULL,
-  PRIMARY KEY (`idOrcamento`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `valorTotal` double NOT NULL,
+  `faturado` tinyint NOT NULL,
+  `numeroParcelas` int NOT NULL,
+  `dataInclusao` date NOT NULL,
+  PRIMARY KEY (`idOrcamento`),
+  KEY `codigo cliente_idx` (`idCliente`),
+  CONSTRAINT `codigo cliente` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`idCliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,6 +143,7 @@ CREATE TABLE `orcamento` (
 
 LOCK TABLES `orcamento` WRITE;
 /*!40000 ALTER TABLE `orcamento` DISABLE KEYS */;
+INSERT INTO `orcamento` VALUES (1,1,1,65,65,0,0,65,0,0,'2021-12-26');
 /*!40000 ALTER TABLE `orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +178,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Teste fator',15.2,20,25,19,31.58,2,'MT',0,'2021-12-04'),(2,'Teste Novo Item',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Teste Margem',0,150,10,0,100,1,'UN',0,'2021-12-05'),(4,'Teste novo item',0,0.15,0,0,100,1,'UN',0,'2021-12-05'),(5,'Teste inclusão',0,15.2,0,0,100,1,'UN',0,'2021-12-05');
+INSERT INTO `produto` VALUES (1,'Teste fator',15.2,20,25,19,31.58,2,'MT',0,'2021-12-04'),(2,'Teste Novo Item',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Teste Margem',0,150,10,0,100,1,'UN',0,'2021-12-05'),(5,'Teste inclusão',0,15.2,0,0,100,1,'UN',0,'2021-12-05');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,15 +190,16 @@ DROP TABLE IF EXISTS `produto_orcamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `produto_orcamento` (
-  `idVenda` int NOT NULL,
+  `idOrcamento` int NOT NULL,
   `idProdutoOrcamento` int NOT NULL,
   `quantidade` double NOT NULL,
+  `fator` varchar(6) NOT NULL,
   `precoUnitario` double NOT NULL,
   `descontoProduto` double DEFAULT NULL,
   `totalProduto` double NOT NULL,
   KEY `idProduto_idx` (`idProdutoOrcamento`),
-  KEY `Venda_idx` (`idVenda`),
-  CONSTRAINT `Venda` FOREIGN KEY (`idVenda`) REFERENCES `orcamento` (`idOrcamento`)
+  KEY `Venda_idx` (`idOrcamento`),
+  CONSTRAINT `Venda` FOREIGN KEY (`idOrcamento`) REFERENCES `orcamento` (`idOrcamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -175,6 +209,7 @@ CREATE TABLE `produto_orcamento` (
 
 LOCK TABLES `produto_orcamento` WRITE;
 /*!40000 ALTER TABLE `produto_orcamento` DISABLE KEYS */;
+INSERT INTO `produto_orcamento` VALUES (1,1,3.25,'MT',20,0,65);
 /*!40000 ALTER TABLE `produto_orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +224,7 @@ CREATE TABLE `setor` (
   `codSetor` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
   PRIMARY KEY (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,9 +233,17 @@ CREATE TABLE `setor` (
 
 LOCK TABLES `setor` WRITE;
 /*!40000 ALTER TABLE `setor` DISABLE KEYS */;
-INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(25,'Parafusos'),(27,'Lixas'),(45,'Furadeiras'),(46,'cimentos');
+INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(27,'Lixas'),(46,'cimentos');
 /*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'banco_deposito'
+--
+
+--
+-- Dumping routines for database 'banco_deposito'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -211,4 +254,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-06  7:31:19
+-- Dump completed on 2021-12-27  7:54:54

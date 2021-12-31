@@ -13,6 +13,7 @@ public class Icones {
 	Icon icone_reload = new ImageIcon(getClass().getResource("/icons/reload.png"));
 	Icon icone_pesquisar = new ImageIcon(getClass().getResource("/icons/pesquisar.png"));
 	Icon icone_limpar = new ImageIcon(getClass().getResource("/icons/limpar.png"));
+	Icon icone_orcamento = new ImageIcon(getClass().getResource("/icons/orcamento.png"));
 	public Icon getIcone_salvar() {
 		return icone_salvar;
 	}
@@ -36,6 +37,9 @@ public class Icones {
 	}
 	public Icon getIcone_limpar() {
 		return icone_limpar;
+	}
+	public Icon getIcone_orcamento() {
+		return icone_orcamento;
 	}
 	
 	

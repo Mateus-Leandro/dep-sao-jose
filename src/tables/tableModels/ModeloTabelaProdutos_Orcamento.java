@@ -12,11 +12,9 @@ import javax.swing.table.AbstractTableModel;
 import entities.orcamentos.Produto_Orcamento;
 
 public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
-	
-	
-	private NumberFormat nf = new DecimalFormat("R$ 0.00");
-	private NumberFormat nf2 = new DecimalFormat("0.00");
-	
+
+	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
+	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
 	private String colunas[] = { "It. Nº", "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
 			"Total" };
@@ -82,50 +80,53 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columIndex) {
-		Produto_Orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
 
-	
-		
-		nf.setRoundingMode(RoundingMode.DOWN);
-		nf2.setRoundingMode(RoundingMode.DOWN);
-		
+		if (rowIndex != -1) {
+			Produto_Orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
 
-		Boolean fracionado = false;
+			nf.setRoundingMode(RoundingMode.DOWN);
+			nf2.setRoundingMode(RoundingMode.DOWN);
 
-		if (produto_orcamento.getFator_venda().equals("MT") || produto_orcamento.getFator_venda().equals("KG")
-				|| produto_orcamento.getFator_venda().equals("L")) {
-			fracionado = true;
-		} else {
-			fracionado = false;
-		}
+			Boolean fracionado = false;
 
-		switch (columIndex) {
-		case COLUNA_NUMERO_ITEM:
-			return rowIndex + 1;
-		case COLUNA_CODIGO:
-			return produto_orcamento.getCodigo();
-		case COLUNA_NOME:
-			return produto_orcamento.getNome();
-		case COLUNA_BARRAS:
-			return produto_orcamento.getCodigo_barras();
-		case COLUNA_UNID:
-			return produto_orcamento.getFator_venda();
-		case COLUNA_QUANTIDADE:
-			if (fracionado) {
-				return nf2.format(produto_orcamento.getQuantidade());
+			if (produto_orcamento.getFator_venda().equals("MT") || produto_orcamento.getFator_venda().equals("KG")
+					|| produto_orcamento.getFator_venda().equals("L")) {
+				fracionado = true;
 			} else {
-				return nf2.format(produto_orcamento.getQuantidade()).substring(0,
-						nf2.format(produto_orcamento.getQuantidade()).length() - 3);
+				fracionado = false;
 			}
 
-		case COLUNA_PRECO_UNIT:
-			return nf.format(produto_orcamento.getPreco_unitario());
-		case COLUNA_DESC:
-			return nf.format(produto_orcamento.getValor_desconto());
-		case COLUNA_TOTAL:
-			return nf.format(produto_orcamento.getValor_total());
+			switch (columIndex) {
+			case COLUNA_NUMERO_ITEM:
+				return rowIndex + 1;
+			case COLUNA_CODIGO:
+				return produto_orcamento.getCodigo();
+			case COLUNA_NOME:
+				return produto_orcamento.getNome();
+			case COLUNA_BARRAS:
+				return produto_orcamento.getCodigo_barras();
+			case COLUNA_UNID:
+				return produto_orcamento.getFator_venda();
+			case COLUNA_QUANTIDADE:
+				if (fracionado) {
+					return nf2.format(produto_orcamento.getQuantidade());
+				} else {
+					return nf2.format(produto_orcamento.getQuantidade()).substring(0,
+							nf2.format(produto_orcamento.getQuantidade()).length() - 3);
+				}
+
+			case COLUNA_PRECO_UNIT:
+				return nf.format(produto_orcamento.getPreco_unitario().doubleValue());
+			case COLUNA_DESC:
+				return nf.format(produto_orcamento.getValor_desconto().doubleValue());
+			case COLUNA_TOTAL:
+				return nf.format(produto_orcamento.getValor_total().doubleValue());
+			}
+			return null;
+		}else {
+			return null;
 		}
-		return null;
+
 	}
 
 	public void addProduto(Produto_Orcamento p) {
@@ -134,8 +135,8 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	}
 
 	public void removeProduto(int index_produto) {
-			this.produtos_orcamento.remove(index_produto);
-			this.fireTableDataChanged();
+		this.produtos_orcamento.remove(index_produto);
+		this.fireTableDataChanged();
 	}
 
 	public void recarregarTabela(JTable tabela, ArrayList<Produto_Orcamento> produtos_orcamento) {

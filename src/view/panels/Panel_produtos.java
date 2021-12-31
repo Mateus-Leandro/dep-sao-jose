@@ -181,7 +181,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		btnMaisSetor.setIcon(icones.getIcone_mais());
-		btnMaisSetor.setBounds(272, 188, 26, 19);
+		btnMaisSetor.setBounds(272, 188, 26, 22);
 		add(btnMaisSetor);
 
 		btnMaisBarras = new JButton();

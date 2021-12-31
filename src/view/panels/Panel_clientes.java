@@ -553,11 +553,11 @@ public class Panel_clientes extends JPanel {
 		});
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEndereco.setBounds(79, 293, 348, 20);
+		fTxtEndereco.setBounds(79, 293, 332, 20);
 		add(fTxtEndereco);
 
 		lblNumero = new JLabel("N\u00B0");
-		lblNumero.setBounds(471, 293, 16, 20);
+		lblNumero.setBounds(525, 257, 16, 20);
 		lblNumero.setToolTipText("");
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNumero);
@@ -579,7 +579,7 @@ public class Panel_clientes extends JPanel {
 		});
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNumero.setBounds(489, 292, 70, 20);
+		fTxtNumero.setBounds(543, 256, 70, 20);
 		add(fTxtNumero);
 
 		lblReferencia = new JLabel("Referencia");
@@ -606,11 +606,11 @@ public class Panel_clientes extends JPanel {
 		});
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtReferencia.setBounds(86, 326, 342, 20);
+		fTxtReferencia.setBounds(86, 326, 325, 20);
 		add(fTxtReferencia);
 
 		lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(444, 328, 40, 20);
+		lblBairro.setBounds(425, 288, 40, 20);
 		lblBairro.setToolTipText("");
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblBairro);
@@ -632,7 +632,7 @@ public class Panel_clientes extends JPanel {
 		});
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(489, 324, 220, 20);
+		fTxtBairro.setBounds(466, 288, 243, 20);
 		add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
@@ -689,7 +689,7 @@ public class Panel_clientes extends JPanel {
 		add(fTxtTelFixo);
 
 		lblEmai = new JLabel("Email");
-		lblEmai.setBounds(372, 363, 40, 20);
+		lblEmai.setBounds(426, 326, 34, 20);
 		lblEmai.setToolTipText("");
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEmai);
@@ -712,7 +712,7 @@ public class Panel_clientes extends JPanel {
 
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEmail.setBounds(412, 362, 297, 20);
+		fTxtEmail.setBounds(466, 325, 243, 20);
 		add(fTxtEmail);
 
 		// alimentando lista de clientes.
@@ -720,6 +720,7 @@ public class Panel_clientes extends JPanel {
 
 		modelo = new ModeloTabelaClientes(lista_clientes);
 		tabelaClientes = new JTable(modelo);
+		tabelaClientes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tabelaClientes.setSurrendersFocusOnKeystroke(true);
 		tabelaClientes.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		tabelaClientes.getTableHeader().setReorderingAllowed(false);
@@ -728,7 +729,7 @@ public class Panel_clientes extends JPanel {
 		Render_tabela_clientes render = new Render_tabela_clientes();
 		tabelaClientes.setDefaultRenderer(Object.class, render);
 
-		ConfiguralarguracolunaTabela(tabelaClientes);
+		ConfiguraLarguraColunaTabela(tabelaClientes);
 
 		scrollPane = new JScrollPane(tabelaClientes);
 		scrollPane.setBounds(16, 495, 693, 153);
@@ -781,6 +782,7 @@ public class Panel_clientes extends JPanel {
 							.parseInt(tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString());
 
 					txtCodigo.setText(codigo.toString());
+					
 
 				} else {
 					btnEditar.setEnabled(false);
@@ -965,7 +967,7 @@ public class Panel_clientes extends JPanel {
 	}
 
 	// Configurando largura das colunas da tabela
-	public void ConfiguralarguracolunaTabela(JTable tabelaProdutos) {
+	public void ConfiguraLarguraColunaTabela(JTable tabelaProdutos) {
 		tabelaClientes.getColumnModel().getColumn(0).setPreferredWidth(40); // Codigo
 		tabelaClientes.getColumnModel().getColumn(1).setPreferredWidth(50); // Bloqueado
 		tabelaClientes.getColumnModel().getColumn(2).setPreferredWidth(150); // Nome
@@ -1174,7 +1176,7 @@ public class Panel_clientes extends JPanel {
 		lista_clientes = alimentarListaClientes(lista_clientes);
 		modelo = new ModeloTabelaClientes(lista_clientes);
 		tabelaClientes.setModel(modelo);
-		ConfiguralarguracolunaTabela(tabelaClientes);
+		ConfiguraLarguraColunaTabela(tabelaClientes);
 		modelo.fireTableDataChanged();
 
 	}
@@ -1188,4 +1190,5 @@ public class Panel_clientes extends JPanel {
 		fTxtEndereco.setText(endereco_cliente.getEndereco());
 		btnLimpaCep.setVisible(true);
 	}
+	
 }

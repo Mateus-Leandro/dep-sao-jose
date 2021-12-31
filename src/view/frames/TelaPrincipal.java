@@ -18,7 +18,9 @@ public class TelaPrincipal extends JFrame {
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
-
+	private Panel_clientes clientes = new Panel_clientes();
+	private Panel_produtos produtos = new Panel_produtos();
+	private Panel_orc_vend orc_vend = new Panel_orc_vend();
 	/**
 	 * Launch the application.
 	 */
@@ -39,8 +41,8 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		setTitle("Dep\u00F3sito S\u00E3o Jos\u00E9");
 		setResizable(false);
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 759, 734);
 		contentPane = new JPanel();
@@ -52,15 +54,10 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tabbedPane.setBounds(5, 5, 733, 687);
 		contentPane.add(tabbedPane);
+		setLocationRelativeTo(null);
 		
-
-		Panel_clientes clientes = new Panel_clientes();
 		clientes.setVisible(true);
-		 
-		Panel_produtos produtos = new Panel_produtos();
-		produtos.setVisible(true);
-		
-		Panel_orc_vend orc_vend = new Panel_orc_vend();
+		produtos.setVisible(true);		
 		orc_vend.setVisible(true);
 		
 		tabbedPane.addTab("Clientes", clientes);

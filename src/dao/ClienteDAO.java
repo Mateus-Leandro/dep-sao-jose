@@ -8,7 +8,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
+import javax.swing.DefaultListModel;
 
 import db.DB;
 import entities.cliente.Cliente;
@@ -279,6 +279,28 @@ public class ClienteDAO {
 
 	}
 
+	public void alimenta_lt_clientes(String tipo_busca, String texto_buscado, DefaultListModel<Cliente> list_model,
+			ArrayList<Cliente> lista_clientes) {
+
+		list_model.clear();
+		lista_clientes.clear();
+
+		
+		if(texto_buscado != null) {
+			if (tipo_busca.toUpperCase().equals("NOME")) {
+				lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%");
+			} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
+				lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%");
+			} else {
+				lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%");
+			}
+
+			for (Cliente cliente : lista_clientes) {
+				list_model.addElement(cliente);
+			}
+		}
+	}
+
 	public String validarDocumento(String documento, String id) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
@@ -292,19 +314,18 @@ public class ClienteDAO {
 
 			if (rs.next()) {
 				return null;
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT nome FROM clientes WHERE documento = ?");
 				ps.setString(1, documento);
 				rs = ps.executeQuery();
 
 				if (rs.next()) {
 					return rs.getString("nome");
-				}else {
+				} else {
 					return null;
 				}
 			}
-		} catch (
-		SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}

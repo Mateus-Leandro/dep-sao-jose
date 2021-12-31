@@ -82,7 +82,7 @@ public class ProdutoDAO {
 		return produto;
 	}
 
-	// ----------- r---------------
+	// ----------- Alterar---------------
 	public boolean alterarProduto(Produto produto) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
