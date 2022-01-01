@@ -299,7 +299,7 @@ public class Panel_orc_vend extends JPanel {
 
 		fTxtTotalItem = new JFormattedTextField();
 		fTxtTotalItem.setDocument(new FormataNumeral(15, 2));
-		fTxtTotalItem.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtTotalItem.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalItem.setEditable(false);
 		fTxtTotalItem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalItem.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -319,6 +319,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(panelValorTotal);
 
 		fTxtTotalOrcamento = new JFormattedTextField();
+		fTxtTotalOrcamento.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalOrcamento.setDocument(new FormataNumeral(15, 2));
 		fTxtTotalOrcamento.setEditable(false);
 		fTxtTotalOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -345,7 +346,7 @@ public class Panel_orc_vend extends JPanel {
 				text_tools.move_cursor_inicio(fTxtPorcentagemDesconto);
 			}
 		});
-		fTxtPorcentagemDesconto.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtPorcentagemDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtPorcentagemDesconto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPorcentDesconto) {
@@ -367,7 +368,7 @@ public class Panel_orc_vend extends JPanel {
 				text_tools.move_cursor_inicio(fTxtValorDesconto);
 			}
 		});
-		fTxtValorDesconto.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtValorDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtValorDesconto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaDesconto) {
@@ -411,6 +412,13 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
+		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickNomeProduto) {
+				text_tools.move_cursor_inicio(fTxtNomeProduto);				
+			}
+		});
 		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent perdaFocoNomeProduto) {
@@ -419,15 +427,14 @@ public class Panel_orc_vend extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				text_tools.move_cursor_inicio(fTxtNomeProduto);
-
+				alimentar_lista_produtos("NOME", "%");
 			}
 		});
 		fTxtNomeProduto.setEnabled(false);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaNomeProduto) {
-				alimentar_lista_produtos(null);
+				alimentar_lista_produtos("NOME", fTxtNomeProduto.getText().trim());
 			}
 		});
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -504,7 +511,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblPrecoUnitario);
 
 		fTxtPrecoUnitario = new JFormattedTextField();
-		fTxtPrecoUnitario.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtPrecoUnitario.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtPrecoUnitario.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoUnitario) {
@@ -642,6 +649,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblTotalMercadotrias);
 
 		fTxtTotalMercadoriasLiquido = new JFormattedTextField();
+		fTxtTotalMercadoriasLiquido.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalMercadoriasLiquido.setEditable(false);
 		fTxtTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasLiquido.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -655,6 +663,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblTotalMercadoriasDesconto);
 
 		fTxtTotalMercadoriasBruto = new JFormattedTextField();
+		fTxtTotalMercadoriasBruto.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalMercadoriasBruto.setEditable(false);
 		fTxtTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasBruto.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -673,6 +682,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblFrete);
 
 		fTxtFrete = new JFormattedTextField();
+		fTxtFrete.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtFrete.setEditable(false);
 		fTxtFrete.addKeyListener(new KeyAdapter() {
 			@Override
@@ -694,6 +704,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(fTxtFrete);
 
 		fTxtDescontoFinal = new JFormattedTextField();
+		fTxtDescontoFinal.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtDescontoFinal.setEditable(false);
 		fTxtDescontoFinal.addKeyListener(new KeyAdapter() {
 			@Override
@@ -724,6 +735,7 @@ public class Panel_orc_vend extends JPanel {
 		produtos.add(lblQuantidadeProdutos);
 
 		fTxtQuantidadeTotal = new JFormattedTextField();
+		fTxtQuantidadeTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtQuantidadeTotal.setEditable(false);
 		fTxtQuantidadeTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtQuantidadeTotal.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -748,7 +760,7 @@ public class Panel_orc_vend extends JPanel {
 		fTxtCodigoProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCodigoProduto) {
-				alimentar_lista_produtos(fTxtCodigoProduto.getText().trim());
+				alimentar_lista_produtos("CODIGO", fTxtCodigoProduto.getText().trim());
 			}
 		});
 		fTxtCodigoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -782,6 +794,7 @@ public class Panel_orc_vend extends JPanel {
 		}
 
 		fTxtCodigoBarra = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtCodigoBarra.setEditable(false);
 		fTxtCodigoBarra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoBarra.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -1360,6 +1373,7 @@ public class Panel_orc_vend extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(null, "Necessário informar pelo menos 1 item para criar o orçamento.",
 					"Orçamento sem itens.", JOptionPane.WARNING_MESSAGE);
+			fTxtNomeProduto.requestFocus();
 		}
 
 	}
@@ -1473,32 +1487,34 @@ public class Panel_orc_vend extends JPanel {
 		ltClientes.setModel(list_model);
 	}
 
-	public void alimentar_lista_produtos(String codigo) {
-		if (!fTxtNomeProduto.getText().trim().isEmpty() || !fTxtCodigoProduto.getText().trim().isEmpty()) {
-			list_model_produtos.clear();
-			lista_produtos.clear();
-			ProdutoDAO produto_dao = new ProdutoDAO();
+	public void alimentar_lista_produtos(String tipo_busca, String texto_buscado) {
 
-			if (codigo == null) {
+		list_model_produtos.clear();
+		lista_produtos.clear();
+		ProdutoDAO produto_dao = new ProdutoDAO();
+
+		if (fTxtNomeProduto.getText().trim().isEmpty() && fTxtCodigoProduto.getText().trim().isEmpty()) {
+			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, "%");
+		} else {
+			if (tipo_busca.equals("NOME")) {
 				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%");
 			} else {
 				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos,
 						fTxtCodigoProduto.getText().trim() + "%");
 			}
+		}
 
-			for (Produto produto : lista_produtos) {
-				list_model_produtos.addElement(produto);
-			}
+		for (Produto produto : lista_produtos) {
+			list_model_produtos.addElement(produto);
+		}
 
-			if (!list_model_produtos.isEmpty()) {
-				scrollPaneListaProdutos.setVisible(true);
-			} else {
-				scrollPaneListaProdutos.setVisible(false);
-			}
+		ltProdutos.setModel(list_model_produtos);
+
+		if (!list_model_produtos.isEmpty()) {
+			scrollPaneListaProdutos.setVisible(true);
 		} else {
 			scrollPaneListaProdutos.setVisible(false);
 		}
-		ltProdutos.setModel(list_model_produtos);
 	}
 
 	public void limpar_campos() {
@@ -1770,8 +1786,7 @@ public class Panel_orc_vend extends JPanel {
 		fTxtDescontoFinal.setEditable(false);
 		btnIncluir.setEnabled(false);
 		produto_selecionado = null;
-		
-		
+
 		// Campos gerais
 		tabbedPane.setEnabled(false);
 		btnCancelar.setVisible(false);

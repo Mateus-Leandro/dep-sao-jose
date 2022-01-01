@@ -313,7 +313,7 @@ public class Orcamentos_do_cliente extends JDialog {
 						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 						if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
 							JOptionPane.showMessageDialog(null,
-									"Orçamento " + orcamento_selecionado.getId_orcamento() + "Excluído.",
+									"Orçamento " + orcamento_selecionado.getId_orcamento() + " " + "Excluído.",
 									"Exclusão de orçamento", JOptionPane.ERROR_MESSAGE);
 							orcamentos_cliente.remove(orcamento_selecionado);
 							orcamento_selecionado = null;
