@@ -171,7 +171,13 @@ public class Orcamentos_do_cliente extends JDialog {
 					orcamento_selecionado = busca_orcamento_selecionado(id_orcamento_selecionado);
 					panel_orcamento.lista_produtos_do_orcamento_selecionado(orcamento_selecionado);
 					panel_orcamento.setNumeroOrcamento(orcamento_selecionado);
+					
+					btnExcluirOrcamento.setEnabled(true);
+					btnEditarOrcamento.setEnabled(true);
 
+				}else {
+					btnExcluirOrcamento.setEnabled(false);
+					btnEditarOrcamento.setEnabled(false);
 				}
 			}
 		});
@@ -287,31 +293,36 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(separador_observacoes);
 
 		btnExcluirOrcamento = new JButton("Excluir");
+		btnExcluirOrcamento.setEnabled(false);
 		btnExcluirOrcamento.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluirOrcamento) {
 
-				int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o orçamento abaixo?"
-						+ "\n\nOrçamento Nº:  " + orcamento_selecionado.getId_orcamento() + "\nCliente: "
-						+ cliente_selecionado.getNome() + "\nValor: "
-						+ nf.format(orcamento_selecionado.getValor_total())
-						+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS SEUS DADOS SERÃO REMOVIDOS PERMANENTIMENTE!",
-						"Exclusão de orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+				if (btnExcluirOrcamento.isEnabled()) {
 
-				Boolean flag = opcao == JOptionPane.YES_OPTION;
+					int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o orçamento abaixo?"
+							+ "\n\nOrçamento Nº:  " + orcamento_selecionado.getId_orcamento() + "\nCliente: "
+							+ cliente_selecionado.getNome() + "\nValor: "
+							+ nf.format(orcamento_selecionado.getValor_total())
+							+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS SEUS DADOS SERÃO REMOVIDOS PERMANENTIMENTE!",
+							"Exclusão de orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
-				if (flag) {
-					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
-					if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
-						JOptionPane.showMessageDialog(null,
-								"Orçamento " + orcamento_selecionado.getId_orcamento() + "Excluído.",
-								"Exclusão de orçamento", JOptionPane.ERROR_MESSAGE);
-						orcamentos_cliente.remove(orcamento_selecionado);
-						orcamento_selecionado = null;
-						modelo_tabela_orcamentos.fireTableDataChanged();
-						panel_orcamento.limpar_campos();
-						tabelaOrcamentos.clearSelection();
+					Boolean flag = opcao == JOptionPane.YES_OPTION;
+
+					if (flag) {
+						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
+						if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
+							JOptionPane.showMessageDialog(null,
+									"Orçamento " + orcamento_selecionado.getId_orcamento() + "Excluído.",
+									"Exclusão de orçamento", JOptionPane.ERROR_MESSAGE);
+							orcamentos_cliente.remove(orcamento_selecionado);
+							orcamento_selecionado = null;
+							modelo_tabela_orcamentos.fireTableDataChanged();
+							panel_orcamento.limpar_campos();
+							tabelaOrcamentos.clearSelection();
+						}
 					}
+
 				}
 
 			}
@@ -322,11 +333,14 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(btnExcluirOrcamento);
 
 		btnEditarOrcamento = new JButton("Editar");
+		btnEditarOrcamento.setEnabled(false);
 		btnEditarOrcamento.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
-				panel_orcamento.novo_orcamento();
-				dispose();
+				if (btnEditarOrcamento.isEnabled()) {
+					panel_orcamento.novo_orcamento();
+					dispose();
+				}
 			}
 		});
 		btnEditarOrcamento.setIcon(icones.getIcone_editar());
