@@ -285,7 +285,7 @@ public class Panel_orcamento extends JPanel {
 
 		ltProdutos.setBounds(438, 77, 267, 79);
 		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-		scrollPaneListaProdutos.setBounds(273, 72, 248, 79);
+		scrollPaneListaProdutos.setBounds(273, 74, 248, 77);
 		produtos.add(scrollPaneListaProdutos);
 		scrollPaneListaProdutos.setVisible(false);
 
@@ -414,7 +414,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeProduto) {
-				text_tools.move_cursor_inicio(fTxtNomeProduto);				
+				text_tools.move_cursor_inicio(fTxtNomeProduto);
 			}
 		});
 		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
@@ -833,7 +833,7 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnCancelar.setIcon(icones.getIcone_cancelar());
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(603, 70, 120, 29);
+		btnCancelar.setBounds(603, 70, 114, 29);
 		btnCancelar.setVisible(false);
 		add(btnCancelar);
 
@@ -859,16 +859,24 @@ public class Panel_orcamento extends JPanel {
 				fTxtEmail.setText(cliente_selecionado.getEmail());
 				fTxtCelular.setText(cliente_selecionado.getCelular());
 				fTxtTelFixo.setText(cliente_selecionado.getTelefone());
-				if (cliente_selecionado.getCpf_cnpj().length() > 14) {
-					lblIe.setVisible(true);
-					txtIe.setText(cliente_selecionado.getInscricao_estadual());
-					txtIe.setVisible(true);
-				} else {
+
+				if (cliente_selecionado.getCpf_cnpj() != null) {
+					if (cliente_selecionado.getCpf_cnpj().length() > 14) {
+						lblIe.setVisible(true);
+						txtIe.setText(cliente_selecionado.getInscricao_estadual());
+						txtIe.setVisible(true);
+					}
+
+					else {
+						lblIe.setVisible(false);
+						txtIe.setText(null);
+						txtIe.setVisible(false);
+					}
+				}else {
 					lblIe.setVisible(false);
 					txtIe.setText(null);
 					txtIe.setVisible(false);
 				}
-
 			}
 		});
 		ltClientes.setBounds(48, 79, 267, 66);
@@ -1510,6 +1518,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNumeroOrcamento.setText(null);
 		lista_produtos_inclusos.clear();
 		modelo_tabela.fireTableDataChanged();
+		quantidade_de_produtos = 0;
 	}
 
 	public void limpar_dados_produto() {
@@ -1523,10 +1532,9 @@ public class Panel_orcamento extends JPanel {
 		fTxtValorDesconto.setText(null);
 		fTxtTotalItem.setText(null);
 
-		quantidade_de_produtos = 0;
 		produto_selecionado = null;
 		btnIncluir.setEnabled(false);
-		
+
 		fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 		fTxtQuantidade.setBorder(new LineBorder(Color.lightGray));
 
@@ -1788,7 +1796,7 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void editar_produto() {
-		
+
 		Double quantidade = Double.parseDouble(tabelaProdutosInclusos
 				.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 5).toString().replace(".", "").replace(",", "."));
 		String preco_unit = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 6).toString()
