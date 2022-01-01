@@ -4,12 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
-
-import com.mysql.cj.xdevapi.Result;
 
 import db.DB;
 import entities.cliente.Cliente;
@@ -19,7 +14,6 @@ import entities.orcamentos.Produto_Orcamento;
 public class OrcamentoDAO {
 
 	private Connection conn;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public Orcamento salvar_orcamento(Orcamento orcamento) {
 		conn = DB.getConnection();

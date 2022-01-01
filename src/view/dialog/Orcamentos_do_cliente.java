@@ -39,7 +39,7 @@ import entities.orcamentos.Produto_Orcamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaOrcamentos;
 import tables.tableSorters.SorterMonetario;
-import view.panels.Panel_orc_vend;
+import view.panels.Panel_orcamento;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
@@ -107,7 +107,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public Orcamentos_do_cliente(Panel_orc_vend panel_orcamento) {
+	public Orcamentos_do_cliente(Panel_orcamento panel_orcamento) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent fechamentoDaJanela) {
@@ -156,7 +156,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		tabelaOrcamentos.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tabelaOrcamentos.setBounds(10, 87, 331, 185);
 		tabelaOrcamentos.getTableHeader().setReorderingAllowed(false);
-		tabelaOrcamentos.setAutoResizeMode(tabelaOrcamentos.AUTO_RESIZE_OFF);
+		tabelaOrcamentos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		ConfiguraLarguraColunaTabelaOrcamento(tabelaOrcamentos);
 		tabelaOrcamentos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 

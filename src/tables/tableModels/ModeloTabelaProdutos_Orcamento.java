@@ -13,6 +13,10 @@ import entities.orcamentos.Produto_Orcamento;
 
 public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
