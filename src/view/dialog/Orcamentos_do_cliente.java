@@ -77,7 +77,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JSeparator separador_orcamentos1;
 	private JLabel lblOrcamentosDoCliente;
 	private JSeparator separador_orcamentos2;
-	private JFormattedTextField formattedTextField;
+	private JFormattedTextField fTxtObservacao;
 	private JLabel lblObservacoes;
 	private JSeparator separador_observacoes;
 	private ListSelectionModel lsm;
@@ -87,6 +87,8 @@ public class Orcamentos_do_cliente extends JDialog {
 	private Icones icones = new Icones();
 	private JButton btnEditarOrcamento;
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
+	private JButton btnEditarObservacao;
+	private JButton btnExcluirObservacao;
 
 	/**
 	 * Launch the application.
@@ -108,6 +110,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	 * Create the frame.
 	 */
 	public Orcamentos_do_cliente(Panel_orcamento panel_orcamento) {
+		alimentar_lista_orcamento(orcamentos_cliente, null);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent fechamentoDaJanela) {
@@ -131,7 +134,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				cliente_selecionado = ltClientes.getSelectedValue();
 				fTxtPesquisaCliente.setText(cliente_selecionado.getNome());
 
-				alimentar_lista_orcamento(orcamentos_cliente);
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
 			}
 		});
 		ltClientes.setBounds(197, 104, 514, 70);
@@ -142,7 +145,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.setLayout(null);
 		contentPane.add(scrollPaneLtClientes);
 
-		lblOrcamentos_do_cliente = new JLabel("Or\u00E7amentos do cliente");
+		lblOrcamentos_do_cliente = new JLabel("Or\u00E7amentos Realizados");
 		lblOrcamentos_do_cliente.setBounds(228, 11, 287, 29);
 		lblOrcamentos_do_cliente.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOrcamentos_do_cliente.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -171,6 +174,8 @@ public class Orcamentos_do_cliente extends JDialog {
 					orcamento_selecionado = busca_orcamento_selecionado(id_orcamento_selecionado);
 					panel_orcamento.lista_produtos_do_orcamento_selecionado(orcamento_selecionado);
 					panel_orcamento.setNumeroOrcamento(orcamento_selecionado);
+					
+					fTxtObservacao.setText(orcamento_selecionado.getObservacao());
 					
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
@@ -236,7 +241,8 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent digitaCliente) {
 				if (fTxtPesquisaCliente.getText().trim().isEmpty()) {
-					alimenta_lt_clientes(cbxTipoPesquisaCliente.getSelectedItem().toString(), null, lista_clientes);
+					scrollPaneLtClientes.setVisible(false);
+					alimentar_lista_orcamento(orcamentos_cliente, null);
 				} else {
 					alimenta_lt_clientes(cbxTipoPesquisaCliente.getSelectedItem().toString(),
 							fTxtPesquisaCliente.getText().trim(), lista_clientes);
@@ -277,19 +283,22 @@ public class Orcamentos_do_cliente extends JDialog {
 		separador_orcamentos2.setBounds(440, 193, 297, 9);
 		contentPane.add(separador_orcamentos2);
 
-		formattedTextField = new JFormattedTextField();
-		formattedTextField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		formattedTextField.setBounds(10, 350, 725, 46);
-		contentPane.add(formattedTextField);
+		fTxtObservacao = new JFormattedTextField();
+		fTxtObservacao.setHorizontalAlignment(SwingConstants.LEFT);
+		fTxtObservacao.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtObservacao.setEditable(false);
+		fTxtObservacao.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		fTxtObservacao.setBounds(9, 368, 727, 29);
+		contentPane.add(fTxtObservacao);
 
-		lblObservacoes = new JLabel("Observa\u00E7\u00F5es");
+		lblObservacoes = new JLabel("Observa\u00E7\u00E3o");
 		lblObservacoes.setToolTipText("");
 		lblObservacoes.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblObservacoes.setBounds(10, 327, 93, 20);
+		lblObservacoes.setBounds(11, 341, 89, 20);
 		contentPane.add(lblObservacoes);
 
 		separador_observacoes = new JSeparator();
-		separador_observacoes.setBounds(106, 338, 629, 9);
+		separador_observacoes.setBounds(96, 352, 287, 9);
 		contentPane.add(separador_observacoes);
 
 		btnExcluirOrcamento = new JButton("Excluir");
@@ -302,9 +311,9 @@ public class Orcamentos_do_cliente extends JDialog {
 
 					int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o orçamento abaixo?"
 							+ "\n\nOrçamento Nº:  " + orcamento_selecionado.getId_orcamento() + "\nCliente: "
-							+ cliente_selecionado.getNome() + "\nValor: "
+							+ orcamento_selecionado.getCliente().getNome() + "\nValor: "
 							+ nf.format(orcamento_selecionado.getValor_total())
-							+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS SEUS DADOS SERÃO REMOVIDOS PERMANENTIMENTE!",
+							+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS DADOS DO ORÇAMENTO SERÃO REMOVIDOS PERMANENTIMENTE!",
 							"Exclusão de orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					Boolean flag = opcao == JOptionPane.YES_OPTION;
@@ -313,7 +322,7 @@ public class Orcamentos_do_cliente extends JDialog {
 						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 						if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
 							JOptionPane.showMessageDialog(null,
-									"Orçamento " + orcamento_selecionado.getId_orcamento() + " " + "Excluído.",
+									"Orçamento " + orcamento_selecionado.getId_orcamento() + " " + "excluído.",
 									"Exclusão de orçamento", JOptionPane.ERROR_MESSAGE);
 							orcamentos_cliente.remove(orcamento_selecionado);
 							orcamento_selecionado = null;
@@ -338,7 +347,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
 				if (btnEditarOrcamento.isEnabled()) {
-					panel_orcamento.novo_orcamento();
+					panel_orcamento.editar_orcamento(orcamento_selecionado.getCliente());
 					dispose();
 				}
 			}
@@ -348,19 +357,35 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnEditarOrcamento.setBounds(531, 157, 97, 29);
 
 		contentPane.add(btnEditarOrcamento);
+		
+		btnEditarObservacao = new JButton("Editar observa\u00E7\u00E3o");
+		btnEditarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnEditarObservacao.setEnabled(false);
+		btnEditarObservacao.setBounds(391, 344, 164, 20);
+		btnEditarObservacao.setIcon(icones.getIcone_editar());
+		contentPane.add(btnEditarObservacao);
+		
+		btnExcluirObservacao = new JButton("Excluir Observa\u00E7\u00E3o");
+		btnExcluirObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnExcluirObservacao.setEnabled(false);
+		btnExcluirObservacao.setBounds(565, 344, 172, 20);
+		btnExcluirObservacao.setIcon(icones.getIcone_excluir());
+		contentPane.add(btnExcluirObservacao);
 	}
 
+	
 	// Configurando largura das colunas da tabela de orçamentos
 	public void ConfiguraLarguraColunaTabelaOrcamento(JTable tabela) {
 		tabela.getColumnModel().getColumn(0).setPreferredWidth(50); // Número do orçamento.
-		tabela.getColumnModel().getColumn(1).setPreferredWidth(70); // Faturado (Sim ou não).
-		tabela.getColumnModel().getColumn(2).setPreferredWidth(70); // Quantidade de itens.
+		tabela.getColumnModel().getColumn(1).setPreferredWidth(150); // Nome do cliente
+		tabela.getColumnModel().getColumn(2).setPreferredWidth(60); // Quantidade de itens.
 		tabela.getColumnModel().getColumn(3).setPreferredWidth(90); // Total mercadorias.
 		tabela.getColumnModel().getColumn(4).setPreferredWidth(90); // Desconto.
 		tabela.getColumnModel().getColumn(5).setPreferredWidth(90); // Frete.
 		tabela.getColumnModel().getColumn(6).setPreferredWidth(90); // Valor total.
-		tabela.getColumnModel().getColumn(7).setPreferredWidth(80); // Número de parcelas.
-		tabela.getColumnModel().getColumn(8).setPreferredWidth(92); // Data inclusão.
+		tabela.getColumnModel().getColumn(7).setPreferredWidth(60); // Faturado.
+		tabela.getColumnModel().getColumn(8).setPreferredWidth(65); // Numero do parcelas.
+		tabela.getColumnModel().getColumn(9).setPreferredWidth(80); // Data inclusão.
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela_orcamentos);
 		tabelaOrcamentos.setRowSorter(sorter);
@@ -374,7 +399,13 @@ public class Orcamentos_do_cliente extends JDialog {
 	public void alimenta_lt_clientes(String forma_pesquisa, String texto, ArrayList<Cliente> lista_clientes) {
 
 		String tipo_busca = forma_pesquisa;
-		String texto_buscado = texto;
+		
+		String texto_buscado;
+		if(texto == null) {
+			texto_buscado = "%";
+		}else {
+			texto_buscado = texto;
+		}
 
 		ClienteDAO cliente_dao = new ClienteDAO();
 		cliente_dao.alimenta_lt_clientes(tipo_busca, texto_buscado, list_model_clientes, lista_clientes);
@@ -388,11 +419,11 @@ public class Orcamentos_do_cliente extends JDialog {
 		ltClientes.setModel(list_model_clientes);
 	}
 
-	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos) {
+	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos, Cliente cliente) {
 		orcamentos.clear();
 
 		OrcamentoDAO orcamento_dao = new OrcamentoDAO();
-		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente_selecionado);
+		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente);
 
 		modelo_tabela_orcamentos.fireTableDataChanged();
 		return orcamentos;

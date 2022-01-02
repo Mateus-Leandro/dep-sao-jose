@@ -285,19 +285,16 @@ public class ClienteDAO {
 		list_model.clear();
 		lista_clientes.clear();
 
-		
-		if(texto_buscado != null) {
-			if (tipo_busca.toUpperCase().equals("NOME")) {
-				lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%");
-			} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
-				lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%");
-			} else {
-				lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%");
-			}
+		if (tipo_busca.toUpperCase().equals("NOME")) {
+			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%");
+		} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
+			lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%");
+		} else {
+			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%");
+		}
 
-			for (Cliente cliente : lista_clientes) {
-				list_model.addElement(cliente);
-			}
+		for (Cliente cliente : lista_clientes) {
+			list_model.addElement(cliente);
 		}
 	}
 

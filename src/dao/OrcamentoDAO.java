@@ -22,17 +22,34 @@ public class OrcamentoDAO {
 
 		try {
 			conn.setAutoCommit(false);
+			Integer id_cliente = null;
 
-			orcamento.setId_orcamento(null);
-			if (orcamento.getId_cliente() == null) {
-				orcamento.setId_cliente(1);
+			// Testa se foi passado cliente no orçamento.
+			if (orcamento.getCliente() == null) {
+				id_cliente = 1;
+			} else {
+				id_cliente = orcamento.getCliente().getIdCliente();
 			}
 
-			ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`orcamento` "
-					+ "(`idCliente`, `quantidadeProdutos`, `totalMercadoriasBruto`, "
-					+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `dataInclusao`) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, orcamento.getId_cliente());
+			// Verifica se está sendo editado ou criando um novo orçamento.
+			Boolean editando_orcamento;
+			editando_orcamento = orcamento.getId_orcamento() != null;
+			if (editando_orcamento) {
+				ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `idCliente` = ?, "
+						+ "`quantidadeProdutos` = ?, `totalMercadoriasBruto` = ?, "
+						+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, "
+						+ "`valorTotal` = ?, `faturado` = ?, `numeroParcelas` = ?, "
+						+ "`observacao` = ?, `dataInclusao` = ? WHERE (`idOrcamento` = ?)");
+
+				// Setando número do orçamento editado.
+				ps.setInt(12, orcamento.getId_orcamento());
+			} else {
+				ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`orcamento` "
+						+ "(`idCliente`, `quantidadeProdutos`, `totalMercadoriasBruto`, "
+						+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `observacao`, `dataInclusao`) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			}
+			ps.setInt(1, id_cliente);
 			ps.setInt(2, orcamento.getQuantidade_produtos());
 			ps.setDouble(3, orcamento.getTotal_mercadorias_bruto());
 			ps.setDouble(4, orcamento.getTotal_mercadorias_liquido());
@@ -41,35 +58,45 @@ public class OrcamentoDAO {
 			ps.setDouble(7, orcamento.getValor_total());
 			ps.setBoolean(8, orcamento.getFaturado());
 			ps.setInt(9, orcamento.getNumero_de_parcelas());
-			ps.setDate(10, new java.sql.Date(System.currentTimeMillis()));
+			ps.setString(10, orcamento.getObservacao());
+			ps.setDate(11, new java.sql.Date(System.currentTimeMillis()));
 
 			ps.execute();
-			rs = ps.getGeneratedKeys();
 
-			if (rs.next()) {
-				orcamento.setId_orcamento(rs.getInt(1));
-
-				for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
-					ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`produto_orcamento` "
-							+ "(`idOrcamento`, `idProdutoOrcamento`, `quantidade`,`fator`, "
-							+ "`precoUnitario`, `descontoProduto`, `totalProduto`) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-					ps.setInt(1, orcamento.getId_orcamento());
-					ps.setInt(2, produto.getCodigo());
-					ps.setDouble(3, produto.getQuantidade());
-					ps.setString(4, produto.getFator_venda());
-					ps.setDouble(5, produto.getPreco_unitario());
-					ps.setDouble(6, produto.getValor_desconto());
-					ps.setDouble(7, produto.getValor_total());
-
-					ps.execute();
+			if (!editando_orcamento) {
+				rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					if (orcamento.getId_orcamento() == null) {
+						orcamento.setId_orcamento(rs.getInt(1));
+					}
 				}
-
-				conn.commit();
-				return orcamento;
 			} else {
-				return null;
+				// Excluindo itens do orçamento editado.
+				ps = conn.prepareStatement("DELETE FROM `banco_deposito`.`produto_orcamento` WHERE idOrcamento = ?");
+				ps.setInt(1, orcamento.getId_orcamento());
+				ps.execute();
 			}
+
+			
+			// Incluindo itens do orçamento.
+			for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
+				ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`produto_orcamento` "
+						+ "(`idOrcamento`, `idProdutoOrcamento`, `quantidade`,`fator`, "
+						+ "`precoUnitario`, `descontoProduto`, `totalProduto`) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+				ps.setInt(1, orcamento.getId_orcamento());
+				ps.setInt(2, produto.getCodigo());
+				ps.setDouble(3, produto.getQuantidade());
+				ps.setString(4, produto.getFator_venda());
+				ps.setDouble(5, produto.getPreco_unitario());
+				ps.setDouble(6, produto.getValor_desconto());
+				ps.setDouble(7, produto.getValor_total());
+
+				ps.execute();
+			}
+
+			conn.commit();
+			return orcamento;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -130,16 +157,30 @@ public class OrcamentoDAO {
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 		try {
-			ps = conn.prepareStatement(
-					"SELECT idOrcamento, faturado, quantidadeProdutos,totalMercadoriasBruto, totalMercadoriasLiquido, descontoFinal, frete, valorTotal, numeroParcelas, dataInclusao FROM orcamento WHERE idCliente = ?");
-			ps.setInt(1, cliente.getIdCliente());
+
+			ps = conn.prepareStatement("SELECT idOrcamento, orcamento.idCliente, clientes.nome as nomeCliente, "
+					+ "quantidadeProdutos, totalMercadoriasBruto, " + "totalMercadoriasLiquido, frete, descontoFinal, "
+					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao "
+					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
+					+ "WHERE orcamento.idCliente LIKE ?");
+			// Testa se foi passado cliente específico na busca de orçamentos.
+			if (cliente != null) {
+				ps.setInt(1, cliente.getIdCliente());
+			} else {
+				ps.setString(1, "%");
+			}
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
+				// Buscando dados do cliente.
+				ClienteDAO cliente_dao = new ClienteDAO();
+				ArrayList<Cliente> cliente_do_orcamento = new ArrayList<Cliente>();
+				cliente_do_orcamento = cliente_dao.listarClientes_codigo(cliente_do_orcamento,
+						rs.getString("idCliente"));
 
 				Orcamento orcamento = new Orcamento();
 				orcamento.setId_orcamento(rs.getInt("idOrcamento"));
-				orcamento.setId_cliente(cliente.getIdCliente());
+				orcamento.setCliente(cliente_do_orcamento.get(0));
 				orcamento.setQuantidade_produtos(rs.getInt("quantidadeProdutos"));
 				orcamento.setTotal_mercadorias_bruto(rs.getDouble("totalMercadoriasBruto"));
 				orcamento.setTotal_mercadorias_liquido(rs.getDouble("totalMercadoriasLiquido"));
@@ -148,6 +189,7 @@ public class OrcamentoDAO {
 				orcamento.setValor_total(rs.getDouble("valorTotal"));
 				orcamento.setFaturado(rs.getBoolean("faturado"));
 				orcamento.setNumero_de_parcelas(rs.getInt("numeroParcelas"));
+				orcamento.setObservacao(rs.getString("observacao"));
 				orcamento.setData_inclusao(rs.getDate("dataInclusao"));
 				orcamento.setProdutos_do_orcamento(new ArrayList<Produto_Orcamento>());
 
