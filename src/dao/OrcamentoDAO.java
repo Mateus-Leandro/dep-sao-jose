@@ -201,7 +201,7 @@ public class OrcamentoDAO {
 						+ "FROM produto_orcamento "
 						+ "INNER JOIN produto on produto.idProduto = produto_orcamento.idProdutoOrcamento "
 						+ "LEFT JOIN barras_produto on barras_produto.idProduto = produto_orcamento.idProdutoOrcamento "
-						+ "WHERE produto_orcamento.idOrcamento = ?");
+						+ "WHERE produto_orcamento.idOrcamento = ? ");
 				ps2.setInt(1, orcamento.getId_orcamento());
 				rs2 = ps2.executeQuery();
 
@@ -218,7 +218,6 @@ public class OrcamentoDAO {
 					produto.setValor_total(rs2.getDouble("total"));
 
 					orcamento.getProdutos_do_orcamento().add(produto);
-
 				}
 
 				lista_orcamentos.add(orcamento);

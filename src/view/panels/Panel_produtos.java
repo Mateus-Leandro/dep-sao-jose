@@ -79,11 +79,10 @@ public class Panel_produtos extends JPanel {
 	private JSeparator separador_clientes_cadastrados_2;
 	private JTable tabelaProdutos;
 	private JScrollPane scrollPane;
-	private ArrayList<Setor> lista_setores = new ArrayList<Setor>();
 	ArrayList<Produto> produtos = new ArrayList<Produto>();
 	ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 	private JLabel lblPesquisarPor;
-	private JComboBox cbxTipoPesquisa;
+	private JComboBox<String> cbxTipoPesquisa;
 	private JFormattedTextField fTxtPesquisa = new JFormattedTextField();
 	private JButton btnReload = new JButton();
 	private JButton btnEditar;
@@ -92,8 +91,7 @@ public class Panel_produtos extends JPanel {
 	private JButton btnCancelar;
 	private JLabel lblMargemPraticada;
 	private JFormattedTextField fTxtMargemPraticada;
-	private JComboBox cbxFatorVenda;
-	private JComboBox cbsFatorVenda;
+	private JComboBox<String> cbxFatorVenda;
 	private JComboBox<Setor> cbxSetor = new JComboBox<Setor>();
 	private Jtext_tools text_tools = new Jtext_tools();
 
@@ -304,10 +302,6 @@ public class Panel_produtos extends JPanel {
 		lblFatorVenda.setBounds(16, 231, 97, 19);
 		add(lblFatorVenda);
 
-		cbxFatorVenda = new JComboBox<String>();
-		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		add(cbxFatorVenda);
-
 		lblInformacoesBasicas = new JLabel("Informa\u00E7\u00F5es B\u00E1sicas");
 		lblInformacoesBasicas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInformacoesBasicas.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -403,7 +397,7 @@ public class Panel_produtos extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
-		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
+		cbxTipoPesquisa.setModel(new DefaultComboBoxModel<String>(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -492,12 +486,12 @@ public class Panel_produtos extends JPanel {
 		btnCancelar.setBounds(595, 378, 113, 29);
 		add(btnCancelar);
 
-		cbsFatorVenda = new JComboBox();
-		cbsFatorVenda.setEnabled(false);
-		cbsFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbsFatorVenda.setModel(new DefaultComboBoxModel(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
-		cbsFatorVenda.setBounds(113, 231, 57, 22);
-		add(cbsFatorVenda);
+		cbxFatorVenda = new JComboBox<String>();
+		cbxFatorVenda.setEnabled(false);
+		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbxFatorVenda.setModel(new DefaultComboBoxModel<String>(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
+		cbxFatorVenda.setBounds(113, 231, 57, 22);
+		add(cbxFatorVenda);
 		cbxSetor.setEnabled(false);
 
 		cbxSetor.addFocusListener(new FocusAdapter() {
@@ -527,7 +521,7 @@ public class Panel_produtos extends JPanel {
 		fTxtNomeProduto.setEditable(true);
 		fTxtPrecoCusto.setEditable(true);
 		fTxtPrecoVenda.setEditable(true);
-		cbsFatorVenda.setEnabled(true);
+		cbxFatorVenda.setEnabled(true);
 		cbxSetor.setEnabled(true);
 	}
 
@@ -537,7 +531,7 @@ public class Panel_produtos extends JPanel {
 		fTxtNomeProduto.setEditable(false);
 		fTxtPrecoCusto.setEditable(false);
 		fTxtPrecoVenda.setEditable(false);
-		cbsFatorVenda.setEnabled(false);
+		cbxFatorVenda.setEnabled(false);
 		cbxSetor.setEnabled(false);
 	}
 
@@ -550,7 +544,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.setText(null);
 		fTxtPrecoSugerido.setText(null);
 		fTxtMargemPraticada.setText(null);
-		cbsFatorVenda.setSelectedIndex(0);
+		cbxFatorVenda.setSelectedIndex(0);
 		cbxSetor.getModel().setSelectedItem("");
 	}
 
@@ -714,7 +708,7 @@ public class Panel_produtos extends JPanel {
 			e.printStackTrace();
 		}
 
-		String unidadeVenda = cbsFatorVenda.getSelectedItem().toString();
+		String unidadeVenda = cbxFatorVenda.getSelectedItem().toString();
 		Boolean bloqueadoVenda = false;
 		Date dataCadastro = null;
 
@@ -878,7 +872,7 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(70); // Preco Sugerido
 		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(70); // Preco Venda
 		tabelaProdutos.getColumnModel().getColumn(8).setPreferredWidth(52); // Margem Praticada
-		tabelaProdutos.getColumnModel().getColumn(9).setPreferredWidth(80); // Código Barras
+		tabelaProdutos.getColumnModel().getColumn(9).setPreferredWidth(110); // Código Barras
 		tabelaProdutos.getColumnModel().getColumn(10).setPreferredWidth(40); // Bloqueado
 		tabelaProdutos.getColumnModel().getColumn(11).setPreferredWidth(80); // Data Cadastro
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);

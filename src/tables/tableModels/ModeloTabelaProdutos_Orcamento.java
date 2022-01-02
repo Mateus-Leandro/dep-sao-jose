@@ -20,18 +20,17 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
-	private String colunas[] = { "It. Nº", "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
+	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
 			"Total" };
 	private ArrayList<Produto_Orcamento> produtos_orcamento;
-	private final int COLUNA_NUMERO_ITEM = 0;
-	private final int COLUNA_CODIGO = 1;
-	private final int COLUNA_NOME = 2;
-	private final int COLUNA_BARRAS = 3;
-	private final int COLUNA_UNID = 4;
-	private final int COLUNA_QUANTIDADE = 5;
-	private final int COLUNA_PRECO_UNIT = 6;
-	private final int COLUNA_DESC = 7;
-	private final int COLUNA_TOTAL = 8;
+	private final int COLUNA_CODIGO = 0;
+	private final int COLUNA_NOME = 1;
+	private final int COLUNA_BARRAS = 2;
+	private final int COLUNA_UNID = 3;
+	private final int COLUNA_QUANTIDADE = 4;
+	private final int COLUNA_PRECO_UNIT = 5;
+	private final int COLUNA_DESC = 6;
+	private final int COLUNA_TOTAL = 7;
 
 	public ModeloTabelaProdutos_Orcamento(ArrayList<Produto_Orcamento> produtos_orcamento) {
 		this.produtos_orcamento = produtos_orcamento;
@@ -59,8 +58,6 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
-		case COLUNA_NUMERO_ITEM:
-			return Integer.class;
 		case COLUNA_CODIGO:
 			return Integer.class;
 		case COLUNA_NOME:
@@ -101,8 +98,6 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 			}
 
 			switch (columIndex) {
-			case COLUNA_NUMERO_ITEM:
-				return rowIndex + 1;
 			case COLUNA_CODIGO:
 				return produto_orcamento.getCodigo();
 			case COLUNA_NOME:

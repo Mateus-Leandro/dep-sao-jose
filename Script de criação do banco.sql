@@ -41,7 +41,7 @@ CREATE TABLE `barras_produto` (
 
 LOCK TABLES `barras_produto` WRITE;
 /*!40000 ALTER TABLE `barras_produto` DISABLE KEYS */;
-INSERT INTO `barras_produto` VALUES (3,'123',1,'2021-12-05'),(5,'1234',1,'2021-12-05');
+INSERT INTO `barras_produto` VALUES (3,'123',1,'2021-12-05'),(5,'12344444444444',1,'2021-12-05');
 /*!40000 ALTER TABLE `barras_produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `Cpf_UNIQUE` (`documento`),
   UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +81,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,0,'Cliente não identificado','TEste','151.253.906-66',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'(99)99999-9999',NULL,'2021-12-13');
+INSERT INTO `clientes` VALUES (1,0,'Cliente não identificado','TEste','999.999.999-99',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'(99)99999-9999',NULL,'2021-12-13'),(2,0,'Mateus Leandro Chagas Andrade','Chagas','151.253.906-66',NULL,'32371-570','Contagem','Rua Rio Jaguaribe','Casa Verde','100A','Eldoradinho','mateusleandro2205@gmail.com','(31)67868-7688','(31)3396-0945','2022-01-01');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,6 +130,7 @@ CREATE TABLE `orcamento` (
   `valorTotal` double NOT NULL,
   `faturado` tinyint NOT NULL,
   `numeroParcelas` int NOT NULL,
+  `observacao` varchar(255) DEFAULT NULL,
   `dataInclusao` date NOT NULL,
   PRIMARY KEY (`idOrcamento`),
   KEY `codigo cliente_idx` (`idCliente`),
@@ -143,7 +144,7 @@ CREATE TABLE `orcamento` (
 
 LOCK TABLES `orcamento` WRITE;
 /*!40000 ALTER TABLE `orcamento` DISABLE KEYS */;
-INSERT INTO `orcamento` VALUES (1,1,1,65,65,0,0,65,0,0,'2021-12-26');
+INSERT INTO `orcamento` VALUES (1,1,3,60.5,60.5,0,0,60.5,0,0,NULL,'2022-01-02');
 /*!40000 ALTER TABLE `orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +170,7 @@ CREATE TABLE `produto` (
   PRIMARY KEY (`idProduto`),
   KEY `codSetor_idx` (`codSetor`),
   CONSTRAINT `codSetor` FOREIGN KEY (`codSetor`) REFERENCES `setor` (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +179,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Teste fator',15.2,20,25,19,31.58,2,'MT',0,'2021-12-04'),(2,'Teste Novo Item',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Teste Margem',0,150,10,0,100,1,'UN',0,'2021-12-05'),(5,'Teste inclusão',0,15.2,0,0,100,1,'UN',0,'2021-12-05');
+INSERT INTO `produto` VALUES (1,'Betoneira HSW 127v',15.2,20,25,19,31.58,2,'UN',0,'2021-12-04'),(2,'Martelete Makita 127v',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Parafusadeira Holdez 127v',0,150,10,0,100,53,'UN',0,'2021-12-05'),(5,'Teste inclusão',0,15.2,0,0,100,1,'UN',0,'2021-12-05'),(6,'Cimento Holcim 50KG',0,10,0,0,100,46,'UN',0,'2022-01-01'),(7,'LixaD\'Agua 480',0,82,0,0,100,27,'UN',0,'2022-01-01'),(8,'Tinta Coral 5L',0,3.5,0,0,100,54,'UN',0,'2022-01-01'),(9,'Cola Super Bond',1.5,2,20,1.8,33.33,56,'UN',0,'2022-01-02');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +210,7 @@ CREATE TABLE `produto_orcamento` (
 
 LOCK TABLES `produto_orcamento` WRITE;
 /*!40000 ALTER TABLE `produto_orcamento` DISABLE KEYS */;
-INSERT INTO `produto_orcamento` VALUES (1,1,3.25,'MT',20,0,65);
+INSERT INTO `produto_orcamento` VALUES (1,1,2,'UN',20,0,40),(1,6,1,'UN',10,0,10),(1,8,3,'UN',3.5,0,10.5);
 /*!40000 ALTER TABLE `produto_orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +225,7 @@ CREATE TABLE `setor` (
   `codSetor` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
   PRIMARY KEY (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +234,7 @@ CREATE TABLE `setor` (
 
 LOCK TABLES `setor` WRITE;
 /*!40000 ALTER TABLE `setor` DISABLE KEYS */;
-INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(27,'Lixas'),(46,'cimentos');
+INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(27,'Lixas'),(46,'cimentos'),(53,'Parafusadeira'),(54,'Tintas'),(56,'Colas');
 /*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-27  7:54:54
+-- Dump completed on 2022-01-02 20:55:46

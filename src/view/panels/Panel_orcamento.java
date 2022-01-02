@@ -285,7 +285,7 @@ public class Panel_orcamento extends JPanel {
 
 		ltProdutos.setBounds(438, 77, 267, 79);
 		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-		scrollPaneListaProdutos.setBounds(273, 74, 248, 77);
+		scrollPaneListaProdutos.setBounds(273, 74, 233, 77);
 		produtos.add(scrollPaneListaProdutos);
 		scrollPaneListaProdutos.setVisible(false);
 
@@ -438,7 +438,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setColumns(10);
-		fTxtNomeProduto.setBounds(273, 55, 248, 20);
+		fTxtNomeProduto.setBounds(273, 55, 233, 20);
 		produtos.add(fTxtNomeProduto);
 
 		lblInclusãoDeProdutos = new JLabel("Inclus\u00E3o de produtos");
@@ -778,7 +778,7 @@ public class Panel_orcamento extends JPanel {
 
 		lblCodBarra = new JLabel("Cod.Barra");
 		lblCodBarra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodBarra.setBounds(540, 57, 70, 19);
+		lblCodBarra.setBounds(519, 55, 63, 19);
 		produtos.add(lblCodBarra);
 
 		MaskFormatter mascara_barras = null;
@@ -795,7 +795,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoBarra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarra.setEnabled(false);
 		fTxtCodigoBarra.setColumns(10);
-		fTxtCodigoBarra.setBounds(608, 54, 97, 20);
+		fTxtCodigoBarra.setBounds(585, 54, 120, 20);
 		produtos.add(fTxtCodigoBarra);
 
 		btnNovo = new JButton("Novo");
@@ -1352,7 +1352,7 @@ public class Panel_orcamento extends JPanel {
 
 		if (quantidade_de_produtos > 0) {
 
-			int opcao = JOptionPane.showConfirmDialog(null, "Deseja finalizar o orçamento?\n", "Confirmar orçamento.",
+			int opcao = JOptionPane.showConfirmDialog(null, "Deseja confirmar o orçamento?\n", "Confirmar orçamento.",
 					JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
@@ -1377,7 +1377,7 @@ public class Panel_orcamento extends JPanel {
 				if (novo_orcamento.getId_orcamento() != null) {
 					fTxtNumeroOrcamento.setText(novo_orcamento.getId_orcamento().toString());
 					JOptionPane.showMessageDialog(null,
-							"Orçamento salvo corretamente.\nNúmero gerado: " + novo_orcamento.getId_orcamento(),
+							"Orçamento Nº " + novo_orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 					limpar_campos();
 					desativar_campos();
@@ -1433,7 +1433,6 @@ public class Panel_orcamento extends JPanel {
 				codigo = fTxtCodigoProduto.getText().trim();
 				nome_produto = fTxtNomeProduto.getText().trim();
 				codigo_barras = fTxtCodigoBarra.getText();
-
 			} else {
 				codigo = produto_selecionado.getIdProduto().toString();
 				nome_produto = produto_selecionado.getDescricao();
@@ -1815,12 +1814,12 @@ public class Panel_orcamento extends JPanel {
 
 	public void editar_produto() {
 		Double quantidade = Double.parseDouble(tabelaProdutosInclusos
-				.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 5).toString().replace(".", "").replace(",", "."));
-		String preco_unit = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 6).toString()
+				.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString().replace(".", "").replace(",", "."));
+		String preco_unit = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 5).toString()
 				.replace(".", "").replace(",", ".");
-		String desconto = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 7).toString()
+		String desconto = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 6).toString()
 				.replace(".", "").replace(",", ".");
-		String total = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 8).toString()
+		String total = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 7).toString()
 				.replace(".", "").replace(",", ".");
 
 		preco_unit = preco_unit.replace("R$ ", "");
@@ -1833,13 +1832,13 @@ public class Panel_orcamento extends JPanel {
 		Double total_form = Double.parseDouble(total);
 
 		fTxtCodigoProduto
-				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1).toString());
-		fTxtNomeProduto.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2));
-		fTxtCodigoBarra.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 3));
+				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0).toString());
+		fTxtNomeProduto.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1));
+		fTxtCodigoBarra.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2));
 		cbxFatorVenda.getModel().setSelectedItem(
-				(String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4));
+				(String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 3));
 		fTxtQuantidade
-				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 5).toString());
+				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString());
 		fTxtPrecoUnitario.setText(nf.format(preco_unit_form));
 		fTxtPorcentagemDesconto.setText(nf.format((desconto_form * 100.00) / preco_unit_form));
 		fTxtValorDesconto.setText(nf.format(desconto_form));
@@ -1969,15 +1968,14 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void ConfiguraLarguraColunaTabela(JTable tabela_produtos_inclusos) {
-		tabela_produtos_inclusos.getColumnModel().getColumn(0).setPreferredWidth(50); // Número item
-		tabela_produtos_inclusos.getColumnModel().getColumn(1).setPreferredWidth(50); // Código
-		tabela_produtos_inclusos.getColumnModel().getColumn(2).setPreferredWidth(150); // Nome
-		tabela_produtos_inclusos.getColumnModel().getColumn(3).setPreferredWidth(70); // barras
-		tabela_produtos_inclusos.getColumnModel().getColumn(4).setPreferredWidth(53); // Unid
-		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(80); // Quantidade
-		tabela_produtos_inclusos.getColumnModel().getColumn(6).setPreferredWidth(80); // Preço Unit.
-		tabela_produtos_inclusos.getColumnModel().getColumn(7).setPreferredWidth(80); // Desconto
-		tabela_produtos_inclusos.getColumnModel().getColumn(8).setPreferredWidth(80); // Total produto
+		tabela_produtos_inclusos.getColumnModel().getColumn(0).setPreferredWidth(60); // Código
+		tabela_produtos_inclusos.getColumnModel().getColumn(1).setPreferredWidth(170); // Nome
+		tabela_produtos_inclusos.getColumnModel().getColumn(2).setPreferredWidth(90); // barras
+		tabela_produtos_inclusos.getColumnModel().getColumn(3).setPreferredWidth(53); // Unid
+		tabela_produtos_inclusos.getColumnModel().getColumn(4).setPreferredWidth(80); // Quantidade
+		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(80); // Preço Unit.
+		tabela_produtos_inclusos.getColumnModel().getColumn(6).setPreferredWidth(80); // Desconto
+		tabela_produtos_inclusos.getColumnModel().getColumn(7).setPreferredWidth(80); // Total produto
 	}
 
 	public void lista_produtos_do_orcamento_selecionado(Orcamento orcamento_selecionado) {
