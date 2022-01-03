@@ -77,7 +77,6 @@ public class OrcamentoDAO {
 				ps.execute();
 			}
 
-			
 			// Incluindo itens do orçamento.
 			for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
 				ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`produto_orcamento` "
@@ -228,6 +227,23 @@ public class OrcamentoDAO {
 		}
 
 		return lista_orcamentos;
+	}
+
+	public boolean salva_observacao(Orcamento orcamento) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+			ps = conn.prepareStatement(
+					"UPDATE `banco_deposito`.`orcamento` SET `observacao` = ? WHERE (`idOrcamento` = ?);");
+			ps.setString(1, orcamento.getObservacao());
+			ps.setInt(2, orcamento.getId_orcamento());
+			ps.execute();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

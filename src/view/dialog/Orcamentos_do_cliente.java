@@ -44,6 +44,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Orcamentos_do_cliente extends JDialog {
 	/**
@@ -89,6 +91,8 @@ public class Orcamentos_do_cliente extends JDialog {
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private JButton btnEditarObservacao;
 	private JButton btnExcluirObservacao;
+	private JButton btnSalvarObservacao = new JButton("Salvar observa\u00E7\u00E3o");
+	private JButton btnCancelarObservacao = new JButton("Cancelar");
 
 	/**
 	 * Launch the application.
@@ -174,15 +178,22 @@ public class Orcamentos_do_cliente extends JDialog {
 					orcamento_selecionado = busca_orcamento_selecionado(id_orcamento_selecionado);
 					panel_orcamento.lista_produtos_do_orcamento_selecionado(orcamento_selecionado);
 					panel_orcamento.setNumeroOrcamento(orcamento_selecionado);
-					
+
 					fTxtObservacao.setText(orcamento_selecionado.getObservacao());
-					
+
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
+					btnEditarObservacao.setEnabled(true);
+					btnExcluirObservacao.setEnabled(true);
 
-				}else {
+				} else {
 					btnExcluirOrcamento.setEnabled(false);
 					btnEditarOrcamento.setEnabled(false);
+					btnEditarObservacao.setEnabled(false);
+					btnExcluirObservacao.setEnabled(false);
+
+					fTxtObservacao.setText(null);
+
 				}
 			}
 		});
@@ -357,23 +368,89 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnEditarOrcamento.setBounds(531, 157, 97, 29);
 
 		contentPane.add(btnEditarOrcamento);
-		
+
 		btnEditarObservacao = new JButton("Editar observa\u00E7\u00E3o");
-		btnEditarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnEditarObservacao.setEnabled(false);
+		btnEditarObservacao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickEditarObservacao) {
+				btnEditarObservacao.setVisible(false);
+				btnExcluirObservacao.setVisible(false);
+				btnSalvarObservacao.setVisible(true);
+				btnCancelarObservacao.setVisible(true);
+				fTxtObservacao.setEditable(true);
+				fTxtObservacao.requestFocus();
+			}
+		});
+		btnEditarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnEditarObservacao.setBounds(391, 344, 164, 20);
 		btnEditarObservacao.setIcon(icones.getIcone_editar());
 		contentPane.add(btnEditarObservacao);
-		
+
 		btnExcluirObservacao = new JButton("Excluir Observa\u00E7\u00E3o");
-		btnExcluirObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnExcluirObservacao.setEnabled(false);
+		btnExcluirObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnExcluirObservacao.setBounds(565, 344, 172, 20);
 		btnExcluirObservacao.setIcon(icones.getIcone_excluir());
 		contentPane.add(btnExcluirObservacao);
+		btnSalvarObservacao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickSalvarObservacao) {
+				if (!fTxtObservacao.getText().trim().isEmpty()) {
+					orcamento_selecionado.setObservacao(fTxtObservacao.getText().trim());
+
+					for (Orcamento orcamento : orcamentos_cliente) {
+						if (orcamento.getId_orcamento() == orcamento_selecionado.getId_orcamento()) {
+							orcamento.setObservacao(orcamento_selecionado.getObservacao());
+							break;
+						}
+					}
+					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
+					if (orcamento_dao.salva_observacao(orcamento_selecionado)) {
+						JOptionPane.showMessageDialog(null,
+								"Observação salva no orçamento Nº " + orcamento_selecionado.getId_orcamento() + ".",
+								"Observacao do orçamento.", JOptionPane.NO_OPTION);
+						tabelaOrcamentos.clearSelection();
+					}
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Impossível salvar a observação! "
+							+ "\nCaso desejar removê-la, utilize o botão excluir observação.",
+							"Observação vazia!", JOptionPane.WARNING_MESSAGE);
+					fTxtObservacao.setText(orcamento_selecionado.getObservacao());
+					fTxtObservacao.setEditable(false);
+				}
+				btnSalvarObservacao.setVisible(false);
+				btnCancelarObservacao.setVisible(false);
+
+				btnEditarObservacao.setVisible(true);
+				btnExcluirObservacao.setVisible(true);
+			}
+		});
+
+		btnSalvarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnSalvarObservacao.setBounds(420, 337, 164, 20);
+		btnSalvarObservacao.setIcon(icones.getIcone_salvar());
+		btnSalvarObservacao.setVisible(false);
+		contentPane.add(btnSalvarObservacao);
+		btnCancelarObservacao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickCancelarObservacao) {
+				btnEditarObservacao.setVisible(true);
+				btnExcluirObservacao.setVisible(true);
+				btnSalvarObservacao.setVisible(false);
+				btnCancelarObservacao.setVisible(false);
+				fTxtObservacao.setEditable(false);
+			}
+		});
+
+		btnCancelarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnCancelarObservacao.setBounds(594, 337, 135, 20);
+		btnCancelarObservacao.setIcon(icones.getIcone_cancelar());
+		btnCancelarObservacao.setVisible(false);
+		contentPane.add(btnCancelarObservacao);
 	}
 
-	
 	// Configurando largura das colunas da tabela de orçamentos
 	public void ConfiguraLarguraColunaTabelaOrcamento(JTable tabela) {
 		tabela.getColumnModel().getColumn(0).setPreferredWidth(50); // Número do orçamento.
@@ -399,11 +476,11 @@ public class Orcamentos_do_cliente extends JDialog {
 	public void alimenta_lt_clientes(String forma_pesquisa, String texto, ArrayList<Cliente> lista_clientes) {
 
 		String tipo_busca = forma_pesquisa;
-		
+
 		String texto_buscado;
-		if(texto == null) {
+		if (texto == null) {
 			texto_buscado = "%";
-		}else {
+		} else {
 			texto_buscado = texto;
 		}
 
