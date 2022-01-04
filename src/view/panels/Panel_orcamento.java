@@ -577,7 +577,7 @@ public class Panel_orcamento extends JPanel {
 				if (btnExcluir.isEnabled() && !lsm.isSelectionEmpty()) {
 
 					int linha_selecionada = tabelaProdutosInclusos.getSelectedRow();
-					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 1).toString())) {
+					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 0).toString())) {
 						JOptionPane.showMessageDialog(null, "Produto removido corretamente do orçamento.",
 								"Produto removido.", JOptionPane.NO_OPTION);
 						quantidade_de_produtos = modelo_tabela.getRowCount();
@@ -1900,8 +1900,8 @@ public class Panel_orcamento extends JPanel {
 	public Boolean excluir_produto(String codigo) {
 		int opcao = JOptionPane.showConfirmDialog(null,
 				"Deseja remover o seguinte produto do orçamento?\n" + "Cod = "
-						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1) + "\n"
-						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2),
+						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0) + "\n"
+						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1),
 				"Remoção de produtos", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		Boolean flag = opcao == JOptionPane.YES_OPTION;
