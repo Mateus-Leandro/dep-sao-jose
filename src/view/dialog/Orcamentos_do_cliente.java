@@ -183,8 +183,13 @@ public class Orcamentos_do_cliente extends JDialog {
 
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
+					
 					btnEditarObservacao.setEnabled(true);
-					btnExcluirObservacao.setEnabled(true);
+					if(orcamento_selecionado.getObservacao() != null) {
+						btnExcluirObservacao.setEnabled(true);
+					}else {
+						btnExcluirObservacao.setEnabled(false);
+					}
 
 				} else {
 					btnExcluirOrcamento.setEnabled(false);
@@ -193,7 +198,6 @@ public class Orcamentos_do_cliente extends JDialog {
 					btnExcluirObservacao.setEnabled(false);
 
 					fTxtObservacao.setText(null);
-
 				}
 			}
 		});
@@ -388,6 +392,28 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(btnEditarObservacao);
 
 		btnExcluirObservacao = new JButton("Excluir Observa\u00E7\u00E3o");
+		btnExcluirObservacao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickExcluirObservacao) {
+
+				int opcao = JOptionPane.showConfirmDialog(null,
+						"Deseja remover a observação do orçamento Nº " + orcamento_selecionado.getId_orcamento() + " ?",
+						"Exclusão de observação.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+
+				Boolean flag = opcao == JOptionPane.YES_OPTION;
+
+				if (flag) {
+					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
+					if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
+						JOptionPane.showMessageDialog(null,
+								"A observação do orçamento N° " + orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
+								"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
+						orcamento_selecionado.setObservacao(null);
+						tabelaOrcamentos.clearSelection();
+					}
+				}
+			}
+		});
 		btnExcluirObservacao.setEnabled(false);
 		btnExcluirObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnExcluirObservacao.setBounds(565, 344, 172, 20);
@@ -409,13 +435,13 @@ public class Orcamentos_do_cliente extends JDialog {
 					if (orcamento_dao.salva_observacao(orcamento_selecionado)) {
 						JOptionPane.showMessageDialog(null,
 								"Observação salva no orçamento Nº " + orcamento_selecionado.getId_orcamento() + ".",
-								"Observacao do orçamento.", JOptionPane.NO_OPTION);
+								"Observação do orçamento.", JOptionPane.NO_OPTION);
 						tabelaOrcamentos.clearSelection();
 					}
 				} else {
 					JOptionPane.showMessageDialog(null,
 							"Impossível salvar a observação! "
-							+ "\nCaso desejar removê-la, utilize o botão excluir observação.",
+									+ "\nCaso desejar removê-la, utilize o botão excluir observação.",
 							"Observação vazia!", JOptionPane.WARNING_MESSAGE);
 					fTxtObservacao.setText(orcamento_selecionado.getObservacao());
 					fTxtObservacao.setEditable(false);

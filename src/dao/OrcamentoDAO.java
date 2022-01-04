@@ -245,5 +245,22 @@ public class OrcamentoDAO {
 			return false;
 		}
 	}
+	
+	
+	public boolean deleta_observacao(Orcamento orcamento) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+			ps = conn.prepareStatement(
+					"UPDATE `banco_deposito`.`orcamento` SET `observacao` = null WHERE (`idOrcamento` = ?);");
+			ps.setInt(1, orcamento.getId_orcamento());
+			ps.execute();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }
