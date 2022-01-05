@@ -147,7 +147,7 @@ public class OrcamentoDAO {
 
 	}
 
-	public ArrayList<Orcamento> listar_orcamentos_do_cliente(ArrayList<Orcamento> lista_orcamentos, Cliente cliente) {
+	public ArrayList<Orcamento> listar_orcamentos_do_cliente(ArrayList<Orcamento> lista_orcamentos, Cliente cliente, String numero_orcamento) {
 
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
@@ -161,13 +161,20 @@ public class OrcamentoDAO {
 					+ "quantidadeProdutos, totalMercadoriasBruto, " + "totalMercadoriasLiquido, frete, descontoFinal, "
 					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
-					+ "WHERE orcamento.idCliente LIKE ?");
+					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?");
 			// Testa se foi passado cliente específico na busca de orçamentos.
 			if (cliente != null) {
 				ps.setInt(1, cliente.getIdCliente());
 			} else {
 				ps.setString(1, "%");
 			}
+			
+			if(numero_orcamento != null) {
+				ps.setString(2, numero_orcamento);
+			}else {
+				ps.setString(2, "%");
+			}
+			
 			rs = ps.executeQuery();
 
 			while (rs.next()) {

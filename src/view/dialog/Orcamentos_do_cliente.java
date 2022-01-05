@@ -114,7 +114,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	 * Create the frame.
 	 */
 	public Orcamentos_do_cliente(Panel_orcamento panel_orcamento) {
-		alimentar_lista_orcamento(orcamentos_cliente, null);
+		alimentar_lista_orcamento(orcamentos_cliente, null, null);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent fechamentoDaJanela) {
@@ -138,7 +138,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				cliente_selecionado = ltClientes.getSelectedValue();
 				fTxtPesquisaCliente.setText(cliente_selecionado.getNome());
 
-				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, null);
 			}
 		});
 		ltClientes.setBounds(197, 104, 514, 70);
@@ -183,11 +183,11 @@ public class Orcamentos_do_cliente extends JDialog {
 
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
-					
+
 					btnEditarObservacao.setEnabled(true);
-					if(orcamento_selecionado.getObservacao() != null) {
+					if (orcamento_selecionado.getObservacao() != null) {
 						btnExcluirObservacao.setEnabled(true);
-					}else {
+					} else {
 						btnExcluirObservacao.setEnabled(false);
 					}
 
@@ -214,13 +214,26 @@ public class Orcamentos_do_cliente extends JDialog {
 
 		cbxTipoPesquisaOrcamento = new JComboBox<String>();
 		cbxTipoPesquisaOrcamento.setBounds(97, 127, 97, 22);
-		cbxTipoPesquisaOrcamento.setModel(new DefaultComboBoxModel<String>(
-				new String[] { "N\u00FAmero", "Valor Total", "Dt. cria\u00E7\u00E3o" }));
+		cbxTipoPesquisaOrcamento.setModel(new DefaultComboBoxModel(new String[] { "N\u00FAmero" }));
 		cbxTipoPesquisaOrcamento.setSelectedIndex(0);
 		cbxTipoPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		contentPane.add(cbxTipoPesquisaOrcamento);
 
 		fTxtPesquisaOrcamento = new JFormattedTextField();
+		fTxtPesquisaOrcamento.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaPesquisaOrcamento) {
+				
+				String numero_orcamento;
+				
+				if(fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
+					numero_orcamento = null;
+				}else {
+					numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
+				}
+					alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
+			}
+		});
 		fTxtPesquisaOrcamento.setBounds(202, 129, 386, 20);
 		fTxtPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtPesquisaOrcamento.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -251,13 +264,28 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(lblPesquisarPorCliente);
 
 		fTxtPesquisaCliente = new JFormattedTextField();
+		fTxtPesquisaCliente.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent perdaFocoNomeCliente) {
+				scrollPaneLtClientes.setVisible(false);
+			}
+		});
 		fTxtPesquisaCliente.setBounds(198, 78, 514, 20);
 		fTxtPesquisaCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCliente) {
 				if (fTxtPesquisaCliente.getText().trim().isEmpty()) {
+					
+					cliente_selecionado = null;
 					scrollPaneLtClientes.setVisible(false);
-					alimentar_lista_orcamento(orcamentos_cliente, null);
+
+					String numero_orcamento;
+					if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
+						numero_orcamento = null;
+					} else {
+						numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
+					}
+					alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
 				} else {
 					alimenta_lt_clientes(cbxTipoPesquisaCliente.getSelectedItem().toString(),
 							fTxtPesquisaCliente.getText().trim(), lista_clientes);
@@ -405,9 +433,11 @@ public class Orcamentos_do_cliente extends JDialog {
 				if (flag) {
 					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 					if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
-						JOptionPane.showMessageDialog(null,
-								"A observação do orçamento N° " + orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
-								"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
+						JOptionPane
+								.showMessageDialog(null,
+										"A observação do orçamento N° " + orcamento_selecionado.getId_orcamento() + " "
+												+ "foi removida.",
+										"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
 						orcamento_selecionado.setObservacao(null);
 						tabelaOrcamentos.clearSelection();
 					}
@@ -522,11 +552,12 @@ public class Orcamentos_do_cliente extends JDialog {
 		ltClientes.setModel(list_model_clientes);
 	}
 
-	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos, Cliente cliente) {
+	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos, Cliente cliente,
+			String numero_orcamento) {
 		orcamentos.clear();
 
 		OrcamentoDAO orcamento_dao = new OrcamentoDAO();
-		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente);
+		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente, numero_orcamento);
 
 		modelo_tabela_orcamentos.fireTableDataChanged();
 		return orcamentos;
