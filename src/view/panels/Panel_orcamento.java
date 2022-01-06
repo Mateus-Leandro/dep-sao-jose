@@ -408,7 +408,7 @@ public class Panel_orcamento extends JPanel {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
@@ -729,15 +729,14 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidadeTotal.setBounds(167, 417, 91, 20);
 		produtos.add(fTxtQuantidadeTotal);
 
-		
 		MaskFormatter mascara_codigo_produto = null;
-		
+
 		try {
 			mascara_codigo_produto = new MaskFormatter("######");
-		}catch (ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		fTxtCodigoProduto = new JFormattedTextField(mascara_codigo_produto);
 		fTxtCodigoProduto.setHorizontalAlignment(SwingConstants.CENTER);
 		fTxtCodigoProduto.addFocusListener(new FocusAdapter() {
@@ -1314,8 +1313,6 @@ public class Panel_orcamento extends JPanel {
 		return this;
 	}
 
-	
-	
 	public void exibir_dados_cliente() {
 		fTxtApelido.setText(cliente_selecionado.getApelido());
 		fTxtNomeCliente.setText(cliente_selecionado.getNome());
@@ -1348,6 +1345,7 @@ public class Panel_orcamento extends JPanel {
 
 		}
 	}
+
 	public void salvar_orcamento() {
 
 		if (quantidade_de_produtos > 0) {
@@ -1367,17 +1365,21 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			if (flag) {
-				Orcamento novo_orcamento = new Orcamento();
-				novo_orcamento = montar_orcamento(novo_orcamento);
-				
+				Orcamento orcamento = new Orcamento();
+				orcamento = montar_orcamento(orcamento);
+
 				OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 
-				orcamento_dao.salvar_orcamento(novo_orcamento);
+				if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
+					orcamento_dao.salvar_novo_orcamento(orcamento);
+				} else {
+					orcamento_dao.salvar_orcamento_editado(orcamento);
+				}
 
-				if (novo_orcamento.getId_orcamento() != null) {
-					fTxtNumeroOrcamento.setText(novo_orcamento.getId_orcamento().toString());
+				if (orcamento.getId_orcamento() != null) {
+					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 					JOptionPane.showMessageDialog(null,
-							"Orçamento Nº " + novo_orcamento.getId_orcamento() + " salvo corretamente.",
+							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 					limpar_campos();
 					desativar_campos();
@@ -1537,7 +1539,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNumeroOrcamento.setText(null);
 		lista_produtos_inclusos.clear();
 		modelo_tabela.fireTableDataChanged();
-		
+
 	}
 
 	public void limpar_dados_produto() {
@@ -1562,7 +1564,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtFrete.setText(null);
 		fTxtDescontoFinal.setText(null);
 		fTxtTotalOrcamento.setText(null);
-		
+
 		quantidade_de_produtos = 0;
 	}
 
@@ -1928,35 +1930,34 @@ public class Panel_orcamento extends JPanel {
 		btnLimpaDadosProduto.setEnabled(true);
 		fTxtNomeProduto.requestFocus();
 	}
-	
-	
+
 	public void editar_orcamento(Cliente cliente_informado) {
 		novo_orcamento();
 		cliente_selecionado = cliente_informado;
 		exibir_dados_cliente();
 	}
 
-	public Orcamento montar_orcamento(Orcamento novo_orcamento) {
+	public Orcamento montar_orcamento(Orcamento orcamento) {
 		nf2.setRoundingMode(RoundingMode.DOWN);
 
 		Integer id_orcamento;
-		
-		if(fTxtNumeroOrcamento.getText().trim().isEmpty()) {
+
+		if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
 			id_orcamento = null;
-		}else {
+		} else {
 			id_orcamento = Integer.parseInt(fTxtNumeroOrcamento.getText().trim());
 		}
 
 		Boolean faturado = false;
 		Integer numero_de_parcelas = 0;
 
-		novo_orcamento = new Orcamento(id_orcamento, cliente_selecionado, quantidade_de_produtos,
+		orcamento = new Orcamento(id_orcamento, cliente_selecionado, quantidade_de_produtos,
 				Double.valueOf(nf2.format(total_mercadorias_bruto).replaceAll(",", "\\.")),
 				Double.valueOf(nf2.format(total_mercadorias_liquido).replaceAll(",", "\\.")), valor_frete,
 				desconto_final, Double.valueOf(nf2.format(total_orcamento).replaceAll(",", "\\.")), faturado,
 				numero_de_parcelas, null, null, lista_produtos_inclusos);
 
-		return novo_orcamento;
+		return orcamento;
 	}
 
 	public void setNumeroOrcamento(Orcamento orcamento) {
