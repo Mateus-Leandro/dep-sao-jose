@@ -136,7 +136,7 @@ public class OrcamentoDAO {
 			ps.execute();
 
 			// Deletando financeiro do orçamento.
-			ps = conn.prepareStatement("DELETE FROM financeiro WHERE idOrcamento = ?");
+			ps = conn.prepareStatement("DELETE FROM parcelas WHERE idOrcamento = ?");
 			ps.setInt(1, numero_orcamento);
 			ps.execute();
 
