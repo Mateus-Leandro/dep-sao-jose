@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import db.DB;
 import entities.cliente.Cliente;
+import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 
@@ -85,10 +86,21 @@ public class OrcamentoDAO {
 			ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `idCliente` = ?, "
 					+ "`quantidadeProdutos` = ?, `totalMercadoriasBruto` = ?, "
 					+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, "
-					+ "`valorTotal` = ?, `faturado` = ?, `numeroParcelas` = ?, "
-					+ "`observacao` = ?, `dataInclusao` = ? WHERE (`idOrcamento` = ?)");
-			// Setando número do orçamento editado.
-			ps.setInt(12, orcamento_editado.getId_orcamento());
+					+ "`valorTotal` = ? "
+					+ "WHERE (`idOrcamento` = ?)");
+			if(orcamento_editado.getCliente() != null) {
+				ps.setInt(1, orcamento_editado.getCliente().getIdCliente());
+			}else {
+				ps.setInt(1,1);
+			}
+			ps.setInt(2, orcamento_editado.getQuantidade_produtos());
+			ps.setDouble(3, orcamento_editado.getTotal_mercadorias_bruto());
+			ps.setDouble(4, orcamento_editado.getTotal_mercadorias_liquido());
+			ps.setDouble(5, orcamento_editado.getFrete());
+			ps.setDouble(6, orcamento_editado.getDesconto_final());
+			ps.setDouble(7, orcamento_editado.getValor_total());
+			ps.setInt(8, orcamento_editado.getId_orcamento());
+			ps.execute();
 
 			// Excluindo itens do orçamento editado.
 			ps = conn.prepareStatement("DELETE FROM `banco_deposito`.`produto_orcamento` WHERE idOrcamento = ?");
@@ -201,6 +213,7 @@ public class OrcamentoDAO {
 				orcamento.setObservacao(rs.getString("observacao"));
 				orcamento.setData_inclusao(rs.getDate("dataInclusao"));
 				orcamento.setProdutos_do_orcamento(new ArrayList<Produto_Orcamento>());
+				orcamento.setParcelas(new ArrayList<Parcela>());
 
 				// Listando os produtos do orçamento.
 				ps2 = conn.prepareStatement("SELECT produto_orcamento.idProdutoOrcamento AS codigo, "
