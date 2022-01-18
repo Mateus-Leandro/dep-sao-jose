@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import entities.cliente.Cliente;
+import entities.financeiro.Parcela;
 
 public class Orcamento {
 
@@ -20,6 +21,7 @@ public class Orcamento {
 	String observacao;
 	Date data_inclusao;
 	ArrayList<Produto_Orcamento> produtos_do_orcamento;
+	ArrayList<Parcela> parcelas;
 
 	public Orcamento() {
 	}
@@ -29,7 +31,7 @@ public class Orcamento {
 	public Orcamento(Integer id_orcamento, Cliente cliente, Integer quantidade_produtos, Double total_mercadorias_bruto,
 			Double total_mercadorias_liquido, Double frete, Double desconto_final, Double valor_total, Boolean faturado,
 			Integer numero_de_parcelas, String observacao, Date data_inclusao,
-			ArrayList<Produto_Orcamento> produtos_do_orcamento) {
+			ArrayList<Produto_Orcamento> produtos_do_orcamento, ArrayList<Parcela> parcelas) {
 		this.id_orcamento = id_orcamento;
 		this.cliente = cliente;
 		this.quantidade_produtos = quantidade_produtos;
@@ -43,6 +45,7 @@ public class Orcamento {
 		this.observacao = observacao;
 		this.data_inclusao = data_inclusao;
 		this.produtos_do_orcamento = produtos_do_orcamento;
+		this.parcelas = parcelas;
 	}
 
 
@@ -151,6 +154,21 @@ public class Orcamento {
 	public void setProdutos_do_orcamento(ArrayList<Produto_Orcamento> produtos_do_orcamento) {
 		this.produtos_do_orcamento = produtos_do_orcamento;
 	}
+	
+
+	public ArrayList<Parcela> getParcelas() {
+		if(parcelas != null) {
+			return parcelas;
+		}else {
+			return null;
+		}
+	}
+
+	public void setParcelas(ArrayList<Parcela> parcelas) {
+		this.parcelas = parcelas;
+	}
+
+
 
 	@Override
 	public int hashCode() {

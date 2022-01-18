@@ -14,6 +14,10 @@ public class Icones {
 	Icon icone_pesquisar = new ImageIcon(getClass().getResource("/icons/pesquisar.png"));
 	Icon icone_limpar = new ImageIcon(getClass().getResource("/icons/limpar.png"));
 	Icon icone_orcamento = new ImageIcon(getClass().getResource("/icons/orcamento.png"));
+	Icon icone_parcelas = new ImageIcon(getClass().getResource("/icons/parcelas.png"));
+	Icon icone_ok = new ImageIcon(getClass().getResource("/icons/ok.png"));
+	Icon icone_dinheiro = new ImageIcon(getClass().getResource("/icons/dinheiro.png"));
+	
 	public Icon getIcone_salvar() {
 		return icone_salvar;
 	}
@@ -41,6 +45,14 @@ public class Icones {
 	public Icon getIcone_orcamento() {
 		return icone_orcamento;
 	}
-	
+	public Icon getIcone_parcelas() {
+		return icone_parcelas;
+	}
+	public Icon getIcone_ok() {
+		return icone_ok;
+	}
+	public Icon getIcone_dinheiro() {
+		return icone_dinheiro;
+	}
 	
 }

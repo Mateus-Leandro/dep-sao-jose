@@ -296,7 +296,7 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(panelTotalItem);
 
 		fTxtTotalItem = new JFormattedTextField();
-		fTxtTotalItem.setDocument(new FormataNumeral(15, 2));
+		fTxtTotalItem.setDocument(new FormataNumeral(12, 2));
 		fTxtTotalItem.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalItem.setEditable(false);
 		fTxtTotalItem.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -318,7 +318,7 @@ public class Panel_orcamento extends JPanel {
 
 		fTxtTotalOrcamento = new JFormattedTextField();
 		fTxtTotalOrcamento.setHorizontalAlignment(SwingConstants.RIGHT);
-		fTxtTotalOrcamento.setDocument(new FormataNumeral(15, 2));
+		fTxtTotalOrcamento.setDocument(new FormataNumeral(13, 2));
 		fTxtTotalOrcamento.setEditable(false);
 		fTxtTotalOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalOrcamento.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -600,11 +600,13 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(lblProdutosInclusos);
 
 		tabelaProdutosInclusos = new JTable(modelo_tabela);
+		tabelaProdutosInclusos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaProdutosInclusos.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tabelaProdutosInclusos.setBounds(10, 236, 695, 152);
 		ConfiguraLarguraColunaTabela(tabelaProdutosInclusos);
 		tabelaProdutosInclusos.setAutoResizeMode(tabelaProdutosInclusos.AUTO_RESIZE_OFF);
 		tabelaProdutosInclusos.getTableHeader().setReorderingAllowed(false);
+		tabelaProdutosInclusos.getTableHeader().setResizingAllowed(false);
 		tabelaProdutosInclusos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -1354,8 +1356,10 @@ public class Panel_orcamento extends JPanel {
 					JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
-
-			if (cliente_selecionado == null && flag) {
+			
+			Boolean cliente_vazio = cliente_selecionado == null; 
+			
+			if (cliente_vazio && flag) {
 				opcao = JOptionPane.showConfirmDialog(null,
 						"Nenhum cliente foi informado!\n" + "Caso confirmar, o orçamento será gravado para o cliente:"
 								+ "\n\nCódigo: 1" + "\nNome: Cliente não identificado."
@@ -1367,7 +1371,11 @@ public class Panel_orcamento extends JPanel {
 			if (flag) {
 				Orcamento orcamento = new Orcamento();
 				orcamento = montar_orcamento(orcamento);
-
+				
+				if(! cliente_vazio) {
+					orcamento.setCliente(cliente_selecionado);
+				}
+				
 				OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 
 				if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
@@ -1955,7 +1963,7 @@ public class Panel_orcamento extends JPanel {
 				Double.valueOf(nf2.format(total_mercadorias_bruto).replaceAll(",", "\\.")),
 				Double.valueOf(nf2.format(total_mercadorias_liquido).replaceAll(",", "\\.")), valor_frete,
 				desconto_final, Double.valueOf(nf2.format(total_orcamento).replaceAll(",", "\\.")), faturado,
-				numero_de_parcelas, null, null, lista_produtos_inclusos);
+				numero_de_parcelas, null, null, lista_produtos_inclusos, null);
 
 		return orcamento;
 	}

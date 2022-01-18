@@ -350,6 +350,7 @@ public class Panel_produtos extends JPanel {
 		add(separador_clientes_cadastrados_2);
 
 		tabelaProdutos = new JTable(modelo);
+		tabelaProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaProdutos.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setAutoResizeMode(tabelaProdutos.AUTO_RESIZE_OFF);
@@ -621,11 +622,8 @@ public class Panel_produtos extends JPanel {
 		try {
 			cbxSetor.removeAllItems();
 			for (Setor set : setores) {
-				Setor setor = new Setor();
-				setor.setCodSetor(set.getCodSetor());
-				setor.setNome(set.getNome());
+				Setor setor = new Setor(set.getCodSetor(), set.getNome());
 				cbxSetor.addItem(setor);
-
 			}
 
 		} catch (Exception e1) {

@@ -23,7 +23,8 @@ public class DB {
 				String url = props.getProperty("dburl");
 				conn = DriverManager.getConnection(url, props);
 			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de dados!\n" + e.getMessage());
+				JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de dados!\n" + e.getMessage(),
+						"Erro de conexão.", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		return conn;
@@ -62,7 +63,7 @@ public class DB {
 	}
 
 	// Fecha conexão com o banco.
-	public static void closeConnection(Connection conn){
+	public static void closeConnection(Connection conn) {
 		try {
 			if (conn != null || !conn.isClosed()) {
 				try {

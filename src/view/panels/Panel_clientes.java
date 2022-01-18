@@ -722,7 +722,7 @@ public class Panel_clientes extends JPanel {
 		tabelaClientes = new JTable(modelo);
 		tabelaClientes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tabelaClientes.setSurrendersFocusOnKeystroke(true);
-		tabelaClientes.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tabelaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaClientes.getTableHeader().setReorderingAllowed(false);
 		tabelaClientes.setAutoResizeMode(tabelaClientes.AUTO_RESIZE_OFF);
 		tabelaClientes.setBounds(14, 325, 694, 216);

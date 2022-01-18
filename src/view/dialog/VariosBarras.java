@@ -38,6 +38,7 @@ import javax.swing.text.MaskFormatter;
 import dao.BarrasDAO;
 import entities.produto.Barras_Produto;
 import tables.tableModels.ModeloTabelaBarras;
+import javax.swing.ListSelectionModel;
 
 public class VariosBarras extends JDialog {
 
@@ -166,6 +167,7 @@ public class VariosBarras extends JDialog {
 		panel.add(txtCodigoBarrasPrincipal);
 
 		tabelaVariosBarras = new JTable(modelo_tabela);
+		tabelaVariosBarras.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tabelaVariosBarras.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 

@@ -189,8 +189,7 @@ public class ProdutoDAO {
 			return produtos;
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar produtos" + e.getMessage(), "Carregar produtos. ",
-					JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 			return null;
 		}
 	}

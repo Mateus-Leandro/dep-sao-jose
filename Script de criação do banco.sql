@@ -86,30 +86,27 @@ INSERT INTO `clientes` VALUES (1,0,'Cliente não identificado','TEste','999.999.
 UNLOCK TABLES;
 
 --
--- Table structure for table `financeiro`
+-- Table structure for table `forma_pagamento`
 --
 
-DROP TABLE IF EXISTS `financeiro`;
+DROP TABLE IF EXISTS `forma_pagamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `financeiro` (
-  `idOrcamento` int NOT NULL,
-  `numeroDaParcela` int NOT NULL,
-  `valor` double NOT NULL,
-  `pago` tinyint NOT NULL,
-  `dataVencimento` date NOT NULL,
-  KEY `Numero Orcamento_idx` (`idOrcamento`),
-  CONSTRAINT `Numero Orcamento` FOREIGN KEY (`idOrcamento`) REFERENCES `orcamento` (`idOrcamento`)
+CREATE TABLE `forma_pagamento` (
+  `idFormaPagamento` int NOT NULL,
+  `descricao` varchar(45) NOT NULL,
+  PRIMARY KEY (`idFormaPagamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `financeiro`
+-- Dumping data for table `forma_pagamento`
 --
 
-LOCK TABLES `financeiro` WRITE;
-/*!40000 ALTER TABLE `financeiro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `financeiro` ENABLE KEYS */;
+LOCK TABLES `forma_pagamento` WRITE;
+/*!40000 ALTER TABLE `forma_pagamento` DISABLE KEYS */;
+INSERT INTO `forma_pagamento` VALUES (1,'Dinheiro');
+/*!40000 ALTER TABLE `forma_pagamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -135,7 +132,7 @@ CREATE TABLE `orcamento` (
   PRIMARY KEY (`idOrcamento`),
   KEY `codigo cliente_idx` (`idCliente`),
   CONSTRAINT `codigo cliente` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,8 +141,38 @@ CREATE TABLE `orcamento` (
 
 LOCK TABLES `orcamento` WRITE;
 /*!40000 ALTER TABLE `orcamento` DISABLE KEYS */;
-INSERT INTO `orcamento` VALUES (1,1,3,60.5,60.5,0,0,60.5,0,0,NULL,'2022-01-02');
+INSERT INTO `orcamento` VALUES (1,1,1,60,60,0,0,60,0,0,NULL,'2022-01-03'),(2,2,1,6,6,0,0,6,0,0,NULL,'2022-01-04'),(3,1,1,20,20,0,0,20,0,0,NULL,'2022-01-08');
 /*!40000 ALTER TABLE `orcamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `parcelas`
+--
+
+DROP TABLE IF EXISTS `parcelas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `parcelas` (
+  `idOrcamento` int NOT NULL,
+  `valor` double NOT NULL,
+  `idFormaPagamento` int DEFAULT NULL,
+  `dataPagamento` date DEFAULT NULL,
+  `dataVencimento` date NOT NULL,
+  KEY `Numero Orcamento_idx` (`idOrcamento`),
+  KEY `Forma Pagamento_idx` (`idFormaPagamento`),
+  CONSTRAINT `Forma Pagamento` FOREIGN KEY (`idFormaPagamento`) REFERENCES `forma_pagamento` (`idFormaPagamento`),
+  CONSTRAINT `Numero Orcamento` FOREIGN KEY (`idOrcamento`) REFERENCES `orcamento` (`idOrcamento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `parcelas`
+--
+
+LOCK TABLES `parcelas` WRITE;
+/*!40000 ALTER TABLE `parcelas` DISABLE KEYS */;
+INSERT INTO `parcelas` VALUES (3,15,1,'2022-01-09','2022-02-09');
+/*!40000 ALTER TABLE `parcelas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -210,7 +237,7 @@ CREATE TABLE `produto_orcamento` (
 
 LOCK TABLES `produto_orcamento` WRITE;
 /*!40000 ALTER TABLE `produto_orcamento` DISABLE KEYS */;
-INSERT INTO `produto_orcamento` VALUES (1,1,2,'UN',20,0,40),(1,6,1,'UN',10,0,10),(1,8,3,'UN',3.5,0,10.5);
+INSERT INTO `produto_orcamento` VALUES (1,1,3,'UN',20,0,60),(2,9,3,'UN',2,0,6),(3,6,2,'UN',10,0,20);
 /*!40000 ALTER TABLE `produto_orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,4 +282,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-02 20:55:46
+-- Dump completed on 2022-01-09 20:41:15

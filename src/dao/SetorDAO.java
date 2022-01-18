@@ -96,6 +96,11 @@ public class SetorDAO {
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao excluir setor!", "Erro!", JOptionPane.WARNING_MESSAGE);
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			return false;
 		}
 

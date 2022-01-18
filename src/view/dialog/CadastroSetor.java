@@ -36,6 +36,7 @@ import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
 
 import java.awt.Color;
+import javax.swing.ListSelectionModel;
 
 public class CadastroSetor extends JDialog {
 
@@ -207,6 +208,7 @@ public class CadastroSetor extends JDialog {
 
 		setores = alimenta_setores(setores);
 		tabelaSetores = new JTable(modelo);
+		tabelaSetores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tabelaSetores.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 

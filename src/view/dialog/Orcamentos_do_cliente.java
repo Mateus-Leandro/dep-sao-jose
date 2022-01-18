@@ -93,6 +93,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JButton btnExcluirObservacao;
 	private JButton btnSalvarObservacao = new JButton("Salvar observa\u00E7\u00E3o");
 	private JButton btnCancelarObservacao = new JButton("Cancelar");
+	private JButton btnFaturar;
 
 	/**
 	 * Launch the application.
@@ -127,7 +128,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		setModal(true);
+	//	setModal(true);
 
 		ltClientes = new JList<Cliente>();
 		ltClientes.addMouseListener(new MouseAdapter() {
@@ -164,6 +165,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		tabelaOrcamentos.setBounds(10, 87, 331, 185);
 		tabelaOrcamentos.getTableHeader().setReorderingAllowed(false);
 		tabelaOrcamentos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabelaOrcamentos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ConfiguraLarguraColunaTabelaOrcamento(tabelaOrcamentos);
 		tabelaOrcamentos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -183,6 +185,7 @@ public class Orcamentos_do_cliente extends JDialog {
 
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
+					btnFaturar.setEnabled(true);
 
 					btnEditarObservacao.setEnabled(true);
 					if (orcamento_selecionado.getObservacao() != null) {
@@ -196,7 +199,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					btnEditarOrcamento.setEnabled(false);
 					btnEditarObservacao.setEnabled(false);
 					btnExcluirObservacao.setEnabled(false);
-
+					btnFaturar.setEnabled(false);
 					fTxtObservacao.setText(null);
 				}
 			}
@@ -352,7 +355,7 @@ public class Orcamentos_do_cliente extends JDialog {
 
 				if (btnExcluirOrcamento.isEnabled()) {
 
-					int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o orçamento abaixo?"
+					int opcao = JOptionPane.showConfirmDialog(btnExcluirOrcamento, "Deseja realmente excluir o orçamento abaixo?"
 							+ "\n\nOrçamento Nº:  " + orcamento_selecionado.getId_orcamento() + "\nCliente: "
 							+ orcamento_selecionado.getCliente().getNome() + "\nValor: "
 							+ nf.format(orcamento_selecionado.getValor_total())
@@ -505,6 +508,25 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnCancelarObservacao.setIcon(icones.getIcone_cancelar());
 		btnCancelarObservacao.setVisible(false);
 		contentPane.add(btnCancelarObservacao);
+		
+		btnFaturar = new JButton("Faturamento");
+		btnFaturar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnFaturar.setEnabled(false);
+		btnFaturar.setIcon(icones.getIcone_dinheiro());
+		btnFaturar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickFaturar) {
+				if(btnFaturar.isEnabled()) {
+					Faturamento faturamento = new Faturamento(getOrcamentosDoCliente(), orcamento_selecionado);
+					faturamento.setLocationRelativeTo(btnExcluirOrcamento);
+					faturamento.setVisible(true);
+					
+				}
+			}
+		});
+		btnFaturar.setBounds(10, 159, 143, 29);
+		contentPane.add(btnFaturar);
+	
 	}
 
 	// Configurando largura das colunas da tabela de orçamentos
@@ -574,5 +596,9 @@ public class Orcamentos_do_cliente extends JDialog {
 		}
 
 		return null;
+	}
+	
+	public Orcamentos_do_cliente getOrcamentosDoCliente() {
+		return this;
 	}
 }
