@@ -237,7 +237,7 @@ public class Panel_orcamento extends JPanel {
 				produto_selecionado = ltProdutos.getSelectedValue();
 
 				if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
-					JOptionPane.showMessageDialog(null, "Produto já incluso.",
+					JOptionPane.showMessageDialog(lblQuantidade, "Produto já incluso.",
 							"Produto selecionado já presente no orçamento.", JOptionPane.WARNING_MESSAGE);
 					produto_selecionado = null;
 					limpar_dados_produto();
@@ -541,7 +541,7 @@ public class Panel_orcamento extends JPanel {
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Necessário selecionar um produto.",
+					JOptionPane.showMessageDialog(lblQuantidade, "Necessário selecionar um produto.",
 							"Nenhum produto selecionado", JOptionPane.WARNING_MESSAGE);
 				}
 
@@ -578,7 +578,7 @@ public class Panel_orcamento extends JPanel {
 
 					int linha_selecionada = tabelaProdutosInclusos.getSelectedRow();
 					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 0).toString())) {
-						JOptionPane.showMessageDialog(null, "Produto removido corretamente do orçamento.",
+						JOptionPane.showMessageDialog(lblQuantidade, "Produto removido corretamente do orçamento.",
 								"Produto removido.", JOptionPane.NO_OPTION);
 						quantidade_de_produtos = modelo_tabela.getRowCount();
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
@@ -1352,7 +1352,7 @@ public class Panel_orcamento extends JPanel {
 
 		if (quantidade_de_produtos > 0) {
 
-			int opcao = JOptionPane.showConfirmDialog(null, "Deseja confirmar o orçamento?\n", "Confirmar orçamento.",
+			int opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Deseja confirmar o orçamento?\n", "Confirmar orçamento.",
 					JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
@@ -1360,7 +1360,7 @@ public class Panel_orcamento extends JPanel {
 			Boolean cliente_vazio = cliente_selecionado == null; 
 			
 			if (cliente_vazio && flag) {
-				opcao = JOptionPane.showConfirmDialog(null,
+				opcao = JOptionPane.showConfirmDialog(lblQuantidade,
 						"Nenhum cliente foi informado!\n" + "Caso confirmar, o orçamento será gravado para o cliente:"
 								+ "\n\nCódigo: 1" + "\nNome: Cliente não identificado."
 								+ "\n\nDeseja confirmar o orçamento?",
@@ -1386,7 +1386,7 @@ public class Panel_orcamento extends JPanel {
 
 				if (orcamento.getId_orcamento() != null) {
 					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
-					JOptionPane.showMessageDialog(null,
+					JOptionPane.showMessageDialog(lblQuantidade,
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 					limpar_campos();
@@ -1395,7 +1395,7 @@ public class Panel_orcamento extends JPanel {
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(null, "Necessário informar pelo menos 1 item para criar o orçamento.",
+			JOptionPane.showMessageDialog(lblQuantidade, "Necessário informar pelo menos 1 item para criar o orçamento.",
 					"Orçamento sem itens.", JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
 		}
@@ -1464,7 +1464,7 @@ public class Panel_orcamento extends JPanel {
 			return true;
 		} else {
 			if (quantidade <= 0.00) {
-				JOptionPane.showMessageDialog(null, "Necessário informar quantidade.", "Quantidade zerada.",
+				JOptionPane.showMessageDialog(lblQuantidade, "Necessário informar quantidade.", "Quantidade zerada.",
 						JOptionPane.WARNING_MESSAGE);
 				fTxtQuantidade.setBorder(new LineBorder(Color.RED));
 				fTxtQuantidade.requestFocus();
@@ -1473,7 +1473,7 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			if (preco_unitario <= 0.00) {
-				JOptionPane.showMessageDialog(null, "Necessário informar preço unitário.", "Preço unitário zerado!",
+				JOptionPane.showMessageDialog(lblPrecoUnitario, "Necessário informar preço unitário.", "Preço unitário zerado!",
 						JOptionPane.WARNING_MESSAGE);
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.RED));
 				fTxtPrecoUnitario.requestFocus();
@@ -1482,7 +1482,7 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			if (valor_desconto > preco_unitario) {
-				JOptionPane.showMessageDialog(null, "Desconto maior que preço unitário.", "Valor de desconto inválido!",
+				JOptionPane.showMessageDialog(lblValorDesconto, "Desconto maior que preço unitário.", "Valor de desconto inválido!",
 						JOptionPane.WARNING_MESSAGE);
 				fTxtValorEmAberto.setBorder(new LineBorder(Color.RED));
 				fTxtValorDesconto.requestFocus();
@@ -1881,7 +1881,7 @@ public class Panel_orcamento extends JPanel {
 			}
 			modelo_tabela.fireTableDataChanged();
 			cancelar_edicao();
-			JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", " Alteração de produto.",
+			JOptionPane.showMessageDialog(lblQuantidade, "Produto alterado com sucesso!", " Alteração de produto.",
 					JOptionPane.NO_OPTION);
 			calcula_total_mercadorias();
 			fTxtNomeProduto.requestFocus();
@@ -1908,7 +1908,7 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public Boolean excluir_produto(String codigo) {
-		int opcao = JOptionPane.showConfirmDialog(null,
+		int opcao = JOptionPane.showConfirmDialog(lblQuantidade,
 				"Deseja remover o seguinte produto do orçamento?\n" + "Cod = "
 						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0) + "\n"
 						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1),
