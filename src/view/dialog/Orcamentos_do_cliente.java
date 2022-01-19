@@ -393,7 +393,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
 				if (btnEditarOrcamento.isEnabled()) {
-					panel_orcamento.editar_orcamento(orcamento_selecionado.getCliente());
+					panel_orcamento.editar_orcamento(orcamento_selecionado);
 					dispose();
 				}
 			}

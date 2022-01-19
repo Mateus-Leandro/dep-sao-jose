@@ -1574,6 +1574,10 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalOrcamento.setText(null);
 
 		quantidade_de_produtos = 0;
+		total_mercadorias_bruto = 0.00;
+		total_mercadorias_liquido = 0.00;
+		valor_frete = 0.00;
+		desconto_final = 0.00;
 	}
 
 	public void limpar_dados_cliente() {
@@ -1705,7 +1709,6 @@ public class Panel_orcamento extends JPanel {
 		total_mercadorias_liquido = 0.00;
 
 		for (Produto_Orcamento produto : lista_produtos_inclusos) {
-
 			total_mercadorias_bruto += Double.valueOf(
 					nf2.format((produto.getPreco_unitario() * produto.getQuantidade())).replaceAll(",", "\\."));
 			total_mercadorias_liquido += Double.valueOf(nf2.format(produto.getValor_total()).replaceAll(",", "\\."));
@@ -1939,9 +1942,14 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.requestFocus();
 	}
 
-	public void editar_orcamento(Cliente cliente_informado) {
+	public void editar_orcamento(Orcamento orcamento_informado) {
+		cliente_selecionado = orcamento_informado.getCliente();
+		total_mercadorias_bruto = orcamento_informado.getTotal_mercadorias_bruto();
+		total_mercadorias_liquido = orcamento_informado.getTotal_mercadorias_liquido();
+		valor_frete = orcamento_informado.getFrete();
+		desconto_final = orcamento_informado.getDesconto_final();
+		total_orcamento = orcamento_informado.getValor_total();
 		novo_orcamento();
-		cliente_selecionado = cliente_informado;
 		exibir_dados_cliente();
 	}
 
