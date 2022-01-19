@@ -1007,23 +1007,28 @@ public class Faturamento extends JDialog {
 
 	public void parcelar_igualmente(int quantidade_de_parcelas, Double valor_a_parcelar) {
 		nf.setRoundingMode(RoundingMode.DOWN);
-		String valor_parcela = nf.format(valor_a_parcelar / quantidade_de_parcelas).replaceAll("\\.", "").replace(",",
-				".");
-		
-		Double valor_parcela_form = Double.parseDouble(valor_parcela);
-		
+
+		Double valor_parcela = Double.parseDouble(
+				nf.format(valor_a_parcelar / quantidade_de_parcelas).replaceAll("\\.", "").replace(",", "."));
+
 		Calendar vencimento = Calendar.getInstance();
 		vencimento.setTime(pega_ultimo_vencimento());
 
+		Double centavos_dizima = orcamento.getValor_total() - (valor_parcela * quantidade_de_parcelas);
+		centavos_dizima = Double.parseDouble(nf.format(centavos_dizima).replaceAll("\\.", "").replace(",", "."));
+
 		for (int n = 0; n < quantidade_de_parcelas; n++) {
 			vencimento.add(Calendar.MONTH, 1);
-			Parcela nova_parcela = new Parcela(orcamento.getId_orcamento(), valor_parcela_form,
+			Parcela nova_parcela = new Parcela(orcamento.getId_orcamento(), valor_parcela,
 					(Forma_pagamento) cbxFormaPagamento.getSelectedItem(), null, vencimento.getTime());
+			if (n + 1 == quantidade_de_parcelas) {
+				if (centavos_dizima != 0.00) {
+					nova_parcela.setValor_parcela(nova_parcela.getValor_parcela() + centavos_dizima);
+				}
+			}
 			orcamento.getParcelas().add(nova_parcela);
 		}
-
 		modelo_tabela.fireTableDataChanged();
-
 	}
 
 	// Valida se a data de vencimento ja foi utilizada por alguma parcela.
