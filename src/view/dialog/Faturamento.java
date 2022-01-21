@@ -1004,7 +1004,12 @@ public class Faturamento extends JDialog {
 			}
 		}
 
-		return maior_data_vencimento;
+		// Testa se a data de vencimento da ultima parcela é menor que a data atual.
+		if(maior_data_vencimento.after(new Date())) {
+			return maior_data_vencimento;
+		}else {
+			return new Date();
+		}
 	}
 
 	public void parcelar_igualmente(int quantidade_de_parcelas, Double valor_a_parcelar) {
@@ -1014,7 +1019,7 @@ public class Faturamento extends JDialog {
 				nf.format(valor_a_parcelar / quantidade_de_parcelas).replaceAll("\\.", "").replace(",", "."));
 
 		Calendar vencimento = Calendar.getInstance();
-		vencimento.setTime(pega_ultimo_vencimento());
+		vencimento.setTime(pega_ultimo_vencimento());	
 
 		for (int n = 0; n < quantidade_de_parcelas; n++) {
 			vencimento.add(Calendar.MONTH, 1);
