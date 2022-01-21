@@ -15,11 +15,13 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -44,11 +46,13 @@ import dao.ClienteDAO;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
 import entities.cliente.Cliente;
+import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 import entities.produto.Produto;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
+import view.dialog.Faturamento;
 import view.dialog.Orcamentos_do_cliente;
 import view.formatFields.FormataNumeral;
 import view.tools.Jtext_tools;
@@ -187,6 +191,9 @@ public class Panel_orcamento extends JPanel {
 	private JPanel panelNumeroOrcamento = new JPanel();
 	private JFormattedTextField fTxtNumeroOrcamento;
 	private JLabel lblNumeroOrcamento;
+	private Double valor_original = 0.00;
+	private Date data_inclusao_orcamento = null;
+	private ArrayList<Parcela> parcelas = new ArrayList<Parcela>();
 
 	/**
 	 * Create the panel.
@@ -1351,14 +1358,13 @@ public class Panel_orcamento extends JPanel {
 	public void salvar_orcamento() {
 
 		if (quantidade_de_produtos > 0) {
-
-			int opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Deseja confirmar o orçamento?\n", "Confirmar orçamento.",
-					JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+			int opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Deseja confirmar o orçamento?\n",
+					"Confirmar orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
-			
-			Boolean cliente_vazio = cliente_selecionado == null; 
-			
+
+			Boolean cliente_vazio = cliente_selecionado == null;
+
 			if (cliente_vazio && flag) {
 				opcao = JOptionPane.showConfirmDialog(lblQuantidade,
 						"Nenhum cliente foi informado!\n" + "Caso confirmar, o orçamento será gravado para o cliente:"
@@ -1371,11 +1377,11 @@ public class Panel_orcamento extends JPanel {
 			if (flag) {
 				Orcamento orcamento = new Orcamento();
 				orcamento = montar_orcamento(orcamento);
-				
-				if(! cliente_vazio) {
+
+				if (!cliente_vazio) {
 					orcamento.setCliente(cliente_selecionado);
 				}
-				
+
 				OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 
 				if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
@@ -1391,12 +1397,35 @@ public class Panel_orcamento extends JPanel {
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 					limpar_campos();
 					desativar_campos();
+
+					// Testa se o orçamento foi editado e se seu valor original foi alterado.
+					Boolean valor_alterado = orcamento.getValor_total().compareTo(valor_original) != 0;
+
+					if (valor_alterado && orcamento.getParcelas().size() > 0) {
+						flag = true;
+					} else {
+						opcao = JOptionPane.showConfirmDialog(lblQuantidade,
+								"Deseja prosseguir para a manutenção das parcelas?", "Manutenção de parcelas.",
+								JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
+						flag = opcao == JOptionPane.YES_OPTION;
+					}
+
+					if (flag) {
+						Faturamento faturamento = new Faturamento(null, orcamento);
+						// Não deixando usuário fechar a tela.
+						faturamento.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+						faturamento.setModal(true);
+						faturamento.setLocationRelativeTo(lblQuantidade);
+						faturamento.setVisible(true);
+					}
 				}
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(lblQuantidade, "Necessário informar pelo menos 1 item para criar o orçamento.",
-					"Orçamento sem itens.", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(lblQuantidade,
+					"Necessário informar pelo menos 1 item para criar o orçamento.", "Orçamento sem itens.",
+					JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
 		}
 
@@ -1473,8 +1502,8 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			if (preco_unitario <= 0.00) {
-				JOptionPane.showMessageDialog(lblPrecoUnitario, "Necessário informar preço unitário.", "Preço unitário zerado!",
-						JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(lblPrecoUnitario, "Necessário informar preço unitário.",
+						"Preço unitário zerado!", JOptionPane.WARNING_MESSAGE);
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.RED));
 				fTxtPrecoUnitario.requestFocus();
 			} else {
@@ -1482,8 +1511,8 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			if (valor_desconto > preco_unitario) {
-				JOptionPane.showMessageDialog(lblValorDesconto, "Desconto maior que preço unitário.", "Valor de desconto inválido!",
-						JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(lblValorDesconto, "Desconto maior que preço unitário.",
+						"Valor de desconto inválido!", JOptionPane.WARNING_MESSAGE);
 				fTxtValorEmAberto.setBorder(new LineBorder(Color.RED));
 				fTxtValorDesconto.requestFocus();
 			} else {
@@ -1578,6 +1607,8 @@ public class Panel_orcamento extends JPanel {
 		total_mercadorias_liquido = 0.00;
 		valor_frete = 0.00;
 		desconto_final = 0.00;
+		data_inclusao_orcamento = null;
+		parcelas = null;
 	}
 
 	public void limpar_dados_cliente() {
@@ -1949,6 +1980,13 @@ public class Panel_orcamento extends JPanel {
 		valor_frete = orcamento_informado.getFrete();
 		desconto_final = orcamento_informado.getDesconto_final();
 		total_orcamento = orcamento_informado.getValor_total();
+		valor_original = total_orcamento;
+		data_inclusao_orcamento = orcamento_informado.getData_inclusao();
+
+		if (orcamento_informado.getParcelas().size() > 0) {
+			parcelas = orcamento_informado.getParcelas();
+		}
+
 		novo_orcamento();
 		exibir_dados_cliente();
 	}
@@ -1957,7 +1995,6 @@ public class Panel_orcamento extends JPanel {
 		nf2.setRoundingMode(RoundingMode.DOWN);
 
 		Integer id_orcamento;
-
 		if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
 			id_orcamento = null;
 		} else {
@@ -1971,7 +2008,7 @@ public class Panel_orcamento extends JPanel {
 				Double.valueOf(nf2.format(total_mercadorias_bruto).replaceAll(",", "\\.")),
 				Double.valueOf(nf2.format(total_mercadorias_liquido).replaceAll(",", "\\.")), valor_frete,
 				desconto_final, Double.valueOf(nf2.format(total_orcamento).replaceAll(",", "\\.")), faturado,
-				numero_de_parcelas, null, null, lista_produtos_inclusos, null);
+				numero_de_parcelas, null, data_inclusao_orcamento, lista_produtos_inclusos, parcelas);
 
 		return orcamento;
 	}

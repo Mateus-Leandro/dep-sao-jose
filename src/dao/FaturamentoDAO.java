@@ -30,8 +30,8 @@ public class FaturamentoDAO {
 			ps.setInt(1, orcamento.getId_orcamento());
 
 			rs = ps.executeQuery();
-			orcamento.getParcelas().clear();
-
+			
+			orcamento.setParcelas(new ArrayList<Parcela>());
 			while (rs.next()) {
 				Parcela parcela = new Parcela();
 				parcela.setId_orcamento(orcamento.getId_orcamento());

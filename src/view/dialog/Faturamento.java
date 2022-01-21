@@ -115,6 +115,7 @@ public class Faturamento extends JDialog {
 	private Double valor_em_aberto;
 	private Double valor_pago;
 	private Double valor_digitado;
+	private JButton btnCancelarFaturamento = new JButton("Cancelar");
 
 	/**
 	 * Launch the application.
@@ -467,7 +468,7 @@ public class Faturamento extends JDialog {
 		alimenta_formas_pagamento();
 
 		lblTotalParcelas = new JLabel("Total das parcelas");
-		lblTotalParcelas.setForeground(Color.BLUE);
+		lblTotalParcelas.setForeground(Color.BLACK);
 		lblTotalParcelas.setToolTipText("");
 		lblTotalParcelas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTotalParcelas.setBounds(10, 445, 112, 20);
@@ -477,14 +478,14 @@ public class Faturamento extends JDialog {
 		lblValorEmAberto.setForeground(new Color(255, 0, 0));
 		lblValorEmAberto.setToolTipText("");
 		lblValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorEmAberto.setBounds(248, 445, 101, 20);
+		lblValorEmAberto.setBounds(455, 445, 101, 20);
 		contentPanel.add(lblValorEmAberto);
 
 		lblValorPago = new JLabel("Valor pago");
 		lblValorPago.setForeground(new Color(0, 128, 0));
 		lblValorPago.setToolTipText("");
 		lblValorPago.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorPago.setBounds(474, 445, 67, 20);
+		lblValorPago.setBounds(254, 445, 67, 20);
 		contentPanel.add(lblValorPago);
 
 		btnEditarParcela = new JButton();
@@ -588,13 +589,13 @@ public class Faturamento extends JDialog {
 		txtValorAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtValorAberto.setEditable(false);
 		txtValorAberto.setColumns(10);
-		txtValorAberto.setBounds(346, 445, 101, 20);
+		txtValorAberto.setBounds(553, 445, 101, 20);
 		contentPanel.add(txtValorAberto);
 
 		txtValorPago.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtValorPago.setEditable(false);
 		txtValorPago.setColumns(10);
-		txtValorPago.setBounds(542, 445, 112, 20);
+		txtValorPago.setBounds(322, 445, 112, 20);
 		contentPanel.add(txtValorPago);
 
 		btnParcelarIgualmente = new JButton("Parcelar igualmente");
@@ -703,17 +704,18 @@ public class Faturamento extends JDialog {
 		btnLimpaDataPagamento.setIcon(icones.getIcone_limpar());
 		contentPanel.add(btnLimpaDataPagamento);
 
-		JButton btnCancelarFaturamento = new JButton("Cancelar");
 		btnCancelarFaturamento.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCancelarFaturamento) {
-				int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
-						"Deseja realmente cancelar as alterações realizadas?" + "\n\nATENÇÃO!"
-								+ "\nTODAS AS ALTERAÇÕES REALIZADAS NO PARCELAMENTO SERÃO PERDIDAS.",
-						"Cancelar alterações.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
-				Boolean flag = opcao == JOptionPane.YES_OPTION;
-				if (flag) {
-					dispose();
+				if (btnCancelarFaturamento.isEnabled()) {
+					int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
+							"Deseja realmente cancelar as alterações realizadas?" + "\n\nATENÇÃO!"
+									+ "\nTODAS AS ALTERAÇÕES REALIZADAS NO PARCELAMENTO SERÃO PERDIDAS.",
+							"Cancelar alterações.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					Boolean flag = opcao == JOptionPane.YES_OPTION;
+					if (flag) {
+						dispose();
+					}
 				}
 			}
 		});
@@ -973,9 +975,9 @@ public class Faturamento extends JDialog {
 		}
 
 		if (orcamento.getValor_total().compareTo(total_parcelas) == 0) {
-			btnConfirmarFaturamento.setEnabled(true);
+			txtTotalParcelas.setForeground(Color.BLACK);
 		} else {
-			btnConfirmarFaturamento.setEnabled(false);
+			txtTotalParcelas.setForeground(new Color(255, 69, 0));
 		}
 
 	}
@@ -1014,16 +1016,23 @@ public class Faturamento extends JDialog {
 		Calendar vencimento = Calendar.getInstance();
 		vencimento.setTime(pega_ultimo_vencimento());
 
-		Double centavos_dizima = orcamento.getValor_total() - (valor_parcela * quantidade_de_parcelas);
-		centavos_dizima = Double.parseDouble(nf.format(centavos_dizima).replaceAll("\\.", "").replace(",", "."));
-
 		for (int n = 0; n < quantidade_de_parcelas; n++) {
 			vencimento.add(Calendar.MONTH, 1);
 			Parcela nova_parcela = new Parcela(orcamento.getId_orcamento(), valor_parcela,
 					(Forma_pagamento) cbxFormaPagamento.getSelectedItem(), null, vencimento.getTime());
+
 			if (n + 1 == quantidade_de_parcelas) {
-				if (centavos_dizima != 0.00) {
-					nova_parcela.setValor_parcela(nova_parcela.getValor_parcela() + centavos_dizima);
+				if (valor_a_parcelar.compareTo(nova_parcela.getValor_parcela() * quantidade_de_parcelas) != 0) {
+
+					Double total = valor_parcela * quantidade_de_parcelas;
+
+					nf.setRoundingMode(RoundingMode.HALF_UP);
+					Double centavos_faltantes = valor_a_parcelar - total;
+
+					centavos_faltantes = Double
+							.parseDouble(nf.format(centavos_faltantes).replaceAll("\\.", "").replace(",", "."));
+
+					nova_parcela.setValor_parcela(valor_parcela + centavos_faltantes);
 				}
 			}
 			orcamento.getParcelas().add(nova_parcela);

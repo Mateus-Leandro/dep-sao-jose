@@ -26,8 +26,6 @@ public class Orcamento {
 	public Orcamento() {
 	}
 
-	
-
 	public Orcamento(Integer id_orcamento, Cliente cliente, Integer quantidade_produtos, Double total_mercadorias_bruto,
 			Double total_mercadorias_liquido, Double frete, Double desconto_final, Double valor_total, Boolean faturado,
 			Integer numero_de_parcelas, String observacao, Date data_inclusao,
@@ -47,8 +45,6 @@ public class Orcamento {
 		this.produtos_do_orcamento = produtos_do_orcamento;
 		this.parcelas = parcelas;
 	}
-
-
 
 	public Integer getId_orcamento() {
 		return id_orcamento;
@@ -130,15 +126,14 @@ public class Orcamento {
 		this.numero_de_parcelas = numero_de_parcelas;
 	}
 
-	
 	public String getObservacao() {
 		return observacao;
 	}
-	
+
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
-	
+
 	public Date getData_inclusao() {
 		return data_inclusao;
 	}
@@ -154,12 +149,11 @@ public class Orcamento {
 	public void setProdutos_do_orcamento(ArrayList<Produto_Orcamento> produtos_do_orcamento) {
 		this.produtos_do_orcamento = produtos_do_orcamento;
 	}
-	
 
 	public ArrayList<Parcela> getParcelas() {
-		if(parcelas != null) {
+		if (parcelas != null) {
 			return parcelas;
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -168,8 +162,7 @@ public class Orcamento {
 		this.parcelas = parcelas;
 	}
 
-
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
