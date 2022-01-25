@@ -56,7 +56,6 @@ public class Panel_configuracoes extends JPanel {
 	private JComboBox<String> cbxGeraPdf;
 	private JLabel lblAlterarOramentoJ;
 	private JComboBox<String> cbxAltOrc;
-	private JTextPane txtPaviso;
 	private Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
 
 	/**
@@ -76,7 +75,7 @@ public class Panel_configuracoes extends JPanel {
 
 		lblNomeEmpresa = new JLabel("Nome da empresa");
 		lblNomeEmpresa.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeEmpresa.setBounds(10, 256, 117, 19);
+		lblNomeEmpresa.setBounds(10, 156, 117, 19);
 		add(lblNomeEmpresa);
 
 		MaskFormatter mascara_nome_empresa = null;
@@ -98,18 +97,21 @@ public class Panel_configuracoes extends JPanel {
 		fTxtNomeEmpresa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeEmpresa.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeEmpresa.setColumns(10);
-		fTxtNomeEmpresa.setBounds(125, 255, 293, 20);
+		fTxtNomeEmpresa.setBounds(125, 155, 293, 20);
 		add(fTxtNomeEmpresa);
 
 		btnConfigurar = new JButton("Configurar");
 		btnConfigurar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickConfigurar) {
-				valida_campos();
-				ativar_campos();
-				btnConfigurar.setVisible(false);
-				btnSalvar.setVisible(true);
-				btnCancelar.setVisible(true);
+				if (btnConfigurar.isEnabled()) {
+					valida_campos();
+					ativar_campos();
+					btnConfigurar.setEnabled(false);
+					btnSalvar.setVisible(true);
+					btnCancelar.setVisible(true);
+				}
+
 			}
 		});
 		btnConfigurar.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -121,7 +123,6 @@ public class Panel_configuracoes extends JPanel {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCancelar) {
-
 				desativar_campos();
 			}
 		});
@@ -144,7 +145,7 @@ public class Panel_configuracoes extends JPanel {
 								JOptionPane.NO_OPTION);
 						btnSalvar.setVisible(false);
 						btnCancelar.setVisible(false);
-						btnConfigurar.setVisible(true);
+						btnConfigurar.setEnabled(true);
 						desativar_campos();
 					}
 				}
@@ -159,7 +160,7 @@ public class Panel_configuracoes extends JPanel {
 
 		lblTelefone = new JLabel("Tel. Fixo");
 		lblTelefone.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTelefone.setBounds(10, 324, 50, 19);
+		lblTelefone.setBounds(10, 224, 50, 19);
 		add(lblTelefone);
 
 		MaskFormatter mascara_tel_fixo = null;
@@ -176,12 +177,12 @@ public class Panel_configuracoes extends JPanel {
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTelFixo.setColumns(10);
-		fTxtTelFixo.setBounds(64, 323, 101, 20);
+		fTxtTelFixo.setBounds(64, 223, 101, 20);
 		add(fTxtTelFixo);
 
 		lblCelular = new JLabel("Celular");
 		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCelular.setBounds(185, 324, 44, 19);
+		lblCelular.setBounds(185, 224, 44, 19);
 		add(lblCelular);
 
 		MaskFormatter mascara_celular = null;
@@ -199,22 +200,22 @@ public class Panel_configuracoes extends JPanel {
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCelular.setColumns(10);
-		fTxtCelular.setBounds(229, 323, 107, 20);
+		fTxtCelular.setBounds(229, 223, 107, 20);
 		add(fTxtCelular);
 
 		lblInformacoesDaEmpresa = new JLabel("Informa\u00E7\u00F5es da Empresa");
 		lblInformacoesDaEmpresa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInformacoesDaEmpresa.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblInformacoesDaEmpresa.setBounds(10, 216, 233, 29);
+		lblInformacoesDaEmpresa.setBounds(10, 122, 233, 29);
 		add(lblInformacoesDaEmpresa);
 
 		separado_informacoes_empresa = new JSeparator();
-		separado_informacoes_empresa.setBounds(242, 233, 477, 9);
+		separado_informacoes_empresa.setBounds(242, 139, 477, 9);
 		add(separado_informacoes_empresa);
 
 		lblEndereco = new JLabel("Endereco");
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEndereco.setBounds(10, 359, 64, 19);
+		lblEndereco.setBounds(10, 259, 64, 19);
 		add(lblEndereco);
 
 		MaskFormatter mascara_endereco = null;
@@ -237,12 +238,12 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEndereco.setColumns(10);
-		fTxtEndereco.setBounds(74, 358, 364, 20);
+		fTxtEndereco.setBounds(74, 258, 364, 20);
 		add(fTxtEndereco);
 
 		lblResponsavel = new JLabel("Respons\u00E1vel");
 		lblResponsavel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblResponsavel.setBounds(428, 256, 82, 19);
+		lblResponsavel.setBounds(428, 156, 82, 19);
 		add(lblResponsavel);
 
 		fTxtNomeResponsavel = new JFormattedTextField();
@@ -251,12 +252,12 @@ public class Panel_configuracoes extends JPanel {
 		fTxtNomeResponsavel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeResponsavel.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeResponsavel.setColumns(10);
-		fTxtNomeResponsavel.setBounds(508, 255, 211, 20);
+		fTxtNomeResponsavel.setBounds(508, 155, 211, 20);
 		add(fTxtNomeResponsavel);
 
 		lblCnpj = new JLabel("CNPJ");
 		lblCnpj.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCnpj.setBounds(10, 291, 38, 19);
+		lblCnpj.setBounds(10, 191, 38, 19);
 		add(lblCnpj);
 
 		MaskFormatter mascara_cnpj = null;
@@ -278,12 +279,12 @@ public class Panel_configuracoes extends JPanel {
 		fTxtCnpj.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCnpj.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCnpj.setColumns(10);
-		fTxtCnpj.setBounds(46, 290, 134, 20);
+		fTxtCnpj.setBounds(46, 190, 134, 20);
 		add(fTxtCnpj);
 
 		lblInscricaoEstadual = new JLabel("Inscri\u00E7\u00E3o Estadual");
 		lblInscricaoEstadual.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblInscricaoEstadual.setBounds(212, 290, 117, 19);
+		lblInscricaoEstadual.setBounds(212, 190, 117, 19);
 		add(lblInscricaoEstadual);
 
 		MaskFormatter mascara_ie = null;
@@ -300,12 +301,12 @@ public class Panel_configuracoes extends JPanel {
 		fTxtInscricao.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtInscricao.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtInscricao.setColumns(10);
-		fTxtInscricao.setBounds(326, 290, 134, 20);
+		fTxtInscricao.setBounds(326, 190, 134, 20);
 		add(fTxtInscricao);
 
 		lblEmail = new JLabel("Email");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEmail.setBounds(400, 324, 38, 19);
+		lblEmail.setBounds(400, 224, 38, 19);
 		add(lblEmail);
 
 		fTxtEmail = new JFormattedTextField();
@@ -314,64 +315,54 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEmail.setColumns(10);
-		fTxtEmail.setBounds(434, 324, 285, 20);
+		fTxtEmail.setBounds(434, 224, 285, 20);
 		add(fTxtEmail);
 
 		lblConfiguracoes_faturamento = new JLabel("Configura\u00E7\u00F5es do Faturamento");
 		lblConfiguracoes_faturamento.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConfiguracoes_faturamento.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblConfiguracoes_faturamento.setBounds(10, 434, 279, 29);
+		lblConfiguracoes_faturamento.setBounds(10, 329, 279, 29);
 		add(lblConfiguracoes_faturamento);
 
 		separado_informacoes_empresa_1 = new JSeparator();
-		separado_informacoes_empresa_1.setBounds(293, 451, 426, 9);
+		separado_informacoes_empresa_1.setBounds(293, 346, 426, 9);
 		add(separado_informacoes_empresa_1);
 
-		lblSalvarParcelasDivergentes = new JLabel("Salva parcelas diferentes do total");
+		lblSalvarParcelasDivergentes = new JLabel("Salvar parcelas \u2260 do total do or\u00E7amento");
 		lblSalvarParcelasDivergentes.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSalvarParcelasDivergentes.setBounds(10, 470, 206, 19);
+		lblSalvarParcelasDivergentes.setBounds(10, 365, 246, 19);
 		add(lblSalvarParcelasDivergentes);
 
 		cbxParcelasDiferentes = new JComboBox<String>();
 		cbxParcelasDiferentes.setEnabled(false);
 		cbxParcelasDiferentes.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxParcelasDiferentes.setModel(new DefaultComboBoxModel(new String[] { "SIM", "N\u00C3O", "PERGUNTAR" }));
-		cbxParcelasDiferentes.setBounds(214, 465, 114, 22);
+		cbxParcelasDiferentes.setBounds(259, 361, 114, 22);
 		add(cbxParcelasDiferentes);
 
-		JLabel lblGeraPdf = new JLabel("Gerar PDF ap\u00F3s confirmar or\u00E7amento");
+		JLabel lblGeraPdf = new JLabel("PDF ap\u00F3s confirmar or\u00E7amento");
 		lblGeraPdf.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblGeraPdf.setBounds(368, 470, 228, 19);
+		lblGeraPdf.setBounds(405, 366, 191, 19);
 		add(lblGeraPdf);
 
 		cbxGeraPdf = new JComboBox<String>();
 		cbxGeraPdf.setEnabled(false);
 		cbxGeraPdf.setModel(new DefaultComboBoxModel(new String[] { "SIM", "N\u00C3O", "PERGUNTAR" }));
 		cbxGeraPdf.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxGeraPdf.setBounds(602, 465, 117, 22);
+		cbxGeraPdf.setBounds(602, 360, 117, 22);
 		add(cbxGeraPdf);
 
-		lblAlterarOramentoJ = new JLabel("Alterar or\u00E7amentos j\u00E1 fechados");
+		lblAlterarOramentoJ = new JLabel("Alterar or\u00E7amentos que possuem parcelas");
 		lblAlterarOramentoJ.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblAlterarOramentoJ.setBounds(10, 505, 190, 19);
+		lblAlterarOramentoJ.setBounds(10, 400, 260, 19);
 		add(lblAlterarOramentoJ);
 
 		cbxAltOrc = new JComboBox<String>();
 		cbxAltOrc.setEnabled(false);
 		cbxAltOrc.setModel(new DefaultComboBoxModel(new String[] { "SIM", "N\u00C3O", "PERGUNTAR" }));
 		cbxAltOrc.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxAltOrc.setBounds(204, 502, 117, 22);
+		cbxAltOrc.setBounds(268, 395, 117, 22);
 		add(cbxAltOrc);
-
-		txtPaviso = new JTextPane();
-		txtPaviso.setBackground(new Color(240, 240, 240));
-		txtPaviso.setForeground(Color.RED);
-		txtPaviso.setText(
-				"ATEN\u00C7\u00C3O\r\nApós alterar alguma configuração, é necessário fechar o sistema e abrir novamente para que o mesmo utilize as novas configurações salvas.");
-		txtPaviso.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtPaviso.setEditable(false);
-		txtPaviso.setBounds(6, 130, 713, 64);
-		add(txtPaviso);
 
 		String texto = "ATEN\u00C7\u00C3O\r\nApós alterar alguma configuração, é necessário fechar o sistema e abrir novamente para que o mesmo utilize as novas configurações salvas.";
 		exibe_configuracoes(configuracoes_do_sistema);
@@ -474,7 +465,7 @@ public class Panel_configuracoes extends JPanel {
 		cbxAltOrc.setEnabled(false);
 		cbxGeraPdf.setEnabled(false);
 		cbxParcelasDiferentes.setEnabled(false);
-		btnConfigurar.setVisible(true);
+		btnConfigurar.setEnabled(true);
 		btnSalvar.setVisible(false);
 		btnCancelar.setVisible(false);
 	}

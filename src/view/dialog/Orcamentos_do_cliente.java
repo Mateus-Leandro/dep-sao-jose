@@ -2,10 +2,16 @@ package view.dialog;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -32,6 +38,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import dao.ClienteDAO;
+import dao.ConfiguracaoDAO;
+import dao.FaturamentoDAO;
 import dao.OrcamentoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
@@ -41,12 +49,6 @@ import icons.Icones;
 import tables.tableModels.ModeloTabelaOrcamentos;
 import tables.tableSorters.SorterMonetario;
 import view.panels.Panel_orcamento;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class Orcamentos_do_cliente extends JDialog {
 	/**
@@ -54,7 +56,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel lblOrcamentos_do_cliente;
+	private JLabel lblOrcamentos_do_realizados;
 	private JSeparator separador_orcamentos;
 	private JScrollPane scrollPaneOrcamentos;
 	private JTable tabelaOrcamentos;
@@ -96,6 +98,8 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JButton btnCancelarObservacao = new JButton("Cancelar");
 	private JButton btnFaturar;
 	private JButton btnImprimir;
+	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
+	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 
 	/**
 	 * Launch the application.
@@ -130,7 +134,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-	//	setModal(true);
+		// setModal(true);
 
 		ltClientes = new JList<Cliente>();
 		ltClientes.addMouseListener(new MouseAdapter() {
@@ -152,11 +156,11 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.setLayout(null);
 		contentPane.add(scrollPaneLtClientes);
 
-		lblOrcamentos_do_cliente = new JLabel("Or\u00E7amentos Realizados");
-		lblOrcamentos_do_cliente.setBounds(228, 11, 287, 29);
-		lblOrcamentos_do_cliente.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOrcamentos_do_cliente.setFont(new Font("Tahoma", Font.BOLD, 24));
-		contentPane.add(lblOrcamentos_do_cliente);
+		lblOrcamentos_do_realizados = new JLabel("Or\u00E7amentos Realizados");
+		lblOrcamentos_do_realizados.setBounds(228, 11, 287, 29);
+		lblOrcamentos_do_realizados.setHorizontalAlignment(SwingConstants.CENTER);
+		lblOrcamentos_do_realizados.setFont(new Font("Tahoma", Font.BOLD, 24));
+		contentPane.add(lblOrcamentos_do_realizados);
 
 		separador_orcamentos = new JSeparator();
 		separador_orcamentos.setBounds(10, 50, 727, 9);
@@ -189,7 +193,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					btnEditarOrcamento.setEnabled(true);
 					btnFaturar.setEnabled(true);
 					btnImprimir.setEnabled(true);
-					
+
 					btnEditarObservacao.setEnabled(true);
 					if (orcamento_selecionado.getObservacao() != null) {
 						btnExcluirObservacao.setEnabled(true);
@@ -230,15 +234,15 @@ public class Orcamentos_do_cliente extends JDialog {
 		fTxtPesquisaOrcamento.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPesquisaOrcamento) {
-				
+
 				String numero_orcamento;
-				
-				if(fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
+
+				if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
 					numero_orcamento = null;
-				}else {
+				} else {
 					numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
 				}
-					alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
 			}
 		});
 		fTxtPesquisaOrcamento.setBounds(202, 129, 386, 20);
@@ -282,7 +286,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent digitaCliente) {
 				if (fTxtPesquisaCliente.getText().trim().isEmpty()) {
-					
+
 					cliente_selecionado = null;
 					scrollPaneLtClientes.setVisible(false);
 
@@ -359,11 +363,12 @@ public class Orcamentos_do_cliente extends JDialog {
 
 				if (btnExcluirOrcamento.isEnabled()) {
 
-					int opcao = JOptionPane.showConfirmDialog(btnExcluirOrcamento, "Deseja realmente excluir o orçamento abaixo?"
-							+ "\n\nOrçamento Nº:  " + orcamento_selecionado.getId_orcamento() + "\nCliente: "
-							+ orcamento_selecionado.getCliente().getNome() + "\nValor: "
-							+ nf.format(orcamento_selecionado.getValor_total())
-							+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS DADOS DO ORÇAMENTO SERÃO REMOVIDOS PERMANENTIMENTE!",
+					int opcao = JOptionPane.showConfirmDialog(btnExcluirOrcamento,
+							"Deseja realmente excluir o orçamento abaixo?" + "\n\nOrçamento Nº:  "
+									+ orcamento_selecionado.getId_orcamento() + "\nCliente: "
+									+ orcamento_selecionado.getCliente().getNome() + "\nValor: "
+									+ nf.format(orcamento_selecionado.getValor_total())
+									+ "\n\nCASO EXCLUÍDO NÃO SERÁ POSSÍVEL RECUPERÁ-LO E TODOS OS DADOS DO ORÇAMENTO SERÃO REMOVIDOS PERMANENTIMENTE!",
 							"Exclusão de orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					Boolean flag = opcao == JOptionPane.YES_OPTION;
@@ -397,8 +402,36 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
 				if (btnEditarOrcamento.isEnabled()) {
-					panel_orcamento.editar_orcamento(orcamento_selecionado);
-					dispose();
+					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando novamente as ocnfigurações do
+																				// sistema.
+					FaturamentoDAO faturamento_dao = new FaturamentoDAO();
+					orcamento_selecionado.setParcelas(faturamento_dao.lista_parcelas(orcamento_selecionado));
+					Boolean flag;
+
+					// Valida a configuração de alteração de orçamentos que possuem parcelas
+					// lançadas
+					if (orcamento_selecionado.getParcelas().size() != 0) {
+						if (configuracoes_do_sistema.getAltera_orc().equals("SIM")) {
+							flag = true;
+						} else if (configuracoes_do_sistema.getAltera_orc().equals("PERGUNTAR")) {
+							int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
+									"O orçamento selecionado já possui parcelas lançadas, deseja alterá-lo?",
+									"Orçamento com parcelas salvas.", JOptionPane.YES_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							flag = opcao == JOptionPane.YES_OPTION;
+						} else {
+							flag = false;
+							JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
+									"As configurações atuais não permitem alterar orçamentos que já possuem parcelas lançadas,\ncaso desejar alterar o orçamento selecionado, altere primeiro as configurações do sistema na aba 'Configurações' e libere esse tipo de alteração.",
+									"Orçamento com parcelas salvas.", JOptionPane.WARNING_MESSAGE);
+						}
+					} else {
+						flag = true;
+					}
+					if (flag) {
+						panel_orcamento.editar_orcamento(orcamento_selecionado);
+						dispose();
+					}
 				}
 			}
 		});
@@ -512,7 +545,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnCancelarObservacao.setIcon(icones.getIcone_cancelar());
 		btnCancelarObservacao.setVisible(false);
 		contentPane.add(btnCancelarObservacao);
-		
+
 		btnFaturar = new JButton("Faturamento");
 		btnFaturar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnFaturar.setEnabled(false);
@@ -520,7 +553,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnFaturar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickFaturar) {
-				if(btnFaturar.isEnabled()) {
+				if (btnFaturar.isEnabled()) {
 					Faturamento faturamento = new Faturamento(getOrcamentosDoCliente(), orcamento_selecionado);
 					faturamento.setLocationRelativeTo(btnExcluirOrcamento);
 					faturamento.setVisible(true);
@@ -529,14 +562,14 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		btnFaturar.setBounds(594, 157, 143, 29);
 		contentPane.add(btnFaturar);
-		
+
 		btnImprimir = new JButton("Imprimir");
 		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnImprimir.setEnabled(false);
 		btnImprimir.setBounds(461, 157, 122, 29);
 		btnImprimir.setIcon(icones.getIcone_impressora());
 		contentPane.add(btnImprimir);
-	
+
 	}
 
 	// Configurando largura das colunas da tabela de orçamentos
@@ -607,7 +640,7 @@ public class Orcamentos_do_cliente extends JDialog {
 
 		return null;
 	}
-	
+
 	public Orcamentos_do_cliente getOrcamentosDoCliente() {
 		return this;
 	}
