@@ -34,6 +34,7 @@ import javax.swing.table.TableRowSorter;
 import dao.ClienteDAO;
 import dao.OrcamentoDAO;
 import entities.cliente.Cliente;
+import entities.configuracoes.Configuracoes;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 import icons.Icones;
@@ -94,6 +95,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JButton btnSalvarObservacao = new JButton("Salvar observa\u00E7\u00E3o");
 	private JButton btnCancelarObservacao = new JButton("Cancelar");
 	private JButton btnFaturar;
+	private JButton btnImprimir;
 
 	/**
 	 * Launch the application.
@@ -186,7 +188,8 @@ public class Orcamentos_do_cliente extends JDialog {
 					btnExcluirOrcamento.setEnabled(true);
 					btnEditarOrcamento.setEnabled(true);
 					btnFaturar.setEnabled(true);
-
+					btnImprimir.setEnabled(true);
+					
 					btnEditarObservacao.setEnabled(true);
 					if (orcamento_selecionado.getObservacao() != null) {
 						btnExcluirObservacao.setEnabled(true);
@@ -201,6 +204,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					btnExcluirObservacao.setEnabled(false);
 					btnFaturar.setEnabled(false);
 					fTxtObservacao.setText(null);
+					btnImprimir.setEnabled(false);
 				}
 			}
 		});
@@ -384,7 +388,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		btnExcluirOrcamento.setIcon(icones.getIcone_excluir());
 		btnExcluirOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluirOrcamento.setBounds(640, 157, 97, 29);
+		btnExcluirOrcamento.setBounds(119, 159, 97, 29);
 		contentPane.add(btnExcluirOrcamento);
 
 		btnEditarOrcamento = new JButton("Editar");
@@ -400,7 +404,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		btnEditarOrcamento.setIcon(icones.getIcone_editar());
 		btnEditarOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditarOrcamento.setBounds(531, 157, 97, 29);
+		btnEditarOrcamento.setBounds(10, 159, 97, 29);
 
 		contentPane.add(btnEditarOrcamento);
 
@@ -520,12 +524,18 @@ public class Orcamentos_do_cliente extends JDialog {
 					Faturamento faturamento = new Faturamento(getOrcamentosDoCliente(), orcamento_selecionado);
 					faturamento.setLocationRelativeTo(btnExcluirOrcamento);
 					faturamento.setVisible(true);
-					
 				}
 			}
 		});
-		btnFaturar.setBounds(10, 159, 143, 29);
+		btnFaturar.setBounds(594, 157, 143, 29);
 		contentPane.add(btnFaturar);
+		
+		btnImprimir = new JButton("Imprimir");
+		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnImprimir.setEnabled(false);
+		btnImprimir.setBounds(461, 157, 122, 29);
+		btnImprimir.setIcon(icones.getIcone_impressora());
+		contentPane.add(btnImprimir);
 	
 	}
 

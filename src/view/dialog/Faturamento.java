@@ -39,8 +39,10 @@ import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.ConfiguracaoDAO;
 import dao.FaturamentoDAO;
 import dao.FormaPagamentoDAO;
+import entities.configuracoes.Configuracoes;
 import entities.financeiro.Forma_pagamento;
 import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
@@ -116,6 +118,7 @@ public class Faturamento extends JDialog {
 	private Double valor_pago;
 	private Double valor_digitado;
 	private JButton btnCancelarFaturamento = new JButton("Cancelar");
+	private Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
 
 	/**
 	 * Launch the application.
@@ -217,11 +220,26 @@ public class Faturamento extends JDialog {
 			public void mousePressed(MouseEvent clickConfirmarFaturamento) {
 				if (btnConfirmarFaturamento.isEnabled()) {
 					FaturamentoDAO faturamento_dao = new FaturamentoDAO();
-					if (faturamento_dao.salvar_parcelas(orcamento)) {
-						JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
-								"Parcelas do orçamento.", JOptionPane.NO_OPTION);
-						dispose();
+
+					Boolean flag;
+					if (orcamento.getValor_total().compareTo(total_parcelas) != 0 && configuracoes_do_sistema.getSalva_parc_dif().equals("PERGUNTAR")) {
+						int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
+								"O total das parcelas está diferente do total do orçamento.\nDeseja salvar as parcelas?",
+								"Total das parcelas", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+
+						flag = opcao == JOptionPane.YES_OPTION;
+					}else {
+						flag = true;
 					}
+
+					if(flag) {
+						if (faturamento_dao.salvar_parcelas(orcamento)) {
+							JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
+									"Parcelas do orçamento.", JOptionPane.NO_OPTION);
+							dispose();
+						}
+					}
+					
 				}
 			}
 		});
@@ -976,8 +994,15 @@ public class Faturamento extends JDialog {
 
 		if (orcamento.getValor_total().compareTo(total_parcelas) == 0) {
 			txtTotalParcelas.setForeground(Color.BLACK);
+			btnConfirmarFaturamento.setEnabled(true);
 		} else {
 			txtTotalParcelas.setForeground(new Color(255, 69, 0));
+
+			if (configuracoes_do_sistema.getSalva_parc_dif().equals("NÃO")) {
+				btnConfirmarFaturamento.setEnabled(false);
+			} else {
+				btnConfirmarFaturamento.setEnabled(true);
+			}
 		}
 
 	}
@@ -1005,9 +1030,9 @@ public class Faturamento extends JDialog {
 		}
 
 		// Testa se a data de vencimento da ultima parcela é menor que a data atual.
-		if(maior_data_vencimento.after(new Date())) {
+		if (maior_data_vencimento.after(new Date())) {
 			return maior_data_vencimento;
-		}else {
+		} else {
 			return new Date();
 		}
 	}
@@ -1019,7 +1044,7 @@ public class Faturamento extends JDialog {
 				nf.format(valor_a_parcelar / quantidade_de_parcelas).replaceAll("\\.", "").replace(",", "."));
 
 		Calendar vencimento = Calendar.getInstance();
-		vencimento.setTime(pega_ultimo_vencimento());	
+		vencimento.setTime(pega_ultimo_vencimento());
 
 		for (int n = 0; n < quantidade_de_parcelas; n++) {
 			vencimento.add(Calendar.MONTH, 1);

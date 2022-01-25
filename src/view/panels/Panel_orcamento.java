@@ -43,9 +43,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
 import dao.ClienteDAO;
+import dao.ConfiguracaoDAO;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
 import entities.cliente.Cliente;
+import entities.configuracoes.Configuracoes;
 import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
@@ -194,6 +196,7 @@ public class Panel_orcamento extends JPanel {
 	private Double valor_original = 0.00;
 	private Date data_inclusao_orcamento = null;
 	private ArrayList<Parcela> parcelas = new ArrayList<Parcela>();
+	private Configuracoes configuravoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
 
 	/**
 	 * Create the panel.

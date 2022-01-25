@@ -41,6 +41,7 @@ import api_tools.Busca_cep;
 import api_tools.Busca_cnpj;
 import dao.ClienteDAO;
 import entities.cliente.Cliente;
+import entities.configuracoes.Configuracoes;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;

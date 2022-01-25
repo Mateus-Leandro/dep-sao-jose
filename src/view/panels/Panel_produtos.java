@@ -37,6 +37,7 @@ import javax.swing.text.MaskFormatter;
 
 import dao.ProdutoDAO;
 import dao.SetorDAO;
+import entities.configuracoes.Configuracoes;
 import entities.produto.Produto;
 import entities.produto.Setor;
 import icons.Icones;

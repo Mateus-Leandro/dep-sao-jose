@@ -56,6 +56,7 @@ public class Busca_cnpj {
 
 	}
 
+	
 	public JSONObject chama_api_cnpj(JSONObject objetoJson, String cnpj) throws IOException {
 		@SuppressWarnings("unchecked")
 		String url = "https://www.receitaws.com.br/v1/cnpj/" + cnpj;
