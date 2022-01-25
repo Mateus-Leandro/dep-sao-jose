@@ -17,6 +17,8 @@ public class Icones {
 	Icon icone_parcelas = new ImageIcon(getClass().getResource("/icons/parcelas.png"));
 	Icon icone_ok = new ImageIcon(getClass().getResource("/icons/ok.png"));
 	Icon icone_dinheiro = new ImageIcon(getClass().getResource("/icons/dinheiro.png"));
+	Icon icone_impressora = new ImageIcon(getClass().getResource("/icons/impressora.png"));
+	Icon icone_engrenagem = new ImageIcon(getClass().getResource("/icons/engrenagem.png"));
 	
 	public Icon getIcone_salvar() {
 		return icone_salvar;
@@ -54,5 +56,10 @@ public class Icones {
 	public Icon getIcone_dinheiro() {
 		return icone_dinheiro;
 	}
-	
+	public Icon getIcone_impressora() {
+		return icone_impressora;
+	}
+	public Icon getIcone_engrenagem() {
+		return icone_engrenagem;
+	}
 }
