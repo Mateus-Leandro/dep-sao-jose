@@ -46,6 +46,7 @@ import entities.configuracoes.Configuracoes;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 import icons.Icones;
+import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaOrcamentos;
 import tables.tableSorters.SorterMonetario;
 import view.panels.Panel_orcamento;
@@ -564,6 +565,13 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(btnFaturar);
 
 		btnImprimir = new JButton("Imprimir");
+		btnImprimir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickImprimirOrcamento) {
+				Gera_pdf gera_pdf = new Gera_pdf();
+				gera_pdf.monta_pdf_orcamento(orcamento_selecionado);
+			}
+		});
 		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnImprimir.setEnabled(false);
 		btnImprimir.setBounds(461, 157, 122, 29);
