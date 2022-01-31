@@ -95,6 +95,8 @@ public class Panel_produtos extends JPanel {
 	private JComboBox<String> cbxFatorVenda;
 	private JComboBox<Setor> cbxSetor = new JComboBox<Setor>();
 	private Jtext_tools text_tools = new Jtext_tools();
+	private JLabel lblObg_nomeProduto;
+	private JLabel lblObg_precoVenda;
 
 	/**
 	 * Create the panel.
@@ -127,6 +129,16 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterNomeProduto) {
+
+				if (!fTxtNomeProduto.getText().trim().isEmpty()
+						&& enterNomeProduto.getKeyCode() == enterNomeProduto.VK_ENTER) {
+					cbxSetor.requestFocus();
+				}
+			}
+		});
 		fTxtNomeProduto.setEditable(false);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -157,6 +169,14 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtCodigoBarras = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarras.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterBarras) {
+				if (enterBarras.getKeyCode() == enterBarras.VK_ENTER) {
+					cbxFatorVenda.requestFocus();
+				}
+			}
+		});
 		fTxtCodigoBarras.setEditable(false);
 		fTxtCodigoBarras.addMouseListener(new MouseAdapter() {
 			@Override
@@ -174,7 +194,7 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickMaisSetor) {
 				if (btnMaisSetor.isEnabled()) {
-					CadastroSetor cadastro_setor = new CadastroSetor();
+					CadastroSetor cadastro_setor = new CadastroSetor(getPanelProdutos());
 					cadastro_setor.setVisible(true);
 				}
 			}
@@ -213,6 +233,10 @@ public class Panel_produtos extends JPanel {
 			public void keyReleased(KeyEvent digitaCusto) {
 				calcula_sugerido();
 				calcula_margem_praticada();
+
+				if (digitaCusto.getKeyCode() == digitaCusto.VK_ENTER) {
+					fTxtMargem.requestFocus();
+				}
 			}
 		});
 		fTxtPrecoCusto.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -233,6 +257,10 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaMargem) {
 				calcula_sugerido();
+
+				if (digitaMargem.getKeyCode() == digitaMargem.VK_ENTER) {
+					fTxtPrecoVenda.requestFocus();
+				}
 			}
 		});
 		fTxtMargem.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -267,6 +295,10 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoVenda) {
 				calcula_margem_praticada();
+
+				if (digitaPrecoVenda.getKeyCode() == digitaPrecoVenda.VK_ENTER) {
+					salvar_produto();
+				}
 			}
 		});
 		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -399,7 +431,8 @@ public class Panel_produtos extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
-		cbxTipoPesquisa.setModel(new DefaultComboBoxModel<String>(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
+		cbxTipoPesquisa
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -436,7 +469,9 @@ public class Panel_produtos extends JPanel {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
-				editar_item();
+				if(btnEditar.isEnabled()) {
+					editar_item();
+				}
 			}
 		});
 		btnEditar.setEnabled(false);
@@ -450,7 +485,17 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickExcluir) {
 				if (btnExcluir.isEnabled()) {
-					excluir_item();
+
+					ProdutoDAO produto_dao = new ProdutoDAO();
+
+					if (produto_dao.produto_tem_orcamento(
+							(Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0))) {
+						JOptionPane.showMessageDialog(btnExcluir,
+								"Impossível excluir produto.\nO produto selecionado está presente em 1 ou mais orçamentos.",
+								"Exclusão de produtos", JOptionPane.WARNING_MESSAGE);
+					} else {
+						excluir_item();
+					}
 				}
 			}
 		});
@@ -489,11 +534,28 @@ public class Panel_produtos extends JPanel {
 		add(btnCancelar);
 
 		cbxFatorVenda = new JComboBox<String>();
+		cbxFatorVenda.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterFator) {
+				if (enterFator.getKeyCode() == enterFator.VK_ENTER) {
+					fTxtPrecoCusto.requestFocus();
+				}
+			}
+		});
 		cbxFatorVenda.setEnabled(false);
 		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxFatorVenda.setModel(new DefaultComboBoxModel<String>(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
+		cbxFatorVenda
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
 		cbxFatorVenda.setBounds(113, 231, 57, 22);
 		add(cbxFatorVenda);
+		cbxSetor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterSetor) {
+				if (enterSetor.getKeyCode() == enterSetor.VK_ENTER) {
+					fTxtCodigoBarras.requestFocus();
+				}
+			}
+		});
 		cbxSetor.setEnabled(false);
 
 		cbxSetor.addFocusListener(new FocusAdapter() {
@@ -512,6 +574,18 @@ public class Panel_produtos extends JPanel {
 		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxSetor.setBounds(59, 189, 210, 20);
 		add(cbxSetor);
+		
+		lblObg_nomeProduto = new JLabel("*");
+		lblObg_nomeProduto.setForeground(Color.RED);
+		lblObg_nomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_nomeProduto.setBounds(710, 163, 20, 15);
+		add(lblObg_nomeProduto);
+		
+		lblObg_precoVenda = new JLabel("*");
+		lblObg_precoVenda.setForeground(Color.RED);
+		lblObg_precoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_precoVenda.setBounds(709, 309, 20, 15);
+		add(lblObg_precoVenda);
 
 	}
 
@@ -535,6 +609,9 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.setEditable(false);
 		cbxFatorVenda.setEnabled(false);
 		cbxSetor.setEnabled(false);
+
+		fTxtNomeProduto.setBorder(new LineBorder(Color.lightGray));
+		fTxtPrecoVenda.setBorder(new LineBorder(Color.lightGray));
 	}
 
 	public void limparCampos() {
@@ -561,7 +638,9 @@ public class Panel_produtos extends JPanel {
 		btnSalvar.setVisible(true);
 		btnCancelar.setEnabled(true);
 		btnSalvar.setEnabled(true);
-		cbxSetor.setSelectedIndex(0);
+		if (cbxSetor.getItemCount() > 0) {
+			cbxSetor.setSelectedIndex(0);
+		}
 	}
 
 	public void cancelar_item() {
@@ -580,6 +659,7 @@ public class Panel_produtos extends JPanel {
 		btnExcluir.setVisible(false);
 		btnSalvar.setVisible(true);
 		btnCancelar.setVisible(true);
+		fTxtNomeProduto.requestFocus();
 	}
 
 	public void excluir_item() {
@@ -611,7 +691,7 @@ public class Panel_produtos extends JPanel {
 					}
 				}
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Erro ao excluir produto!");
+				JOptionPane.showMessageDialog(btnExcluir, "Erro ao excluir produto!");
 			}
 		}
 	}
@@ -654,13 +734,17 @@ public class Panel_produtos extends JPanel {
 			if (fTxtNomeProduto.getText().trim().isEmpty() || preco < 0.01) {
 				if (fTxtNomeProduto.getText().trim().isEmpty()) {
 					fTxtNomeProduto.setBorder(new LineBorder(Color.RED));
-					JOptionPane.showMessageDialog(null, "Necessário informar o nome do produto!");
+					JOptionPane.showMessageDialog(fTxtNomeProduto, "Necessário informar o nome do produto!",
+							"Produto sem nome.", JOptionPane.WARNING_MESSAGE);
+					fTxtNomeProduto.requestFocus();
 				}
 
 				if (preco < 0.01) {
 					fTxtPrecoVenda.setBorder(new LineBorder(Color.RED));
-					JOptionPane.showMessageDialog(null, "Necessario informar preço de venda!", "Preço de venda zerado.",
-							JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(fTxtPrecoVenda, "Necessario informar preço de venda!",
+							"Preço de venda zerado.", JOptionPane.WARNING_MESSAGE);
+					fTxtMargem.requestFocus();
+
 				}
 			} else {
 				gravarNovoProduto();
@@ -927,5 +1011,9 @@ public class Panel_produtos extends JPanel {
 			}
 
 		}
+	}
+	
+	public Panel_produtos getPanelProdutos() {
+		return this;
 	}
 }

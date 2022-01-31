@@ -9,16 +9,11 @@ import javax.swing.JTextField;
 
 public class Jtext_tools {
 	
-	
-	public void move_cursor_inicio(JFormattedTextField fTxtNomeProduto) {
-		if(fTxtNomeProduto.getText().trim().isEmpty()) {
-			fTxtNomeProduto.setCaretPosition(0);
-		}
-	}
-	
-	public void proximo_campo(KeyEvent tecla, Component comp) {
-		if(tecla.getKeyCode() == tecla.VK_ENTER) {
-			comp.requestFocus();
+	public void move_cursor_inicio(JFormattedTextField nome_campo) {
+		if(nome_campo.getText().trim().isEmpty()) {
+			nome_campo.setCaretPosition(0);
+		}else {
+			nome_campo.setCaretPosition(nome_campo.getText().trim().length());
 		}
 	}
 }

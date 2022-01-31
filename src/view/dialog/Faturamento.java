@@ -49,6 +49,10 @@ import entities.orcamentos.Orcamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaParcelas;
 import view.formatFields.FormataNumeral;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Faturamento extends JDialog {
 
@@ -77,7 +81,7 @@ public class Faturamento extends JDialog {
 	private JButton btnInserirParcela;
 	private Icones icones = new Icones();
 	private JLabel lblFormaPagamento;
-	private JComboBox<Forma_pagamento> cbxFormaPagamento;
+	private JComboBox<Forma_pagamento> cbxFormaPagamento = new JComboBox<Forma_pagamento>();
 	private JLabel lblTotalParcelas;
 	private JLabel lblValorEmAberto;
 	private JLabel lblValorPago;
@@ -97,7 +101,7 @@ public class Faturamento extends JDialog {
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	private JButton btnParcelarIgualmente;
+	private JButton btnParcelarIgualmente = new JButton("Parcelar igualmente");
 	private JFormattedTextField fTxtQuantidadeDeParcelas;
 	private JLabel lblQuantidadeParcelas;
 	private JButton btnParcelar;
@@ -119,6 +123,9 @@ public class Faturamento extends JDialog {
 	private Double valor_digitado;
 	private JButton btnCancelarFaturamento = new JButton("Cancelar");
 	private Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
+	private JLabel lblObg_valorParcela;
+	private JLabel lblObg_formaPagamento;
+	private JLabel lblObg_dataVencimento;
 
 	/**
 	 * Launch the application.
@@ -222,24 +229,25 @@ public class Faturamento extends JDialog {
 					FaturamentoDAO faturamento_dao = new FaturamentoDAO();
 
 					Boolean flag;
-					if (orcamento.getValor_total().compareTo(total_parcelas) != 0 && configuracoes_do_sistema.getSalva_parc_dif().equals("PERGUNTAR")) {
+					if (orcamento.getValor_total().compareTo(total_parcelas) != 0
+							&& configuracoes_do_sistema.getSalva_parc_dif().equals("PERGUNTAR")) {
 						int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
 								"O total das parcelas está diferente do total do orçamento.\nDeseja salvar as parcelas?",
 								"Total das parcelas", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 						flag = opcao == JOptionPane.YES_OPTION;
-					}else {
+					} else {
 						flag = true;
 					}
 
-					if(flag) {
+					if (flag) {
 						if (faturamento_dao.salvar_parcelas(orcamento)) {
 							JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
 									"Parcelas do orçamento.", JOptionPane.NO_OPTION);
 							dispose();
 						}
 					}
-					
+
 				}
 			}
 		});
@@ -479,7 +487,6 @@ public class Faturamento extends JDialog {
 		lblFormaPagamento.setBounds(284, 190, 133, 20);
 		contentPanel.add(lblFormaPagamento);
 
-		cbxFormaPagamento = new JComboBox<Forma_pagamento>();
 		cbxFormaPagamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxFormaPagamento.setBounds(419, 188, 195, 22);
 		contentPanel.add(cbxFormaPagamento);
@@ -616,7 +623,6 @@ public class Faturamento extends JDialog {
 		txtValorPago.setBounds(322, 445, 112, 20);
 		contentPanel.add(txtValorPago);
 
-		btnParcelarIgualmente = new JButton("Parcelar igualmente");
 		btnParcelarIgualmente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickDividirParcelas) {
@@ -634,16 +640,7 @@ public class Faturamento extends JDialog {
 		fTxtQuantidadeDeParcelas.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaQuantidadeParcelas) {
-				if (total_parcelas < orcamento.getValor_total()) {
-					if (fTxtQuantidadeDeParcelas.getText().trim().isEmpty()
-							|| Integer.parseInt(fTxtQuantidadeDeParcelas.getText().trim()) == 0) {
-						btnParcelar.setEnabled(false);
-					} else {
-						btnParcelar.setEnabled(true);
-					}
-				} else {
-					btnParcelar.setEnabled(false);
-				}
+				valida_parcelamento();
 			}
 		});
 		fTxtQuantidadeDeParcelas.setDocument(new FormataNumeral(2, 0));
@@ -704,7 +701,7 @@ public class Faturamento extends JDialog {
 				}
 			}
 		});
-		btnLimpaDataVencimento.setBounds(386, 230, 26, 20);
+		btnLimpaDataVencimento.setBounds(392, 231, 26, 20);
 		btnLimpaDataVencimento.setIcon(icones.getIcone_limpar());
 		contentPanel.add(btnLimpaDataVencimento);
 
@@ -742,6 +739,24 @@ public class Faturamento extends JDialog {
 		btnCancelarFaturamento.setIcon(icones.getIcone_cancelar());
 		contentPanel.add(btnCancelarFaturamento);
 
+		lblObg_valorParcela = new JLabel("*");
+		lblObg_valorParcela.setForeground(Color.RED);
+		lblObg_valorParcela.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_valorParcela.setBounds(263, 199, 20, 15);
+		contentPanel.add(lblObg_valorParcela);
+
+		lblObg_formaPagamento = new JLabel("*");
+		lblObg_formaPagamento.setForeground(Color.RED);
+		lblObg_formaPagamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_formaPagamento.setBounds(614, 202, 20, 15);
+		contentPanel.add(lblObg_formaPagamento);
+
+		lblObg_dataVencimento = new JLabel("*");
+		lblObg_dataVencimento.setForeground(Color.RED);
+		lblObg_dataVencimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_dataVencimento.setBounds(382, 242, 20, 15);
+		contentPanel.add(lblObg_dataVencimento);
+
 	}
 
 	// ------- Funções ------
@@ -766,7 +781,7 @@ public class Faturamento extends JDialog {
 		mostra_totais();
 	}
 
-	public void alimenta_formas_pagamento() {
+	public ArrayList<Forma_pagamento> alimenta_formas_pagamento() {
 
 		formas_pagamento.clear();
 		cbxFormaPagamento.removeAllItems();
@@ -777,6 +792,8 @@ public class Faturamento extends JDialog {
 			Forma_pagamento forma = new Forma_pagamento(form.getCodigo(), form.getDescricao());
 			cbxFormaPagamento.addItem(forma);
 		}
+		
+		return formas_pagamento;
 	}
 
 	public void parcelar() {
@@ -921,7 +938,7 @@ public class Faturamento extends JDialog {
 
 	public Boolean valida_parcela() {
 		try {
-			if (fTxtValorParcela.getText().trim().isEmpty()
+			if (cbxFormaPagamento.getSelectedIndex() == -1 || fTxtValorParcela.getText().trim().isEmpty()
 					|| nf.parse(fTxtValorParcela.getText().trim().replace("R$ ", "")).doubleValue() < 0.01
 					|| nf.parse(fTxtValorParcela.getText().trim().replace("R$ ", "")).doubleValue() > orcamento
 							.getValor_total()
@@ -1095,6 +1112,38 @@ public class Faturamento extends JDialog {
 				}
 			}
 			return true;
+		}
+	}
+
+	public void valida_parcelamento() {
+		if (total_parcelas < orcamento.getValor_total()) {
+			if (fTxtQuantidadeDeParcelas.getText().trim().isEmpty()
+					|| Integer.parseInt(fTxtQuantidadeDeParcelas.getText().trim()) == 0
+					|| cbxFormaPagamento.getSelectedIndex() == -1) {
+				btnParcelar.setEnabled(false);
+			} else {
+				btnParcelar.setEnabled(true);
+			}
+		} else {
+			btnParcelar.setEnabled(false);
+		}
+	}
+	
+	public void abrir_faturamento(Faturamento tela_faturamento) {
+		ArrayList<Forma_pagamento> formas_de_pagamento = alimenta_formas_pagamento();
+
+		// Testa se existe formas de pagamento cadastradas.
+		if (formas_de_pagamento.size() == 0) {
+			JOptionPane.showMessageDialog(null,
+					"Nenhuma forma de pagamento cadastrada.\nNecessário cadastrar ao menos 1 forma de pagamento para utilizar a manutenção das parcelas.",
+					"Formas de pagamento.", JOptionPane.WARNING_MESSAGE);
+			tela_faturamento.setVisible(false);
+
+			CadastroFormaPagamento cadastro_formas = new CadastroFormaPagamento(tela_faturamento,
+					formas_de_pagamento);
+			cadastro_formas.setVisible(true);
+		} else {
+			tela_faturamento.setVisible(true);
 		}
 	}
 }

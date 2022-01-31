@@ -29,6 +29,8 @@ import dao.FormaPagamentoDAO;
 import entities.financeiro.Forma_pagamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaFormasPagamento;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CadastroFormaPagamento extends JDialog {
 
@@ -69,13 +71,24 @@ public class CadastroFormaPagamento extends JDialog {
 	 * Create the dialog.
 	 */
 	public CadastroFormaPagamento(Faturamento tela_faturamento, ArrayList<Forma_pagamento> formas_pagamento) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent fechaTelaFormas) {
+				if(!tela_faturamento.getTelaFaturamento().isVisible()) {
+					tela_faturamento.dispose();
+					dispose();
+				}else {
+					dispose();
+				}
+			}
+		});
 		modelo_tabela = new ModeloTabelaFormasPagamento(formas_pagamento);
 		formas = formas_pagamento;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		setModal(true);
+//		setModal(true);
 		setLocationRelativeTo(tela_faturamento);
 
 		contentPanel.setLayout(null);
@@ -113,6 +126,9 @@ public class CadastroFormaPagamento extends JDialog {
 					if (fTxtCodigoForma.getText().trim().isEmpty()) {
 						if (salvar_forma()) {
 							tela_faturamento.alimenta_formas_pagamento();
+							if(!tela_faturamento.isVisible()) {
+								tela_faturamento.setVisible(true);
+							}
 						}
 					} else {
 						if (editar_forma()) {

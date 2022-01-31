@@ -23,21 +23,13 @@ public class OrcamentoDAO {
 
 		try {
 			conn.setAutoCommit(false);
-			Integer id_cliente = null;
-
-			// Testa se foi passado cliente no orçamento.
-			if (orcamento.getCliente() == null) {
-				id_cliente = 1;
-			} else {
-				id_cliente = orcamento.getCliente().getIdCliente();
-			}
 
 			// salvando cabeçalho do orçamento.
 			ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`orcamento` "
 					+ "(`idCliente`, `quantidadeProdutos`, `totalMercadoriasBruto`, "
 					+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `observacao`, `dataInclusao`) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, id_cliente);
+			ps.setInt(1, orcamento.getCliente().getIdCliente());
 			ps.setInt(2, orcamento.getQuantidade_produtos());
 			ps.setDouble(3, orcamento.getTotal_mercadorias_bruto());
 			ps.setDouble(4, orcamento.getTotal_mercadorias_liquido());
@@ -85,13 +77,12 @@ public class OrcamentoDAO {
 
 			ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `idCliente` = ?, "
 					+ "`quantidadeProdutos` = ?, `totalMercadoriasBruto` = ?, "
-					+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, "
-					+ "`valorTotal` = ? "
+					+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, " + "`valorTotal` = ? "
 					+ "WHERE (`idOrcamento` = ?)");
-			if(orcamento_editado.getCliente() != null) {
+			if (orcamento_editado.getCliente() != null) {
 				ps.setInt(1, orcamento_editado.getCliente().getIdCliente());
-			}else {
-				ps.setInt(1,1);
+			} else {
+				ps.setInt(1, 1);
 			}
 			ps.setInt(2, orcamento_editado.getQuantidade_produtos());
 			ps.setDouble(3, orcamento_editado.getTotal_mercadorias_bruto());

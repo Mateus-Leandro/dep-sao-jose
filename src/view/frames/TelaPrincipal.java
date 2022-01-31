@@ -4,10 +4,12 @@ import java.awt.EventQueue;
 import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalTabbedPaneUI.TabbedPaneLayout;
 
 import dao.ConfiguracaoDAO;
 import entities.configuracoes.Configuracoes;
@@ -22,13 +24,13 @@ public class TelaPrincipal extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private  Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
+	private Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
 	private JPanel contentPane;
-	private JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private Panel_clientes clientes = new Panel_clientes();
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
-	private Panel_configuracoes configuracoes = new Panel_configuracoes();
+	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
 
 	/**
 	 * Launch the application.
@@ -58,7 +60,7 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+
 		tabbedPane.setBorder(UIManager.getBorder("CheckBoxMenuItem.border"));
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tabbedPane.setBounds(5, 5, 733, 687);
@@ -74,5 +76,28 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.addTab("Orçamentos", orcamentos);
 		tabbedPane.addTab("Configurações", configuracoes);
 
+		if (configuracoes_do_sistema == null) {
+			desativa_abas_configuracao_inicial();
+			JOptionPane.showMessageDialog(null, "Necessário realizar configuração inicial do sistema.",
+					"Configuração inicial", JOptionPane.WARNING_MESSAGE);
+		}
+
+	}
+
+	public void desativa_abas_configuracao_inicial() {
+		tabbedPane.setEnabledAt(0, false);
+		tabbedPane.setEnabledAt(1, false);
+		tabbedPane.setEnabledAt(2, false);
+		muda_aba(3);
+	}
+
+	public void ativa_abas_configuracao_inicial() {
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+	}
+
+	public void muda_aba(int numero_aba) {
+		tabbedPane.setSelectedIndex(numero_aba);
 	}
 }

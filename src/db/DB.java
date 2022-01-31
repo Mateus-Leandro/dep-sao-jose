@@ -1,5 +1,6 @@
 package db;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,29 +18,39 @@ public class DB {
 
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
-		if (conn == null) {
-			try {
-				Properties props = carregarDados();
-				String url = props.getProperty("dburl");
-				conn = DriverManager.getConnection(url, props);
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de dados!\n" + e.getMessage(),
-						"Erro de conexão.", JOptionPane.WARNING_MESSAGE);
+
+		File arquivo_db = new File("C:/dep/conf/db.properties");
+		if (!arquivo_db.exists()) {
+			JOptionPane.showMessageDialog(null, "O arquivo " + arquivo_db.getPath()
+					+ ", necessário para a conexão com o banco de dados, não foi encontrado."
+					+ "\nGentileza preencher as configurações da tela seguinte para que o arquivo seja criado.",
+					"Arquivo de conexão não encontrado.", JOptionPane.WARNING_MESSAGE);
+			return null;
+		} else {
+			if (conn == null) {
+				try {
+					Properties props = carregarDados();
+					String url = props.getProperty("dburl");
+					conn = DriverManager.getConnection(url, props);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de dados!\n" + e.getMessage(),
+							"Erro de conexão.", JOptionPane.WARNING_MESSAGE);
+				}
 			}
+			return conn;
 		}
-		return conn;
 	}
 
 	// Lê os dados de conexão do banco através de um arquivo.
 	private static Properties carregarDados() {
-		try (FileInputStream fs = new FileInputStream("db.properties")) {
+
+		try (FileInputStream fs = new FileInputStream("C:/dep/conf/db.properties")) {
 			Properties props = new Properties();
 			props.load(fs);
 			return props;
 		} catch (IOException e) {
 			throw new DbException(e.getMessage());
 		}
-
 	}
 
 	public static void closeStatement(Statement st) {

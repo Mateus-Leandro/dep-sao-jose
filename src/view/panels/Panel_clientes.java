@@ -2,8 +2,6 @@ package view.panels;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -41,7 +39,6 @@ import api_tools.Busca_cep;
 import api_tools.Busca_cnpj;
 import dao.ClienteDAO;
 import entities.cliente.Cliente;
-import entities.configuracoes.Configuracoes;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
@@ -89,7 +86,7 @@ public class Panel_clientes extends JPanel {
 	private JButton btnEditar;
 	private JButton btnExcluir;
 	private JLabel lblPesquisarPor;
-	private JComboBox cbxTipoPesquisa;
+	private JComboBox<String> cbxTipoPesquisa;
 	private JFormattedTextField fTxtPesquisa;
 	private JLabel lblClienteCadastrados;
 	private JSeparator separador_clientes_1;
@@ -106,6 +103,11 @@ public class Panel_clientes extends JPanel {
 	private JSeparator separador_clientes_4;
 	private JButton btnReload;
 	private Jtext_tools text_tools = new Jtext_tools();
+	private JLabel lblObg_nome;
+	private JLabel lblObg_celular;
+	private Boolean documento_valido;
+	private ClienteDAO cliente_dao = new ClienteDAO();
+	private Cliente cliente = new Cliente();
 
 	/**
 	 * Create the panel.
@@ -129,6 +131,7 @@ public class Panel_clientes extends JPanel {
 					btnExcluir.setVisible(false);
 					btnSalvar.setVisible(true);
 					btnCancelar.setVisible(true);
+					fTxtDocumento.requestFocus();
 				}
 
 			}
@@ -143,30 +146,15 @@ public class Panel_clientes extends JPanel {
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluir) {
-
-				if (btnExcluir.isEnabled()) {
-
-					boolean flag;
-
-					ClienteDAO cliente_dao = new ClienteDAO();
-					Integer codigo = (Integer) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0);
-
-					int opcao = JOptionPane.showConfirmDialog(null,
-							"Deseja excluir o cliente abaixo?\n" + "Código: " + codigo + "\n" + "Nome: "
-									+ tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 2),
-							"Exclusão de Cliente", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
-
-					flag = opcao == JOptionPane.YES_OPTION;
-
-					if (flag) {
-						if (cliente_dao.excluirCliente(codigo)) {
-							JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso.",
-									"Exclusão de clientes.", JOptionPane.NO_OPTION);
-							recarregarTabela();
-							limpar_campos();
-						}
-					}
+				if (!cliente_dao.cliente_com_orcamento(
+						tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString())) {
+					excluir_cliente();
+				} else {
+					JOptionPane.showMessageDialog(fTxtCidade,
+							"Impossível excluir cilente.\nO cliente selecionado possui pelo menos 1 orçamento salvo em seu nome.",
+							"Exclusão de cliente", JOptionPane.WARNING_MESSAGE);
 				}
+
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -200,7 +188,6 @@ public class Panel_clientes extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent escreveBarraPesquisa) {
 				recarregarTabela();
-
 			}
 		});
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -228,10 +215,12 @@ public class Panel_clientes extends JPanel {
 			public void itemStateChanged(ItemEvent juridico) {
 				fTxtDocumento.setText(null);
 				if (juridico.getStateChange() == ItemEvent.SELECTED) {
+					lblDocumento.setText("CNPJ");
 					fTxtDocumento.setFormatterFactory(new DefaultFormatterFactory(mascara_cnpj));
 					fTxtIe.setVisible(true);
 					lblIe.setVisible(true);
 				} else {
+					lblDocumento.setText("CPF");
 					fTxtDocumento.setFormatterFactory(new DefaultFormatterFactory(mascara_cpf));
 					fTxtIe.setText(null);
 					fTxtIe.setVisible(false);
@@ -248,8 +237,8 @@ public class Panel_clientes extends JPanel {
 		checkBoxJuridica.setEnabled(false);
 		add(checkBoxJuridica);
 
-		lblDocumento = new JLabel("Documento");
-		lblDocumento.setBounds(297, 155, 78, 17);
+		lblDocumento = new JLabel("CPF");
+		lblDocumento.setBounds(339, 156, 34, 17);
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblDocumento);
 
@@ -261,70 +250,26 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtDocumento = new JFormattedTextField(mascara_cpf);
-		fTxtDocumento.setEditable(false);
-		fTxtDocumento.addFocusListener(new FocusAdapter() {
+		fTxtDocumento.addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusLost(FocusEvent perdaFocoDocumento) {
-
-				if (!fTxtDocumento.getText().equals("   .   .   -  ")
-						&& !fTxtDocumento.getText().equals("  .   .   /    -  ")) {
-
-					if (fTxtDocumento.isEnabled()) {
-						String documento = fTxtDocumento.getText().trim();
-						String codigo = txtCodigo.getText().trim();
-						ClienteDAO cliente_dao = new ClienteDAO();
-						String nome_cliente = null;
-						nome_cliente = cliente_dao.validarDocumento(documento, codigo);
-						if (nome_cliente != null) {
-							JOptionPane.showMessageDialog(null,
-									"Documento ja informado para o cliente abaixo:" + "\n" + nome_cliente,
-									"Documento ja utilizado.", JOptionPane.WARNING_MESSAGE);
-							fTxtDocumento.requestFocus();
-						}
-					}
-				}
+			public void mousePressed(MouseEvent clickDocumento) {
+				fTxtDocumento.setCaretPosition(0);
 			}
 		});
+		fTxtDocumento.setHorizontalAlignment(SwingConstants.LEFT);
+		fTxtDocumento.setEditable(false);
 		fTxtDocumento.setBounds(376, 152, 125, 20);
 		fTxtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtDocumento.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtDocumento.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterDocumento) {
-				String documento = fTxtDocumento.getText().trim();
-				Cliente cliente = new Cliente();
-				ClienteDAO cliente_dao = new ClienteDAO();
-
 				if (enterDocumento.getKeyCode() == enterDocumento.VK_ENTER) {
-
-					if (cliente_dao.validarDocumento(documento, txtCodigo.getText().trim()) == null) {
-						if (documento.length() > 14) {
-							if (checkBoxJuridica.isSelected()) {
-								Busca_cnpj api_cnpj = new Busca_cnpj();
-								documento = fTxtDocumento.getText().trim().replaceAll("[./-]", "");
-								cliente = api_cnpj.buscar_cnpj(documento);
-
-								if (cliente != null) {
-									fTxtNomeCliente.setText(cliente.getNome());
-									fTxtApelido.setText(cliente.getApelido());
-									fTxtCep.setText(cliente.getCep());
-									buscaCep();
-									fTxtNumero.setText(cliente.getNumero());
-									fTxtReferencia.setText(cliente.getReferencia());
-									fTxtTelFixo.setText(cliente.getTelefone());
-									fTxtEmail.setText(cliente.getEmail());
-									btnLimpaDocumento.setVisible(true);
-								}
-							}
-						}
-					}
-
 					if (fTxtIe.isVisible()) {
 						fTxtIe.requestFocus();
 					} else {
 						fTxtNomeCliente.requestFocus();
 					}
-
 				}
 			}
 		});
@@ -344,6 +289,7 @@ public class Panel_clientes extends JPanel {
 			e.printStackTrace();
 		}
 		fTxtIe = new JFormattedTextField(mascara_ie);
+		fTxtIe = new JFormattedTextField(mascara_ie);
 		fTxtIe.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterIe) {
@@ -352,8 +298,6 @@ public class Panel_clientes extends JPanel {
 				}
 			}
 		});
-
-		fTxtIe = new JFormattedTextField(mascara_ie);
 		fTxtIe.setEditable(false);
 		fTxtIe.addMouseListener(new MouseAdapter() {
 			@Override
@@ -384,6 +328,14 @@ public class Panel_clientes extends JPanel {
 			e.printStackTrace();
 		}
 		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterNome) {
+				if (!fTxtNomeCliente.getText().trim().isEmpty() && enterNome.getKeyCode() == enterNome.VK_ENTER) {
+					fTxtApelido.requestFocus();
+				}
+			}
+		});
 		fTxtNomeCliente.setEditable(false);
 		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
 			@Override
@@ -410,6 +362,14 @@ public class Panel_clientes extends JPanel {
 		add(lblApelido);
 
 		fTxtApelido = new JFormattedTextField(mascara_apelido);
+		fTxtApelido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterApelido) {
+				if (enterApelido.getKeyCode() == enterApelido.VK_ENTER) {
+					fTxtCep.requestFocus();
+				}
+			}
+		});
 		fTxtApelido.setEditable(false);
 		fTxtApelido.addMouseListener(new MouseAdapter() {
 			@Override
@@ -463,19 +423,23 @@ public class Panel_clientes extends JPanel {
 		fTxtCep.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCep) {
-				text_tools.move_cursor_inicio(fTxtCep);
+				fTxtCep.setCaretPosition(0);
 			}
 		});
 		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCep.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (fTxtCep.getText().trim().length() == 9) {
-					buscaCep();
-					btnLimpaCep.setVisible(true);
-				} else {
-					btnLimpaCep.setVisible(false);
+
+				if (!fTxtCep.getText().trim().equals("-")) {
+					if (fTxtCep.getText().trim().length() == 9) {
+						buscaCep();
+						btnLimpaCep.setVisible(true);
+					} else {
+						btnLimpaCep.setVisible(false);
+					}
 				}
+				
 				if (e.getKeyCode() == e.VK_ENTER) {
 					fTxtCidade.requestFocus();
 				}
@@ -512,6 +476,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterCidade) {
+				if (enterCidade.getKeyCode() == enterCidade.VK_ENTER) {
+					fTxtNumero.requestFocus();
+				}
+			}
+		});
 		fTxtCidade.setEditable(false);
 		fTxtCidade.addMouseListener(new MouseAdapter() {
 			@Override
@@ -545,6 +517,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterEndereco) {
+				if (enterEndereco.getKeyCode() == enterEndereco.VK_ENTER) {
+					fTxtBairro.requestFocus();
+				}
+			}
+		});
 		fTxtEndereco.setEditable(false);
 		fTxtEndereco.addMouseListener(new MouseAdapter() {
 			@Override
@@ -571,6 +551,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterNumero) {
+				if (enterNumero.getKeyCode() == enterNumero.VK_ENTER) {
+					fTxtEndereco.requestFocus();
+				}
+			}
+		});
 		fTxtNumero.setEditable(false);
 		fTxtNumero.addMouseListener(new MouseAdapter() {
 			@Override
@@ -598,6 +586,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		fTxtReferencia.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterReferencia) {
+				if (enterReferencia.getKeyCode() == enterReferencia.VK_ENTER) {
+					fTxtEmail.requestFocus();
+				}
+			}
+		});
 		fTxtReferencia.setEditable(false);
 		fTxtReferencia.addMouseListener(new MouseAdapter() {
 			@Override
@@ -624,6 +620,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterBairro) {
+				if (enterBairro.getKeyCode() == enterBairro.VK_ENTER) {
+					fTxtReferencia.requestFocus();
+				}
+			}
+		});
 		fTxtBairro.setEditable(false);
 		fTxtBairro.addMouseListener(new MouseAdapter() {
 			@Override
@@ -650,6 +654,15 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtCelular = new JFormattedTextField(mascara_celular);
+		fTxtCelular.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterCelular) {
+				if (enterCelular.getKeyCode() == enterCelular.VK_ENTER
+						&& !fTxtCelular.getText().equals("(  )     -    ")) {
+					fTxtTelFixo.requestFocus();
+				}
+			}
+		});
 		fTxtCelular.setEditable(false);
 		fTxtCelular.addMouseListener(new MouseAdapter() {
 			@Override
@@ -676,6 +689,18 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterTelFixo) {
+				if (enterTelFixo.getKeyCode() == enterTelFixo.VK_ENTER) {
+					if (valida_documento()) {
+						btnSalvar.doClick();
+						valida_cliente();
+					}
+
+				}
+			}
+		});
 		fTxtTelFixo.setEditable(false);
 		fTxtTelFixo.addMouseListener(new MouseAdapter() {
 			@Override
@@ -703,6 +728,14 @@ public class Panel_clientes extends JPanel {
 		}
 
 		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterEmail) {
+				if (enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
+					fTxtCelular.requestFocus();
+				}
+			}
+		});
 		fTxtEmail.setEditable(false);
 		fTxtEmail.addMouseListener(new MouseAdapter() {
 			@Override
@@ -783,7 +816,6 @@ public class Panel_clientes extends JPanel {
 							.parseInt(tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString());
 
 					txtCodigo.setText(codigo.toString());
-					
 
 				} else {
 					btnEditar.setEnabled(false);
@@ -797,58 +829,8 @@ public class Panel_clientes extends JPanel {
 		btnSalvar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickSalvarCliente) {
-				Cliente cliente = novo_cliente();
-
-				if (fTxtNomeCliente.getText().trim().isEmpty() || fTxtCelular.getText().equals("(  )     -    ")) {
-					if (fTxtNomeCliente.getText().trim().isEmpty()) {
-						fTxtNomeCliente.setBorder(new LineBorder(Color.RED));
-						JOptionPane.showMessageDialog(null, "Necessário informar o nome do cliente.",
-								"Cliente sem nome.", JOptionPane.WARNING_MESSAGE);
-					}
-
-					if (fTxtCelular.getText().equals("(  )     -    ")) {
-						fTxtCelular.setBorder(new LineBorder(Color.RED));
-						JOptionPane.showMessageDialog(null, "Necessário informar o celular do cliente.",
-								"Cliente sem celular.", JOptionPane.WARNING_MESSAGE);
-					}
-				} else {
-
-					if (txtCodigo.getText().trim().isEmpty()) {
-						if (salvar_cliente(cliente)) {
-							fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
-							fTxtCelular.setBorder(new LineBorder(Color.lightGray));
-							JOptionPane
-									.showMessageDialog(null,
-											"Cliente cadastrado com sucesso." + "\nCódigo: " + cliente.getIdCliente()
-													+ "\nNome: " + cliente.getNome(),
-											"Novo cliente", JOptionPane.NO_OPTION);
-							limpar_campos();
-							desativar_campos();
-							recarregarTabela();
-							btnNovo.setVisible(true);
-							btnEditar.setVisible(true);
-							btnExcluir.setVisible(true);
-						}
-					} else {
-
-						ClienteDAO cliente_dao = new ClienteDAO();
-
-						cliente.setIdCliente(Integer.parseInt(txtCodigo.getText().trim()));
-
-						if (cliente_dao.alterar_cliente(cliente)) {
-							fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
-							fTxtCelular.setBorder(new LineBorder(Color.lightGray));
-							JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso.", "Alteração de cliente",
-									JOptionPane.NO_OPTION);
-							limpar_campos();
-							desativar_campos();
-							recarregarTabela();
-							tabelaClientes.clearSelection();
-							btnEditar.setVisible(true);
-							btnExcluir.setVisible(true);
-							btnNovo.setVisible(true);
-						}
-					}
+				if (valida_documento()) {
+					valida_cliente();
 				}
 			}
 		});
@@ -887,7 +869,7 @@ public class Panel_clientes extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox();
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "Apelido", "C\u00F3digo" }));
+		cbxTipoPesquisa.setModel(new DefaultComboBoxModel<String>(new String[] { "Nome", "Apelido", "C\u00F3digo" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setBounds(105, 462, 96, 22);
 		add(cbxTipoPesquisa);
@@ -964,6 +946,18 @@ public class Panel_clientes extends JPanel {
 		btnReload.setIcon(icones.getIcone_reload());
 		btnReload.setBounds(675, 462, 34, 22);
 		add(btnReload);
+
+		lblObg_nome = new JLabel("*");
+		lblObg_nome.setForeground(Color.RED);
+		lblObg_nome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_nome.setBounds(375, 196, 20, 15);
+		add(lblObg_nome);
+
+		lblObg_celular = new JLabel("*");
+		lblObg_celular.setForeground(Color.RED);
+		lblObg_celular.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblObg_celular.setBounds(166, 371, 20, 15);
+		add(lblObg_celular);
 
 	}
 
@@ -1049,6 +1043,89 @@ public class Panel_clientes extends JPanel {
 		fTxtEmail.setText(null);
 	}
 
+	public Boolean valida_documento() {
+		if (!fTxtDocumento.getText().equals("   .   .   -  ")
+				&& !fTxtDocumento.getText().equals("  .   .   /    -  ")) {
+			String documento = fTxtDocumento.getText().trim();
+
+			String codigo = null;
+			if (txtCodigo.getText().trim().isEmpty()) {
+				codigo = null;
+			} else {
+				codigo = txtCodigo.getText().trim();
+			}
+
+			String nome_cliente = null;
+			nome_cliente = cliente_dao.validarDocumento(documento, codigo);
+
+			if (nome_cliente != null) {
+				fTxtDocumento.requestFocus();
+				JOptionPane.showMessageDialog(fTxtCidade,
+						"Documento ja informado para o cliente abaixo:" + "\n" + nome_cliente,
+						"Documento ja utilizado.", JOptionPane.WARNING_MESSAGE);
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	public void valida_cliente() {
+		cliente = novo_cliente();
+
+		if (fTxtNomeCliente.getText().trim().isEmpty() || fTxtCelular.getText().equals("(  )     -    ")) {
+			if (fTxtNomeCliente.getText().trim().isEmpty()) {
+				fTxtNomeCliente.setBorder(new LineBorder(Color.RED));
+				JOptionPane.showMessageDialog(fTxtNomeCliente, "Necessário informar o nome do cliente.",
+						"Cliente sem nome.", JOptionPane.WARNING_MESSAGE);
+			}
+
+			if (fTxtCelular.getText().equals("(  )     -    ")) {
+				fTxtCelular.setBorder(new LineBorder(Color.RED));
+				JOptionPane.showMessageDialog(fTxtCelular, "Necessário informar o celular do cliente.",
+						"Cliente sem celular.", JOptionPane.WARNING_MESSAGE);
+			}
+		} else {
+
+			if (txtCodigo.getText().trim().isEmpty()) {
+				if (salvar_cliente(cliente)) {
+					fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
+					fTxtCelular.setBorder(new LineBorder(Color.lightGray));
+					JOptionPane
+							.showMessageDialog(
+									fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
+											+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
+									"Novo cliente", JOptionPane.NO_OPTION);
+					limpar_campos();
+					desativar_campos();
+					recarregarTabela();
+					btnNovo.setVisible(true);
+					btnEditar.setVisible(true);
+					btnExcluir.setVisible(true);
+				}
+			} else {
+
+				cliente.setIdCliente(Integer.parseInt(txtCodigo.getText().trim()));
+
+				if (cliente_dao.alterar_cliente(cliente)) {
+					fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
+					fTxtCelular.setBorder(new LineBorder(Color.lightGray));
+					JOptionPane.showMessageDialog(fTxtCidade, "Cliente alterado com sucesso.", "Alteração de cliente",
+							JOptionPane.NO_OPTION);
+					limpar_campos();
+					desativar_campos();
+					recarregarTabela();
+					tabelaClientes.clearSelection();
+					btnEditar.setVisible(true);
+					btnExcluir.setVisible(true);
+					btnNovo.setVisible(true);
+				}
+			}
+		}
+	}
+
 	public Cliente novo_cliente() {
 		String documento = null;
 		String inscricao_estadual = null;
@@ -1130,8 +1207,6 @@ public class Panel_clientes extends JPanel {
 	}
 
 	public boolean salvar_cliente(Cliente cliente) {
-
-		ClienteDAO cliente_dao = new ClienteDAO();
 		cliente = cliente_dao.inserirCliente(cliente);
 
 		if (cliente.getIdCliente() != null) {
@@ -1141,8 +1216,30 @@ public class Panel_clientes extends JPanel {
 		}
 	}
 
+	public void excluir_cliente() {
+		if (btnExcluir.isEnabled()) {
+			boolean flag;
+			Integer codigo = (Integer) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0);
+
+			int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+					"Deseja excluir o cliente abaixo?\n" + "Código: " + codigo + "\n" + "Nome: "
+							+ tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 2),
+					"Exclusão de Cliente", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+
+			flag = opcao == JOptionPane.YES_OPTION;
+
+			if (flag) {
+				if (cliente_dao.excluirCliente(codigo)) {
+					JOptionPane.showMessageDialog(fTxtCidade, "Cliente excluído com sucesso.", "Exclusão de clientes.",
+							JOptionPane.NO_OPTION);
+					recarregarTabela();
+					limpar_campos();
+				}
+			}
+		}
+	}
+
 	public ArrayList<Cliente> alimentarListaClientes(ArrayList<Cliente> clientes) {
-		ClienteDAO cliente_dao = new ClienteDAO();
 
 		String pesquisado = null;
 
@@ -1191,5 +1288,41 @@ public class Panel_clientes extends JPanel {
 		fTxtEndereco.setText(endereco_cliente.getEndereco());
 		btnLimpaCep.setVisible(true);
 	}
-	
+
+	public void pega_dados_pessoa_juridica() {
+		Cliente cliente = new Cliente();
+		String documento;
+		if (!fTxtDocumento.getText().equals("   .   .   -  ")
+				&& !fTxtDocumento.getText().equals("  .   .   /    -  ")) {
+			documento = null;
+		} else {
+			documento = fTxtDocumento.getText().trim();
+		}
+
+		if (documento != null) {
+			if (cliente_dao.validarDocumento(documento, txtCodigo.getText().trim()) == null) {
+				if (documento.length() > 14) {
+					if (checkBoxJuridica.isSelected()) {
+						Busca_cnpj api_cnpj = new Busca_cnpj();
+						documento = fTxtDocumento.getText().trim().replaceAll("[./-]", "");
+						cliente = api_cnpj.buscar_cnpj(documento);
+
+						if (cliente != null) {
+							fTxtNomeCliente.setText(cliente.getNome());
+							fTxtApelido.setText(cliente.getApelido());
+							fTxtCep.setText(cliente.getCep());
+							buscaCep();
+							fTxtNumero.setText(cliente.getNumero());
+							fTxtReferencia.setText(cliente.getReferencia());
+							fTxtTelFixo.setText(cliente.getTelefone());
+							fTxtEmail.setText(cliente.getEmail());
+							btnLimpaDocumento.setVisible(true);
+						}
+					}
+				}
+			}
+
+		}
+	}
+
 }

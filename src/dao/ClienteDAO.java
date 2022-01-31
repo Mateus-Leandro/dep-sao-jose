@@ -202,7 +202,8 @@ public class ClienteDAO {
 		}
 
 	}
-
+	
+	
 	public ArrayList<Cliente> listarClientes_codigo(ArrayList<Cliente> clientes, String codigo) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
@@ -304,13 +305,18 @@ public class ClienteDAO {
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ? and idCliente = ?");
+			if(id != null) {
+				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ? and idCliente = ?");
+				ps.setString(2, id);
+			}else {
+				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ?");
+			}
+			
 			ps.setString(1, documento);
-			ps.setString(2, id);
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-				return null;
+				return rs.getString("nome");
 			} else {
 				ps = conn.prepareStatement("SELECT nome FROM clientes WHERE documento = ?");
 				ps.setString(1, documento);
@@ -327,4 +333,30 @@ public class ClienteDAO {
 			return null;
 		}
 	}
+	
+	
+	public Boolean cliente_com_orcamento(String id_cliente) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = conn.prepareStatement("SELECT idCliente FROM orcamento WHERE idCliente = ?");
+			ps.setString(1, id_cliente);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return true;
+		}
+		
+	}
+	
+	
 }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import db.DB;
+import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 
 public class ConfiguracaoDAO {
@@ -24,8 +25,8 @@ public class ConfiguracaoDAO {
 
 			// salvando novas configurações.
 			ps = conn.prepareStatement("INSERT INTO configuracoes "
-					+ "(nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, celular, email, endereco, salva_parc_dif, alt_orc, gera_pdf) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					+ "(nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, celular, email, endereco, salva_parc_dif, alt_orc, gera_pdf, idConsumidor_final) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, configuracao.getNome_empresa());
 			ps.setString(2, configuracao.getResponsavel());
 			ps.setString(3, configuracao.getCNPJ());
@@ -37,6 +38,7 @@ public class ConfiguracaoDAO {
 			ps.setString(9, configuracao.getSalva_parc_dif());
 			ps.setString(10, configuracao.getAltera_orc());
 			ps.setString(11, configuracao.getGera_PDF());
+			ps.setInt(12, configuracao.getConsumidor_final().getIdCliente());
 
 			ps.execute();
 			conn.commit();
@@ -48,24 +50,26 @@ public class ConfiguracaoDAO {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			return false;
 		}
 
 	}
-	
-	
-	
+
 	public Configuracoes busca_configuracoes() {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs;
 		Configuracoes conf = new Configuracoes();
 		try {
-			ps = conn.prepareStatement("SELECT * FROM configuracoes");
+			ps = conn.prepareStatement(
+					"SELECT nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, configuracoes.celular, "
+							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc,gera_pdf, idConsumidor_final, clientes.nome "
+							+ "FROM configuracoes " + "LEFT JOIN clientes "
+							+ "ON clientes.idCliente = configuracoes.idConsumidor_final");
 			rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				conf.setNome_empresa(rs.getString("nome_empresa"));
 				conf.setResponsavel(rs.getString("responsavel"));
 				conf.setCNPJ(rs.getString("cnpj"));
@@ -77,9 +81,17 @@ public class ConfiguracaoDAO {
 				conf.setSalva_parc_dif(rs.getString("salva_parc_dif"));
 				conf.setAltera_orc(rs.getString("alt_orc"));
 				conf.setGera_PDF(rs.getString("gera_pdf"));
+				
+				Cliente consumidor_final = new Cliente();
+				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));
+				consumidor_final.setNome(rs.getString("clientes.nome"));
+				conf.setConsumidor_final(consumidor_final);
+			}else {
+				return null;
 			}
+			
 			return conf;
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}

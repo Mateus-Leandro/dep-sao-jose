@@ -34,6 +34,7 @@ import javax.swing.text.MaskFormatter;
 import dao.SetorDAO;
 import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
+import view.panels.Panel_produtos;
 
 import java.awt.Color;
 import javax.swing.ListSelectionModel;
@@ -59,7 +60,7 @@ public class CadastroSetor extends JDialog {
 	private JButton btnCancelar;
 	ArrayList<Setor> setores = new ArrayList<Setor>();
 	ModeloTabelaSetores modelo = new ModeloTabelaSetores(setores);
-
+	private Panel_produtos panel_produtos;
 	/**
 	 * Launch the application.
 	 */
@@ -67,7 +68,7 @@ public class CadastroSetor extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CadastroSetor frame = new CadastroSetor();
+					CadastroSetor frame = new CadastroSetor(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,7 +80,8 @@ public class CadastroSetor extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public CadastroSetor() {
+	public CadastroSetor(Panel_produtos panel_produtos) {
+		this.panel_produtos = panel_produtos;
 		tecla_pressionada();
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -174,7 +176,6 @@ public class CadastroSetor extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickSalvar) {
 				salva_setor();
-
 			}
 		});
 		btnSalvar.setBounds(192, 54, 95, 23);
@@ -390,6 +391,7 @@ public class CadastroSetor extends JDialog {
 			btnExcluir.setVisible(true);
 			btnNovo.setVisible(true);
 			fTxtNomeSetor.setText(null);
+			panel_produtos.alimenta_setores();
 		}
 	}
 
@@ -426,6 +428,7 @@ public class CadastroSetor extends JDialog {
 					JOptionPane.showMessageDialog(null, "Setor excluído!", "Exclusão de setor",
 							JOptionPane.ERROR_MESSAGE);
 					modelo.removeSetor(tabelaSetores.getSelectedRow());
+					panel_produtos.alimenta_setores();
 				}
 			}
 		}

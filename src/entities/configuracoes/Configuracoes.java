@@ -1,5 +1,7 @@
 package entities.configuracoes;
 
+import entities.cliente.Cliente;
+
 public class Configuracoes {
 	private String nome_empresa;
 	private String responsavel;
@@ -12,13 +14,14 @@ public class Configuracoes {
 	private String salva_parc_dif;
 	private String altera_orc;
 	private String gera_PDF;
+	private Cliente consumidor_final;
 
 	public Configuracoes() {
 	}
 
 	public Configuracoes(String nome_empresa, String responsavel, String CNPJ, String inscricao_estadual,
 			String tel_fixo, String celular, String email, String endereco, String salva_parc_dif, String altera_orc,
-			String gera_PDF) {
+			String gera_PDF, Cliente consumidor_final) {
 		this.nome_empresa = nome_empresa;
 		this.responsavel = responsavel;
 		this.CNPJ = CNPJ;
@@ -30,6 +33,7 @@ public class Configuracoes {
 		this.salva_parc_dif = salva_parc_dif;
 		this.altera_orc = altera_orc;
 		this.gera_PDF = gera_PDF;
+		this.consumidor_final = consumidor_final;
 	}
 
 	public String getNome_empresa() {
@@ -118,6 +122,14 @@ public class Configuracoes {
 
 	public void setGera_PDF(String gera_PDF) {
 		this.gera_PDF = gera_PDF;
+	}
+
+	public Cliente getConsumidor_final() {
+		return consumidor_final;
+	}
+
+	public void setConsumidor_final(Cliente consumidor_final) {
+		this.consumidor_final = consumidor_final;
 	}
 
 }

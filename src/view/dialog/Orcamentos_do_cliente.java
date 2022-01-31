@@ -43,6 +43,7 @@ import dao.FaturamentoDAO;
 import dao.OrcamentoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
+import entities.financeiro.Forma_pagamento;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 import icons.Icones;
@@ -377,7 +378,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					if (flag) {
 						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 						if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
-							JOptionPane.showMessageDialog(null,
+							JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
 									"Orçamento " + orcamento_selecionado.getId_orcamento() + " " + "excluído.",
 									"Exclusão de orçamento", JOptionPane.ERROR_MESSAGE);
 							orcamentos_cliente.remove(orcamento_selecionado);
@@ -465,7 +466,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickExcluirObservacao) {
 
-				int opcao = JOptionPane.showConfirmDialog(null,
+				int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
 						"Deseja remover a observação do orçamento Nº " + orcamento_selecionado.getId_orcamento() + " ?",
 						"Exclusão de observação.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
@@ -474,11 +475,10 @@ public class Orcamentos_do_cliente extends JDialog {
 				if (flag) {
 					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 					if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
-						JOptionPane
-								.showMessageDialog(null,
-										"A observação do orçamento N° " + orcamento_selecionado.getId_orcamento() + " "
-												+ "foi removida.",
-										"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(
+								lblOrcamentosDoCliente, "A observação do orçamento N° "
+										+ orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
+								"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
 						orcamento_selecionado.setObservacao(null);
 						tabelaOrcamentos.clearSelection();
 					}
@@ -504,7 +504,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					}
 					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 					if (orcamento_dao.salva_observacao(orcamento_selecionado)) {
-						JOptionPane.showMessageDialog(null,
+						JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
 								"Observação salva no orçamento Nº " + orcamento_selecionado.getId_orcamento() + ".",
 								"Observação do orçamento.", JOptionPane.NO_OPTION);
 						tabelaOrcamentos.clearSelection();
@@ -556,8 +556,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			public void mousePressed(MouseEvent clickFaturar) {
 				if (btnFaturar.isEnabled()) {
 					Faturamento faturamento = new Faturamento(getOrcamentosDoCliente(), orcamento_selecionado);
-					faturamento.setLocationRelativeTo(btnExcluirOrcamento);
-					faturamento.setVisible(true);
+					faturamento.abrir_faturamento(faturamento);
 				}
 			}
 		});

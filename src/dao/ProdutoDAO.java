@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import com.mysql.cj.xdevapi.Result;
+
 import db.DB;
 import entities.produto.Produto;
 import entities.produto.Setor;
@@ -37,7 +39,11 @@ public class ProdutoDAO {
 							+ " bloqueadoVenda, dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, produto.getDescricao().trim());
-			ps.setInt(2, produto.getSetor().getCodSetor());
+			if(produto.getSetor()!= null) {
+				ps.setInt(2, produto.getSetor().getCodSetor());
+			}else {
+				ps.setString(2, null);
+			}
 			ps.setString(3, produto.getUnidadeVenda());
 			ps.setDouble(4, produto.getPrecoVenda());
 			ps.setDouble(5, produto.getPrCusto());
@@ -94,7 +100,12 @@ public class ProdutoDAO {
 					+ "prVenda = ?, prCusto = ?, margem = ?, prSugerido = ?, margemPraticada = ?, bloqueadoVenda = ? "
 					+ "WHERE idProduto = ?");
 			ps.setString(1, produto.getDescricao());
-			ps.setInt(2, produto.getSetor().getCodSetor());
+			
+			if(produto.getSetor() != null) {
+				ps.setInt(2, produto.getSetor().getCodSetor());
+			}else {
+				ps.setString(2, null);
+			}
 			ps.setString(3, produto.getUnidadeVenda());
 			ps.setDouble(4, produto.getPrecoVenda());
 			ps.setDouble(5, produto.getPrCusto());
@@ -164,7 +175,7 @@ public class ProdutoDAO {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
 					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS NOT FALSE " + "ORDER BY descricao");
 			rs = ps.executeQuery();
@@ -204,7 +215,7 @@ public class ProdutoDAO {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
 					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao");
 			
@@ -250,7 +261,7 @@ public class ProdutoDAO {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
 					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "INNER JOIN setor ON produto.codSetor = setor.codSetor "
+					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
 			
@@ -408,6 +419,34 @@ public class ProdutoDAO {
 		}
 	}
 
+	
+	
+	public Boolean produto_tem_orcamento(Integer cod_prod) {
+		conn = DB.getConnection();
+		PreparedStatement ps = null;
+		
+		ResultSet rs = null;
+		
+		try {
+			ps = conn.prepareStatement("SELECT * FROM produto_orcamento WHERE idProdutoOrcamento = ?");
+			ps.setInt(1, cod_prod);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	
 	public boolean testaBarrasAlteracao(Integer codigo, String barras) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
