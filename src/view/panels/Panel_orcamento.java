@@ -1452,8 +1452,6 @@ public class Panel_orcamento extends JPanel {
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 
-					limpar_campos();
-					desativar_campos();
 
 					// Testa se o orçamento foi editado e se seu valor original foi alterado.
 					flag = false;
@@ -1505,6 +1503,9 @@ public class Panel_orcamento extends JPanel {
 						gera_pdf.monta_pdf_orcamento(orcamento);
 					}
 				}
+				
+				limpar_campos();
+				desativar_campos();
 			}
 
 		} else {
@@ -1513,7 +1514,6 @@ public class Panel_orcamento extends JPanel {
 					JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
 		}
-
 	}
 
 	public void cancelar_orcamento() {
