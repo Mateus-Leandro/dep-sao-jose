@@ -1,7 +1,9 @@
 package db;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,10 +23,13 @@ public class DB {
 
 		File arquivo_db = new File("C:/dep/conf/db.properties");
 		if (!arquivo_db.exists()) {
-			JOptionPane.showMessageDialog(null, "O arquivo " + arquivo_db.getPath()
-					+ ", necessário para a conexão com o banco de dados, não foi encontrado."
-					+ "\nGentileza preencher as configurações da tela seguinte para que o arquivo seja criado.",
-					"Arquivo de conexão não encontrado.", JOptionPane.WARNING_MESSAGE);
+		
+			File pasta_db = new File("C:/dep/conf/");
+			if (!pasta_db.exists()) {
+				pasta_db.mkdirs();
+			}
+
+			monta_arquivo_conexao(arquivo_db.getAbsolutePath());
 			return null;
 		} else {
 			if (conn == null) {
@@ -33,8 +38,9 @@ public class DB {
 					String url = props.getProperty("dburl");
 					conn = DriverManager.getConnection(url, props);
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de dados!\n" + e.getMessage(),
-							"Erro de conexão.", JOptionPane.WARNING_MESSAGE);
+					e.printStackTrace();
+					monta_arquivo_conexao(arquivo_db.getAbsolutePath());
+					return null;
 				}
 			}
 			return conn;
@@ -43,12 +49,12 @@ public class DB {
 
 	// Lê os dados de conexão do banco através de um arquivo.
 	private static Properties carregarDados() {
-
 		try (FileInputStream fs = new FileInputStream("C:/dep/conf/db.properties")) {
 			Properties props = new Properties();
 			props.load(fs);
 			return props;
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new DbException(e.getMessage());
 		}
 	}
@@ -86,6 +92,39 @@ public class DB {
 		} catch (SQLException e) {
 			e.getMessage();
 		}
+	}
+
+	public static void monta_arquivo_conexao(String path) {
+		try {
+
+			BufferedWriter saida = new BufferedWriter(new FileWriter(path));
+			saida.write("useTimezone=true");
+			saida.newLine();
+			saida.write("serverTimezone=UTC");
+			saida.newLine();
+			saida.write("user=USUARIO_DO_BANCO");
+			saida.newLine();
+			saida.write("password=SENHA_DO_USUARIO");
+			saida.newLine();
+			saida.write("dburl=jdbc:mysql://IP_DO_BANCO:3306/banco_deposito");
+			saida.newLine();
+			saida.write("useSSL=false");
+			saida.newLine();
+			saida.write("allowPublicKeyRetrieval=true");
+			saida.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		JOptionPane.showMessageDialog(null, "O arquivo C:/dep/conf/db.properties"
+				+ ", necessário para a conexão com o banco de dados, não foi encontrado ou está com as configurações inválidas."
+				+ "\nGentileza verificar as informações presentes dentro do arquivo.",
+				"Arquivo de conexão inválido ou não encontrado.", JOptionPane.WARNING_MESSAGE);
+		
+		
+		System.exit(0);
 	}
 
 }
