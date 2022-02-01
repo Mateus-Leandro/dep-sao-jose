@@ -1244,7 +1244,7 @@ public class Panel_clientes extends JPanel {
 		String pesquisado = null;
 
 		if (fTxtPesquisa.getText().trim().isEmpty()) {
-			clientes = cliente_dao.listarClientes(clientes);
+			clientes = cliente_dao.listarClientes(clientes, 50);
 			return clientes;
 		} else {
 

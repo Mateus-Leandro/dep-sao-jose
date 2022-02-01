@@ -39,6 +39,7 @@ public class ProdutoDAO {
 							+ " bloqueadoVenda, dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, produto.getDescricao().trim());
+			
 			if(produto.getSetor()!= null) {
 				ps.setInt(2, produto.getSetor().getCodSetor());
 			}else {

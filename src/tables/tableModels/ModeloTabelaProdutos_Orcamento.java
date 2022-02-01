@@ -20,7 +20,7 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
-	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desconto",
+	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desc. Unit",
 			"Total" };
 	private ArrayList<Produto_Orcamento> produtos_orcamento;
 	private final int COLUNA_CODIGO = 0;

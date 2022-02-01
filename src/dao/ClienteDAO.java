@@ -128,13 +128,17 @@ public class ClienteDAO {
 		}
 	}
 
-	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes) {
+	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT * FROM clientes");
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT * FROM clientes");
+			}else {
+				ps = conn.prepareStatement("SELECT * FROM clientes LIMIT " + limite);
+			}
 			rs = ps.executeQuery();
 
 			while (rs.next()) {

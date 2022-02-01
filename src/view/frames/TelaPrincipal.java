@@ -2,6 +2,7 @@ package view.frames;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -9,9 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.metal.MetalTabbedPaneUI.TabbedPaneLayout;
 
+import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
+import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 import view.panels.Panel_clientes;
 import view.panels.Panel_configuracoes;
@@ -77,6 +79,19 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.addTab("Configurações", configuracoes);
 
 		if (configuracoes_do_sistema == null) {
+			ClienteDAO cliente_dao = new ClienteDAO();
+			ArrayList<Cliente> clientes_cadastrados = new ArrayList<Cliente>();
+			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, 1);
+			// Testa se existe algum cliente cadastrado. Se não existir é cadastrado um
+			// consumidor final.
+			if (clientes_cadastrados.size() < 1) {
+				// Incluindo consumidor final
+				Cliente consumidor_final = new Cliente(null, "Consumidor final", null, false, null, null, null, null,
+						null, null, null, null, null, "(99)99999-9999", null, false,
+						new java.sql.Date(System.currentTimeMillis()));
+				clientes.salvar_cliente(consumidor_final);
+			}
+
 			desativa_abas_configuracao_inicial();
 			JOptionPane.showMessageDialog(null, "Necessário realizar configuração inicial do sistema.",
 					"Configuração inicial", JOptionPane.WARNING_MESSAGE);

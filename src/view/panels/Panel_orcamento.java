@@ -1357,6 +1357,9 @@ public class Panel_orcamento extends JPanel {
 
 	public void incluir_produto() {
 		if (produto_selecionado != null) {
+			
+			produto_incluso = new Produto_Orcamento();
+
 			if (novo_produto(produto_incluso, false)) {
 				modelo_tabela.addProduto(produto_incluso);
 				limpar_dados_produto();
