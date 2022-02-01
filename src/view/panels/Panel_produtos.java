@@ -624,7 +624,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoSugerido.setText(null);
 		fTxtMargemPraticada.setText(null);
 		cbxFatorVenda.setSelectedIndex(0);
-		cbxSetor.getModel().setSelectedItem("");
+		cbxSetor.setSelectedIndex(-1);
 	}
 
 	public void novo_item() {
@@ -638,9 +638,6 @@ public class Panel_produtos extends JPanel {
 		btnSalvar.setVisible(true);
 		btnCancelar.setEnabled(true);
 		btnSalvar.setEnabled(true);
-		if (cbxSetor.getItemCount() > 0) {
-			cbxSetor.setSelectedIndex(0);
-		}
 	}
 
 	public void cancelar_item() {
@@ -761,7 +758,10 @@ public class Panel_produtos extends JPanel {
 		NumberFormat nf = new DecimalFormat("#,###0.00");
 		String descricao = fTxtNomeProduto.getText().trim();
 
-		Object setor = (Setor) cbxSetor.getModel().getSelectedItem();
+		Object setor = null;
+		if(cbxSetor.getSelectedIndex() != -1) {
+			 setor = (Setor) cbxSetor.getModel().getSelectedItem();
+		}
 
 		Double precoVenda = null;
 		Double precoCusto = 0.00;
