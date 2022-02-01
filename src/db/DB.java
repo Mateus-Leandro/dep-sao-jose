@@ -17,13 +17,14 @@ import javax.swing.JOptionPane;
 public class DB {
 
 	private static Connection conn = null;
+	private boolean existe_pasta;
 
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
 
 		File arquivo_db = new File("C:/dep/conf/db.properties");
 		if (!arquivo_db.exists()) {
-		
+
 			File pasta_db = new File("C:/dep/conf/");
 			if (!pasta_db.exists()) {
 				pasta_db.mkdirs();
@@ -38,8 +39,11 @@ public class DB {
 					String url = props.getProperty("dburl");
 					conn = DriverManager.getConnection(url, props);
 				} catch (SQLException e) {
-					e.printStackTrace();
-					monta_arquivo_conexao(arquivo_db.getAbsolutePath());
+					JOptionPane.showMessageDialog(null,
+							"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
+									+ arquivo_db,
+							"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
+					System.exit(0);
 					return null;
 				}
 			}
@@ -54,8 +58,12 @@ public class DB {
 			props.load(fs);
 			return props;
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new DbException(e.getMessage());
+			JOptionPane.showMessageDialog(null,
+					"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
+							+ "C:/dep/conf/db.properties",
+					"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+			return null;
 		}
 	}
 
@@ -122,8 +130,7 @@ public class DB {
 				+ ", necessário para a conexão com o banco de dados, não foi encontrado ou está com as configurações inválidas."
 				+ "\nGentileza verificar as informações presentes dentro do arquivo.",
 				"Arquivo de conexão inválido ou não encontrado.", JOptionPane.WARNING_MESSAGE);
-		
-		
+
 		System.exit(0);
 	}
 
