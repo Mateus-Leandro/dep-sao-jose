@@ -587,8 +587,9 @@ public class Orcamentos_do_cliente extends JDialog {
 		tabela.getColumnModel().getColumn(4).setPreferredWidth(90); // Desconto.
 		tabela.getColumnModel().getColumn(5).setPreferredWidth(90); // Frete.
 		tabela.getColumnModel().getColumn(6).setPreferredWidth(90); // Valor total.
-		tabela.getColumnModel().getColumn(7).setPreferredWidth(60); // Faturado.
-		tabela.getColumnModel().getColumn(8).setPreferredWidth(80); // Data inclusão.
+		tabela.getColumnModel().getColumn(7).setPreferredWidth(45); // Faturado.
+		tabela.getColumnModel().getColumn(8).setPreferredWidth(55); // Quantidade de parcelas
+		tabela.getColumnModel().getColumn(9).setPreferredWidth(80); // Data inclusão.
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela_orcamentos);
 		tabelaOrcamentos.setRowSorter(sorter);

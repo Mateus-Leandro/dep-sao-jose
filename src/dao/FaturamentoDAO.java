@@ -92,6 +92,7 @@ public class FaturamentoDAO {
 				ps.setInt(1, orcamento.getId_orcamento());
 				ps.execute();
 				
+				
 			}else {
 				
 				// Setando o orçamento como não faturado.
@@ -99,6 +100,12 @@ public class FaturamentoDAO {
 				ps.setInt(1, orcamento.getId_orcamento());
 				ps.execute();
 			}
+			
+			// Setando o número de parcelas do orçamento.
+			ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `numeroParcelas` = ? WHERE (`idOrcamento` = ?)");
+			ps.setInt(1, orcamento.getParcelas().size());
+			ps.setInt(2, orcamento.getId_orcamento());
+			ps.execute();
 
 			conn.commit();
 		} catch (SQLException e) {
