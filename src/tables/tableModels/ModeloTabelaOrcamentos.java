@@ -16,7 +16,7 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	private NumberFormat nf2 = new DecimalFormat("0.00");
 
 	private String colunas[] = { "Nº Orc.", "Cliente", "Qtd. Itens", "Total Merc", "Desconto", "Frete", "Valor Total",
-			"Faturado", "Nº Parc.", "Dt. Inclusão" };
+			"Faturado", "Dt. Inclusão" };
 	private ArrayList<Orcamento> orcamentos;
 	private final int COLUNA_NUMERO_ORCAMENTO = 0;
 	private final int COLUNA_CLIENTE = 1;
@@ -26,8 +26,7 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	private final int COLUNA_VALOR_FRETE = 5;
 	private final int COLUNA_TOTAL_ORCAMENTO = 6;
 	private final int COLUNA_FATURADO = 7;
-	private final int COLUNA_NUMERO_PARCELAS = 8;
-	private final int COLUNA_DATA_INCLUSAO = 9;
+	private final int COLUNA_DATA_INCLUSAO = 8;
 
 	public ModeloTabelaOrcamentos(ArrayList<Orcamento> orcamentos) {
 		this.orcamentos = orcamentos;
@@ -71,8 +70,6 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return BigDecimal.class;
 		case COLUNA_TOTAL_ORCAMENTO:
 			return BigDecimal.class;
-		case COLUNA_NUMERO_PARCELAS:
-			return Integer.class;
 		case COLUNA_DATA_INCLUSAO:
 			return java.util.Date.class;
 		default:
@@ -101,8 +98,6 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return nf.format(orcamento.getFrete());
 		case COLUNA_TOTAL_ORCAMENTO:
 			return nf.format(orcamento.getValor_total());
-		case COLUNA_NUMERO_PARCELAS:
-			return orcamento.getNumero_de_parcelas();
 		case COLUNA_DATA_INCLUSAO:
 			return orcamento.getData_inclusao();
 		}

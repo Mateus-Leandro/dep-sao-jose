@@ -51,6 +51,8 @@ import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaOrcamentos;
 import tables.tableSorters.SorterMonetario;
 import view.panels.Panel_orcamento;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class Orcamentos_do_cliente extends JDialog {
 	/**
@@ -64,7 +66,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JTable tabelaOrcamentos;
 	private JLabel lblPesquisarPorOrcamento;
 	private JComboBox<String> cbxTipoPesquisaOrcamento;
-	private JFormattedTextField fTxtPesquisaOrcamento;
+	private JFormattedTextField fTxtPesquisaOrcamento = new JFormattedTextField();
 	private DefaultListModel<Cliente> list_model_clientes = new DefaultListModel<Cliente>();
 	private ArrayList<Cliente> lista_clientes = new ArrayList<Cliente>();
 	private ArrayList<Orcamento> orcamentos_cliente = new ArrayList<Orcamento>();
@@ -76,7 +78,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JFormattedTextField fTxtPesquisaCliente;
 	private JSeparator separador_orcamento;
 	private JLabel lblOrcamento;
-	private JCheckBox checkBoxFaturado;
+	private JCheckBox checkBoxFaturado = new JCheckBox("Somente faturados");
 	private JList<Cliente> ltClientes;
 	private JScrollPane scrollPaneLtClientes;
 	private Cliente cliente_selecionado;
@@ -102,6 +104,8 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JButton btnImprimir;
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
+	private String numero_orcamento;
+	
 
 	/**
 	 * Launch the application.
@@ -123,7 +127,7 @@ public class Orcamentos_do_cliente extends JDialog {
 	 * Create the frame.
 	 */
 	public Orcamentos_do_cliente(Panel_orcamento panel_orcamento) {
-		alimentar_lista_orcamento(orcamentos_cliente, null, null);
+		alimentar_lista_orcamento(orcamentos_cliente, null);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent fechamentoDaJanela) {
@@ -147,7 +151,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				cliente_selecionado = ltClientes.getSelectedValue();
 				fTxtPesquisaCliente.setText(cliente_selecionado.getNome());
 
-				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, null);
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
 			}
 		});
 		ltClientes.setBounds(197, 104, 514, 70);
@@ -232,19 +236,10 @@ public class Orcamentos_do_cliente extends JDialog {
 		cbxTipoPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		contentPane.add(cbxTipoPesquisaOrcamento);
 
-		fTxtPesquisaOrcamento = new JFormattedTextField();
 		fTxtPesquisaOrcamento.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPesquisaOrcamento) {
-
-				String numero_orcamento;
-
-				if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
-					numero_orcamento = null;
-				} else {
-					numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
-				}
-				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
 			}
 		});
 		fTxtPesquisaOrcamento.setBounds(202, 129, 386, 20);
@@ -292,13 +287,7 @@ public class Orcamentos_do_cliente extends JDialog {
 					cliente_selecionado = null;
 					scrollPaneLtClientes.setVisible(false);
 
-					String numero_orcamento;
-					if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
-						numero_orcamento = null;
-					} else {
-						numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
-					}
-					alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado, numero_orcamento);
+					alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
 				} else {
 					alimenta_lt_clientes(cbxTipoPesquisaCliente.getSelectedItem().toString(),
 							fTxtPesquisaCliente.getText().trim(), lista_clientes);
@@ -320,7 +309,11 @@ public class Orcamentos_do_cliente extends JDialog {
 		lblOrcamento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		contentPane.add(lblOrcamento);
 
-		checkBoxFaturado = new JCheckBox("Somente faturados");
+		checkBoxFaturado.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent clickSoFaturado) {
+				alimentar_lista_orcamento(orcamentos_cliente, cliente_selecionado);
+			}
+		});
 		checkBoxFaturado.setBounds(594, 127, 143, 23);
 		checkBoxFaturado.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		contentPane.add(checkBoxFaturado);
@@ -589,8 +582,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		tabela.getColumnModel().getColumn(5).setPreferredWidth(90); // Frete.
 		tabela.getColumnModel().getColumn(6).setPreferredWidth(90); // Valor total.
 		tabela.getColumnModel().getColumn(7).setPreferredWidth(60); // Faturado.
-		tabela.getColumnModel().getColumn(8).setPreferredWidth(65); // Numero do parcelas.
-		tabela.getColumnModel().getColumn(9).setPreferredWidth(80); // Data inclusão.
+		tabela.getColumnModel().getColumn(8).setPreferredWidth(80); // Data inclusão.
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela_orcamentos);
 		tabelaOrcamentos.setRowSorter(sorter);
@@ -624,12 +616,20 @@ public class Orcamentos_do_cliente extends JDialog {
 		ltClientes.setModel(list_model_clientes);
 	}
 
-	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos, Cliente cliente,
-			String numero_orcamento) {
+	public ArrayList<Orcamento> alimentar_lista_orcamento(ArrayList<Orcamento> orcamentos, Cliente cliente) {
 		orcamentos.clear();
 
+		// Verifica se foi passado número do orçamento.
+		String numero_orcamento;
+		if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
+			numero_orcamento = null;
+		} else {
+			numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
+		}
+		
 		OrcamentoDAO orcamento_dao = new OrcamentoDAO();
-		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente, numero_orcamento);
+		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente, numero_orcamento, 150,
+				checkBoxFaturado.isSelected());
 
 		modelo_tabela_orcamentos.fireTableDataChanged();
 		return orcamentos;

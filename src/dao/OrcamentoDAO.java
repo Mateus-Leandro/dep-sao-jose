@@ -153,7 +153,7 @@ public class OrcamentoDAO {
 	}
 
 	public ArrayList<Orcamento> listar_orcamentos_do_cliente(ArrayList<Orcamento> lista_orcamentos, Cliente cliente,
-			String numero_orcamento) {
+			String numero_orcamento, Integer limite, Boolean so_faturados) {
 
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
@@ -163,12 +163,27 @@ public class OrcamentoDAO {
 		ResultSet rs2 = null;
 		try {
 
-			ps = conn.prepareStatement("SELECT idOrcamento, orcamento.idCliente, clientes.nome as nomeCliente, "
+			String consulta = "SELECT idOrcamento, orcamento.idCliente, clientes.nome as nomeCliente, "
 					+ "quantidadeProdutos, totalMercadoriasBruto, " + "totalMercadoriasLiquido, frete, descontoFinal, "
 					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
-					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?");
-			// Testa se foi passado cliente específico na busca de orçamentos.
+					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?";
+			
+			if(limite == null) {
+				if(so_faturados) {
+					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true");
+				}else {
+					ps = conn.prepareStatement(consulta);
+				}
+				// Testa se foi passado cliente específico na busca de orçamentos.
+			}else {
+				if(so_faturados) {
+					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + " LIMIT " + limite);
+				}else {
+					ps = conn.prepareStatement(consulta + " LIMIT " + limite);
+				}
+				
+			}
 			if (cliente != null) {
 				ps.setInt(1, cliente.getIdCliente());
 			} else {
