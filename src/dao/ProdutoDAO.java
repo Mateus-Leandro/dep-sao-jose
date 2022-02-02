@@ -312,26 +312,22 @@ public class ProdutoDAO {
 
 		ResultSet rs = null;
 
+		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+				+ "setor.nome, unidadeVenda, prCusto, margem, prSugerido, prVenda, margemPraticada, bloqueadoVenda, dataCadastro "
+				+ "FROM produto LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+				+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+				+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
+				+ "ORDER BY descricao";
+
 		try {
 			if (limite == null) {
-				ps = conn.prepareStatement(
-						"SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-								+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
-								+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-								+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-								+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
-								+ "ORDER BY descricao");
+				ps = conn.prepareStatement(select);
 				ps.setString(1, barras);
 			} else {
-				ps = conn.prepareStatement(
-						"SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-								+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
-								+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-								+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-								+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
-								+ "ORDER BY descricao LIMIT " + limite);
+				ps = conn.prepareStatement(select + " LIMIT " + limite);
 				ps.setString(1, barras);
 			}
+
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -363,20 +359,26 @@ public class ProdutoDAO {
 	}
 
 	// Pesquisar barras vinculados
-	public ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras) {
+	public ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras,
+			Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 
 		ResultSet rs = null;
 
-		try {
+		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+				+ "setor.nome, unidadeVenda, prCusto, prVenda, margem, prSugerido, margemPraticada,  "
+				+ "bloqueadoVenda, dataCadastro FROM produto LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+				+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+				+ "WHERE barras_produto.principal IS NOT TRUE AND barras_produto.barras LIKE ? "
+				+ "GROUP BY idProduto ORDER BY descricao";
 
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
-					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS FALSE AND barras_produto.barras LIKE ? "
-					+ "ORDER BY descricao");
+		try {
+			if (limite == null) {
+				ps = conn.prepareStatement(select);
+			} else {
+				ps = conn.prepareStatement(select + " LIMIT " + limite);
+			}
 
 			ps.setString(1, barras);
 			rs = ps.executeQuery();

@@ -923,9 +923,13 @@ public class Panel_produtos extends JPanel {
 				produtos = produto_dao.listarProdutosBarras(produtos, pesquisado, 50);
 
 				ArrayList<Produto> barras_vinculados = new ArrayList<Produto>();
-				barras_vinculados = produto_dao.listarProdutosBarrasVinculados(barras_vinculados, pesquisado);
+				barras_vinculados = produto_dao.listarProdutosBarrasVinculados(barras_vinculados, pesquisado, 50);
 
-				produtos.addAll(barras_vinculados);
+				for (Produto prod : barras_vinculados) {
+					if (!produtos.contains(prod)) {
+						produtos.add(prod);
+					}
+				}
 			}
 
 			return produtos;
