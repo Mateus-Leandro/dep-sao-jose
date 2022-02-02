@@ -792,7 +792,7 @@ public class Faturamento extends JDialog {
 			Forma_pagamento forma = new Forma_pagamento(form.getCodigo(), form.getDescricao());
 			cbxFormaPagamento.addItem(forma);
 		}
-		
+
 		return formas_pagamento;
 	}
 
@@ -1079,7 +1079,7 @@ public class Faturamento extends JDialog {
 					centavos_faltantes = Double
 							.parseDouble(nf.format(centavos_faltantes).replaceAll("\\.", "").replace(",", "."));
 
-					nova_parcela.setValor_parcela(valor_parcela + centavos_faltantes);
+					nova_parcela.setValor_parcela(Double.parseDouble(nf.format(valor_parcela + centavos_faltantes).replaceAll("\\.", "").replace(",", ".")));
 				}
 			}
 			orcamento.getParcelas().add(nova_parcela);
@@ -1128,7 +1128,7 @@ public class Faturamento extends JDialog {
 			btnParcelar.setEnabled(false);
 		}
 	}
-	
+
 	public void abrir_faturamento(Faturamento tela_faturamento) {
 		ArrayList<Forma_pagamento> formas_de_pagamento = alimenta_formas_pagamento();
 
@@ -1139,8 +1139,7 @@ public class Faturamento extends JDialog {
 					"Formas de pagamento.", JOptionPane.WARNING_MESSAGE);
 			tela_faturamento.setVisible(false);
 
-			CadastroFormaPagamento cadastro_formas = new CadastroFormaPagamento(tela_faturamento,
-					formas_de_pagamento);
+			CadastroFormaPagamento cadastro_formas = new CadastroFormaPagamento(tela_faturamento, formas_de_pagamento);
 			cadastro_formas.setVisible(true);
 		} else {
 			tela_faturamento.setVisible(true);
