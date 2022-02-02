@@ -31,6 +31,8 @@ import view.frames.TelaPrincipal;
 import view.tools.Jtext_tools;
 
 import java.awt.Color;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Panel_configuracoes extends JPanel {
 	private JLabel lblconfiguracoes;
@@ -373,7 +375,7 @@ public class Panel_configuracoes extends JPanel {
 		add(lblCnpj);
 
 		MaskFormatter mascara_cnpj = null;
-		try {
+		try {	
 			mascara_cnpj = new MaskFormatter("##.###.###/####-##");
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -557,13 +559,13 @@ public class Panel_configuracoes extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickConsumidorFinal) {
 				text_tools.move_cursor_inicio(fTxtConsumidorFinal);
+				alimentar_lista_consumidor_final("NOME", "%");
 			}
 		});
 		fTxtConsumidorFinal.setBounds(172, 489, 276, 20);
 		fTxtConsumidorFinal.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaConsumidorFinal) {
-
 				if (fTxtConsumidorFinal.getText().trim().isEmpty()) {
 					alimentar_lista_consumidor_final("NOME", null);
 				} else {
@@ -694,6 +696,7 @@ public class Panel_configuracoes extends JPanel {
 		} else {
 			scrollPaneConsumidorFinal.setVisible(false);
 		}
+		
 		ltConsumidorFinal.setModel(list_model);
 	}
 
@@ -720,6 +723,8 @@ public class Panel_configuracoes extends JPanel {
 				fTxtConsumidorFinal.setText(null);
 				fTxtCodigoConsumidor.setText(null);
 			}
+		}else {
+			limpa_campos();
 		}
 
 	}
@@ -755,5 +760,20 @@ public class Panel_configuracoes extends JPanel {
 		btnSalvar.setVisible(false);
 		btnCancelar.setVisible(false);
 		fTxtConsumidorFinal.setEditable(false);
+		scrollPaneConsumidorFinal.setVisible(false);
+	}
+	
+	
+	public void limpa_campos() {
+		fTxtNomeEmpresa.setText(null);
+		fTxtNomeResponsavel.setText(null);
+		fTxtCelular.setText(null);
+		fTxtTelFixo.setText(null);
+		fTxtCnpj.setText(null);
+		fTxtInscricao.setText(null);
+		fTxtEndereco.setText(null);
+		fTxtEmail.setText(null);
+		fTxtConsumidorFinal.setText(null);
+		fTxtCodigoConsumidor.setText(null);
 	}
 }
