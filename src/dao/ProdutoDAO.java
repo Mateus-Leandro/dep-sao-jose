@@ -39,10 +39,10 @@ public class ProdutoDAO {
 							+ " bloqueadoVenda, dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, produto.getDescricao().trim());
-			
-			if(produto.getSetor()!= null) {
+
+			if (produto.getSetor() != null) {
 				ps.setInt(2, produto.getSetor().getCodSetor());
-			}else {
+			} else {
 				ps.setString(2, null);
 			}
 			ps.setString(3, produto.getUnidadeVenda());
@@ -101,10 +101,10 @@ public class ProdutoDAO {
 					+ "prVenda = ?, prCusto = ?, margem = ?, prSugerido = ?, margemPraticada = ?, bloqueadoVenda = ? "
 					+ "WHERE idProduto = ?");
 			ps.setString(1, produto.getDescricao());
-			
-			if(produto.getSetor() != null) {
+
+			if (produto.getSetor() != null) {
 				ps.setInt(2, produto.getSetor().getCodSetor());
-			}else {
+			} else {
 				ps.setString(2, null);
 			}
 			ps.setString(3, produto.getUnidadeVenda());
@@ -207,19 +207,29 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por nome-----
-	public ArrayList<Produto> listarProdutosNome(ArrayList<Produto> produtos, String nome) {
+	public ArrayList<Produto> listarProdutosNome(ArrayList<Produto> produtos, String nome, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao");
-			
+			if (limite == null) {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao");
+			} else {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao LIMIT "
+						+ limite);
+			}
+
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
 
@@ -252,21 +262,29 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por código interno----
-	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno) {
+	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 
 		ResultSet rs = null;
 		try {
-			
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
-			
-	
+
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
+			}else {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
+						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao LIMIT " + limite);
+			}
+
 			ps.setString(1, codInterno);
 			rs = ps.executeQuery();
 
@@ -285,7 +303,7 @@ public class ProdutoDAO {
 				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
 				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
-				
+
 				produtos.add(produto);
 			}
 			return produtos;
@@ -299,20 +317,30 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por código de barras----
-	public ArrayList<Produto> listarProdutosBarras(ArrayList<Produto> produtos, String barras) {
+	public ArrayList<Produto> listarProdutosBarras(ArrayList<Produto> produtos, String barras, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
-					+ "ORDER BY descricao");
-			ps.setString(1, barras);
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+						+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+						+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
+						+ "ORDER BY descricao");
+				ps.setString(1, barras);
+			}else {
+				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+						+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+						+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
+						+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+						+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
+						+ "ORDER BY descricao LIMIT " + limite);
+				ps.setString(1, barras);
+			}
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -351,14 +379,14 @@ public class ProdutoDAO {
 		ResultSet rs = null;
 
 		try {
-			
+
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS FALSE AND barras_produto.barras LIKE ? "
 					+ "ORDER BY descricao");
-			
+
 			ps.setString(1, barras);
 			rs = ps.executeQuery();
 
@@ -377,7 +405,7 @@ public class ProdutoDAO {
 				produto.setBloqueadoVenda(rs.getBoolean("bloqueadoVenda"));
 				String data_formatada = sdf.format(rs.getDate("dataCadastro"));
 				produto.setDataCadastro(sdf.parse(data_formatada));
-				
+
 				produtos.add(produto);
 			}
 
@@ -420,34 +448,29 @@ public class ProdutoDAO {
 		}
 	}
 
-	
-	
 	public Boolean produto_tem_orcamento(Integer cod_prod) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
-		
+
 		ResultSet rs = null;
-		
+
 		try {
 			ps = conn.prepareStatement("SELECT * FROM produto_orcamento WHERE idProdutoOrcamento = ?");
 			ps.setInt(1, cod_prod);
 			rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
-	
-	
+
 	public boolean testaBarrasAlteracao(Integer codigo, String barras) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;

@@ -188,7 +188,7 @@ public class OrcamentoDAO {
 				ClienteDAO cliente_dao = new ClienteDAO();
 				ArrayList<Cliente> cliente_do_orcamento = new ArrayList<Cliente>();
 				cliente_do_orcamento = cliente_dao.listarClientes_codigo(cliente_do_orcamento,
-						rs.getString("idCliente"));
+						rs.getString("idCliente"), 1);
 
 				Orcamento orcamento = new Orcamento();
 				orcamento.setId_orcamento(rs.getInt("idOrcamento"));

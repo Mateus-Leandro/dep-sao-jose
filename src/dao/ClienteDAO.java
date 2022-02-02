@@ -169,13 +169,18 @@ public class ClienteDAO {
 
 	}
 
-	public ArrayList<Cliente> listarClientes_nome(ArrayList<Cliente> clientes, String nome) {
+	public ArrayList<Cliente> listarClientes_nome(ArrayList<Cliente> clientes, String nome, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
+			}else {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ? LIMIT " + limite);
+			}
+			
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
 
@@ -208,13 +213,17 @@ public class ClienteDAO {
 	}
 	
 	
-	public ArrayList<Cliente> listarClientes_codigo(ArrayList<Cliente> clientes, String codigo) {
+	public ArrayList<Cliente> listarClientes_codigo(ArrayList<Cliente> clientes, String codigo, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
+			}else {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ? LIMIT " + limite);
+			}
 			ps.setString(1, codigo);
 			rs = ps.executeQuery();
 
@@ -246,13 +255,17 @@ public class ClienteDAO {
 
 	}
 
-	public ArrayList<Cliente> listarClientes_apelido(ArrayList<Cliente> clientes, String apelido) {
+	public ArrayList<Cliente> listarClientes_apelido(ArrayList<Cliente> clientes, String apelido, Integer limite) {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
+			if(limite == null) {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
+			}else {
+				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ? LIMIT " + limite);
+			}
 			ps.setString(1, apelido);
 			rs = ps.executeQuery();
 
@@ -291,11 +304,11 @@ public class ClienteDAO {
 		lista_clientes.clear();
 
 		if (tipo_busca.toUpperCase().equals("NOME")) {
-			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%");
+			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%" , 50);
 		} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
-			lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%");
+			lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%", 50);
 		} else {
-			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%");
+			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%" , 50);
 		}
 
 		for (Cliente cliente : lista_clientes) {

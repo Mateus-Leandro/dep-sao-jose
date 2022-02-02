@@ -923,13 +923,13 @@ public class Panel_produtos extends JPanel {
 		} else {
 			switch (cbxTipoPesquisa.getSelectedItem().toString()) {
 			case "Nome":
-				produtos = produto_dao.listarProdutosNome(produtos, pesquisado);
+				produtos = produto_dao.listarProdutosNome(produtos, pesquisado, 50);
 				break;
 			case "Código":
-				produtos = produto_dao.listarProdutosCodigo(produtos, pesquisado);
+				produtos = produto_dao.listarProdutosCodigo(produtos, pesquisado, 50);
 				break;
 			case "Cod. Barras":
-				produtos = produto_dao.listarProdutosBarras(produtos, pesquisado);
+				produtos = produto_dao.listarProdutosBarras(produtos, pesquisado, 50);
 
 				ArrayList<Produto> barras_vinculados = new ArrayList<Produto>();
 				barras_vinculados = produto_dao.listarProdutosBarrasVinculados(barras_vinculados, pesquisado);

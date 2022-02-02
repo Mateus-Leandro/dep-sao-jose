@@ -694,8 +694,8 @@ public class Panel_clientes extends JPanel {
 			public void keyReleased(KeyEvent enterTelFixo) {
 				if (enterTelFixo.getKeyCode() == enterTelFixo.VK_ENTER) {
 					if (valida_documento()) {
-						btnSalvar.doClick();
 						valida_cliente();
+						btnNovo.requestFocus();
 					}
 
 				}
@@ -1093,17 +1093,17 @@ public class Panel_clientes extends JPanel {
 				if (salvar_cliente(cliente)) {
 					fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
 					fTxtCelular.setBorder(new LineBorder(Color.lightGray));
-					JOptionPane
-							.showMessageDialog(
-									fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
-											+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
-									"Novo cliente", JOptionPane.NO_OPTION);
 					limpar_campos();
 					desativar_campos();
 					recarregarTabela();
 					btnNovo.setVisible(true);
 					btnEditar.setVisible(true);
 					btnExcluir.setVisible(true);
+					JOptionPane
+					.showMessageDialog(
+							fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
+									+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
+									"Novo cliente", JOptionPane.NO_OPTION);
 				}
 			} else {
 
@@ -1253,13 +1253,13 @@ public class Panel_clientes extends JPanel {
 			switch (cbxTipoPesquisa.getSelectedItem().toString()) {
 
 			case "Código":
-				clientes = cliente_dao.listarClientes_codigo(clientes, pesquisado);
+				clientes = cliente_dao.listarClientes_codigo(clientes, pesquisado, 50);
 				break;
 			case "Nome":
-				clientes = cliente_dao.listarClientes_nome(clientes, pesquisado);
+				clientes = cliente_dao.listarClientes_nome(clientes, pesquisado, 50);
 				break;
 			case "Apelido":
-				clientes = cliente_dao.listarClientes_apelido(clientes, pesquisado);
+				clientes = cliente_dao.listarClientes_apelido(clientes, pesquisado, 50);
 				break;
 			}
 

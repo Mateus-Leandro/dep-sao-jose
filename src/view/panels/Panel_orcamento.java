@@ -1634,13 +1634,13 @@ public class Panel_orcamento extends JPanel {
 		ProdutoDAO produto_dao = new ProdutoDAO();
 
 		if (fTxtNomeProduto.getText().trim().isEmpty() && fTxtCodigoProduto.getText().trim().isEmpty()) {
-			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, "%");
+			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, "%", 50);
 		} else {
 			if (tipo_busca.equals("NOME")) {
-				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%");
+				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%", 50);
 			} else {
 				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos,
-						fTxtCodigoProduto.getText().trim() + "%");
+						fTxtCodigoProduto.getText().trim() + "%", 50);
 			}
 		}
 
