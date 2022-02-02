@@ -21,6 +21,16 @@ public class Resumo_financeiroDAO {
 		int id_cliente = cliente.getIdCliente();
 		try {
 
+			// Calculando valor total em orçamentos
+			ps = conn.prepareStatement(
+					"SELECT SUM(valorTotal) AS valor_comprado FROM orcamento WHERE idCliente = ? AND faturado = true");
+			ps.setInt(1, id_cliente);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				resumo.setTotal_comprado(rs.getDouble("valor_comprado"));
+			}
+
 			// Calculando total em aberto
 			Double parcelas_pagas = 0.00;
 			ps = conn.prepareStatement("SELECT SUM(parcelas.valor) as parcelas_pagas " + "FROM orcamento "
@@ -35,15 +45,6 @@ public class Resumo_financeiroDAO {
 			resumo.setValor_aberto(resumo.getTotal_comprado() - parcelas_pagas);
 
 			
-			// Calculando valor total em orçamentos
-			ps = conn.prepareStatement(
-					"SELECT SUM(valorTotal) AS valor_comprado FROM orcamento WHERE idCliente = ? AND faturado = true");
-			ps.setInt(1, id_cliente);
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				resumo.setTotal_comprado(rs.getDouble("valor_comprado"));
-			}
 
 
 			// Buscando valor da maior compra
