@@ -146,13 +146,16 @@ public class Panel_clientes extends JPanel {
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluir) {
-				if (!cliente_dao.cliente_com_orcamento(
-						tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString())) {
-					excluir_cliente();
-				} else {
-					JOptionPane.showMessageDialog(fTxtCidade,
-							"Impossível excluir cilente.\nO cliente selecionado possui pelo menos 1 orçamento salvo em seu nome.",
-							"Exclusão de cliente", JOptionPane.WARNING_MESSAGE);
+				if (btnExcluir.isEnabled()) {
+
+					if (!cliente_dao.cliente_com_orcamento(
+							tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString())) {
+						excluir_cliente();
+					} else {
+						JOptionPane.showMessageDialog(fTxtCidade,
+								"Impossível excluir cilente.\nO cliente selecionado possui pelo menos 1 orçamento salvo em seu nome.",
+								"Exclusão de cliente", JOptionPane.WARNING_MESSAGE);
+					}
 				}
 
 			}
@@ -439,7 +442,7 @@ public class Panel_clientes extends JPanel {
 						btnLimpaCep.setVisible(false);
 					}
 				}
-				
+
 				if (e.getKeyCode() == e.VK_ENTER) {
 					fTxtCidade.requestFocus();
 				}
@@ -1100,9 +1103,9 @@ public class Panel_clientes extends JPanel {
 					btnEditar.setVisible(true);
 					btnExcluir.setVisible(true);
 					JOptionPane
-					.showMessageDialog(
-							fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
-									+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
+							.showMessageDialog(
+									fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
+											+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
 									"Novo cliente", JOptionPane.NO_OPTION);
 				}
 			} else {

@@ -105,7 +105,6 @@ public class Orcamentos_do_cliente extends JDialog {
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 	private String numero_orcamento;
-	
 
 	/**
 	 * Launch the application.
@@ -441,12 +440,14 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnEditarObservacao.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditarObservacao) {
-				btnEditarObservacao.setVisible(false);
-				btnExcluirObservacao.setVisible(false);
-				btnSalvarObservacao.setVisible(true);
-				btnCancelarObservacao.setVisible(true);
-				fTxtObservacao.setEditable(true);
-				fTxtObservacao.requestFocus();
+				if (btnEditarObservacao.isEnabled()) {
+					btnEditarObservacao.setVisible(false);
+					btnExcluirObservacao.setVisible(false);
+					btnSalvarObservacao.setVisible(true);
+					btnCancelarObservacao.setVisible(true);
+					fTxtObservacao.setEditable(true);
+					fTxtObservacao.requestFocus();
+				}
 			}
 		});
 		btnEditarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -458,22 +459,25 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnExcluirObservacao.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluirObservacao) {
+				if (btnExcluirObservacao.isEnabled()) {
 
-				int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
-						"Deseja remover a observação do orçamento Nº " + orcamento_selecionado.getId_orcamento() + " ?",
-						"Exclusão de observação.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
+							"Deseja remover a observação do orçamento Nº " + orcamento_selecionado.getId_orcamento()
+									+ " ?",
+							"Exclusão de observação.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
-				Boolean flag = opcao == JOptionPane.YES_OPTION;
+					Boolean flag = opcao == JOptionPane.YES_OPTION;
 
-				if (flag) {
-					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
-					if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
-						JOptionPane.showMessageDialog(
-								lblOrcamentosDoCliente, "A observação do orçamento N° "
-										+ orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
-								"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
-						orcamento_selecionado.setObservacao(null);
-						tabelaOrcamentos.clearSelection();
+					if (flag) {
+						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
+						if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
+							JOptionPane.showMessageDialog(
+									lblOrcamentosDoCliente, "A observação do orçamento N° "
+											+ orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
+									"Exclusão de observação.", JOptionPane.ERROR_MESSAGE);
+							orcamento_selecionado.setObservacao(null);
+							tabelaOrcamentos.clearSelection();
+						}
 					}
 				}
 			}
@@ -560,8 +564,10 @@ public class Orcamentos_do_cliente extends JDialog {
 		btnImprimir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickImprimirOrcamento) {
-				Gera_pdf gera_pdf = new Gera_pdf();
-				gera_pdf.monta_pdf_orcamento(orcamento_selecionado);
+				if (btnImprimir.isEnabled()) {
+					Gera_pdf gera_pdf = new Gera_pdf();
+					gera_pdf.monta_pdf_orcamento(orcamento_selecionado);
+				}
 			}
 		});
 		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -626,7 +632,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		} else {
 			numero_orcamento = fTxtPesquisaOrcamento.getText().trim();
 		}
-		
+
 		OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 		orcamentos = orcamento_dao.listar_orcamentos_do_cliente(orcamentos_cliente, cliente, numero_orcamento, 150,
 				checkBoxFaturado.isSelected());

@@ -63,6 +63,7 @@ public class CadastroSetor extends JDialog {
 	ModeloTabelaSetores modelo = new ModeloTabelaSetores(setores);
 	private Panel_produtos panel_produtos;
 	private Jtext_tools text_tools = new Jtext_tools();
+
 	/**
 	 * Launch the application.
 	 */
@@ -115,13 +116,13 @@ public class CadastroSetor extends JDialog {
 		try {
 			MaskFormatter mascara_nome_setor = new MaskFormatter("******************************");
 			fTxtNomeSetor = new JFormattedTextField(mascara_nome_setor);
+			fTxtNomeSetor.setEditable(false);
 			fTxtNomeSetor.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent clickNomeSetor) {
 					text_tools.move_cursor_inicio(fTxtNomeSetor);
 				}
 			});
-			fTxtNomeSetor.setEnabled(false);
 			fTxtNomeSetor.setBounds(179, 13, 225, 20);
 			panel.add(fTxtNomeSetor);
 			fTxtNomeSetor.setColumns(10);
@@ -189,6 +190,7 @@ public class CadastroSetor extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickCancelar) {
 				cancela_setor();
+				tabelaSetores.clearSelection();
 			}
 		});
 		btnCancelar.setBounds(297, 54, 114, 23);
@@ -199,7 +201,7 @@ public class CadastroSetor extends JDialog {
 		try {
 			MaskFormatter mascara_codigo_setor = new MaskFormatter("####");
 			fTxtCodigoSetor = new JFormattedTextField(mascara_codigo_setor);
-			fTxtCodigoSetor.setEnabled(false);
+			fTxtCodigoSetor.setEditable(false);
 			fTxtCodigoSetor.setFocusLostBehavior(JFormattedTextField.PERSIST);
 			fTxtCodigoSetor.setBounds(56, 13, 50, 18);
 			panel.add(fTxtCodigoSetor);
@@ -213,13 +215,24 @@ public class CadastroSetor extends JDialog {
 
 		tabelaSetores.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-			public void valueChanged(ListSelectionEvent e) {
-				btnExcluir.setEnabled(true);
-				btnEditar.setEnabled(true);
-				if (btnNovo.isVisible() && tabelaSetores.getSelectedRow() != -1) {
-					fTxtCodigoSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 0).toString());
-					fTxtNomeSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 1).toString());
+			public void valueChanged(ListSelectionEvent selecaoLinhaTabela) {
+
+				ListSelectionModel lsm = (ListSelectionModel) selecaoLinhaTabela.getSource();
+
+				if (!lsm.isSelectionEmpty()) {
+					btnExcluir.setEnabled(true);
+					btnEditar.setEnabled(true);
+
+					if (btnNovo.isVisible()) {
+						fTxtCodigoSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 0).toString());
+						fTxtNomeSetor.setText(tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 1).toString());
+					}
+
+				} else {
+					btnExcluir.setEnabled(true);
+					btnEditar.setEnabled(true);
 				}
+
 			}
 		});
 
@@ -331,11 +344,12 @@ public class CadastroSetor extends JDialog {
 		btnNovo.setVisible(false);
 		btnSalvar.setVisible(true);
 		btnCancelar.setVisible(true);
-		fTxtNomeSetor.setEnabled(true);
+		fTxtNomeSetor.setEditable(true);
 		lblNomeSetor.setEnabled(true);
 		fTxtCodigoSetor.setText(null);
 		fTxtNomeSetor.setText(null);
 		fTxtNomeSetor.requestFocusInWindow();
+		tabelaSetores.clearSelection();
 	}
 
 	// Ação botão cancelar
@@ -348,10 +362,11 @@ public class CadastroSetor extends JDialog {
 		btnNovo.setVisible(true);
 		btnEditar.setVisible(true);
 		btnExcluir.setVisible(true);
-		fTxtNomeSetor.setEnabled(false);
+		fTxtNomeSetor.setEditable(false);
 		lblNomeSetor.setEnabled(false);
 		fTxtCodigoSetor.setText(null);
 		fTxtNomeSetor.setText(null);
+		fTxtNomeSetor.setEditable(false);
 	}
 
 	// Ação de salva_setor
@@ -381,8 +396,6 @@ public class CadastroSetor extends JDialog {
 			} else {
 				setor_dao.alterarSetor(setor);
 				JOptionPane.showMessageDialog(null, "Setor alterado!", "Alteração de setores.", JOptionPane.NO_OPTION);
-				fTxtCodigoSetor.setText(null);
-				fTxtCodigoSetor.setText(null);
 				recarregarTabela();
 			}
 			btnSalvar.setVisible(false);
@@ -391,6 +404,8 @@ public class CadastroSetor extends JDialog {
 			btnExcluir.setVisible(true);
 			btnNovo.setVisible(true);
 			fTxtNomeSetor.setText(null);
+			fTxtCodigoSetor.setText(null);
+			fTxtNomeSetor.setEditable(false);
 			panel_produtos.alimenta_setores();
 		}
 	}
@@ -398,7 +413,7 @@ public class CadastroSetor extends JDialog {
 	// Editar setor
 	public void editar_setor() {
 		if (tabelaSetores.getSelectedRow() != -1 && btnEditar.isEnabled()) {
-			fTxtNomeSetor.setEnabled(true);
+			fTxtNomeSetor.setEditable(true);
 			btnSalvar.setVisible(true);
 			btnCancelar.setVisible(true);
 			btnNovo.setVisible(false);
