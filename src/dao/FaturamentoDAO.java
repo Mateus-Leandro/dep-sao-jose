@@ -62,24 +62,41 @@ public class FaturamentoDAO {
 			ps.setInt(1, orcamento.getId_orcamento());
 			ps.execute();
 
-			// Incuindo as parcelas salvas.
-			for (Parcela parc : orcamento.getParcelas()) {
-				ps = conn.prepareStatement("INSERT INTO parcelas "
-						+ "(`idOrcamento`,`valor`, `idFormaPagamento`, `dataPagamento`, `dataVencimento`) "
-						+ "VALUES (?, ?, ?, ?, ? )");
-				ps.setInt(1, orcamento.getId_orcamento());
-				ps.setDouble(2, parc.getValor_parcela());
-				ps.setInt(3, parc.getForma_pagamento().getCodigo());
+			// Testa se o orçamento possui alguma parcela.
+			if(orcamento.getParcelas().size() > 0) {
 				
-				
-				Date data_pagamento = null;
-				if(parc.getData_pagamento() != null) {
-				 data_pagamento = new java.sql.Date(parc.getData_pagamento().getTime());
+				// Incuindo as parcelas salvas.
+				for (Parcela parc : orcamento.getParcelas()) {
+					ps = conn.prepareStatement("INSERT INTO parcelas "
+							+ "(`idOrcamento`,`valor`, `idFormaPagamento`, `dataPagamento`, `dataVencimento`) "
+							+ "VALUES (?, ?, ?, ?, ? )");
+					ps.setInt(1, orcamento.getId_orcamento());
+					ps.setDouble(2, parc.getValor_parcela());
+					ps.setInt(3, parc.getForma_pagamento().getCodigo());
+					
+					
+					Date data_pagamento = null;
+					if(parc.getData_pagamento() != null) {
+						data_pagamento = new java.sql.Date(parc.getData_pagamento().getTime());
+					}
+					
+					Date data_vencimento = new java.sql.Date(parc.getData_vencimento().getTime());
+					ps.setDate(4, data_pagamento);
+					ps.setDate(5, data_vencimento);
+					ps.execute();
 				}
 				
-				Date data_vencimento = new java.sql.Date(parc.getData_vencimento().getTime());
-				ps.setDate(4, data_pagamento);
-				ps.setDate(5, data_vencimento);
+				
+				// Setando o orçamento como faturado.
+				ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `faturado` = '1' WHERE (`idOrcamento` = ?)");
+				ps.setInt(1, orcamento.getId_orcamento());
+				ps.execute();
+				
+			}else {
+				
+				// Setando o orçamento como não faturado.
+				ps = conn.prepareStatement("UPDATE `banco_deposito`.`orcamento` SET `faturado` = '0' WHERE (`idOrcamento` = ?)");
+				ps.setInt(1, orcamento.getId_orcamento());
 				ps.execute();
 			}
 

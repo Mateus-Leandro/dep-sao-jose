@@ -14,6 +14,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -47,10 +48,12 @@ import dao.ConfiguracaoDAO;
 import dao.FormaPagamentoDAO;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
+import dao.Resumo_financeiroDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 import entities.financeiro.Forma_pagamento;
 import entities.financeiro.Parcela;
+import entities.financeiro.Resumo_financeiro;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
 import entities.produto.Produto;
@@ -117,7 +120,6 @@ public class Panel_orcamento extends JPanel {
 	private JFormattedTextField fTxtMaiorCompra;
 	private JLabel lblVendaspendentes_1;
 	private JLabel lblObservacaoFinanceira;
-	private JTextPane txtpObservaoFinanceira;
 	private JList<Cliente> ltClientes;
 	private DefaultListModel<Cliente> list_model = new DefaultListModel<Cliente>();
 	private ArrayList<Cliente> lista_clientes = new ArrayList<Cliente>();
@@ -188,6 +190,7 @@ public class Panel_orcamento extends JPanel {
 	private Double valor_frete = 0.00;
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("0.00");
+	private NumberFormat nf3 = new DecimalFormat("R$ ,##0.00");
 	private JFormattedTextField fTxtApelido;
 	private Cliente cliente_selecionado = null;
 	private Integer quantidade_de_produtos = 0;
@@ -205,6 +208,8 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblObg_produto;
 	private JLabel lblObg_produto_1;
 	private JLabel lblObg_quantidade;
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private JLabel lblTextoObservacao;
 
 	/**
 	 * Create the panel.
@@ -1240,10 +1245,10 @@ public class Panel_orcamento extends JPanel {
 		fTxtPrimeiraCompra.setBounds(599, 329, 104, 20);
 		cliente.add(fTxtPrimeiraCompra);
 
-		lblSomentesVendaspendentes = new JLabel("* Vendas (pendentes + pagas)");
+		lblSomentesVendaspendentes = new JLabel("* Or\u00E7amento confirmado");
 		lblSomentesVendaspendentes.setToolTipText("");
 		lblSomentesVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblSomentesVendaspendentes.setBounds(225, 365, 158, 20);
+		lblSomentesVendaspendentes.setBounds(225, 365, 125, 20);
 		cliente.add(lblSomentesVendaspendentes);
 
 		lblVendaspendentes = new JLabel("* Vendas (pendentes)");
@@ -1284,22 +1289,17 @@ public class Panel_orcamento extends JPanel {
 		fTxtMaiorCompra.setBounds(155, 395, 100, 20);
 		cliente.add(fTxtMaiorCompra);
 
-		lblVendaspendentes_1 = new JLabel("* Venda (pendente ou paga)");
+		lblVendaspendentes_1 = new JLabel("* Or\u00E7amento confirmado");
 		lblVendaspendentes_1.setToolTipText("");
 		lblVendaspendentes_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes_1.setBounds(263, 397, 145, 20);
+		lblVendaspendentes_1.setBounds(263, 397, 125, 20);
 		cliente.add(lblVendaspendentes_1);
 
 		lblObservacaoFinanceira = new JLabel("Observa\u00E7\u00E3o Financeira");
 		lblObservacaoFinanceira.setToolTipText("");
-		lblObservacaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObservacaoFinanceira.setBounds(11, 427, 141, 20);
+		lblObservacaoFinanceira.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblObservacaoFinanceira.setBounds(10, 439, 161, 20);
 		cliente.add(lblObservacaoFinanceira);
-
-		txtpObservaoFinanceira = new JTextPane();
-		txtpObservaoFinanceira.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtpObservaoFinanceira.setBounds(10, 450, 693, 49);
-		cliente.add(txtpObservaoFinanceira);
 
 		btnLimpaCliente = new JButton();
 		btnLimpaCliente.setEnabled(false);
@@ -1330,6 +1330,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtApelido.setColumns(10);
 		fTxtApelido.setBounds(463, 61, 240, 20);
 		cliente.add(fTxtApelido);
+		
+		lblTextoObservacao = new JLabel("* Os valores acima consideram somente or\u00E7amentos confirmados. (Ormentos com pelo menos 1 parcela lan\u00E7ada).");
+		lblTextoObservacao.setForeground(Color.RED);
+		lblTextoObservacao.setToolTipText("");
+		lblTextoObservacao.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblTextoObservacao.setBounds(10, 470, 645, 20);
+		cliente.add(lblTextoObservacao);
 
 		btnPesquisaOrcamento = new JButton("Pesquisar");
 		btnPesquisaOrcamento.addMouseListener(new MouseAdapter() {
@@ -1357,7 +1364,7 @@ public class Panel_orcamento extends JPanel {
 
 	public void incluir_produto() {
 		if (produto_selecionado != null) {
-			
+
 			produto_incluso = new Produto_Orcamento();
 
 			if (novo_produto(produto_incluso, false)) {
@@ -1407,6 +1414,33 @@ public class Panel_orcamento extends JPanel {
 			txtIe.setVisible(false);
 
 		}
+
+		exibir_resumo_financeiro();
+	}
+
+	public void exibir_resumo_financeiro() {
+		Resumo_financeiroDAO resumo_dao = new Resumo_financeiroDAO();
+		Resumo_financeiro resumo_financeiro = new Resumo_financeiro();
+		resumo_financeiro = resumo_dao.carregar_resumo_financeiro(cliente_selecionado, resumo_financeiro);
+
+		if (resumo_financeiro.getPrimeira_compra() != null) {
+			fTxtPrimeiraCompra.setText(sdf.format(resumo_financeiro.getPrimeira_compra()));
+		}
+		if (resumo_financeiro.getUltima_compra() != null) {
+			fTxtUltimaCompra.setText(sdf.format(resumo_financeiro.getUltima_compra()));
+		}
+		if (resumo_financeiro.getValor_aberto() != null) {
+			fTxtValorEmAberto.setText(nf3.format(resumo_financeiro.getValor_aberto()));
+		}
+
+		if (resumo_financeiro.getMaior_compra() != null) {
+			fTxtMaiorCompra.setText(nf3.format(resumo_financeiro.getMaior_compra()));
+		}
+
+		if (resumo_financeiro.getTotal_comprado() != null) {
+			fTxtTotalVendido.setText(nf3.format(resumo_financeiro.getTotal_comprado()));
+		}
+
 	}
 
 	public void salvar_orcamento() {
@@ -1454,7 +1488,6 @@ public class Panel_orcamento extends JPanel {
 					JOptionPane.showMessageDialog(lblQuantidade,
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
-
 
 					// Testa se o orçamento foi editado e se seu valor original foi alterado.
 					flag = false;
@@ -1506,7 +1539,7 @@ public class Panel_orcamento extends JPanel {
 						gera_pdf.monta_pdf_orcamento(orcamento);
 					}
 				}
-				
+
 				limpar_campos();
 				desativar_campos();
 			}
@@ -1637,7 +1670,8 @@ public class Panel_orcamento extends JPanel {
 			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, "%", 50);
 		} else {
 			if (tipo_busca.equals("NOME")) {
-				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%", 50);
+				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%",
+						50);
 			} else {
 				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos,
 						fTxtCodigoProduto.getText().trim() + "%", 50);
@@ -1721,7 +1755,6 @@ public class Panel_orcamento extends JPanel {
 		fTxtMaiorCompra.setText(null);
 		fTxtPrimeiraCompra.setText(null);
 		fTxtUltimaCompra.setText(null);
-		txtpObservaoFinanceira.setText(null);
 		fTxtNomeCliente.requestFocus();
 	}
 
