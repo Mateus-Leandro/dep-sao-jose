@@ -169,6 +169,8 @@ public class Panel_produtos extends JPanel {
 		}
 
 		fTxtCodigoBarras = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarras.setToolTipText(
+				"Ap\u00F3s salvar o produto, vincule um c\u00F3digo de barras selecionando o item e clicando no bot\u00E3o ao lado.");
 		fTxtCodigoBarras.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterBarras) {
@@ -178,12 +180,6 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		fTxtCodigoBarras.setEditable(false);
-		fTxtCodigoBarras.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickCodigoBarras) {
-				text_tools.move_cursor_inicio(fTxtCodigoBarras);
-			}
-		});
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarras.setBounds(557, 187, 117, 20);
@@ -210,8 +206,8 @@ public class Panel_produtos extends JPanel {
 			public void mousePressed(MouseEvent clickMaisBarras) {
 
 				if (btnMaisBarras.isEnabled()) {
-					VariosBarras varios_barras = new VariosBarras(txtCodigo.getText().trim(),
-							fTxtCodigoBarras.getText().trim(), fTxtNomeProduto.getText().trim());
+					VariosBarras varios_barras = new VariosBarras(txtCodigo.getText().trim(), fTxtCodigoBarras,
+							fTxtNomeProduto.getText().trim());
 					varios_barras.setVisible(true);
 				}
 			}
@@ -419,6 +415,10 @@ public class Panel_produtos extends JPanel {
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
 					btnMaisBarras.setEnabled(true);
+				} else {
+					btnEditar.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					btnMaisBarras.setEnabled(false);
 				}
 			}
 		});
@@ -469,7 +469,7 @@ public class Panel_produtos extends JPanel {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
-				if(btnEditar.isEnabled()) {
+				if (btnEditar.isEnabled()) {
 					editar_item();
 				}
 			}
@@ -552,7 +552,7 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent enterSetor) {
 				if (enterSetor.getKeyCode() == enterSetor.VK_ENTER) {
-					fTxtCodigoBarras.requestFocus();
+					cbxFatorVenda.requestFocus();
 				}
 			}
 		});
@@ -574,13 +574,13 @@ public class Panel_produtos extends JPanel {
 		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxSetor.setBounds(59, 189, 210, 20);
 		add(cbxSetor);
-		
+
 		lblObg_nomeProduto = new JLabel("*");
 		lblObg_nomeProduto.setForeground(Color.RED);
 		lblObg_nomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_nomeProduto.setBounds(710, 163, 20, 15);
 		add(lblObg_nomeProduto);
-		
+
 		lblObg_precoVenda = new JLabel("*");
 		lblObg_precoVenda.setForeground(Color.RED);
 		lblObg_precoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -592,7 +592,6 @@ public class Panel_produtos extends JPanel {
 	// --------------Funções--------------
 
 	public void ativarCampos() {
-		fTxtCodigoBarras.setEditable(true);
 		fTxtMargem.setEditable(true);
 		fTxtNomeProduto.setEditable(true);
 		fTxtPrecoCusto.setEditable(true);
@@ -602,7 +601,6 @@ public class Panel_produtos extends JPanel {
 	}
 
 	public void desativarCampos() {
-		fTxtCodigoBarras.setEditable(false);
 		fTxtMargem.setEditable(false);
 		fTxtNomeProduto.setEditable(false);
 		fTxtPrecoCusto.setEditable(false);
@@ -625,6 +623,7 @@ public class Panel_produtos extends JPanel {
 		fTxtMargemPraticada.setText(null);
 		cbxFatorVenda.setSelectedIndex(0);
 		cbxSetor.setSelectedIndex(-1);
+		tabelaProdutos.clearSelection();
 	}
 
 	public void novo_item() {
@@ -759,8 +758,8 @@ public class Panel_produtos extends JPanel {
 		String descricao = fTxtNomeProduto.getText().trim();
 
 		Object setor = null;
-		if(cbxSetor.getSelectedIndex() != -1) {
-			 setor = (Setor) cbxSetor.getModel().getSelectedItem();
+		if (cbxSetor.getSelectedIndex() != -1) {
+			setor = (Setor) cbxSetor.getModel().getSelectedItem();
 		}
 
 		Double precoVenda = null;
@@ -768,6 +767,7 @@ public class Panel_produtos extends JPanel {
 		Double margem = 0.00;
 		Double prSugerido = 0.00;
 		Double margemPraticada = 100.00;
+
 		try {
 			precoVenda = nf.parse(fTxtPrecoVenda.getText()).doubleValue();
 
@@ -854,34 +854,25 @@ public class Panel_produtos extends JPanel {
 			} else {
 				produto.setIdProduto(Integer.parseInt(txtCodigo.getText().trim()));
 
-				if (!fTxtCodigoBarras.getText().trim().isEmpty()) {
-					barras_valido = produto_dao.testaBarrasAlteracao(produto.getIdProduto(), codigo_barra);
-				}
-
-				if (barras_valido) {
-					if (produto_dao.alterarProduto(produto)) {
-						JOptionPane.showMessageDialog(null, "Produto alterado!", "Alteração de produto",
-								JOptionPane.NO_OPTION);
-						limparCampos();
-						desativarCampos();
-						btnCancelar.setVisible(false);
-						btnNovo.setEnabled(true);
-						btnSalvar.setVisible(false);
-						lblPesquisarPor.setVisible(true);
-						fTxtPesquisa.setVisible(true);
-						cbxTipoPesquisa.setVisible(true);
-						btnExcluir.setVisible(true);
-						btnEditar.setVisible(true);
-						fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
-						recarregarTabela();
-						return produto;
-					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao alterar produto!", "Alteração de produto",
-								JOptionPane.WARNING_MESSAGE);
-					}
+				if (produto_dao.alterarProduto(produto)) {
+					JOptionPane.showMessageDialog(null, "Produto alterado!", "Alteração de produto",
+							JOptionPane.NO_OPTION);
+					limparCampos();
+					desativarCampos();
+					btnCancelar.setVisible(false);
+					btnNovo.setEnabled(true);
+					btnSalvar.setVisible(false);
+					lblPesquisarPor.setVisible(true);
+					fTxtPesquisa.setVisible(true);
+					cbxTipoPesquisa.setVisible(true);
+					btnExcluir.setVisible(true);
+					btnEditar.setVisible(true);
+					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
+					recarregarTabela();
+					return produto;
 				} else {
-					JOptionPane.showMessageDialog(null, "Código de barras informado ja utilizado em outro item!",
-							"Código de barras duplicado!", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Erro ao alterar produto!", "Alteração de produto",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 
@@ -1012,7 +1003,7 @@ public class Panel_produtos extends JPanel {
 
 		}
 	}
-	
+
 	public Panel_produtos getPanelProdutos() {
 		return this;
 	}

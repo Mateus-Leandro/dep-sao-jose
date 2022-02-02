@@ -23,7 +23,7 @@ public class BarrasDAO {
 	}
 
 	// Incluir novo barras
-	public boolean novo_barras(String cod_item, String barras) {
+	public boolean novo_barras(String cod_item, String barras, Boolean principal) {
 
 		if (testa_barras_vinculado(barras)) {
 			conn = DB.getConnection();
@@ -34,13 +34,11 @@ public class BarrasDAO {
 				ps = conn.prepareStatement(
 						"INSERT INTO barras_produto (idProduto, principal, barras, dt_vinculacao) VALUES (?, ?, ?, ?)");
 				ps.setString(1, cod_item);
-				ps.setBoolean(2, false);
+				ps.setBoolean(2, principal);
 				ps.setString(3, barras);
 				ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
 				ps.execute();
 				conn.commit();
-				JOptionPane.showMessageDialog(null, "Código vinculado corretamente.", "Vinculação de código de barras",
-						JOptionPane.NO_OPTION);
 				return true;
 			}
 
@@ -67,8 +65,6 @@ public class BarrasDAO {
 			ps.setString(1, barras);
 			ps.execute();
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "Código de barras removido.", "Exclusão de código de barras vinculado.",
-					JOptionPane.WARNING_MESSAGE);
 			return true;
 		} catch (Exception erro) {
 			JOptionPane.showMessageDialog(null, "Erro ao remover código de barras!",

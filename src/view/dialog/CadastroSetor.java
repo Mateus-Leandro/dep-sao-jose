@@ -35,6 +35,7 @@ import dao.SetorDAO;
 import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
 import view.panels.Panel_produtos;
+import view.tools.Jtext_tools;
 
 import java.awt.Color;
 import javax.swing.ListSelectionModel;
@@ -61,6 +62,7 @@ public class CadastroSetor extends JDialog {
 	ArrayList<Setor> setores = new ArrayList<Setor>();
 	ModeloTabelaSetores modelo = new ModeloTabelaSetores(setores);
 	private Panel_produtos panel_produtos;
+	private Jtext_tools text_tools = new Jtext_tools();
 	/**
 	 * Launch the application.
 	 */
@@ -116,9 +118,7 @@ public class CadastroSetor extends JDialog {
 			fTxtNomeSetor.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent clickNomeSetor) {
-					if (fTxtNomeSetor.getText().trim().isEmpty()) {
-						fTxtNomeSetor.setCaretPosition(0);
-					}
+					text_tools.move_cursor_inicio(fTxtNomeSetor);
 				}
 			});
 			fTxtNomeSetor.setEnabled(false);

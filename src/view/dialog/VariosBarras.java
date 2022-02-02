@@ -38,6 +38,9 @@ import javax.swing.text.MaskFormatter;
 import dao.BarrasDAO;
 import entities.produto.Barras_Produto;
 import tables.tableModels.ModeloTabelaBarras;
+import view.panels.Panel_produtos;
+import view.tools.Jtext_tools;
+
 import javax.swing.ListSelectionModel;
 
 public class VariosBarras extends JDialog {
@@ -71,6 +74,7 @@ public class VariosBarras extends JDialog {
 	BarrasDAO barras_dao = new BarrasDAO();
 	ArrayList<Barras_Produto> lista = new ArrayList<Barras_Produto>();
 	ModeloTabelaBarras modelo_tabela = new ModeloTabelaBarras(lista);
+	private Jtext_tools text_tool = new Jtext_tools();
 
 	/**
 	 * Launch the application.
@@ -91,7 +95,7 @@ public class VariosBarras extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public VariosBarras(String cod, String cod_barras_principal, String nome) {
+	public VariosBarras(String cod, JFormattedTextField campo_barras, String nome) {
 		lista = barras_dao.lista_barras(cod, lista);
 		tecla_pressionada();
 		setResizable(false);
@@ -102,18 +106,19 @@ public class VariosBarras extends JDialog {
 		setContentPane(contentPane);
 		setModal(true);
 		contentPane.setLayout(null);
-		
-				btnExcluir = new JButton("Excluir");
-				btnExcluir.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent clickExcluir) {
-						exclui_barras();
-					}
-				});
-				btnExcluir.setIcon(icone_excluir);
-				btnExcluir.setBounds(312, 139, 112, 23);
-				btnExcluir.setVisible(false);
-				contentPane.add(btnExcluir);
+
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickExcluir) {
+				exclui_barras();
+				campo_barras.setText(txtCodigoBarrasPrincipal.getText().trim());
+			}
+		});
+		btnExcluir.setIcon(icone_excluir);
+		btnExcluir.setBounds(312, 139, 112, 23);
+		btnExcluir.setVisible(false);
+		contentPane.add(btnExcluir);
 
 		lblCadatroDeProduto = new JLabel("Cod. Barras Vinculados");
 		lblCadatroDeProduto.setBounds(10, 11, 414, 32);
@@ -162,7 +167,9 @@ public class VariosBarras extends JDialog {
 		txtCodigoBarrasPrincipal.setEnabled(true);
 		txtCodigoBarrasPrincipal.setColumns(10);
 		txtCodigoBarrasPrincipal.setBounds(297, 11, 103, 20);
-		txtCodigoBarrasPrincipal.setText(cod_barras_principal);
+		if(!campo_barras.getText().trim().isEmpty()) {
+			txtCodigoBarrasPrincipal.setText(campo_barras.getText().trim());
+		}
 		txtCodigoBarrasPrincipal.setEditable(false);
 		panel.add(txtCodigoBarrasPrincipal);
 
@@ -176,11 +183,14 @@ public class VariosBarras extends JDialog {
 					barras_selecionado = tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 0)
 							.toString();
 					btnExcluir.setVisible(true);
-					if((boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
+					if ((boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
 						btnTornaPrincipal.setVisible(false);
-					}else {
+					} else {
 						btnTornaPrincipal.setVisible(true);
 					}
+				} else {
+					btnTornaPrincipal.setVisible(false);
+					btnExcluir.setVisible(false);
 				}
 			}
 		});
@@ -199,6 +209,7 @@ public class VariosBarras extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				salvar_barras();
+				campo_barras.setText(txtCodigoBarrasPrincipal.getText().trim());
 			}
 		});
 		btnSalvar.setBounds(198, 139, 104, 23);
@@ -239,6 +250,13 @@ public class VariosBarras extends JDialog {
 		}
 
 		fTxtCodigoVinculado = new JFormattedTextField(mascara_barras);
+		fTxtCodigoVinculado.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickBarras) {
+				
+				text_tool.move_cursor_inicio(fTxtCodigoVinculado);
+			}
+		});
 		fTxtCodigoVinculado.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoVinculado.setBounds(10, 142, 155, 20);
 		fTxtCodigoVinculado.setVisible(false);
@@ -286,13 +304,13 @@ public class VariosBarras extends JDialog {
 		btnTornaPrincipal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickTornarPrincipal) {
-
 				if (barras_dao.tornar_principal(cod, barras_selecionado)) {
 					JOptionPane.showMessageDialog(null, "Código de barras principal alterado com sucesso.",
 							"Alteração do código de barras principal", JOptionPane.INFORMATION_MESSAGE);
 					txtCodigoBarrasPrincipal.setText(barras_selecionado);
 					lista = barras_dao.lista_barras(cod, lista);
 					modelo_tabela.fireTableDataChanged();
+					campo_barras.setText(txtCodigoBarrasPrincipal.getText().trim());
 				}
 
 			}
@@ -318,6 +336,8 @@ public class VariosBarras extends JDialog {
 		lblVinculado.setVisible(true);
 		fTxtCodigoVinculado.requestFocus();
 		btnTornaPrincipal.setVisible(false);
+
+		tabelaVariosBarras.clearSelection();
 	}
 
 	public void cancela_barras() {
@@ -327,6 +347,13 @@ public class VariosBarras extends JDialog {
 		btnSalvar.setVisible(false);
 		fTxtCodigoVinculado.setVisible(false);
 		lblVinculado.setVisible(false);
+		btnExcluir.setVisible(true);
+
+		if (tabelaVariosBarras.getSelectedRow() != -1) {
+			if (!(boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
+				btnTornaPrincipal.setVisible(true);
+			}
+		}
 	}
 
 	public void exclui_barras() {
@@ -348,7 +375,11 @@ public class VariosBarras extends JDialog {
 
 				if (flag) {
 					int linha_removida = tabelaVariosBarras.getSelectedRow();
-					barras_dao.remove_barras(barras_selecionado);
+					if (barras_dao.remove_barras(barras_selecionado)) {
+						JOptionPane.showMessageDialog(null, "Código de barras removido.",
+								"Exclusão de código de barras vinculado.", JOptionPane.WARNING_MESSAGE);
+						tabelaVariosBarras.clearSelection();
+					}
 					modelo_tabela.removeBarras(linha_removida);
 
 				}
@@ -362,15 +393,20 @@ public class VariosBarras extends JDialog {
 		if (!fTxtCodigoVinculado.getText().trim().isEmpty()) {
 			String barras = fTxtCodigoVinculado.getText().trim();
 
-			if (barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras)) {
-				modelo_tabela
-						.addBarras(new Barras_Produto(false, barras, new java.sql.Date(System.currentTimeMillis())));
+			Boolean principal = lista.size() == 0;
+
+			if (barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal)) {
+				JOptionPane.showMessageDialog(null, "Código vinculado corretamente.", "Vinculação de código de barras",
+						JOptionPane.NO_OPTION);
+				modelo_tabela.addBarras(
+						new Barras_Produto(principal, barras, new java.sql.Date(System.currentTimeMillis())));
 				btnSalvar.setVisible(false);
 				btnCancelar.setVisible(false);
 				btnNovo.setVisible(true);
 				fTxtCodigoVinculado.setVisible(false);
 				lblVinculado.setVisible(false);
 
+				fTxtCodigoVinculado.setText(null);
 			}
 
 		} else {
@@ -432,5 +468,5 @@ public class VariosBarras extends JDialog {
 	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
 	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
 	Icon icone_principal = new ImageIcon(getClass().getResource("/icons/principal.png"));
-	
+
 }

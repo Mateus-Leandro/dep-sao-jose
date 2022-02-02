@@ -58,18 +58,6 @@ public class ProdutoDAO {
 
 			if (rs.next()) {
 				produto.setIdProduto(rs.getInt(1));
-
-				if (produto.getCodigo_barra() != null) {
-					ps = conn.prepareStatement(
-							"INSERT INTO barras_produto (idProduto, barras, principal, dt_vinculacao) VALUES (?, ?, ?, ?)");
-					ps.setInt(1, produto.getIdProduto());
-					ps.setString(2, produto.getCodigo_barra());
-					ps.setBoolean(3, true);
-					ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
-					ps.execute();
-
-				}
-
 			}
 			conn.commit();
 
@@ -269,20 +257,21 @@ public class ProdutoDAO {
 		ResultSet rs = null;
 		try {
 
-			if(limite == null) {
+			if (limite == null) {
 				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
 						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
 						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
 						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
 						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
 						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
 						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao LIMIT " + limite);
+						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao LIMIT "
+						+ limite);
 			}
 
 			ps.setString(1, codInterno);
@@ -324,21 +313,23 @@ public class ProdutoDAO {
 		ResultSet rs = null;
 
 		try {
-			if(limite == null) {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-						+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-						+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
-						+ "ORDER BY descricao");
+			if (limite == null) {
+				ps = conn.prepareStatement(
+						"SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+								+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
+								+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
+								+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+								+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
+								+ "ORDER BY descricao");
 				ps.setString(1, barras);
-			}else {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-						+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
-						+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
-						+ "ORDER BY descricao LIMIT " + limite);
+			} else {
+				ps = conn.prepareStatement(
+						"SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
+								+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
+								+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
+								+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+								+ "WHERE barras_produto.principal IS NOT FALSE AND barras_produto.barras LIKE ? "
+								+ "ORDER BY descricao LIMIT " + limite);
 				ps.setString(1, barras);
 			}
 			rs = ps.executeQuery();
@@ -381,7 +372,7 @@ public class ProdutoDAO {
 		try {
 
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
-					+ "setor.nome, unidadeVenda, preco, bloqueadoVenda, dataCadastro "
+					+ "setor.nome, unidadeVenda, prVenda, bloqueadoVenda, dataCadastro "
 					+ "FROM produto INNER JOIN setor ON produto.codSetor = setor.codSetor "
 					+ "INNER JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
 					+ "WHERE barras_produto.principal IS FALSE AND barras_produto.barras LIKE ? "

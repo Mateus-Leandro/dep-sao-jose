@@ -144,8 +144,8 @@ public class Panel_configuracoes extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaNomeEmpresa) {
 				valida_campos();
-				
-				if(digitaNomeEmpresa.getKeyCode() == digitaNomeEmpresa.VK_ENTER) {
+
+				if (digitaNomeEmpresa.getKeyCode() == digitaNomeEmpresa.VK_ENTER) {
 					fTxtNomeResponsavel.requestFocus();
 				}
 			}
@@ -236,7 +236,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtTelFixo.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterTelFixo) {
-				if(enterTelFixo.getKeyChar() == enterTelFixo.VK_ENTER) {
+				if (enterTelFixo.getKeyChar() == enterTelFixo.VK_ENTER) {
 					fTxtCelular.requestFocus();
 				}
 			}
@@ -280,8 +280,8 @@ public class Panel_configuracoes extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaCelular) {
 				valida_campos();
-				
-				if(digitaCelular.getKeyCode() == digitaCelular.VK_ENTER) {
+
+				if (digitaCelular.getKeyCode() == digitaCelular.VK_ENTER) {
 					fTxtEmail.requestFocus();
 				}
 			}
@@ -322,7 +322,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEndereco.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEndereco) {
-				if(enterEndereco.getKeyCode() == enterEndereco.VK_ENTER) {
+				if (enterEndereco.getKeyCode() == enterEndereco.VK_ENTER) {
 					cbxParcelasDiferentes.requestFocus();
 				}
 			}
@@ -350,7 +350,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtNomeResponsavel.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNomeResponsavel) {
-				if(enterNomeResponsavel.getKeyCode() == enterNomeResponsavel.VK_ENTER) {
+				if (enterNomeResponsavel.getKeyCode() == enterNomeResponsavel.VK_ENTER) {
 					fTxtCnpj.requestFocus();
 				}
 			}
@@ -375,7 +375,7 @@ public class Panel_configuracoes extends JPanel {
 		add(lblCnpj);
 
 		MaskFormatter mascara_cnpj = null;
-		try {	
+		try {
 			mascara_cnpj = new MaskFormatter("##.###.###/####-##");
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -385,7 +385,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtCnpj.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCnpj) {
-				if(digitaCnpj.getKeyCode() == digitaCnpj.VK_ENTER) {
+				if (digitaCnpj.getKeyCode() == digitaCnpj.VK_ENTER) {
 					fTxtInscricao.requestFocus();
 				}
 			}
@@ -421,7 +421,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtInscricao.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterInscricao) {
-				if(enterInscricao.getKeyCode() == enterInscricao.VK_ENTER) {
+				if (enterInscricao.getKeyCode() == enterInscricao.VK_ENTER) {
 					fTxtTelFixo.requestFocus();
 				}
 			}
@@ -449,7 +449,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEmail.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEmail) {
-				if(enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
+				if (enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
 					fTxtEndereco.requestFocus();
 				}
 			}
@@ -484,11 +484,12 @@ public class Panel_configuracoes extends JPanel {
 		add(lblSalvarParcelasDivergentes);
 
 		cbxParcelasDiferentes = new JComboBox<String>();
-		cbxParcelasDiferentes.setToolTipText("Permitir gravar parcelas quando o total delas for diferente do total do or\u00E7amento.");
+		cbxParcelasDiferentes.setToolTipText(
+				"Permitir gravar parcelas quando o total delas for diferente do total do or\u00E7amento.");
 		cbxParcelasDiferentes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterParcelasDif) {
-				if(enterParcelasDif.getKeyCode() == enterParcelasDif.VK_ENTER) {
+				if (enterParcelasDif.getKeyCode() == enterParcelasDif.VK_ENTER) {
 					cbxGeraPdf.requestFocus();
 				}
 			}
@@ -509,7 +510,7 @@ public class Panel_configuracoes extends JPanel {
 		cbxGeraPdf.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterGeraPdf) {
-				if(enterGeraPdf.getKeyCode() == enterGeraPdf.VK_ENTER) {
+				if (enterGeraPdf.getKeyCode() == enterGeraPdf.VK_ENTER) {
 					cbxAltOrc.requestFocus();
 				}
 			}
@@ -526,11 +527,12 @@ public class Panel_configuracoes extends JPanel {
 		add(lblAlterarOramentoJ);
 
 		cbxAltOrc = new JComboBox<String>();
-		cbxAltOrc.setToolTipText("Permitir editar os itens e valores do or\u00E7amento quando ele possuir parcelas lan\u00E7adas.");
+		cbxAltOrc.setToolTipText(
+				"Permitir editar os itens e valores do or\u00E7amento quando ele possuir parcelas lan\u00E7adas.");
 		cbxAltOrc.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterAltOrc) {
-				if(enterAltOrc.getKeyCode() == enterAltOrc.VK_ENTER) {
+				if (enterAltOrc.getKeyCode() == enterAltOrc.VK_ENTER) {
 					fTxtConsumidorFinal.requestFocus();
 				}
 			}
@@ -598,26 +600,27 @@ public class Panel_configuracoes extends JPanel {
 		lblNomeConsumidorFinal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNomeConsumidorFinal.setBounds(127, 490, 41, 19);
 		add(lblNomeConsumidorFinal);
-		
+
 		lblObg_celular = new JLabel("*");
 		lblObg_celular.setForeground(Color.RED);
 		lblObg_celular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_celular.setBounds(337, 235, 20, 15);
 		add(lblObg_celular);
-		
+
 		lblObg_consumidor = new JLabel("*");
 		lblObg_consumidor.setForeground(Color.RED);
 		lblObg_consumidor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_consumidor.setBounds(450, 502, 20, 15);
 		add(lblObg_consumidor);
-		
+
 		lblObg_nomeEmpresa = new JLabel("*");
 		lblObg_nomeEmpresa.setForeground(Color.RED);
 		lblObg_nomeEmpresa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_nomeEmpresa.setBounds(411, 166, 20, 15);
 		add(lblObg_nomeEmpresa);
-		
-		lblObsConsumidor = new JLabel("* O sistema utilizar\u00E1 o consumidor final sempre que n\u00E3o for informado algum cliente no or\u00E7amento.");
+
+		lblObsConsumidor = new JLabel(
+				"* O sistema utilizar\u00E1 o consumidor final sempre que n\u00E3o for informado algum cliente no or\u00E7amento.");
 		lblObsConsumidor.setForeground(Color.BLUE);
 		lblObsConsumidor.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblObsConsumidor.setBounds(10, 519, 540, 19);
@@ -645,8 +648,8 @@ public class Panel_configuracoes extends JPanel {
 		if (!fTxtNomeResponsavel.getText().trim().isEmpty()) {
 			responsavel = fTxtNomeResponsavel.getText().trim();
 		}
-		
-		if(!fTxtCnpj.getText().equals("  .   .   /    -  ")) {
+
+		if (!fTxtCnpj.getText().equals("  .   .   /    -  ")) {
 			CNPJ = fTxtCnpj.getText().trim();
 		}
 		if (!fTxtInscricao.getText().equals("         .  -  ")) {
@@ -696,7 +699,7 @@ public class Panel_configuracoes extends JPanel {
 		} else {
 			scrollPaneConsumidorFinal.setVisible(false);
 		}
-		
+
 		ltConsumidorFinal.setModel(list_model);
 	}
 
@@ -705,7 +708,8 @@ public class Panel_configuracoes extends JPanel {
 		if (configuracoes_do_sistema != null) {
 			fTxtNomeEmpresa.setText(configuracoes_do_sistema.getNome_empresa());
 			fTxtNomeResponsavel.setText(configuracoes_do_sistema.getResponsavel());
-			fTxtCelular.setText(configuracoes_do_sistema.getCelular());
+			fTxtCelular
+					.setText(configuracoes_do_sistema.getCelular().replace("(", "").replace(")", "").replace("-", ""));
 			fTxtTelFixo.setText(configuracoes_do_sistema.getTel_fixo());
 			fTxtCnpj.setText(configuracoes_do_sistema.getCNPJ());
 			fTxtInscricao.setText(configuracoes_do_sistema.getInscricao_estadual());
@@ -723,7 +727,7 @@ public class Panel_configuracoes extends JPanel {
 				fTxtConsumidorFinal.setText(null);
 				fTxtCodigoConsumidor.setText(null);
 			}
-		}else {
+		} else {
 			limpa_campos();
 		}
 
@@ -762,8 +766,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtConsumidorFinal.setEditable(false);
 		scrollPaneConsumidorFinal.setVisible(false);
 	}
-	
-	
+
 	public void limpa_campos() {
 		fTxtNomeEmpresa.setText(null);
 		fTxtNomeResponsavel.setText(null);

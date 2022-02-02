@@ -43,6 +43,7 @@ public class DB {
 							"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
 									+ arquivo_db,
 							"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
 					System.exit(0);
 					return null;
 				}
