@@ -948,7 +948,7 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(70); // Preco Custo
 		tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(52); // Margem
 		tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(70); // Preco Sugerido
-		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(70); // Preco Venda
+		tabelaProdutos.getColumnModel().getColumn(7).setPreferredWidth(75); // Preco Venda
 		tabelaProdutos.getColumnModel().getColumn(8).setPreferredWidth(52); // Margem Praticada
 		tabelaProdutos.getColumnModel().getColumn(9).setPreferredWidth(110); // Código Barras
 		tabelaProdutos.getColumnModel().getColumn(10).setPreferredWidth(40); // Bloqueado

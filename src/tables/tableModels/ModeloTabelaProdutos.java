@@ -89,7 +89,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columIndex) {
 		Produto produto = this.produtos.get(rowIndex);
 
-		NumberFormat nf = new DecimalFormat("R$ 0.00");
+		NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 		NumberFormat nf2 = new DecimalFormat("0.00");
 
 		switch (columIndex) {
