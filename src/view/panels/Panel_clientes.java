@@ -38,7 +38,9 @@ import javax.swing.text.MaskFormatter;
 import api_tools.Busca_cep;
 import api_tools.Busca_cnpj;
 import dao.ClienteDAO;
+import dao.ConfiguracaoDAO;
 import entities.cliente.Cliente;
+import entities.configuracoes.Configuracoes;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
@@ -109,6 +111,8 @@ public class Panel_clientes extends JPanel {
 	private ClienteDAO cliente_dao = new ClienteDAO();
 	private Cliente cliente = new Cliente();
 	private Render_tabela_clientes render = new Render_tabela_clientes();
+	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
+	private Configuracoes configuracoes = conf_dao.busca_configuracoes();
 
 	/**
 	 * Create the panel.
@@ -218,7 +222,7 @@ public class Panel_clientes extends JPanel {
 		checkBoxJuridica.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent juridico) {
 				fTxtDocumento.setText(null);
-				
+
 				if (juridico.getStateChange() == ItemEvent.SELECTED) {
 					fTxtDocumento.setValue(null);
 					lblDocumento.setText("CNPJ");
@@ -234,7 +238,7 @@ public class Panel_clientes extends JPanel {
 					lblIe.setVisible(false);
 					btnLimpaDocumento.setVisible(false);
 				}
-				
+
 				btnLimpaCep.setVisible(false);
 
 				if (!btnNovo.isVisible()) {
@@ -986,12 +990,13 @@ public class Panel_clientes extends JPanel {
 		tabelaClientes.getColumnModel().getColumn(13).setPreferredWidth(150); // Email
 		tabelaClientes.getColumnModel().getColumn(14).setPreferredWidth(90); // Telefone
 		tabelaClientes.getColumnModel().getColumn(15).setPreferredWidth(70); // Data Cadastro
-		
+
 		// Definindo o sorter da tabela para ordenação das colunas.
 		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
 		tabelaClientes.setRowSorter(sorter);
-		
-		// Definindo o render da coluna para que seja pintada corretamente quando o cliente está bloqueado.
+
+		// Definindo o render da coluna para que seja pintada corretamente quando o
+		// cliente está bloqueado.
 		tabelaClientes.getColumnModel().getColumn(0).setCellRenderer(render);
 
 	}
@@ -1160,7 +1165,8 @@ public class Panel_clientes extends JPanel {
 			apelido = fTxtApelido.getText().trim();
 		}
 
-		if (!fTxtDocumento.getText().equals("  .   .   /    -  ") && !fTxtDocumento.getText().equals("   .   .   -  ")) {
+		if (!fTxtDocumento.getText().equals("  .   .   /    -  ")
+				&& !fTxtDocumento.getText().equals("   .   .   -  ")) {
 			documento = fTxtDocumento.getText().trim();
 		} else {
 			documento = null;
@@ -1232,19 +1238,26 @@ public class Panel_clientes extends JPanel {
 			boolean flag;
 			Integer codigo = (Integer) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0);
 
-			int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
-					"Deseja excluir o cliente abaixo?\n" + "Código: " + codigo + "\n" + "Nome: "
-							+ tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 2),
-					"Exclusão de Cliente", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (codigo.equals(configuracoes.getConsumidor_final().getIdCliente())) {
+				JOptionPane.showMessageDialog(null,
+						"Impossível excluir cliente.\nO cliente selecionado está sendo usado como consumidor final nas configurações do sistema.",
+						"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);
+			} else {
 
-			flag = opcao == JOptionPane.YES_OPTION;
+				int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+						"Deseja excluir o cliente abaixo?\n" + "Código: " + codigo + "\n" + "Nome: "
+								+ tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 2),
+						"Exclusão de Cliente", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
-			if (flag) {
-				if (cliente_dao.excluirCliente(codigo)) {
-					JOptionPane.showMessageDialog(fTxtCidade, "Cliente excluído com sucesso.", "Exclusão de clientes.",
-							JOptionPane.NO_OPTION);
-					recarregarTabela();
-					limpar_campos();
+				flag = opcao == JOptionPane.YES_OPTION;
+
+				if (flag) {
+					if (cliente_dao.excluirCliente(codigo)) {
+						JOptionPane.showMessageDialog(fTxtCidade, "Cliente excluído com sucesso.",
+								"Exclusão de clientes.", JOptionPane.NO_OPTION);
+						recarregarTabela();
+						limpar_campos();
+					}
 				}
 			}
 		}
@@ -1303,8 +1316,7 @@ public class Panel_clientes extends JPanel {
 	public void pega_dados_pessoa_juridica() {
 		Cliente cliente = new Cliente();
 		String documento;
-		if (fTxtDocumento.getText().equals("   .   .   -  ")
-				&& fTxtDocumento.getText().equals("  .   .   /    -  ")) {
+		if (fTxtDocumento.getText().equals("   .   .   -  ") && fTxtDocumento.getText().equals("  .   .   /    -  ")) {
 			documento = null;
 		} else {
 			documento = fTxtDocumento.getText().trim();
