@@ -324,13 +324,20 @@ public class ClienteDAO {
 		try {
 			if(id != null) {
 				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ? and idCliente = ?");
+				ps.setString(1, documento);
 				ps.setString(2, id);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					return null;
+				}
+				
 			}else {
 				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ?");
+				ps.setString(1, documento);
+				rs = ps.executeQuery();
 			}
 			
-			ps.setString(1, documento);
-			rs = ps.executeQuery();
 
 			if (rs.next()) {
 				return rs.getString("nome");

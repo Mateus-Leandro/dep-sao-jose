@@ -108,6 +108,7 @@ public class Panel_clientes extends JPanel {
 	private Boolean documento_valido;
 	private ClienteDAO cliente_dao = new ClienteDAO();
 	private Cliente cliente = new Cliente();
+	private Render_tabela_clientes render = new Render_tabela_clientes();
 
 	/**
 	 * Create the panel.
@@ -217,12 +218,15 @@ public class Panel_clientes extends JPanel {
 		checkBoxJuridica.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent juridico) {
 				fTxtDocumento.setText(null);
+				
 				if (juridico.getStateChange() == ItemEvent.SELECTED) {
+					fTxtDocumento.setValue(null);
 					lblDocumento.setText("CNPJ");
 					fTxtDocumento.setFormatterFactory(new DefaultFormatterFactory(mascara_cnpj));
 					fTxtIe.setVisible(true);
 					lblIe.setVisible(true);
 				} else {
+					fTxtDocumento.setValue(null);
 					lblDocumento.setText("CPF");
 					fTxtDocumento.setFormatterFactory(new DefaultFormatterFactory(mascara_cpf));
 					fTxtIe.setText(null);
@@ -230,6 +234,7 @@ public class Panel_clientes extends JPanel {
 					lblIe.setVisible(false);
 					btnLimpaDocumento.setVisible(false);
 				}
+				
 				btnLimpaCep.setVisible(false);
 
 				if (!btnNovo.isVisible()) {
@@ -264,19 +269,20 @@ public class Panel_clientes extends JPanel {
 		fTxtDocumento.setBounds(376, 152, 125, 20);
 		fTxtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtDocumento.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		add(fTxtDocumento);
 		fTxtDocumento.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterDocumento) {
 				if (enterDocumento.getKeyCode() == enterDocumento.VK_ENTER) {
 					if (fTxtIe.isVisible()) {
 						fTxtIe.requestFocus();
+						pega_dados_pessoa_juridica();
 					} else {
 						fTxtNomeCliente.requestFocus();
 					}
 				}
 			}
 		});
-		add(fTxtDocumento);
 
 		lblIe = new JLabel("I. E.");
 		lblIe.setBounds(550, 155, 24, 17);
@@ -763,7 +769,6 @@ public class Panel_clientes extends JPanel {
 		tabelaClientes.getTableHeader().setReorderingAllowed(false);
 		tabelaClientes.setAutoResizeMode(tabelaClientes.AUTO_RESIZE_OFF);
 		tabelaClientes.setBounds(14, 325, 694, 216);
-		Render_tabela_clientes render = new Render_tabela_clientes();
 		tabelaClientes.setDefaultRenderer(Object.class, render);
 
 		ConfiguraLarguraColunaTabela(tabelaClientes);
@@ -815,10 +820,9 @@ public class Panel_clientes extends JPanel {
 					fTxtTelFixo.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 14));
 					fTxtEmail.setText((String) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 13));
 
-					Integer codigo = Integer
-							.parseInt(tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString());
+					String cod = tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0).toString();
 
-					txtCodigo.setText(codigo.toString());
+					txtCodigo.setText(cod);
 
 				} else {
 					btnEditar.setEnabled(false);
@@ -982,8 +986,13 @@ public class Panel_clientes extends JPanel {
 		tabelaClientes.getColumnModel().getColumn(13).setPreferredWidth(150); // Email
 		tabelaClientes.getColumnModel().getColumn(14).setPreferredWidth(90); // Telefone
 		tabelaClientes.getColumnModel().getColumn(15).setPreferredWidth(70); // Data Cadastro
+		
+		// Definindo o sorter da tabela para ordenação das colunas.
 		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo);
 		tabelaClientes.setRowSorter(sorter);
+		
+		// Definindo o render da coluna para que seja pintada corretamente quando o cliente está bloqueado.
+		tabelaClientes.getColumnModel().getColumn(0).setCellRenderer(render);
 
 	}
 
@@ -1151,8 +1160,7 @@ public class Panel_clientes extends JPanel {
 			apelido = fTxtApelido.getText().trim();
 		}
 
-		if (!fTxtDocumento.getText().equals("   .   .   -  ")
-				&& !fTxtDocumento.getText().equals("  .   .   /    -  ")) {
+		if (!fTxtDocumento.getText().equals("  .   .   /    -  ") && !fTxtDocumento.getText().equals("   .   .   -  ")) {
 			documento = fTxtDocumento.getText().trim();
 		} else {
 			documento = null;
@@ -1295,8 +1303,8 @@ public class Panel_clientes extends JPanel {
 	public void pega_dados_pessoa_juridica() {
 		Cliente cliente = new Cliente();
 		String documento;
-		if (!fTxtDocumento.getText().equals("   .   .   -  ")
-				&& !fTxtDocumento.getText().equals("  .   .   /    -  ")) {
+		if (fTxtDocumento.getText().equals("   .   .   -  ")
+				&& fTxtDocumento.getText().equals("  .   .   /    -  ")) {
 			documento = null;
 		} else {
 			documento = fTxtDocumento.getText().trim();

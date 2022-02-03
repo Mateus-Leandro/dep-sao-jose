@@ -24,6 +24,8 @@ public class Render_tabela_clientes extends DefaultTableCellRenderer {
 
 			if ((Boolean) bloqueado) {
 				cor = Color.RED;
+			}else {
+				cor = Color.BLACK;
 			}
 
 		label.setForeground(cor);
