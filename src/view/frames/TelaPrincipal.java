@@ -53,7 +53,14 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
-		setTitle("Dep\u00F3sito S\u00E3o Jos\u00E9");
+
+		if (configuracoes_do_sistema != null) {
+			if (configuracoes_do_sistema.getNome_empresa() != null) {
+				setTitle(configuracoes_do_sistema.getNome_empresa());
+			}
+		}else {
+			setTitle("NOME DA EMPRESA");
+		}
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 759, 734);
