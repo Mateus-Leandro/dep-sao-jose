@@ -41,7 +41,6 @@ CREATE TABLE `barras_produto` (
 
 LOCK TABLES `barras_produto` WRITE;
 /*!40000 ALTER TABLE `barras_produto` DISABLE KEYS */;
-INSERT INTO `barras_produto` VALUES (3,'123',1,'2021-12-05');
 /*!40000 ALTER TABLE `barras_produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +71,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `Cpf_UNIQUE` (`documento`),
   UNIQUE KEY `InscricaoEstadual_UNIQUE` (`inscricaoEstadual`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +80,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,0,'Cliente não identificado','Teste','999.999.999-99',NULL,NULL,'Piedade dos gerais','Rua Rio 0',NULL,'100A','Vista Alegre',NULL,'(99)99999-9999',NULL,'2021-12-13'),(2,0,'Mateus Leandro Chagas Andrade','Chagas','151.253.906-66',NULL,'32371-570','Contagem','Rua Rio Jaguaribe','Casa Verde','100A','Eldoradinho','mateusleandro2205@gmail.com','(31)67868-7688','(31)3396-0945','2022-01-01');
+INSERT INTO `clientes` VALUES (1,0,'Consumidor final',NULL,NULL,NULL,'32371-570','Contagem','Rua Rio Jaguaribe',NULL,'2000A','Eldoradinho',NULL,'(99)99999-9999',NULL,'2022-02-02');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,15 +94,18 @@ DROP TABLE IF EXISTS `configuracoes`;
 CREATE TABLE `configuracoes` (
   `nome_empresa` varchar(45) NOT NULL,
   `responsavel` varchar(45) DEFAULT NULL,
-  `cnpj` varchar(18) NOT NULL,
+  `cnpj` varchar(18) DEFAULT NULL,
   `inscricao_estadual` varchar(15) DEFAULT NULL,
   `tel_fixo` varchar(13) DEFAULT NULL,
   `celular` varchar(14) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `endereco` varchar(63) NOT NULL,
+  `endereco` varchar(63) DEFAULT NULL,
   `salva_parc_dif` varchar(9) NOT NULL,
   `alt_orc` varchar(9) NOT NULL,
-  `gera_pdf` varchar(9) NOT NULL
+  `gera_pdf` varchar(9) NOT NULL,
+  `idConsumidor_final` int NOT NULL,
+  KEY `Codigo Consumidor Final_idx` (`idConsumidor_final`),
+  CONSTRAINT `Codigo Consumidor Final` FOREIGN KEY (`idConsumidor_final`) REFERENCES `clientes` (`idCliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -113,7 +115,7 @@ CREATE TABLE `configuracoes` (
 
 LOCK TABLES `configuracoes` WRITE;
 /*!40000 ALTER TABLE `configuracoes` DISABLE KEYS */;
-INSERT INTO `configuracoes` VALUES ('Depósito São José','Ricardo','99.999.999/9999-99','111111111.11-11','(31)3396-0945','(31)98444-8086','aa@sss','Rua principal','PERGUNTAR','SIM','SIM');
+INSERT INTO `configuracoes` VALUES ('Depósito São José',NULL,NULL,NULL,NULL,'(31)98444-8086',NULL,'','SIM','SIM','PERGUNTAR',1);
 /*!40000 ALTER TABLE `configuracoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +130,7 @@ CREATE TABLE `forma_pagamento` (
   `idFormaPagamento` int NOT NULL AUTO_INCREMENT,
   `descricao` varchar(45) NOT NULL,
   PRIMARY KEY (`idFormaPagamento`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +139,7 @@ CREATE TABLE `forma_pagamento` (
 
 LOCK TABLES `forma_pagamento` WRITE;
 /*!40000 ALTER TABLE `forma_pagamento` DISABLE KEYS */;
-INSERT INTO `forma_pagamento` VALUES (1,'Dinheiro'),(7,'Cartão de Débito');
+INSERT INTO `forma_pagamento` VALUES (1,'Dinheiro');
 /*!40000 ALTER TABLE `forma_pagamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,7 +166,7 @@ CREATE TABLE `orcamento` (
   PRIMARY KEY (`idOrcamento`),
   KEY `codigo cliente_idx` (`idCliente`),
   CONSTRAINT `codigo cliente` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,7 +175,7 @@ CREATE TABLE `orcamento` (
 
 LOCK TABLES `orcamento` WRITE;
 /*!40000 ALTER TABLE `orcamento` DISABLE KEYS */;
-INSERT INTO `orcamento` VALUES (1,1,1,6980,6980,60,0,7040,0,0,NULL,'2022-01-03'),(2,2,1,6,6,11,0,17,0,0,NULL,'2022-01-04'),(3,1,5,6065,5565,14,0,5579,0,0,NULL,'2022-01-08');
+INSERT INTO `orcamento` VALUES (1,1,2,3555.55,3055.55,150,550,2655.55,1,2,NULL,'2022-02-02'),(2,1,1,4.95,4.95,0,0,4.95,0,0,NULL,'2022-02-02');
 /*!40000 ALTER TABLE `orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +205,7 @@ CREATE TABLE `parcelas` (
 
 LOCK TABLES `parcelas` WRITE;
 /*!40000 ALTER TABLE `parcelas` DISABLE KEYS */;
-INSERT INTO `parcelas` VALUES (1,3520,1,NULL,'2022-03-21'),(1,1760,1,NULL,'2022-04-21'),(3,100,1,NULL,'2022-02-26'),(3,100,1,NULL,'2022-03-26');
+INSERT INTO `parcelas` VALUES (1,1327.77,1,NULL,'2022-03-02'),(1,1327.78,1,NULL,'2022-04-02');
 /*!40000 ALTER TABLE `parcelas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,13 +225,13 @@ CREATE TABLE `produto` (
   `prSugerido` double DEFAULT NULL,
   `margemPraticada` double DEFAULT NULL,
   `codSetor` int DEFAULT NULL,
-  `unidadeVenda` enum('UN','CX','FD','PC','KG','MT','L') NOT NULL,
+  `unidadeVenda` varchar(30) NOT NULL,
   `bloqueadoVenda` tinyint NOT NULL DEFAULT '0',
   `dataCadastro` date DEFAULT NULL,
   PRIMARY KEY (`idProduto`),
   KEY `codSetor_idx` (`codSetor`),
   CONSTRAINT `codSetor` FOREIGN KEY (`codSetor`) REFERENCES `setor` (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +240,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Betoneira HSW 127v',15.2,20,25,19,31.58,2,'UN',0,'2021-12-04'),(2,'Martelete Makita 127v',12.35,1.6,25.1,15.45,-87.04,27,'UN',0,'2021-12-04'),(3,'Parafusadeira Holdez 127volts testes',0,150,10,0,100,53,'UN',0,'2021-12-05'),(6,'Cimento Holcim 50KG',0,10,0,0,100,46,'UN',0,'2022-01-01'),(7,'LixaD\'Agua 480',0,82,0,0,100,27,'UN',0,'2022-01-01'),(8,'Tinta Coral 5L',0,3.5,0,0,100,54,'UN',0,'2022-01-01'),(9,'Cola Super Bond',1.5,2,20,1.8,33.33,56,'UN',0,'2022-01-02');
+INSERT INTO `produto` VALUES (1,'Betoneira HSW',500,3500,30,650,600,1,'UN',0,'2022-02-02'),(2,'Lixa',1.5,1.65,10,1.65,10,2,'UN',0,'2022-02-02'),(3,'Cimento Holcim',35,60,30,45.5,71.43,3,'PCT',0,'2022-02-02');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +271,7 @@ CREATE TABLE `produto_orcamento` (
 
 LOCK TABLES `produto_orcamento` WRITE;
 /*!40000 ALTER TABLE `produto_orcamento` DISABLE KEYS */;
-INSERT INTO `produto_orcamento` VALUES (2,9,3,'UN',2,0,6),(1,1,349,'UN',20,0,6980),(3,1,1,'UN',5000,500,4500),(3,7,30,'UN',3.5,0,105),(3,9,5,'UN',2,0,10),(3,3,3,'UN',150,0,450),(3,8,10,'UN',50,0,500);
+INSERT INTO `produto_orcamento` VALUES (1,3,1,'PCT',55.55,0,55.55),(1,1,1,'UN',3500,500,3000),(2,2,3,'UN',1.65,0,4.95);
 /*!40000 ALTER TABLE `produto_orcamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +286,7 @@ CREATE TABLE `setor` (
   `codSetor` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
   PRIMARY KEY (`codSetor`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +295,7 @@ CREATE TABLE `setor` (
 
 LOCK TABLES `setor` WRITE;
 /*!40000 ALTER TABLE `setor` DISABLE KEYS */;
-INSERT INTO `setor` VALUES (1,'Geral'),(2,'Betoneiras'),(27,'Lixas'),(46,'cimentos'),(53,'Parafusadeira'),(54,'Tintas'),(56,'Colas');
+INSERT INTO `setor` VALUES (1,'Betoneiras'),(2,'Lixas'),(3,'Cimentos');
 /*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,4 +316,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-27  6:53:29
+-- Dump completed on 2022-02-03  6:17:39

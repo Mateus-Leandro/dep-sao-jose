@@ -998,7 +998,6 @@ public class Panel_clientes extends JPanel {
 		// Definindo o render da coluna para que seja pintada corretamente quando o
 		// cliente está bloqueado.
 		tabelaClientes.getColumnModel().getColumn(0).setCellRenderer(render);
-
 	}
 
 	public void ativar_campos() {

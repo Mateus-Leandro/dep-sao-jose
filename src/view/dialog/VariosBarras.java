@@ -407,6 +407,11 @@ public class VariosBarras extends JDialog {
 				lblVinculado.setVisible(false);
 
 				fTxtCodigoVinculado.setText(null);
+				
+				// Se o código de barras for o principal, é alterado no campos e exibido. 
+				if(principal) {
+					txtCodigoBarrasPrincipal.setText(barras);
+				}
 			}
 
 		} else {

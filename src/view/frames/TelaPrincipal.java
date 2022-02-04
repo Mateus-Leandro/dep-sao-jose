@@ -21,7 +21,6 @@ import view.panels.Panel_orcamento;
 import view.panels.Panel_produtos;
 
 public class TelaPrincipal extends JFrame {
-
 	/**
 	 * 
 	 */

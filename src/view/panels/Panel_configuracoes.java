@@ -73,7 +73,7 @@ public class Panel_configuracoes extends JPanel {
 	private JList<Cliente> ltConsumidorFinal;
 	private DefaultListModel<Cliente> list_model = new DefaultListModel<Cliente>();
 	private ArrayList<Cliente> lista_consumidor_final = new ArrayList<Cliente>();
-	private Cliente consumidor_final = null;
+	private Cliente consumidor_final = new Cliente();
 	private JLabel lblCodConsumidorFinal;
 	private JFormattedTextField fTxtCodigoConsumidor;
 	private JLabel lblNomeConsumidorFinal;

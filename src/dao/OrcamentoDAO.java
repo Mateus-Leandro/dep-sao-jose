@@ -15,6 +15,7 @@ import entities.orcamentos.Produto_Orcamento;
 public class OrcamentoDAO {
 
 	private Connection conn;
+	private FaturamentoDAO faturamento_dao = new FaturamentoDAO();
 
 	public Orcamento salvar_novo_orcamento(Orcamento orcamento) {
 		conn = DB.getConnection();
@@ -158,9 +159,11 @@ public class OrcamentoDAO {
 		conn = DB.getConnection();
 		PreparedStatement ps = null;
 		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
 
 		ResultSet rs = null;
 		ResultSet rs2 = null;
+		ResultSet rs3 = null;
 		try {
 
 			String consulta = "SELECT idOrcamento, orcamento.idCliente, clientes.nome as nomeCliente, "
@@ -244,10 +247,11 @@ public class OrcamentoDAO {
 					produto.setPreco_unitario(rs2.getDouble("preco_unitario"));
 					produto.setValor_desconto(rs2.getDouble("desconto"));
 					produto.setValor_total(rs2.getDouble("total"));
-
 					orcamento.getProdutos_do_orcamento().add(produto);
 				}
-
+				
+				// Listando as parcelas do orçamento
+				orcamento.setParcelas(faturamento_dao.lista_parcelas(orcamento));
 				lista_orcamentos.add(orcamento);
 			}
 		} catch (SQLException e) {

@@ -64,7 +64,7 @@ public class ConfiguracaoDAO {
 		try {
 			ps = conn.prepareStatement(
 					"SELECT nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, configuracoes.celular, "
-							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc,gera_pdf, idConsumidor_final, clientes.nome "
+							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc,gera_pdf, idConsumidor_final, clientes.nome, clientes.endereco, clientes.numero, clientes.bairro, clientes.cidade "
 							+ "FROM configuracoes " + "LEFT JOIN clientes "
 							+ "ON clientes.idCliente = configuracoes.idConsumidor_final");
 			rs = ps.executeQuery();
@@ -85,6 +85,10 @@ public class ConfiguracaoDAO {
 				Cliente consumidor_final = new Cliente();
 				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));
 				consumidor_final.setNome(rs.getString("clientes.nome"));
+				consumidor_final.setEndereco(rs.getString("clientes.endereco"));
+				consumidor_final.setNumero(rs.getString("clientes.numero"));
+				consumidor_final.setBairro(rs.getString("clientes.bairro"));
+				consumidor_final.setCidade(rs.getString("clientes.cidade"));
 				conf.setConsumidor_final(consumidor_final);
 			}else {
 				return null;
