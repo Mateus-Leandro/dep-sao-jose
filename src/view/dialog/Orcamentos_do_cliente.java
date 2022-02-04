@@ -110,11 +110,11 @@ public class Orcamentos_do_cliente extends JDialog {
 	private JLabel lgPagos;
 	private JLabel lgPendentes;
 	private JLabel lblVencidos;
-	private JLabel lgPercMenor;
+	private JLabel lgParcDif;
 	private JTextField txtPendentes = new JTextField();
 	private JTextField txtPagos = new JTextField();
 	private JTextField txtVencidos = new JTextField();
-	private JTextField txtParcTot = new JTextField();
+	private JTextField txtParcDif = new JTextField();
 	private JButton btnReload;
 
 	/**
@@ -216,23 +216,28 @@ public class Orcamentos_do_cliente extends JDialog {
 				}
 			}
 		});
+		txtParcDif.setToolTipText("Or\u00E7amentos com o total das parcelas diferente do total do or\u00E7amento.");
 
-		txtParcTot.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtParcTot.setEditable(false);
-		txtParcTot.setColumns(10);
-		txtParcTot.setBounds(657, 322, 80, 20);
-		contentPane.add(txtParcTot);
+		txtParcDif.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtParcDif.setEditable(false);
+		txtParcDif.setColumns(10);
+		txtParcDif.setBounds(648, 322, 89, 20);
+		contentPane.add(txtParcDif);
+		txtVencidos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtVencidos.setToolTipText("Or\u00E7amentos com 1 ou mais parcelas n\u00E3o pagas e vencidas.");
 
 		txtVencidos.setEditable(false);
 		txtVencidos.setColumns(10);
 		txtVencidos.setBounds(424, 323, 95, 20);
 		contentPane.add(txtVencidos);
+		txtPendentes.setToolTipText("Or\u00E7amentos com 1 ou mais parcelas n\u00E3o pagas.");
 
 		txtPendentes.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtPendentes.setEditable(false);
 		txtPendentes.setColumns(10);
 		txtPendentes.setBounds(246, 323, 104, 20);
 		contentPane.add(txtPendentes);
+		txtPagos.setToolTipText("Or\u00E7amentos com todas as parcelas pagas.");
 
 		txtPagos.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtPagos.setEditable(false);
@@ -629,11 +634,11 @@ public class Orcamentos_do_cliente extends JDialog {
 		lblVencidos.setBounds(360, 325, 64, 20);
 		contentPane.add(lblVencidos);
 
-		lgPercMenor = new JLabel("Parcelas < Tot.Orc");
-		lgPercMenor.setForeground(new Color(128, 0, 128));
-		lgPercMenor.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
-		lgPercMenor.setBounds(527, 324, 127, 20);
-		contentPane.add(lgPercMenor);
+		lgParcDif = new JLabel("Parc. <> Tot.Orc.");
+		lgParcDif.setForeground(new Color(128, 0, 128));
+		lgParcDif.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
+		lgParcDif.setBounds(527, 324, 122, 20);
+		contentPane.add(lgParcDif);
 		
 		btnReload = new JButton();
 		btnReload.addMouseListener(new MouseAdapter() {
@@ -734,7 +739,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		Integer pagos = 0;
 		Integer pendentes = 0;
 		Integer vencidos = 0;
-		Integer parc_menor = 0;
+		Integer parc_dif = 0;
 
 		if (orcamentos.size() > 0) {
 			for (int n = 0; n < tabelaOrcamentos.getRowCount(); n++) {
@@ -748,8 +753,8 @@ public class Orcamentos_do_cliente extends JDialog {
 				case "VENCIDO":
 					vencidos ++;
 					break;
-				case "PCL.<TOT.":
-					parc_menor++;
+				case "PC.<>TOT.":
+					parc_dif++;
 				}
 
 			}
@@ -757,7 +762,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			txtPagos.setText(pagos.toString());
 			txtPendentes.setText(pendentes.toString());
 			txtVencidos.setText(vencidos.toString());
-			txtParcTot.setText(parc_menor.toString());
+			txtParcDif.setText(parc_dif.toString());
 	}
 
 	public Orcamento busca_orcamento_selecionado(Integer numero_do_orcamento) {

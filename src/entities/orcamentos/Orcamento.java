@@ -188,8 +188,8 @@ public class Orcamento {
 				}
 			}
 
-			if (total_parcelas.compareTo(orcamento.getValor_total()) == -1) {
-				return "PCL.<TOT.";
+			if (total_parcelas.compareTo(orcamento.getValor_total()) != 0) {
+				return "PC.<>TOT.";
 			} else {
 				if (vencidas > 0) {
 					return "VENCIDO";

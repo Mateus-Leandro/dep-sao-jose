@@ -560,8 +560,10 @@ public class Panel_configuracoes extends JPanel {
 		fTxtConsumidorFinal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickConsumidorFinal) {
-				text_tools.move_cursor_inicio(fTxtConsumidorFinal);
-				alimentar_lista_consumidor_final("NOME", "%");
+				if(!btnConfigurar.isEnabled()) {
+					text_tools.move_cursor_inicio(fTxtConsumidorFinal);
+					alimentar_lista_consumidor_final("NOME", "%");
+				}
 			}
 		});
 		fTxtConsumidorFinal.setBounds(172, 489, 276, 20);
