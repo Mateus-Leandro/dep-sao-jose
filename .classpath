@@ -10,6 +10,6 @@
 	<classpathentry kind="lib" path="src/External_libs/org.json.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mateu/eclipse-workspace/Sistema Depósito/src/External_libs/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mateu/eclipse-workspace/Sistema Depósito/src/External_libs/itextpdf-5.5.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mateu/eclipse-workspace/Sistema Depósito/src/External_libs/mysql-connector-java-8.0.27/mysql-connector-java-8.0.27.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mateu/eclipse-workspace/Sistema Depósito/src/External_libs/mysql-connector-java-8.0.27.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
