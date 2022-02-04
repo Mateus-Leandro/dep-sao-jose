@@ -42,11 +42,14 @@ import entities.produto.Produto;
 import entities.produto.Setor;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
+import tables.tableRenders.Render_tabela_clientes;
+import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterMonetario;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
 import view.formatFields.FormataNumeral;
 import view.tools.Jtext_tools;
+import javax.swing.JCheckBox;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
@@ -97,7 +100,8 @@ public class Panel_produtos extends JPanel {
 	private Jtext_tools text_tools = new Jtext_tools();
 	private JLabel lblObg_nomeProduto;
 	private JLabel lblObg_precoVenda;
-
+	private JCheckBox chckbxProdutoBloqueado;
+	private Render_tabela_produtos render = new Render_tabela_produtos();
 	/**
 	 * Create the panel.
 	 */
@@ -397,21 +401,33 @@ public class Panel_produtos extends JPanel {
 				ListSelectionModel lsm = (ListSelectionModel) selecaoLinhaTabela.getSource();
 				if (!lsm.isSelectionEmpty() && btnNovo.isVisible()) {
 
-					txtCodigo.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0).toString());
-					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 1).toString());
+					int linha_selecionada = tabelaProdutos.getSelectedRow();
+					
+					txtCodigo.setText(tabelaProdutos.getValueAt(linha_selecionada, 0).toString());
+					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(linha_selecionada, 1).toString());
 					cbxFatorVenda.getModel()
 							.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2));
-					cbxSetor.getModel().setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 3));
-					fTxtPrecoCusto.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 4).toString()
+					cbxSetor.getModel().setSelectedItem(tabelaProdutos.getValueAt(linha_selecionada, 3));
+					fTxtPrecoCusto.setText(tabelaProdutos.getValueAt(linha_selecionada, 4).toString()
 							.replace("R$ ", ""));
-					fTxtMargem.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 5).toString());
-					fTxtPrecoSugerido.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 6).toString()
+					fTxtMargem.setText(tabelaProdutos.getValueAt(linha_selecionada, 5).toString());
+					fTxtPrecoSugerido.setText(tabelaProdutos.getValueAt(linha_selecionada, 6).toString()
 							.replace("R$ ", ""));
-					fTxtPrecoVenda.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 7).toString()
+					fTxtPrecoVenda.setText(tabelaProdutos.getValueAt(linha_selecionada, 7).toString()
 							.replace("R$ ", ""));
 					fTxtMargemPraticada
-							.setText(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 8).toString());
-					fTxtCodigoBarras.setText((String) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 9));
+							.setText(tabelaProdutos.getValueAt(linha_selecionada, 8).toString());
+					fTxtCodigoBarras.setText((String) tabelaProdutos.getValueAt(linha_selecionada, 9));
+					
+					Boolean bloq = ((Boolean) tabelaProdutos.getValueAt(linha_selecionada, 10));
+					
+					if(bloq) {
+						chckbxProdutoBloqueado.setSelected(true);
+					}else {
+						chckbxProdutoBloqueado.setSelected(false);
+					}
+					
+					
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
 					btnMaisBarras.setEnabled(true);
@@ -586,6 +602,13 @@ public class Panel_produtos extends JPanel {
 		lblObg_precoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_precoVenda.setBounds(709, 309, 20, 15);
 		add(lblObg_precoVenda);
+		
+		chckbxProdutoBloqueado = new JCheckBox("Produto Bloqueado");
+		chckbxProdutoBloqueado.setEnabled(false);
+		chckbxProdutoBloqueado.setForeground(Color.BLACK);
+		chckbxProdutoBloqueado.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		chckbxProdutoBloqueado.setBounds(537, 76, 172, 23);
+		add(chckbxProdutoBloqueado);
 
 	}
 
@@ -607,6 +630,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.setEditable(false);
 		cbxFatorVenda.setEnabled(false);
 		cbxSetor.setEnabled(false);
+		chckbxProdutoBloqueado.setEnabled(false);
 
 		fTxtNomeProduto.setBorder(new LineBorder(Color.lightGray));
 		fTxtPrecoVenda.setBorder(new LineBorder(Color.lightGray));
@@ -624,6 +648,7 @@ public class Panel_produtos extends JPanel {
 		cbxFatorVenda.setSelectedIndex(0);
 		cbxSetor.setSelectedIndex(-1);
 		tabelaProdutos.clearSelection();
+		chckbxProdutoBloqueado.setSelected(false);
 	}
 
 	public void novo_item() {
@@ -637,6 +662,7 @@ public class Panel_produtos extends JPanel {
 		btnSalvar.setVisible(true);
 		btnCancelar.setEnabled(true);
 		btnSalvar.setEnabled(true);
+		chckbxProdutoBloqueado.setEnabled(true);
 	}
 
 	public void cancelar_item() {
@@ -647,6 +673,7 @@ public class Panel_produtos extends JPanel {
 		btnCancelar.setVisible(false);
 		btnEditar.setVisible(true);
 		btnExcluir.setVisible(true);
+		chckbxProdutoBloqueado.setEnabled(false);
 	}
 
 	public void editar_item() {
@@ -656,6 +683,7 @@ public class Panel_produtos extends JPanel {
 		btnSalvar.setVisible(true);
 		btnCancelar.setVisible(true);
 		fTxtNomeProduto.requestFocus();
+		chckbxProdutoBloqueado.setEnabled(true);
 	}
 
 	public void excluir_item() {
@@ -664,7 +692,7 @@ public class Panel_produtos extends JPanel {
 				ProdutoDAO produto_dao = new ProdutoDAO();
 				boolean flag;
 
-				int opcao = JOptionPane.showConfirmDialog(null,
+				int opcao = JOptionPane.showConfirmDialog(lblPrecoSugerido,
 						"Deseja excluir o produto abaixo?\n" + "Cod = "
 								+ tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0) + "\n" + "Nome = "
 								+ tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 1),
@@ -675,14 +703,14 @@ public class Panel_produtos extends JPanel {
 				if (flag) {
 					if (produto_dao
 							.deletarProduto((Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0))) {
-						JOptionPane.showMessageDialog(null, "Produto excluído!", "Exclusão de produto",
+						JOptionPane.showMessageDialog(lblPrecoSugerido, "Produto excluído!", "Exclusão de produto",
 								JOptionPane.ERROR_MESSAGE);
 						recarregarTabela();
 						limparCampos();
 						btnExcluir.setEnabled(false);
 						btnEditar.setEnabled(false);
 					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao excluir produto!", "Exclusão de produto",
+						JOptionPane.showMessageDialog(lblPrecoSugerido, "Erro ao excluir produto!", "Exclusão de produto",
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
@@ -792,7 +820,7 @@ public class Panel_produtos extends JPanel {
 		}
 
 		String unidadeVenda = cbxFatorVenda.getSelectedItem().toString();
-		Boolean bloqueadoVenda = false;
+		Boolean bloqueadoVenda = chckbxProdutoBloqueado.isSelected();
 		Date dataCadastro = null;
 
 		String codigo_barra = null;
@@ -820,13 +848,14 @@ public class Panel_produtos extends JPanel {
 
 					if (produto.getIdProduto() != null) {
 
-						JOptionPane.showMessageDialog(null,
+						JOptionPane.showMessageDialog(lblPrecoSugerido,
 								"Produto cadastrado com sucesso! " + "\nCódigo: " + produto.getIdProduto()
 										+ "\nProduto: " + produto.getDescricao(),
 								"Cadastro de produtos", JOptionPane.NO_OPTION);
 						btnEditar.setVisible(true);
 						btnExcluir.setVisible(true);
 						btnSalvar.setVisible(false);
+						chckbxProdutoBloqueado.setEnabled(false);
 						btnNovo.setVisible(true);
 						limparCampos();
 					}
@@ -847,7 +876,7 @@ public class Panel_produtos extends JPanel {
 					recarregarTabela();
 					return produto;
 				} else {
-					JOptionPane.showMessageDialog(null, "Código de barras informado ja utilizado em outro item!",
+					JOptionPane.showMessageDialog(fTxtCodigoBarras, "Código de barras informado ja utilizado em outro item!",
 							"Código de barras duplicado!", JOptionPane.WARNING_MESSAGE);
 				}
 
@@ -855,7 +884,7 @@ public class Panel_produtos extends JPanel {
 				produto.setIdProduto(Integer.parseInt(txtCodigo.getText().trim()));
 
 				if (produto_dao.alterarProduto(produto)) {
-					JOptionPane.showMessageDialog(null, "Produto alterado!", "Alteração de produto",
+					JOptionPane.showMessageDialog(lblPrecoSugerido, "Produto alterado!", "Alteração de produto",
 							JOptionPane.NO_OPTION);
 					limparCampos();
 					desativarCampos();
@@ -871,7 +900,7 @@ public class Panel_produtos extends JPanel {
 					recarregarTabela();
 					return produto;
 				} else {
-					JOptionPane.showMessageDialog(null, "Erro ao alterar produto!", "Alteração de produto",
+					JOptionPane.showMessageDialog(lblPrecoSugerido, "Erro ao alterar produto!", "Alteração de produto",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			}
@@ -959,6 +988,14 @@ public class Panel_produtos extends JPanel {
 		sorter.setComparator(7, spv);
 
 		tabelaProdutos.setRowSorter(sorter);
+		//Pintando linhas de acordo com o status do cliente(bloqueado)
+		tabelaProdutos.setDefaultRenderer(Object.class, render);
+		tabelaProdutos.getColumnModel().getColumn(0).setCellRenderer(render);
+		tabelaProdutos.getColumnModel().getColumn(4).setCellRenderer(render);
+		tabelaProdutos.getColumnModel().getColumn(5).setCellRenderer(render);
+		tabelaProdutos.getColumnModel().getColumn(6).setCellRenderer(render);
+		tabelaProdutos.getColumnModel().getColumn(7).setCellRenderer(render);
+		tabelaProdutos.getColumnModel().getColumn(8).setCellRenderer(render);
 	}
 
 	public void calcula_sugerido() {
