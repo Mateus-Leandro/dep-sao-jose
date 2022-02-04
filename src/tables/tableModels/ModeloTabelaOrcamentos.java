@@ -16,7 +16,7 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	private NumberFormat nf2 = new DecimalFormat("0.00");
 
 	private String colunas[] = { "Nº Orc.", "Cliente", "Qtd. Itens", "Total Merc", "Desconto", "Frete", "Valor Total",
-			"Fat.", "Qtd.Par.", "Dt. Inclusão" };
+			"Status","Qtd.Par.", "Dt. Inclusão" };
 	private ArrayList<Orcamento> orcamentos;
 	private final int COLUNA_NUMERO_ORCAMENTO = 0;
 	private final int COLUNA_CLIENTE = 1;
@@ -25,7 +25,7 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	private final int COLUNA_VALOR_DESCONTO = 4;
 	private final int COLUNA_VALOR_FRETE = 5;
 	private final int COLUNA_TOTAL_ORCAMENTO = 6;
-	private final int COLUNA_FATURADO = 7;
+	private final int COLUNA_STATUS = 7;
 	private final int COLUNA_QTD_PARCELAS = 8;
 	private final int COLUNA_DATA_INCLUSAO = 9;
 
@@ -59,8 +59,6 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return Integer.class;
 		case COLUNA_CLIENTE:
 			return String.class;
-		case COLUNA_FATURADO:
-			return Boolean.class;
 		case COLUNA_QUANTIDADE_ITENS:
 			return Integer.class;
 		case COLUNA_TOTAL_MERCADORIAS:
@@ -71,6 +69,8 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return BigDecimal.class;
 		case COLUNA_TOTAL_ORCAMENTO:
 			return BigDecimal.class;
+		case COLUNA_STATUS:
+			return String.class;
 		case COLUNA_QTD_PARCELAS:
 			return Integer.class;
 		case COLUNA_DATA_INCLUSAO:
@@ -89,8 +89,6 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return orcamento.getId_orcamento();
 		case COLUNA_CLIENTE:
 			return orcamento.getCliente().getNome();
-		case COLUNA_FATURADO:
-			return orcamento.getFaturado();
 		case COLUNA_QUANTIDADE_ITENS:
 			return orcamento.getQuantidade_produtos();
 		case COLUNA_TOTAL_MERCADORIAS:
@@ -101,6 +99,8 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return nf.format(orcamento.getFrete());
 		case COLUNA_TOTAL_ORCAMENTO:
 			return nf.format(orcamento.getValor_total());
+		case COLUNA_STATUS:
+			return orcamento.getStatusPagamento(orcamento);
 		case COLUNA_QTD_PARCELAS:
 			return orcamento.getNumero_de_parcelas();
 		case COLUNA_DATA_INCLUSAO:

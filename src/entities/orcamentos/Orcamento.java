@@ -1,5 +1,6 @@
 package entities.orcamentos;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -162,7 +163,48 @@ public class Orcamento {
 		this.parcelas = parcelas;
 	}
 
-	
+	public String getStatusPagamento(Orcamento orcamento) {
+		int vencidas = 0;
+		int pendentes = 0;
+		int pagas = 0;
+		Double total_parcelas = 0.00;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		if (orcamento.getParcelas().size() > 0) {
+			for (Parcela parc : orcamento.getParcelas()) {
+				total_parcelas += parc.getValor_parcela();
+				if (parc.getData_pagamento() == null) {
+					
+					// Testa se a parcela esta vencida
+					Date hoje = new Date();
+					String data_vencimento = sdf.format(parc.getData_vencimento());
+					
+					if (data_vencimento.compareTo(sdf.format(hoje)) < 0) {
+						vencidas++;
+					} else {
+						pendentes++;
+					}
+				}
+			}
+
+			if (total_parcelas.compareTo(orcamento.getValor_total()) == -1) {
+				return "PCL.<TOT.";
+			} else {
+				if (vencidas > 0) {
+					return "VENCIDO";
+				} else if (pendentes > 0) {
+					return "PENDENTE";
+				} else {
+					return "PAGO";
+				}
+
+			}
+		} else {
+			return "N.FAT.";
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

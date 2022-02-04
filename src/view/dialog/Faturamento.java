@@ -151,7 +151,7 @@ public class Faturamento extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-//		setModal(true);
+		setModal(true);
 		setResizable(false);
 		contentPanel.setLayout(null);
 
@@ -244,6 +244,10 @@ public class Faturamento extends JDialog {
 						if (faturamento_dao.salvar_parcelas(orcamento)) {
 							JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
 									"Parcelas do orçamento.", JOptionPane.NO_OPTION);
+
+							if(orcamentos_do_cliente != null) {
+								orcamentos_do_cliente.alimentar_lista_orcamento();
+							}
 							dispose();
 						}
 					}
@@ -493,7 +497,7 @@ public class Faturamento extends JDialog {
 		alimenta_formas_pagamento();
 
 		lblTotalParcelas = new JLabel("Total das parcelas");
-		lblTotalParcelas.setForeground(Color.BLACK);
+		lblTotalParcelas.setForeground(new Color(0, 0, 0));
 		lblTotalParcelas.setToolTipText("");
 		lblTotalParcelas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTotalParcelas.setBounds(10, 445, 112, 20);

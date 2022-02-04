@@ -22,7 +22,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -33,7 +32,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -45,13 +43,11 @@ import javax.swing.text.MaskFormatter;
 
 import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
-import dao.FormaPagamentoDAO;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
 import dao.Resumo_financeiroDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
-import entities.financeiro.Forma_pagamento;
 import entities.financeiro.Parcela;
 import entities.financeiro.Resumo_financeiro;
 import entities.orcamentos.Orcamento;
@@ -1251,10 +1247,10 @@ public class Panel_orcamento extends JPanel {
 		lblSomentesVendaspendentes.setBounds(225, 365, 125, 20);
 		cliente.add(lblSomentesVendaspendentes);
 
-		lblVendaspendentes = new JLabel("* Vendas (pendentes)");
+		lblVendaspendentes = new JLabel("* O\u00E7amento confirmado");
 		lblVendaspendentes.setToolTipText("");
 		lblVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes.setBounds(225, 328, 111, 20);
+		lblVendaspendentes.setBounds(225, 328, 123, 20);
 		cliente.add(lblVendaspendentes);
 
 		lblUltimaCompra = new JLabel("Data da \u00FAltima compra");
