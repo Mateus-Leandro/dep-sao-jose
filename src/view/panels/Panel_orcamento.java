@@ -255,21 +255,32 @@ public class Panel_orcamento extends JPanel {
 
 				produto_selecionado = ltProdutos.getSelectedValue();
 
-				if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
-					JOptionPane.showMessageDialog(lblQuantidade, "Produto já incluso.",
-							"Produto selecionado já presente no orçamento.", JOptionPane.WARNING_MESSAGE);
-					produto_selecionado = null;
-					limpar_dados_produto();
+				
+				//Testa se o produto está bloqueado
+				if (produto_selecionado.getBloqueadoVenda()) {
+					JOptionPane.showMessageDialog(lblQuantidade,
+							"O produto selecionado está bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orçamento.",
+							"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
 					fTxtNomeProduto.requestFocus();
 				} else {
-					scrollPaneListaProdutos.setVisible(false);
-					fTxtCodigoProduto.setText(produto_selecionado.getIdProduto().toString());
-					fTxtNomeProduto.setText(produto_selecionado.getDescricao());
-					fTxtCodigoBarra.setText(produto_selecionado.getCodigo_barra());
-					cbxFatorVenda.getModel().setSelectedItem(produto_selecionado.getUnidadeVenda());
-					fTxtPrecoUnitario.setText(nf.format(produto_selecionado.getPrecoVenda()));
-					fTxtQuantidade.requestFocus();
-					btnIncluir.setEnabled(true);
+					
+					// Testa se o produto já foi incluso no orçamento.
+					if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
+						JOptionPane.showMessageDialog(lblQuantidade, "Produto já incluso.",
+								"Produto selecionado já presente no orçamento.", JOptionPane.WARNING_MESSAGE);
+						produto_selecionado = null;
+						limpar_dados_produto();
+						fTxtNomeProduto.requestFocus();
+					} else {
+						scrollPaneListaProdutos.setVisible(false);
+						fTxtCodigoProduto.setText(produto_selecionado.getIdProduto().toString());
+						fTxtNomeProduto.setText(produto_selecionado.getDescricao());
+						fTxtCodigoBarra.setText(produto_selecionado.getCodigo_barra());
+						cbxFatorVenda.getModel().setSelectedItem(produto_selecionado.getUnidadeVenda());
+						fTxtPrecoUnitario.setText(nf.format(produto_selecionado.getPrecoVenda()));
+						fTxtQuantidade.requestFocus();
+						btnIncluir.setEnabled(true);
+					}
 				}
 			}
 		});
