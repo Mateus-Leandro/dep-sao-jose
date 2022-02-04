@@ -896,9 +896,23 @@ public class Panel_orcamento extends JPanel {
 		ltClientes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickListaClientes) {
-				scrollPaneListaClientes.setVisible(false);
+				Boolean flag = true;
 				cliente_selecionado = ltClientes.getSelectedValue();
-				exibir_dados_cliente();
+				if (cliente_selecionado.getBloqueado()) {
+					int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+							"ATENÇÃO!\nO cliente selecionado está bloqueado.\nDeseja utilizá-lo no orçamento mesmo assim?\n",
+							"Cliente bloqueado.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					flag = opcao == JOptionPane.YES_OPTION;
+				}
+
+				if (flag) {
+					exibir_dados_cliente();
+				} else {
+					cliente_selecionado = null;
+					fTxtNomeCliente.setText(null);
+					fTxtNomeCliente.requestFocus();
+				}
+				scrollPaneListaClientes.setVisible(false);
 			}
 		});
 		ltClientes.setBounds(48, 79, 267, 66);
@@ -1326,8 +1340,9 @@ public class Panel_orcamento extends JPanel {
 		fTxtApelido.setColumns(10);
 		fTxtApelido.setBounds(463, 61, 240, 20);
 		cliente.add(fTxtApelido);
-		
-		lblTextoObservacao = new JLabel("* Os valores acima consideram somente or\u00E7amentos confirmados. (Ormentos com pelo menos 1 parcela lan\u00E7ada).");
+
+		lblTextoObservacao = new JLabel(
+				"* Os valores acima consideram somente or\u00E7amentos confirmados. (Ormentos com pelo menos 1 parcela lan\u00E7ada).");
 		lblTextoObservacao.setForeground(Color.RED);
 		lblTextoObservacao.setToolTipText("");
 		lblTextoObservacao.setFont(new Font("Tahoma", Font.PLAIN, 12));
