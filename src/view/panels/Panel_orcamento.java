@@ -187,6 +187,7 @@ public class Panel_orcamento extends JPanel {
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("0.00");
 	private NumberFormat nf3 = new DecimalFormat("R$ ,##0.00");
+	private NumberFormat nf4 = new DecimalFormat(",##0.000");
 	private JFormattedTextField fTxtApelido;
 	private Cliente cliente_selecionado = null;
 	private Integer quantidade_de_produtos = 0;
@@ -389,7 +390,7 @@ public class Panel_orcamento extends JPanel {
 			}
 		});
 		fTxtPorcentagemDesconto.setEnabled(false);
-		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(6, 2));
+		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(6, 3));
 		fTxtPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPorcentagemDesconto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPorcentagemDesconto.setBounds(145, 5, 58, 20);
@@ -1629,11 +1630,16 @@ public class Panel_orcamento extends JPanel {
 			if (editando_item) {
 				codigo = fTxtCodigoProduto.getText().trim();
 				nome_produto = fTxtNomeProduto.getText().trim();
-				codigo_barras = fTxtCodigoBarra.getText();
+				
+				if(!fTxtCodigoBarra.getText().trim().isEmpty()) {
+					codigo_barras = fTxtCodigoBarra.getText();
+				}
 			} else {
 				codigo = produto_selecionado.getIdProduto().toString();
 				nome_produto = produto_selecionado.getDescricao();
-				codigo_barras = produto_selecionado.getCodigo_barra();
+				if(produto_selecionado.getCodigo_barra() != null) {
+					codigo_barras = produto_selecionado.getCodigo_barra();
+				}
 			}
 			Double total_produto = Double
 					.valueOf(nf2.format(((preco_unitario - valor_desconto) * quantidade)).replaceAll(",", "\\."));
@@ -1829,7 +1835,7 @@ public class Panel_orcamento extends JPanel {
 		} else {
 			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
 		}
-		fTxtPorcentagemDesconto.setText(nf.format(porcentagem_desconto));
+		fTxtPorcentagemDesconto.setText(nf4.format(porcentagem_desconto));
 
 	}
 
@@ -1844,7 +1850,7 @@ public class Panel_orcamento extends JPanel {
 				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
 			}
 			if (!fTxtPorcentagemDesconto.getText().isEmpty()) {
-				porcentagem_desconto = nf.parse(fTxtPorcentagemDesconto.getText()).doubleValue();
+				porcentagem_desconto = nf4.parse(fTxtPorcentagemDesconto.getText()).doubleValue();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
