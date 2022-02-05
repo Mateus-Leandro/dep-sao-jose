@@ -110,7 +110,7 @@ public class Panel_produtos extends JPanel {
 
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
-		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtCodigo.setBounds(63, 152, 77, 20);
 		add(txtCodigo);
 		txtCodigo.setColumns(10);
@@ -150,7 +150,7 @@ public class Panel_produtos extends JPanel {
 				text_tools.move_cursor_inicio(fTxtNomeProduto);
 			}
 		});
-		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setBounds(365, 152, 344, 20);
 		add(fTxtNomeProduto);
@@ -184,7 +184,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		fTxtCodigoBarras.setEditable(false);
-		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarras.setBounds(557, 187, 117, 20);
 		add(fTxtCodigoBarras);
@@ -239,7 +239,7 @@ public class Panel_produtos extends JPanel {
 				}
 			}
 		});
-		fTxtPrecoCusto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPrecoCusto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoCusto.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoCusto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoCusto.setBounds(80, 300, 77, 20);
@@ -264,7 +264,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		fTxtMargem.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtMargem.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtMargem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtMargem.setDocument(new FormataNumeral(6, 2));
 		fTxtMargem.setBounds(259, 300, 57, 20);
 		add(fTxtMargem);
@@ -278,7 +278,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoSugerido = new JFormattedTextField();
 		fTxtPrecoSugerido.setEditable(false);
 		fTxtPrecoSugerido.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPrecoSugerido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPrecoSugerido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoSugerido.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoSugerido.setBounds(432, 299, 77, 20);
 		add(fTxtPrecoSugerido);
@@ -301,7 +301,7 @@ public class Panel_produtos extends JPanel {
 				}
 			}
 		});
-		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoVenda.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoVenda.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoVenda.setBounds(612, 299, 97, 20);
@@ -314,7 +314,7 @@ public class Panel_produtos extends JPanel {
 		add(lblMargemPraticada);
 
 		fTxtMargemPraticada = new JFormattedTextField();
-		fTxtMargemPraticada.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtMargemPraticada.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtMargemPraticada.setEditable(false);
 		fTxtMargemPraticada.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtMargemPraticada.setBounds(642, 337, 67, 20);
