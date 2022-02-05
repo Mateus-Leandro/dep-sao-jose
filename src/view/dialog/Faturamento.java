@@ -53,6 +53,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Faturamento extends JDialog {
 
@@ -144,6 +146,12 @@ public class Faturamento extends JDialog {
 	 * Create the dialog.
 	 */
 	public Faturamento(Orcamentos_do_cliente orcamentos_do_cliente, Orcamento orcamento_passado) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent clickFecharTela) {
+				aviso_fecha_tela();
+			}
+		});
 		this.orcamento = orcamento_passado;
 		mostra_dados_orcamento(orcamento);
 		modelo_tabela = new ModeloTabelaParcelas(orcamento.getParcelas());
@@ -727,14 +735,7 @@ public class Faturamento extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickCancelarFaturamento) {
 				if (btnCancelarFaturamento.isEnabled()) {
-					int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
-							"Deseja realmente cancelar as alterações realizadas?" + "\n\nATENÇÃO!"
-									+ "\nTODAS AS ALTERAÇÕES REALIZADAS NO PARCELAMENTO SERÃO PERDIDAS.",
-							"Cancelar alterações.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
-					Boolean flag = opcao == JOptionPane.YES_OPTION;
-					if (flag) {
-						dispose();
-					}
+					aviso_fecha_tela();
 				}
 			}
 		});
@@ -1133,6 +1134,21 @@ public class Faturamento extends JDialog {
 		}
 	}
 
+	
+	public void aviso_fecha_tela() {
+		Boolean flag = false;
+		int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
+				"Deseja realmente cancelar as alterações realizadas?" + "\n\nATENÇÃO!"
+						+ "\nTODAS AS ALTERAÇÕES REALIZADAS NO PARCELAMENTO SERÃO PERDIDAS.",
+				"Cancelar alterações.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+		flag = opcao == JOptionPane.YES_OPTION;
+		if (flag) {
+			dispose();
+		}else {
+			setDefaultCloseOperation(0);
+		}
+	}
+	
 	public void abrir_faturamento(Faturamento tela_faturamento) {
 		ArrayList<Forma_pagamento> formas_de_pagamento = alimenta_formas_pagamento();
 
