@@ -549,7 +549,8 @@ public class Panel_orcamento extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoUnitario) {
 				calcula_total_item();
-
+				calcula_valor_desconto();
+				
 				if (digitaPrecoUnitario.getKeyCode() == digitaPrecoUnitario.VK_ENTER) {
 					fTxtPorcentagemDesconto.requestFocus();
 				}
