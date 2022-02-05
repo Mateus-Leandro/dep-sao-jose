@@ -247,7 +247,21 @@ public class Panel_orcamento extends JPanel {
 		tabbedPane.addTab("Produtos", produtos);
 		produtos.setLayout(null);
 
+		btnCancelar_editado = new JButton("Cancelar");
+		btnCancelar_editado.setEnabled(false);
+		btnCancelar_editado.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickCancelarEdicao) {
+				cancelar_edicao();
+			}
+		});
+		btnCancelar_editado.setIcon(icones.getIcone_cancelar());
+		btnCancelar_editado.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCancelar_editado.setBounds(585, 196, 120, 29);
+		btnCancelar_editado.setVisible(false);
+
 		ltProdutos = new JList<Produto>();
+		ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ltProdutos.setVisibleRowCount(10);
 		ltProdutos.addMouseListener(new MouseAdapter() {
 			@Override
@@ -255,15 +269,14 @@ public class Panel_orcamento extends JPanel {
 
 				produto_selecionado = ltProdutos.getSelectedValue();
 
-				
-				//Testa se o produto está bloqueado
+				// Testa se o produto está bloqueado
 				if (produto_selecionado.getBloqueadoVenda()) {
 					JOptionPane.showMessageDialog(lblQuantidade,
 							"O produto selecionado está bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orçamento.",
 							"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
 					fTxtNomeProduto.requestFocus();
 				} else {
-					
+
 					// Testa se o produto já foi incluso no orçamento.
 					if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
 						JOptionPane.showMessageDialog(lblQuantidade, "Produto já incluso.",
@@ -280,23 +293,18 @@ public class Panel_orcamento extends JPanel {
 						fTxtPrecoUnitario.setText(nf.format(produto_selecionado.getPrecoVenda()));
 						fTxtQuantidade.requestFocus();
 						btnIncluir.setEnabled(true);
+						fTxtNomeProduto.setEditable(false);
+						fTxtCodigoProduto.setEditable(false);
 					}
 				}
 			}
 		});
 
-		btnCancelar_editado = new JButton("Cancelar");
-		btnCancelar_editado.setEnabled(false);
-		btnCancelar_editado.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickCancelarEdicao) {
-				cancelar_edicao();
-			}
-		});
-		btnCancelar_editado.setIcon(icones.getIcone_cancelar());
-		btnCancelar_editado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar_editado.setBounds(585, 196, 120, 29);
-		btnCancelar_editado.setVisible(false);
+		ltProdutos.setBounds(438, 77, 267, 79);
+		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
+		scrollPaneListaProdutos.setBounds(273, 74, 233, 77);
+		produtos.add(scrollPaneListaProdutos);
+		scrollPaneListaProdutos.setVisible(false);
 		produtos.add(btnCancelar_editado);
 
 		btnSalvar_editado = new JButton("Salvar");
@@ -312,12 +320,6 @@ public class Panel_orcamento extends JPanel {
 		btnSalvar_editado.setBounds(455, 196, 120, 29);
 		produtos.add(btnSalvar_editado);
 		btnSalvar_editado.setVisible(false);
-
-		ltProdutos.setBounds(438, 77, 267, 79);
-		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-		scrollPaneListaProdutos.setBounds(273, 74, 233, 77);
-		produtos.add(scrollPaneListaProdutos);
-		scrollPaneListaProdutos.setVisible(false);
 
 		panelTotalItem = new JPanel();
 		panelTotalItem.setLayout(null);
@@ -363,7 +365,7 @@ public class Panel_orcamento extends JPanel {
 
 		panelDesconto = new JPanel();
 		panelDesconto.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelDesconto.setBounds(10, 138, 349, 29);
+		panelDesconto.setBounds(10, 151, 349, 29);
 		produtos.add(panelDesconto);
 		panelDesconto.setLayout(null);
 
@@ -467,7 +469,10 @@ public class Panel_orcamento extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				alimentar_lista_produtos("NOME", "%");
+				// Testa se está editando o produto ou incluindo.
+				if (btnEditar.isVisible() && fTxtNomeProduto.isEditable()) {
+					alimentar_lista_produtos("NOME", "%");
+				}
 			}
 		});
 		fTxtNomeProduto.setEnabled(false);
@@ -524,26 +529,6 @@ public class Panel_orcamento extends JPanel {
 		cbxFatorVenda.setBounds(107, 98, 57, 22);
 		produtos.add(cbxFatorVenda);
 
-		fTxtQuantidade = new JFormattedTextField();
-		fTxtQuantidade.setHorizontalAlignment(SwingConstants.CENTER);
-		fTxtQuantidade.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent digitaQuantidade) {
-				calcula_total_item();
-
-				if (digitaQuantidade.getKeyCode() == digitaQuantidade.VK_ENTER) {
-					fTxtPrecoUnitario.requestFocus();
-				}
-			}
-		});
-		fTxtQuantidade.setEnabled(false);
-		fTxtQuantidade.setDocument(new FormataNumeral(6, 0));
-		fTxtQuantidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		fTxtQuantidade.setColumns(10);
-		fTxtQuantidade.setBounds(379, 95, 86, 20);
-		produtos.add(fTxtQuantidade);
-
 		lblQuantidade = new JLabel("Quantidade");
 		lblQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblQuantidade.setBounds(306, 98, 70, 19);
@@ -578,7 +563,9 @@ public class Panel_orcamento extends JPanel {
 		btnIncluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickIncluirProduto) {
-				incluir_produto();
+				if (btnIncluir.isEnabled()) {
+					incluir_produto();
+				}
 			}
 		});
 		btnIncluir.setEnabled(false);
@@ -800,10 +787,13 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(fTxtCodigoProduto);
 
 		btnLimpaDadosProduto = new JButton();
+		btnLimpaDadosProduto.setToolTipText("Limpar item escolhido.");
 		btnLimpaDadosProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickLimpaDadosProduto) {
-				limpar_dados_produto();
+				if (btnLimpaDadosProduto.isEnabled()) {
+					limpar_dados_produto();
+				}
 			}
 		});
 		btnLimpaDadosProduto.setEnabled(false);
@@ -850,6 +840,30 @@ public class Panel_orcamento extends JPanel {
 		lblObg_quantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_quantidade.setBounds(465, 108, 20, 15);
 		produtos.add(lblObg_quantidade);
+
+		fTxtQuantidade = new JFormattedTextField();
+		fTxtQuantidade.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtQuantidade.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaQuantidade) {
+				calcula_total_item();
+				if (digitaQuantidade.getKeyCode() == digitaQuantidade.VK_ENTER) {
+
+					if (!fTxtQuantidade.getText().trim().isEmpty()) {
+						if (Double.parseDouble(fTxtQuantidade.getText().replaceAll("\\.", "").replace(",", ".")) > 0) {
+							fTxtPrecoUnitario.requestFocus();
+						}
+					}
+				}
+			}
+		});
+		fTxtQuantidade.setEnabled(false);
+		fTxtQuantidade.setDocument(new FormataNumeral(6, 0));
+		fTxtQuantidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		fTxtQuantidade.setColumns(10);
+		fTxtQuantidade.setBounds(379, 95, 86, 20);
+		produtos.add(fTxtQuantidade);
 
 		btnNovo = new JButton("Novo");
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -1401,6 +1415,7 @@ public class Panel_orcamento extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(lblQuantidade, "Necessário selecionar um produto.",
 					"Nenhum produto selecionado", JOptionPane.WARNING_MESSAGE);
+			fTxtNomeProduto.requestFocus();
 		}
 
 	}
@@ -1728,14 +1743,15 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.setText(null);
 		fTxtCodigoBarra.setText(null);
 		cbxFatorVenda.getModel().setSelectedItem("UN");
-		fTxtQuantidade.setText(null);
 		fTxtPrecoUnitario.setText(null);
 		fTxtPorcentagemDesconto.setText(null);
 		fTxtValorDesconto.setText(null);
 		fTxtTotalItem.setText(null);
-
 		produto_selecionado = null;
 		btnIncluir.setEnabled(false);
+		fTxtQuantidade.setText(null);
+		fTxtCodigoProduto.setEditable(true);
+		fTxtNomeProduto.setEditable(true);
 	}
 
 	public void limpar_totais_orcamento() {
@@ -1994,6 +2010,7 @@ public class Panel_orcamento extends JPanel {
 		tabbedPane.setEnabled(false);
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
+		btnLimpaDadosProduto.setEnabled(false);
 		btnPesquisaOrcamento.setVisible(true);
 		btnNovo.setVisible(true);
 		tabbedPane.setSelectedIndex(0);
@@ -2039,6 +2056,7 @@ public class Panel_orcamento extends JPanel {
 		btnCancelar.setVisible(false);
 		btnEditar.setVisible(false);
 		btnExcluir.setVisible(false);
+		btnLimpaDadosProduto.setEnabled(false);
 
 		btnSalvar_editado.setVisible(true);
 		btnCancelar_editado.setVisible(true);
@@ -2062,6 +2080,7 @@ public class Panel_orcamento extends JPanel {
 					JOptionPane.NO_OPTION);
 			calcula_total_mercadorias();
 			fTxtNomeProduto.requestFocus();
+			btnLimpaDadosProduto.setEnabled(true);
 		}
 	}
 
@@ -2078,6 +2097,7 @@ public class Panel_orcamento extends JPanel {
 		btnExcluir.setVisible(true);
 		btnExcluir.setEnabled(false);
 		btnIncluir.setVisible(true);
+		btnLimpaDadosProduto.setEnabled(true);
 		limpar_dados_produto();
 
 		fTxtNomeProduto.setEditable(true);
