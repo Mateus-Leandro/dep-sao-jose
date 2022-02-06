@@ -14,6 +14,7 @@ public class Configuracoes {
 	private String salva_parc_dif;
 	private String altera_orc;
 	private String gera_PDF;
+	private String vincula_barras;
 	private Cliente consumidor_final;
 
 	public Configuracoes() {
@@ -21,7 +22,7 @@ public class Configuracoes {
 
 	public Configuracoes(String nome_empresa, String responsavel, String CNPJ, String inscricao_estadual,
 			String tel_fixo, String celular, String email, String endereco, String salva_parc_dif, String altera_orc,
-			String gera_PDF, Cliente consumidor_final) {
+			String gera_PDF, String vincula_barras, Cliente consumidor_final) {
 		this.nome_empresa = nome_empresa;
 		this.responsavel = responsavel;
 		this.CNPJ = CNPJ;
@@ -33,6 +34,7 @@ public class Configuracoes {
 		this.salva_parc_dif = salva_parc_dif;
 		this.altera_orc = altera_orc;
 		this.gera_PDF = gera_PDF;
+		this.vincula_barras = vincula_barras;
 		this.consumidor_final = consumidor_final;
 	}
 
@@ -122,6 +124,14 @@ public class Configuracoes {
 
 	public void setGera_PDF(String gera_PDF) {
 		this.gera_PDF = gera_PDF;
+	}
+
+	public String getVincula_barras() {
+		return vincula_barras;
+	}
+
+	public void setVincula_barras(String vincula_barras) {
+		this.vincula_barras = vincula_barras;
 	}
 
 	public Cliente getConsumidor_final() {
