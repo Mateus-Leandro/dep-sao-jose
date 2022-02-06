@@ -273,7 +273,7 @@ public class CadastroSetor extends JDialog {
 		contentPane.add(lblF1);
 
 		lblNovo = new JLabel("Novo");
-		lblNovo.setForeground(new Color(255, 69, 0));
+		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNovo.setBounds(225, 304, 36, 14);
 		contentPane.add(lblNovo);
