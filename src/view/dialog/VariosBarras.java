@@ -285,7 +285,7 @@ public class VariosBarras extends JDialog {
 		contentPane.add(lblF1);
 
 		lblNovo = new JLabel("Novo");
-		lblNovo.setForeground(new Color(34, 139, 34));
+		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNovo.setBounds(305, 275, 35, 14);
 		contentPane.add(lblNovo);
@@ -331,14 +331,14 @@ public class VariosBarras extends JDialog {
 		btnTornaPrincipal.setIcon(icone_principal);
 		btnTornaPrincipal.setVisible(false);
 		contentPane.add(btnTornaPrincipal);
-		
+
 		lblEnter = new JLabel("Enter:");
 		lblEnter.setFont(new Font("Arial", Font.BOLD, 12));
 		lblEnter.setBounds(109, 275, 35, 14);
 		contentPane.add(lblEnter);
-		
+
 		lblSalvar = new JLabel("Salvar");
-		lblSalvar.setForeground(new Color(0, 0, 139));
+		lblSalvar.setForeground(new Color(0, 128, 0));
 		lblSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSalvar.setBounds(145, 275, 41, 14);
 		contentPane.add(lblSalvar);
@@ -363,19 +363,23 @@ public class VariosBarras extends JDialog {
 	}
 
 	public void cancela_barras() {
-		btnCancelar.doClick();
-		btnNovo.setVisible(true);
-		btnCancelar.setVisible(false);
-		btnSalvar.setVisible(false);
-		fTxtCodigoVinculado.setVisible(false);
-		lblVinculado.setVisible(false);
-		btnExcluir.setVisible(true);
+		if (!btnNovo.isVisible()) {
+			btnCancelar.doClick();
+			btnNovo.setVisible(true);
+			btnCancelar.setVisible(false);
+			btnSalvar.setVisible(false);
+			fTxtCodigoVinculado.setVisible(false);
+			lblVinculado.setVisible(false);
 
-		if (tabelaVariosBarras.getSelectedRow() != -1) {
-			if (!(boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
-				btnTornaPrincipal.setVisible(true);
+			if (tabelaVariosBarras.getSelectedRow() != -1) {
+				if (!(boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
+					btnTornaPrincipal.setVisible(true);
+				}
 			}
+		}else {
+			dispose();
 		}
+
 	}
 
 	public void exclui_barras() {
