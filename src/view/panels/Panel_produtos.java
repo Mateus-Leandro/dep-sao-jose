@@ -35,6 +35,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.MaskFormatter;
 
+import dao.ConfiguracaoDAO;
 import dao.ProdutoDAO;
 import dao.SetorDAO;
 import entities.configuracoes.Configuracoes;
@@ -102,6 +103,9 @@ public class Panel_produtos extends JPanel {
 	private JLabel lblObg_precoVenda;
 	private JCheckBox chckbxProdutoBloqueado;
 	private Render_tabela_produtos render = new Render_tabela_produtos();
+	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
+	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
+
 	/**
 	 * Create the panel.
 	 */
@@ -402,32 +406,30 @@ public class Panel_produtos extends JPanel {
 				if (!lsm.isSelectionEmpty() && btnNovo.isVisible()) {
 
 					int linha_selecionada = tabelaProdutos.getSelectedRow();
-					
+
 					txtCodigo.setText(tabelaProdutos.getValueAt(linha_selecionada, 0).toString());
 					fTxtNomeProduto.setText(tabelaProdutos.getValueAt(linha_selecionada, 1).toString());
 					cbxFatorVenda.getModel()
 							.setSelectedItem(tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 2));
 					cbxSetor.getModel().setSelectedItem(tabelaProdutos.getValueAt(linha_selecionada, 3));
-					fTxtPrecoCusto.setText(tabelaProdutos.getValueAt(linha_selecionada, 4).toString()
-							.replace("R$ ", ""));
+					fTxtPrecoCusto
+							.setText(tabelaProdutos.getValueAt(linha_selecionada, 4).toString().replace("R$ ", ""));
 					fTxtMargem.setText(tabelaProdutos.getValueAt(linha_selecionada, 5).toString());
-					fTxtPrecoSugerido.setText(tabelaProdutos.getValueAt(linha_selecionada, 6).toString()
-							.replace("R$ ", ""));
-					fTxtPrecoVenda.setText(tabelaProdutos.getValueAt(linha_selecionada, 7).toString()
-							.replace("R$ ", ""));
-					fTxtMargemPraticada
-							.setText(tabelaProdutos.getValueAt(linha_selecionada, 8).toString());
+					fTxtPrecoSugerido
+							.setText(tabelaProdutos.getValueAt(linha_selecionada, 6).toString().replace("R$ ", ""));
+					fTxtPrecoVenda
+							.setText(tabelaProdutos.getValueAt(linha_selecionada, 7).toString().replace("R$ ", ""));
+					fTxtMargemPraticada.setText(tabelaProdutos.getValueAt(linha_selecionada, 8).toString());
 					fTxtCodigoBarras.setText((String) tabelaProdutos.getValueAt(linha_selecionada, 9));
-					
+
 					Boolean bloq = ((Boolean) tabelaProdutos.getValueAt(linha_selecionada, 10));
-					
-					if(bloq) {
+
+					if (bloq) {
 						chckbxProdutoBloqueado.setSelected(true);
-					}else {
+					} else {
 						chckbxProdutoBloqueado.setSelected(false);
 					}
-					
-					
+
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
 					btnMaisBarras.setEnabled(true);
@@ -447,8 +449,7 @@ public class Panel_produtos extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
-		cbxTipoPesquisa
-				.setModel(new DefaultComboBoxModel(new String[] {"Nome", "C\u00F3digo", "Cod. Barras"}));
+		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "C\u00F3digo", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -506,7 +507,7 @@ public class Panel_produtos extends JPanel {
 
 					if (produto_dao.produto_tem_orcamento(
 							(Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0))) {
-						JOptionPane.showMessageDialog(btnExcluir,
+						JOptionPane.showMessageDialog(lblPrecoSugerido,
 								"Impossível excluir produto.\nO produto selecionado está presente em 1 ou mais orçamentos.",
 								"Exclusão de produtos", JOptionPane.WARNING_MESSAGE);
 					} else {
@@ -602,7 +603,7 @@ public class Panel_produtos extends JPanel {
 		lblObg_precoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_precoVenda.setBounds(709, 309, 20, 15);
 		add(lblObg_precoVenda);
-		
+
 		chckbxProdutoBloqueado = new JCheckBox("Produto Bloqueado");
 		chckbxProdutoBloqueado.setEnabled(false);
 		chckbxProdutoBloqueado.setForeground(Color.BLACK);
@@ -701,18 +702,13 @@ public class Panel_produtos extends JPanel {
 				flag = opcao == JOptionPane.YES_OPTION;
 
 				if (flag) {
-					if (produto_dao
-							.deletarProduto((Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0))) {
-						JOptionPane.showMessageDialog(lblPrecoSugerido, "Produto excluído!", "Exclusão de produto",
-								JOptionPane.ERROR_MESSAGE);
-						recarregarTabela();
-						limparCampos();
-						btnExcluir.setEnabled(false);
-						btnEditar.setEnabled(false);
-					} else {
-						JOptionPane.showMessageDialog(lblPrecoSugerido, "Erro ao excluir produto!", "Exclusão de produto",
-								JOptionPane.WARNING_MESSAGE);
-					}
+					produto_dao.deletarProduto((Integer) tabelaProdutos.getValueAt(tabelaProdutos.getSelectedRow(), 0));
+					JOptionPane.showMessageDialog(lblPrecoSugerido, "Produto excluído!", "Exclusão de produto",
+							JOptionPane.ERROR_MESSAGE);
+					recarregarTabela();
+					limparCampos();
+					btnExcluir.setEnabled(false);
+					btnEditar.setEnabled(false);
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(btnExcluir, "Erro ao excluir produto!");
@@ -831,55 +827,94 @@ public class Panel_produtos extends JPanel {
 
 		Produto produto = new Produto(null, descricao, (Setor) setor, unidadeVenda, precoVenda, precoCusto, margem,
 				prSugerido, margemPraticada, bloqueadoVenda, dataCadastro, codigo_barra);
-
 		fTxtPrecoVenda.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		fTxtNomeProduto.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		try {
-			boolean barras_valido = true;
 
-			if (!fTxtCodigoBarras.getText().trim().isEmpty()) {
-				barras_valido = produto_dao.testaBarrasInclusao(codigo_barra);
-			}
+			/*
+			 * Retirado teste para validar código de barras. O cadastro agora é feito
+			 * através da tela de vinculação.
+			 */
 
+//			boolean barras_valido = true;
+//			if (!fTxtCodigoBarras.getText().trim().isEmpty()) {
+//				barras_valido = produto_dao.testaBarrasInclusao(codigo_barra);
+//			}
+
+			
+			// Testa se está alterando ou incluindo um novo item.
 			if (txtCodigo.getText().trim().isEmpty()) {
-				if (barras_valido) {
-					produto = produto_dao.inserirProduto(produto);
+//				if (barras_valido) {
+				produto = produto_dao.inserirProduto(produto);
 
-					if (produto.getIdProduto() != null) {
+				if (produto.getIdProduto() != null) {
 
-						JOptionPane.showMessageDialog(lblPrecoSugerido,
-								"Produto cadastrado com sucesso! " + "\nCódigo: " + produto.getIdProduto()
-										+ "\nProduto: " + produto.getDescricao(),
-								"Cadastro de produtos", JOptionPane.NO_OPTION);
-						btnEditar.setVisible(true);
-						btnExcluir.setVisible(true);
-						btnSalvar.setVisible(false);
-						chckbxProdutoBloqueado.setEnabled(false);
-						btnNovo.setVisible(true);
-						limparCampos();
+					JOptionPane.showMessageDialog(
+							lblPrecoSugerido, "Produto cadastrado com sucesso! " + "\nCódigo: " + produto.getIdProduto()
+									+ "\nProduto: " + produto.getDescricao(),
+							"Cadastro de produtos", JOptionPane.NO_OPTION);
+
+					Boolean flag = false;
+					configuracoes_do_sistema = conf_dao.busca_configuracoes();
+
+					switch (configuracoes_do_sistema.getVincula_barras()) {
+					case "SIM":
+						flag = true;
+						break;
+					case "NÃO":
+						flag = false;
+						break;
+					case "PERGUNTAR":
+						int opcao = JOptionPane.showConfirmDialog(lblPrecoSugerido,
+								"Deseja vincular um código de barras ao produto cadastrado?",
+								"Vinculação de código de barras", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
+						flag = opcao == JOptionPane.YES_OPTION;
+						break;
 					}
 
-					String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
-					produto.setDataCadastro(sdf.parse(data_formatada));
+					if (flag) {
+						VariosBarras varios_barras = new VariosBarras(produto.getIdProduto().toString(),
+								fTxtCodigoBarras, produto.getDescricao());
+						varios_barras.setLocationRelativeTo(lblPrecoSugerido);
+						varios_barras.setVisible(true);
+					}
+
+					btnEditar.setVisible(true);
+					btnExcluir.setVisible(true);
+					btnSalvar.setVisible(false);
+					chckbxProdutoBloqueado.setEnabled(false);
+					btnNovo.setVisible(true);
 					limparCampos();
-					desativarCampos();
-					btnCancelar.setVisible(false);
-					btnNovo.setEnabled(true);
-					lblPesquisarPor.setVisible(true);
-					lblPesquisarPor.setEnabled(true);
-					fTxtPesquisa.setVisible(true);
-					fTxtPesquisa.setEnabled(true);
-					cbxTipoPesquisa.setVisible(true);
-					cbxTipoPesquisa.setEnabled(true);
-					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
-					recarregarTabela();
-					return produto;
-				} else {
-					JOptionPane.showMessageDialog(fTxtCodigoBarras, "Código de barras informado ja utilizado em outro item!",
-							"Código de barras duplicado!", JOptionPane.WARNING_MESSAGE);
 				}
 
+				String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
+				produto.setDataCadastro(sdf.parse(data_formatada));
+				limparCampos();
+				desativarCampos();
+				btnCancelar.setVisible(false);
+				btnNovo.setEnabled(true);
+				lblPesquisarPor.setVisible(true);
+				lblPesquisarPor.setEnabled(true);
+				fTxtPesquisa.setVisible(true);
+				fTxtPesquisa.setEnabled(true);
+				cbxTipoPesquisa.setVisible(true);
+				cbxTipoPesquisa.setEnabled(true);
+				fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
+				recarregarTabela();
+				return produto;
+				/*
+				 * Retirado teste para validar código de barras. O cadastro agora é feito
+				 * através da tela de vinculação.
+				 */
+//				} else {
+//					JOptionPane.showMessageDialog(fTxtCodigoBarras,
+//							"Código de barras informado ja utilizado em outro item!", "Código de barras duplicado!",
+//							JOptionPane.WARNING_MESSAGE);
+//				}
+
+				// *******************************************
+				// Alterando cadastro do produto ja salvo.
 			} else {
 				produto.setIdProduto(Integer.parseInt(txtCodigo.getText().trim()));
 
@@ -988,7 +1023,7 @@ public class Panel_produtos extends JPanel {
 		sorter.setComparator(7, spv);
 
 		tabelaProdutos.setRowSorter(sorter);
-		//Pintando linhas de acordo com o status do cliente(bloqueado)
+		// Pintando linhas de acordo com o status do cliente(bloqueado)
 		tabelaProdutos.setDefaultRenderer(Object.class, render);
 		tabelaProdutos.getColumnModel().getColumn(0).setCellRenderer(render);
 		tabelaProdutos.getColumnModel().getColumn(4).setCellRenderer(render);

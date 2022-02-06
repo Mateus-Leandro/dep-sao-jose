@@ -42,6 +42,7 @@ import view.panels.Panel_produtos;
 import view.tools.Jtext_tools;
 
 import javax.swing.ListSelectionModel;
+import java.awt.event.KeyAdapter;
 
 public class VariosBarras extends JDialog {
 
@@ -167,7 +168,7 @@ public class VariosBarras extends JDialog {
 		txtCodigoBarrasPrincipal.setEnabled(true);
 		txtCodigoBarrasPrincipal.setColumns(10);
 		txtCodigoBarrasPrincipal.setBounds(297, 11, 103, 20);
-		if(!campo_barras.getText().trim().isEmpty()) {
+		if (!campo_barras.getText().trim().isEmpty()) {
 			txtCodigoBarrasPrincipal.setText(campo_barras.getText().trim());
 		}
 		txtCodigoBarrasPrincipal.setEditable(false);
@@ -250,10 +251,20 @@ public class VariosBarras extends JDialog {
 		}
 
 		fTxtCodigoVinculado = new JFormattedTextField(mascara_barras);
+		fTxtCodigoVinculado.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterSalvaBarras) {
+				if (enterSalvaBarras.getKeyCode() == enterSalvaBarras.VK_ENTER) {
+					if (!fTxtCodigoVinculado.getText().trim().isEmpty()) {
+						salvar_barras();
+					}
+				}
+			}
+		});
 		fTxtCodigoVinculado.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickBarras) {
-				
+
 				text_tool.move_cursor_inicio(fTxtCodigoVinculado);
 			}
 		});
@@ -281,13 +292,13 @@ public class VariosBarras extends JDialog {
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(350, 275, 23, 14);
+		lblF12.setBounds(356, 275, 23, 14);
 		contentPane.add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(new Color(255, 0, 0));
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(377, 275, 47, 14);
+		lblExcluir.setBounds(383, 275, 41, 14);
 		contentPane.add(lblExcluir);
 
 		lblEsc = new JLabel("Esc:");
@@ -320,6 +331,17 @@ public class VariosBarras extends JDialog {
 		btnTornaPrincipal.setIcon(icone_principal);
 		btnTornaPrincipal.setVisible(false);
 		contentPane.add(btnTornaPrincipal);
+		
+		lblEnter = new JLabel("Enter:");
+		lblEnter.setFont(new Font("Arial", Font.BOLD, 12));
+		lblEnter.setBounds(109, 275, 35, 14);
+		contentPane.add(lblEnter);
+		
+		lblSalvar = new JLabel("Salvar");
+		lblSalvar.setForeground(new Color(0, 0, 139));
+		lblSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSalvar.setBounds(145, 275, 41, 14);
+		contentPane.add(lblSalvar);
 
 		// Alinhando código de barras para esquerda.
 		DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
@@ -407,16 +429,13 @@ public class VariosBarras extends JDialog {
 				lblVinculado.setVisible(false);
 
 				fTxtCodigoVinculado.setText(null);
-				
-				// Se o código de barras for o principal, é alterado no campos e exibido. 
-				if(principal) {
+
+				// Se o código de barras for o principal, é alterado no campos e exibido.
+				if (principal) {
 					txtCodigoBarrasPrincipal.setText(barras);
 				}
 			}
 
-		} else {
-			JOptionPane.showMessageDialog(null, "Necessário informar código de barras!", "Código de barras vazio.",
-					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -473,5 +492,7 @@ public class VariosBarras extends JDialog {
 	Icon icone_mais = new ImageIcon(getClass().getResource("/icons/mais.png"));
 	Icon icone_excluir = new ImageIcon(getClass().getResource("/icons/excluir.png"));
 	Icon icone_principal = new ImageIcon(getClass().getResource("/icons/principal.png"));
+	private JLabel lblEnter;
+	private JLabel lblSalvar;
 
 }
