@@ -2,6 +2,7 @@ package view.panels;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -11,13 +12,16 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -43,14 +48,12 @@ import entities.produto.Produto;
 import entities.produto.Setor;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
-import tables.tableRenders.Render_tabela_clientes;
 import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterMonetario;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
 import view.formatFields.FormataNumeral;
 import view.tools.Jtext_tools;
-import javax.swing.JCheckBox;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
@@ -105,13 +108,23 @@ public class Panel_produtos extends JPanel {
 	private Render_tabela_produtos render = new Render_tabela_produtos();
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
+	private JLabel lblF1;
+	private JLabel lblNovo;
+	private JLabel lblF12;
+	private JLabel lblExcluir;
+	private JLabel lblEsc;
+	private JLabel lblCancelar;
+	private JLabel lblF3;
+	private JLabel lblEditar;
+	private JLabel lblF5;
+	private JLabel lblRecarregar;
 
 	/**
 	 * Create the panel.
 	 */
 	public Panel_produtos() {
 		setLayout(null);
-
+		tecla_pressionada(); // Teclas de atalho.
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
 		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -140,7 +153,6 @@ public class Panel_produtos extends JPanel {
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNomeProduto) {
-
 				if (!fTxtNomeProduto.getText().trim().isEmpty()
 						&& enterNomeProduto.getKeyCode() == enterNomeProduto.VK_ENTER) {
 					cbxSetor.requestFocus();
@@ -354,7 +366,6 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickNovo) {
 				novo_item();
-				fTxtNomeProduto.requestFocus();
 			}
 		});
 		btnNovo.setIcon(icones.getIcone_mais());
@@ -392,7 +403,7 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setAutoResizeMode(tabelaProdutos.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(tabelaProdutos);
-		scrollPane.setBounds(16, 483, 693, 170);
+		scrollPane.setBounds(16, 483, 693, 152);
 		add(scrollPane);
 
 		recarregarTabela();
@@ -449,7 +460,8 @@ public class Panel_produtos extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
-		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "C\u00F3digo", "Cod. Barras" }));
+		cbxTipoPesquisa
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "Nome", "C\u00F3digo", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -486,9 +498,7 @@ public class Panel_produtos extends JPanel {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
-				if (btnEditar.isEnabled()) {
-					editar_item();
-				}
+				editar_item();
 			}
 		});
 		btnEditar.setEnabled(false);
@@ -611,6 +621,61 @@ public class Panel_produtos extends JPanel {
 		chckbxProdutoBloqueado.setBounds(537, 76, 172, 23);
 		add(chckbxProdutoBloqueado);
 
+		lblF1 = new JLabel("F1:");
+		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF1.setBounds(105, 638, 21, 14);
+		add(lblF1);
+
+		lblNovo = new JLabel("Novo");
+		lblNovo.setForeground(Color.BLUE);
+		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNovo.setBounds(122, 638, 35, 14);
+		add(lblNovo);
+
+		lblF12 = new JLabel("F12:");
+		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF12.setBounds(639, 638, 26, 14);
+		add(lblF12);
+
+		lblExcluir = new JLabel("Excluir");
+		lblExcluir.setForeground(new Color(255, 0, 0));
+		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblExcluir.setBounds(667, 638, 42, 14);
+		add(lblExcluir);
+
+		lblEsc = new JLabel("Esc:");
+		lblEsc.setFont(new Font("Arial", Font.BOLD, 12));
+		lblEsc.setBounds(16, 638, 30, 14);
+		add(lblEsc);
+
+		lblCancelar = new JLabel("Cancelar");
+		lblCancelar.setForeground(Color.GRAY);
+		lblCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCancelar.setBounds(42, 638, 53, 14);
+		add(lblCancelar);
+
+		lblF3 = new JLabel("F3:");
+		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF3.setBounds(576, 638, 21, 14);
+		add(lblF3);
+
+		lblEditar = new JLabel("Editar");
+		lblEditar.setForeground(new Color(139, 69, 19));
+		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblEditar.setBounds(594, 638, 35, 14);
+		add(lblEditar);
+		
+		lblF5 = new JLabel("F5:");
+		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF5.setBounds(285, 638, 21, 14);
+		add(lblF5);
+		
+		lblRecarregar = new JLabel("Recarregar Produtos");
+		lblRecarregar.setForeground(new Color(0, 128, 0));
+		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblRecarregar.setBounds(302, 638, 128, 14);
+		add(lblRecarregar);
+
 	}
 
 	// --------------Funções--------------
@@ -641,7 +706,7 @@ public class Panel_produtos extends JPanel {
 		txtCodigo.setText(null);
 		fTxtCodigoBarras.setText(null);
 		fTxtMargem.setText(null);
-		fTxtNomeProduto.setText(null);
+		fTxtNomeProduto.setValue(null);
 		fTxtPrecoCusto.setText(null);
 		fTxtPrecoVenda.setText(null);
 		fTxtPrecoSugerido.setText(null);
@@ -664,27 +729,34 @@ public class Panel_produtos extends JPanel {
 		btnCancelar.setEnabled(true);
 		btnSalvar.setEnabled(true);
 		chckbxProdutoBloqueado.setEnabled(true);
+		fTxtNomeProduto.requestFocus();
 	}
 
 	public void cancelar_item() {
-		desativarCampos();
-		limparCampos();
-		btnNovo.setVisible(true);
-		btnSalvar.setVisible(false);
-		btnCancelar.setVisible(false);
-		btnEditar.setVisible(true);
-		btnExcluir.setVisible(true);
-		chckbxProdutoBloqueado.setEnabled(false);
+		if (!btnNovo.isVisible()) {
+			desativarCampos();
+			limparCampos();
+			btnNovo.setVisible(true);
+			btnSalvar.setVisible(false);
+			btnCancelar.setVisible(false);
+			btnEditar.setVisible(true);
+			btnExcluir.setVisible(true);
+			chckbxProdutoBloqueado.setEnabled(false);
+			btnNovo.requestFocus();
+		}
 	}
 
 	public void editar_item() {
-		ativarCampos();
-		btnEditar.setVisible(false);
-		btnExcluir.setVisible(false);
-		btnSalvar.setVisible(true);
-		btnCancelar.setVisible(true);
-		fTxtNomeProduto.requestFocus();
-		chckbxProdutoBloqueado.setEnabled(true);
+		if (btnEditar.isEnabled()) {
+			ativarCampos();
+			btnEditar.setVisible(false);
+			btnNovo.setVisible(false);
+			btnExcluir.setVisible(false);
+			btnSalvar.setVisible(true);
+			btnCancelar.setVisible(true);
+			fTxtNomeProduto.requestFocus();
+			chckbxProdutoBloqueado.setEnabled(true);
+		}
 	}
 
 	public void excluir_item() {
@@ -768,15 +840,14 @@ public class Panel_produtos extends JPanel {
 				}
 			} else {
 				gravarNovoProduto();
+				desativarCampos();
+				limparCampos();
 			}
-
 		}
-
 	}
 
 	public Produto gravarNovoProduto() {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		ProdutoDAO produto_dao = new ProdutoDAO();
 		NumberFormat nf = new DecimalFormat("#,###0.00");
 		String descricao = fTxtNomeProduto.getText().trim();
@@ -831,21 +902,8 @@ public class Panel_produtos extends JPanel {
 		fTxtNomeProduto.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		try {
-
-			/*
-			 * Retirado teste para validar código de barras. O cadastro agora é feito
-			 * através da tela de vinculação.
-			 */
-
-//			boolean barras_valido = true;
-//			if (!fTxtCodigoBarras.getText().trim().isEmpty()) {
-//				barras_valido = produto_dao.testaBarrasInclusao(codigo_barra);
-//			}
-
-			
 			// Testa se está alterando ou incluindo um novo item.
 			if (txtCodigo.getText().trim().isEmpty()) {
-//				if (barras_valido) {
 				produto = produto_dao.inserirProduto(produto);
 
 				if (produto.getIdProduto() != null) {
@@ -880,57 +938,46 @@ public class Panel_produtos extends JPanel {
 						varios_barras.setVisible(true);
 					}
 
-					btnEditar.setVisible(true);
-					btnExcluir.setVisible(true);
-					btnSalvar.setVisible(false);
-					chckbxProdutoBloqueado.setEnabled(false);
-					btnNovo.setVisible(true);
-					limparCampos();
 				}
-
-				String data_formatada = sdf.format(new java.sql.Date(System.currentTimeMillis()));
-				produto.setDataCadastro(sdf.parse(data_formatada));
-				limparCampos();
-				desativarCampos();
-				btnCancelar.setVisible(false);
+				btnEditar.setVisible(true);
+				btnExcluir.setVisible(true);
+				btnNovo.setVisible(true);
 				btnNovo.setEnabled(true);
-				lblPesquisarPor.setVisible(true);
+				btnSalvar.setVisible(false);
+
+				btnCancelar.setVisible(false);
+
+				chckbxProdutoBloqueado.setEnabled(false);
 				lblPesquisarPor.setEnabled(true);
+				lblPesquisarPor.setVisible(true);
 				fTxtPesquisa.setVisible(true);
 				fTxtPesquisa.setEnabled(true);
 				cbxTipoPesquisa.setVisible(true);
 				cbxTipoPesquisa.setEnabled(true);
+
 				fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
 				recarregarTabela();
 				return produto;
-				/*
-				 * Retirado teste para validar código de barras. O cadastro agora é feito
-				 * através da tela de vinculação.
-				 */
-//				} else {
-//					JOptionPane.showMessageDialog(fTxtCodigoBarras,
-//							"Código de barras informado ja utilizado em outro item!", "Código de barras duplicado!",
-//							JOptionPane.WARNING_MESSAGE);
-//				}
 
-				// *******************************************
-				// Alterando cadastro do produto ja salvo.
 			} else {
+				// Alterando cadastro do produto ja salvo.
 				produto.setIdProduto(Integer.parseInt(txtCodigo.getText().trim()));
-
 				if (produto_dao.alterarProduto(produto)) {
 					JOptionPane.showMessageDialog(lblPrecoSugerido, "Produto alterado!", "Alteração de produto",
 							JOptionPane.NO_OPTION);
-					limparCampos();
-					desativarCampos();
-					btnCancelar.setVisible(false);
+
 					btnNovo.setEnabled(true);
-					btnSalvar.setVisible(false);
+					
+					btnNovo.setVisible(true);
 					lblPesquisarPor.setVisible(true);
 					fTxtPesquisa.setVisible(true);
 					cbxTipoPesquisa.setVisible(true);
 					btnExcluir.setVisible(true);
 					btnEditar.setVisible(true);
+
+					btnCancelar.setVisible(false);
+					btnSalvar.setVisible(false);
+					
 					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
 					recarregarTabela();
 					return produto;
@@ -947,12 +994,6 @@ public class Panel_produtos extends JPanel {
 			btnReload.setVisible(true);
 		}
 		return null;
-	}
-
-	public void editar_produto() {
-		if (btnEditar.isEnabled()) {
-			ativarCampos();
-		}
 	}
 
 	public Double testa_preco_vazio(Double preco) {
@@ -1055,29 +1096,95 @@ public class Panel_produtos extends JPanel {
 	}
 
 	public void calcula_margem_praticada() {
+		if (!btnNovo.isVisible()) {
+			if (!fTxtPrecoVenda.getText().trim().isEmpty()) {
+				DecimalFormat formata_numero = new DecimalFormat("#,###0.00");
 
-		if (!fTxtPrecoVenda.getText().trim().isEmpty()) {
-			DecimalFormat formata_numero = new DecimalFormat("#,###0.00");
+				Double preco_custo = null;
+				Double preco_venda = null;
+				Double margem_praticada = 100.00;
 
-			Double preco_custo = null;
-			Double preco_venda = null;
-			Double margem_praticada = 100.00;
+				if (!fTxtPrecoCusto.getText().trim().isEmpty()) {
+					try {
+						preco_custo = formata_numero.parse(fTxtPrecoCusto.getText()).doubleValue();
+						preco_venda = formata_numero.parse(fTxtPrecoVenda.getText()).doubleValue();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 
-			if (!fTxtPrecoCusto.getText().trim().isEmpty()) {
-				try {
-					preco_custo = formata_numero.parse(fTxtPrecoCusto.getText()).doubleValue();
-					preco_venda = formata_numero.parse(fTxtPrecoVenda.getText()).doubleValue();
-				} catch (ParseException e) {
-					e.printStackTrace();
+					if (preco_custo != 0.0) {
+						margem_praticada = ((preco_venda - preco_custo) / preco_custo) * 100;
+					}
+					fTxtMargemPraticada.setText(formata_numero.format(margem_praticada));
 				}
 
-				if (preco_custo != 0.0) {
-					margem_praticada = ((preco_venda - preco_custo) / preco_custo) * 100;
-				}
-				fTxtMargemPraticada.setText(formata_numero.format(margem_praticada));
 			}
-
 		}
+	}
+
+	// Teclas de atalho
+	public void tecla_pressionada() {
+		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "novo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancelar");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "excluir");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "editar");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "recarregar");
+
+		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("cancelar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_cancelar) {
+				cancelar_item();
+			}
+		});
+
+//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("excluir", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_excluir) {
+				excluir_item();
+			}
+		});
+
+//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("novo", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_novo) {
+				novo_item();
+			}
+		});
+
+//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("editar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_editar) {
+				editar_item();
+			}
+		});
+//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("recarregar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_recarregar) {
+				recarregarTabela();
+			}
+		});
+
 	}
 
 	public Panel_produtos getPanelProdutos() {
