@@ -25,8 +25,8 @@ public class ConfiguracaoDAO {
 
 			// salvando novas configurações.
 			ps = conn.prepareStatement("INSERT INTO configuracoes "
-					+ "(nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, celular, email, endereco, salva_parc_dif, alt_orc, gera_pdf, idConsumidor_final) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					+ "(nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, celular, email, endereco, salva_parc_dif, alt_orc, gera_pdf, vincula_barras, idConsumidor_final) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, configuracao.getNome_empresa());
 			ps.setString(2, configuracao.getResponsavel());
 			ps.setString(3, configuracao.getCNPJ());
@@ -38,7 +38,8 @@ public class ConfiguracaoDAO {
 			ps.setString(9, configuracao.getSalva_parc_dif());
 			ps.setString(10, configuracao.getAltera_orc());
 			ps.setString(11, configuracao.getGera_PDF());
-			ps.setInt(12, configuracao.getConsumidor_final().getIdCliente());
+			ps.setString(12, configuracao.getVincula_barras());
+			ps.setInt(13, configuracao.getConsumidor_final().getIdCliente());
 
 			ps.execute();
 			conn.commit();
@@ -64,7 +65,7 @@ public class ConfiguracaoDAO {
 		try {
 			ps = conn.prepareStatement(
 					"SELECT nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, configuracoes.celular, "
-							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc,gera_pdf, idConsumidor_final, clientes.nome, clientes.endereco, clientes.numero, clientes.bairro, clientes.cidade "
+							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc, gera_pdf, vincula_barras, idConsumidor_final, clientes.nome, clientes.endereco, clientes.numero, clientes.bairro, clientes.cidade "
 							+ "FROM configuracoes " + "LEFT JOIN clientes "
 							+ "ON clientes.idCliente = configuracoes.idConsumidor_final");
 			rs = ps.executeQuery();
@@ -81,6 +82,7 @@ public class ConfiguracaoDAO {
 				conf.setSalva_parc_dif(rs.getString("salva_parc_dif"));
 				conf.setAltera_orc(rs.getString("alt_orc"));
 				conf.setGera_PDF(rs.getString("gera_pdf"));
+				conf.setVincula_barras(rs.getString("vincula_barras"));
 				
 				Cliente consumidor_final = new Cliente();
 				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));
