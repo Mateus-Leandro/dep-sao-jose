@@ -15,13 +15,12 @@ import entities.financeiro.Forma_pagamento;
 public class FormaPagamentoDAO {
 
 	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
 
 	public Forma_pagamento salvar_forma(Forma_pagamento forma) {
 
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
 		try {
 			conn.setAutoCommit(false);
 			ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`forma_pagamento` " + "(`descricao`) VALUES (?)",
@@ -48,12 +47,15 @@ public class FormaPagamentoDAO {
 				e1.printStackTrace();
 			}
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public Boolean alterar_forma(Forma_pagamento forma) {
 		conn = DB.getConnection();
-		PreparedStatement ps;
 
 		try {
 			ps = conn.prepareStatement("UPDATE forma_pagamento SET descricao = ? WHERE idFormaPagamento = ?");
@@ -66,13 +68,15 @@ public class FormaPagamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public Boolean excluir_forma_pagamento(Forma_pagamento forma_excluida) {
 		conn = DB.getConnection();
-		PreparedStatement ps;
 
 		try {
 			conn.setAutoCommit(false);
@@ -101,15 +105,15 @@ public class FormaPagamentoDAO {
 				e1.printStackTrace();
 			}
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public ArrayList<Forma_pagamento> listar_formas_pagamento(ArrayList<Forma_pagamento> formas_pagamento) {
 
 		conn = DB.getConnection();
-		PreparedStatement ps;
-		ResultSet rs = null;
-
 		try {
 			ps = conn.prepareStatement("SELECT * FROM `banco_deposito`.`forma_pagamento`");
 			rs = ps.executeQuery();
@@ -123,6 +127,10 @@ public class FormaPagamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 }

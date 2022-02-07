@@ -12,11 +12,11 @@ import entities.financeiro.Resumo_financeiro;
 
 public class Resumo_financeiroDAO {
 	private Connection conn;
+	private ResultSet rs;
+	private PreparedStatement ps;
 
 	public Resumo_financeiro carregar_resumo_financeiro(Cliente cliente, Resumo_financeiro resumo) {
 		conn = DB.getConnection();
-		ResultSet rs = null;
-		PreparedStatement ps;
 
 		int id_cliente = cliente.getIdCliente();
 		try {
@@ -26,7 +26,7 @@ public class Resumo_financeiroDAO {
 					"SELECT SUM(valorTotal) AS valor_comprado FROM orcamento WHERE idCliente = ? AND faturado = true");
 			ps.setInt(1, id_cliente);
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
 				resumo.setTotal_comprado(rs.getDouble("valor_comprado"));
 			}
@@ -38,14 +38,11 @@ public class Resumo_financeiroDAO {
 					+ "WHERE orcamento.idCliente = ? " + "AND parcelas.dataPagamento IS NOT NULL");
 			ps.setInt(1, id_cliente);
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
 				parcelas_pagas = rs.getDouble("parcelas_pagas");
 			}
 			resumo.setValor_aberto(resumo.getTotal_comprado() - parcelas_pagas);
-
-			
-
 
 			// Buscando valor da maior compra
 			Double maior_compra = 0.00;
@@ -88,6 +85,10 @@ public class Resumo_financeiroDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 

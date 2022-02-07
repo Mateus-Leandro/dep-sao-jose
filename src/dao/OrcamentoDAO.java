@@ -14,13 +14,14 @@ import entities.orcamentos.Produto_Orcamento;
 
 public class OrcamentoDAO {
 
-	private Connection conn;
 	private FaturamentoDAO faturamento_dao = new FaturamentoDAO();
+	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
+	private ResultSet rs2;
 
 	public Orcamento salvar_novo_orcamento(Orcamento orcamento) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -64,14 +65,15 @@ public class OrcamentoDAO {
 			}
 
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean salvar_orcamento_editado(Orcamento orcamento_editado) {
-
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -109,6 +111,9 @@ public class OrcamentoDAO {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
+			} finally {
+				DB.closeStatement(ps);
+				DB.closeConnection(conn);
 			}
 		}
 
@@ -117,7 +122,6 @@ public class OrcamentoDAO {
 
 	public Boolean excluir_orcamento(int numero_orcamento) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -149,6 +153,9 @@ public class OrcamentoDAO {
 			}
 
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
@@ -157,60 +164,68 @@ public class OrcamentoDAO {
 			String numero_orcamento, Integer limite, Boolean so_faturados) {
 
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		PreparedStatement ps2 = null;
-		PreparedStatement ps3 = null;
+		Boolean cliente_vazio = cliente == null;
+		Boolean numero_orcamento_vazio = numero_orcamento == null;
 
-		ResultSet rs = null;
-		ResultSet rs2 = null;
-		ResultSet rs3 = null;
 		try {
-
-			String consulta = "SELECT idOrcamento, orcamento.idCliente, clientes.nome as nomeCliente, "
-					+ "quantidadeProdutos, totalMercadoriasBruto, " + "totalMercadoriasLiquido, frete, descontoFinal, "
+			String consulta = "SELECT idOrcamento, clientes.*, " + "quantidadeProdutos, totalMercadoriasBruto, "
+					+ "totalMercadoriasLiquido, frete, descontoFinal, "
 					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
 					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?";
-			
-			if(limite == null) {
-				if(so_faturados) {
+
+			if (limite == null) {
+				if (so_faturados) {
 					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true");
-				}else {
+				} else {
 					ps = conn.prepareStatement(consulta);
 				}
-				// Testa se foi passado cliente específico na busca de orçamentos.
-			}else {
-				if(so_faturados) {
+			} else {
+				if (so_faturados) {
 					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + " LIMIT " + limite);
-				}else {
+				} else {
 					ps = conn.prepareStatement(consulta + " LIMIT " + limite);
 				}
-				
 			}
-			if (cliente != null) {
+			if (!cliente_vazio) {
 				ps.setInt(1, cliente.getIdCliente());
 			} else {
 				ps.setString(1, "%");
+				cliente = new Cliente();
 			}
 
-			if (numero_orcamento != null) {
+			if (!numero_orcamento_vazio) {
 				ps.setString(2, numero_orcamento);
 			} else {
 				ps.setString(2, "%");
 			}
 
 			rs = ps.executeQuery();
-
 			while (rs.next()) {
 				// Buscando dados do cliente.
-				ClienteDAO cliente_dao = new ClienteDAO();
-				ArrayList<Cliente> cliente_do_orcamento = new ArrayList<Cliente>();
-				cliente_do_orcamento = cliente_dao.listarClientes_codigo(cliente_do_orcamento,
-						rs.getString("idCliente"), 1);
+				if (cliente_vazio) {
+					cliente.setIdCliente(rs.getInt("idCliente"));
+					cliente.setBloqueado(rs.getBoolean("bloqueado"));
+					cliente.setNome(rs.getString("nome"));
+					cliente.setApelido(rs.getString("apelido"));
+					cliente.setCpf_cnpj(rs.getString("documento"));
+					cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
+					cliente.setCep(rs.getString("cep"));
+					cliente.setCidade(rs.getString("cidade"));
+					cliente.setEndereco(rs.getString("endereco"));
+					cliente.setReferencia(rs.getString("referencia"));
+					cliente.setNumero(rs.getString("numero"));
+					cliente.setBairro(rs.getString("bairro"));
+					cliente.setEmail(rs.getString("email"));
+					cliente.setCelular(rs.getString("celular"));
+					cliente.setTelefone(rs.getString("telefone"));
+					cliente.setDataCadastro(rs.getDate("dataCadastro"));
+				}
 
+				// Buscando dados do orçamento.
 				Orcamento orcamento = new Orcamento();
 				orcamento.setId_orcamento(rs.getInt("idOrcamento"));
-				orcamento.setCliente(cliente_do_orcamento.get(0));
+				orcamento.setCliente(cliente);
 				orcamento.setQuantidade_produtos(rs.getInt("quantidadeProdutos"));
 				orcamento.setTotal_mercadorias_bruto(rs.getDouble("totalMercadoriasBruto"));
 				orcamento.setTotal_mercadorias_liquido(rs.getDouble("totalMercadoriasLiquido"));
@@ -225,7 +240,7 @@ public class OrcamentoDAO {
 				orcamento.setParcelas(new ArrayList<Parcela>());
 
 				// Listando os produtos do orçamento.
-				ps2 = conn.prepareStatement("SELECT produto_orcamento.idProdutoOrcamento AS codigo, "
+				ps = conn.prepareStatement("SELECT produto_orcamento.idProdutoOrcamento AS codigo, "
 						+ "produto.descricao as descricao, barras_produto.barras as barras, produto_orcamento.fator as fator, "
 						+ "produto_orcamento.quantidade, produto_orcamento.precoUnitario AS preco_unitario, "
 						+ "produto_orcamento.descontoProduto AS desconto, produto_orcamento.totalProduto AS total "
@@ -233,8 +248,8 @@ public class OrcamentoDAO {
 						+ "INNER JOIN produto on produto.idProduto = produto_orcamento.idProdutoOrcamento "
 						+ "LEFT JOIN barras_produto on barras_produto.idProduto = produto_orcamento.idProdutoOrcamento "
 						+ "WHERE barras_produto.principal is not false AND produto_orcamento.idOrcamento = ? ");
-				ps2.setInt(1, orcamento.getId_orcamento());
-				rs2 = ps2.executeQuery();
+				ps.setInt(1, orcamento.getId_orcamento());
+				rs2 = ps.executeQuery();
 
 				// adicionando os itens do orçamento na lista de produtos do orçamento.
 				while (rs2.next()) {
@@ -249,22 +264,27 @@ public class OrcamentoDAO {
 					produto.setValor_total(rs2.getDouble("total"));
 					orcamento.getProdutos_do_orcamento().add(produto);
 				}
-				
+
 				// Listando as parcelas do orçamento
 				orcamento.setParcelas(faturamento_dao.lista_parcelas(orcamento));
 				lista_orcamentos.add(orcamento);
 			}
+
+			return lista_orcamentos;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeResultSet(rs2);
+			DB.closeConnection(conn);
 		}
-
-		return lista_orcamentos;
 	}
 
 	public boolean salva_observacao(Orcamento orcamento) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			ps = conn.prepareStatement(
@@ -276,12 +296,14 @@ public class OrcamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean deleta_observacao(Orcamento orcamento) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			ps = conn.prepareStatement(
@@ -292,14 +314,15 @@ public class OrcamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
-	// Funções auxiliares
+	// Funções auxiliares ----------------------------------------------
 	public void grava_itens_orcamento(Orcamento orcamento) {
-
-		PreparedStatement ps = null;
-
+		conn = DB.getConnection();
 		try {
 			// Inserindo os proutos do orçamento salvo.
 			for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {

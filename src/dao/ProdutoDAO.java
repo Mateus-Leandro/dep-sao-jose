@@ -19,6 +19,9 @@ import entities.produto.Setor;
 public class ProdutoDAO {
 
 	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
+
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public ProdutoDAO() {
@@ -27,8 +30,6 @@ public class ProdutoDAO {
 //------------Inserir-----------------
 	public Produto inserirProduto(Produto produto) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -67,12 +68,12 @@ public class ProdutoDAO {
 				conn.rollback();
 			} catch (SQLException erroRollBack) {
 				erroRollBack.printStackTrace();
-			} finally {
-				DB.closeResultSet(rs);
-				DB.closeStatement(ps);
-				DB.closeConnection(conn);
 			}
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 		return produto;
 	}
@@ -80,7 +81,6 @@ public class ProdutoDAO {
 	// ----------- Alterar---------------
 	public boolean alterarProduto(Produto produto) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -122,6 +122,9 @@ public class ProdutoDAO {
 				e.printStackTrace();
 			}
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 		return true;
 	}
@@ -129,7 +132,7 @@ public class ProdutoDAO {
 	// --------Deletar--------------
 	public boolean deletarProduto(int id) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
+
 		try {
 			conn.setAutoCommit(false);
 
@@ -151,15 +154,16 @@ public class ProdutoDAO {
 				e1.printStackTrace();
 			}
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 //---------Listar---------------
 	public ArrayList<Produto> listarTodosProdutos(ArrayList<Produto> produtos) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
-		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
 					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
@@ -191,15 +195,17 @@ public class ProdutoDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	// -----Listar produto por nome-----
 	public ArrayList<Produto> listarProdutosNome(ArrayList<Produto> produtos, String nome, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
-		ResultSet rs = null;
 		try {
 			if (limite == null) {
 				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
@@ -246,15 +252,17 @@ public class ProdutoDAO {
 					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	// -----Listar produto por código interno----
 	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
-		ResultSet rs = null;
 		try {
 
 			if (limite == null) {
@@ -302,15 +310,16 @@ public class ProdutoDAO {
 					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	// -----Listar produto por código de barras----
 	public ArrayList<Produto> listarProdutosBarras(ArrayList<Produto> produtos, String barras, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
-		ResultSet rs = null;
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 				+ "setor.nome, unidadeVenda, prCusto, margem, prSugerido, prVenda, margemPraticada, bloqueadoVenda, dataCadastro "
@@ -354,6 +363,10 @@ public class ProdutoDAO {
 					"Pesquisa por código de barras.", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
@@ -362,9 +375,6 @@ public class ProdutoDAO {
 	public ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras,
 			Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
-		ResultSet rs = null;
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
 				+ "setor.nome, unidadeVenda, prCusto, prVenda, margem, prSugerido, margemPraticada,  "
@@ -409,16 +419,16 @@ public class ProdutoDAO {
 					"Erro!", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	// --Testar se o codigo de barras ja existe em outro item
 	public boolean testaBarrasInclusao(String barras) {
-
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
-		ResultSet rs = null;
 
 		if (barras.toString() != null) {
 			try {
@@ -434,8 +444,11 @@ public class ProdutoDAO {
 			} catch (Exception e) {
 				e.getMessage();
 				return false;
+			} finally {
+				DB.closeResultSet(rs);
+				DB.closeStatement(ps);
+				DB.closeConnection(conn);
 			}
-
 		} else {
 			return true;
 		}
@@ -443,9 +456,6 @@ public class ProdutoDAO {
 
 	public Boolean produto_tem_orcamento(Integer cod_prod) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
-		ResultSet rs = null;
 
 		try {
 			ps = conn.prepareStatement("SELECT * FROM produto_orcamento WHERE idProdutoOrcamento = ?");
@@ -461,17 +471,17 @@ public class ProdutoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean testaBarrasAlteracao(Integer codigo, String barras) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
-		ResultSet rs = null;
 
 		if (barras.toString() != null) {
-
 			try {
 				ps = conn.prepareStatement("SELECT barras FROM barras_produto WHERE barras = ? AND idProduto = ?");
 				ps.setString(1, barras);
@@ -493,6 +503,10 @@ public class ProdutoDAO {
 			} catch (Exception e) {
 				e.getMessage();
 				return false;
+			} finally {
+				DB.closeResultSet(rs);
+				DB.closeStatement(ps);
+				DB.closeConnection(conn);
 			}
 		} else {
 			return true;

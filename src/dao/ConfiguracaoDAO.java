@@ -11,11 +11,12 @@ import entities.configuracoes.Configuracoes;
 
 public class ConfiguracaoDAO {
 	Connection conn;
+	PreparedStatement ps;
+	ResultSet rs;
 
 	public Boolean salva_configuracao(Configuracoes configuracao) {
 
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -51,16 +52,16 @@ public class ConfiguracaoDAO {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public Configuracoes busca_configuracoes() {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs;
 		Configuracoes conf = new Configuracoes();
 		try {
 			ps = conn.prepareStatement(
@@ -83,7 +84,7 @@ public class ConfiguracaoDAO {
 				conf.setAltera_orc(rs.getString("alt_orc"));
 				conf.setGera_PDF(rs.getString("gera_pdf"));
 				conf.setVincula_barras(rs.getString("vincula_barras"));
-				
+
 				Cliente consumidor_final = new Cliente();
 				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));
 				consumidor_final.setNome(rs.getString("clientes.nome"));
@@ -92,14 +93,18 @@ public class ConfiguracaoDAO {
 				consumidor_final.setBairro(rs.getString("clientes.bairro"));
 				consumidor_final.setCidade(rs.getString("clientes.cidade"));
 				conf.setConsumidor_final(consumidor_final);
-			}else {
+			} else {
 				return null;
 			}
-			
+
 			return conf;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 }

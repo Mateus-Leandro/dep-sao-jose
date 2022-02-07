@@ -1,5 +1,6 @@
 package db;
 
+import java.awt.HeadlessException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,20 +34,24 @@ public class DB {
 			monta_arquivo_conexao(arquivo_db.getAbsolutePath());
 			return null;
 		} else {
-			if (conn == null) {
-				try {
-					Properties props = carregarDados();
-					String url = props.getProperty("dburl");
-					
-					conn = DriverManager.getConnection(url, props);
-				} catch (SQLException  e) {
-					JOptionPane.showMessageDialog(null,
-							"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
-									+ arquivo_db,
-							"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
-					System.exit(0);
-					return null;
+			try {
+				if (conn == null || conn.isClosed()) {
+					try {
+						Properties props = carregarDados();
+						String url = props.getProperty("dburl");
+
+						conn = DriverManager.getConnection(url, props);
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null,
+								"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
+										+ arquivo_db,
+								"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
+						System.exit(0);
+						return null;
+					}
 				}
+			} catch (HeadlessException | SQLException e) {
+				e.printStackTrace();
 			}
 			return conn;
 		}

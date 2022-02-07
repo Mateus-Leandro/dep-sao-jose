@@ -14,12 +14,10 @@ import entities.produto.Barras_Produto;
 public class BarrasDAO {
 
 	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
 
 	public BarrasDAO() {
-	}
-
-	public BarrasDAO(Connection conn) {
-		this.conn = conn;
 	}
 
 	// Incluir novo barras
@@ -27,9 +25,7 @@ public class BarrasDAO {
 
 		if (testa_barras_vinculado(barras)) {
 			conn = DB.getConnection();
-			PreparedStatement ps = null;
 			try {
-
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement(
 						"INSERT INTO barras_produto (idProduto, principal, barras, dt_vinculacao) VALUES (?, ?, ?, ?)");
@@ -47,17 +43,18 @@ public class BarrasDAO {
 				JOptionPane.showMessageDialog(null, "Erro ao vincular novo código de barras!",
 						"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
 				return false;
+			} finally {
+				DB.closeStatement(ps);
+				DB.closeConnection(conn);
 			}
 		} else {
 			return false;
 		}
-
 	}
 
 	// Incluir novo barras
 	public boolean remove_barras(String barras) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -70,16 +67,15 @@ public class BarrasDAO {
 			JOptionPane.showMessageDialog(null, "Erro ao remover código de barras!",
 					"Exclusão de código de barras vinculado.", JOptionPane.WARNING_MESSAGE);
 			return false;
-
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	// Verifica existencia do código de barras
 	public Boolean testa_barras_vinculado(String barras) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
 		try {
 			ps = conn.prepareStatement("SELECT * FROM barras_produto WHERE barras = ?");
 			ps.setString(1, barras);
@@ -96,16 +92,16 @@ public class BarrasDAO {
 			JOptionPane.showMessageDialog(null, "Erro ao vincular novo código de barras!",
 					"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public ArrayList<Barras_Produto> lista_barras(String cod_produto, ArrayList<Barras_Produto> lista) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
 		lista.clear();
-
 		try {
 			ps = conn.prepareStatement(
 					"SELECT principal, barras, dt_vinculacao FROM barras_produto WHERE idProduto = ?");
@@ -123,13 +119,15 @@ public class BarrasDAO {
 			JOptionPane.showMessageDialog(null, "Erro ao alimentar lista de códigos de barras!", "Erro",
 					JOptionPane.WARNING_MESSAGE);
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean tornar_principal(String cod_produto, String barras) {
-
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -153,6 +151,9 @@ public class BarrasDAO {
 			}
 
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 

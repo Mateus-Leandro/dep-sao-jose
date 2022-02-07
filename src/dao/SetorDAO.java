@@ -16,14 +16,13 @@ import entities.produto.Setor;
 
 public class SetorDAO {
 	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
 
 	public Setor inserirSetor(Setor setor) {
 
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-
 		try {
-			ResultSet rs = null;
 			ps = conn.prepareStatement("INSERT INTO setor " + "(nome) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, setor.getNome());
 
@@ -33,10 +32,11 @@ public class SetorDAO {
 			if (rs.next()) {
 				setor.setCodSetor(rs.getInt(1));
 			}
-			
+
 			return setor;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao gravar setor!" + e.getMessage(),"Erro!",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Erro ao gravar setor!" + e.getMessage(), "Erro!",
+					JOptionPane.WARNING_MESSAGE);
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
@@ -44,12 +44,15 @@ public class SetorDAO {
 			}
 			setor = null;
 			return setor;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean alterarSetor(Setor setor) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -68,12 +71,15 @@ public class SetorDAO {
 				e.getMessage();
 			}
 			return false;
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean excluirSetor(Integer codigo_setor) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -102,14 +108,15 @@ public class SetorDAO {
 				e1.printStackTrace();
 			}
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public ArrayList<Setor> listarSetores(ArrayList<Setor> lista_setores) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 
@@ -123,14 +130,17 @@ public class SetorDAO {
 			}
 		} catch (SQLException e) {
 			e.getMessage();
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 		return lista_setores;
 	}
 
+	
 	public boolean testaExisteCodigo(String string) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 			ps = conn.prepareStatement("SELECT * from setor WHERE codSetor = ?");
@@ -139,6 +149,10 @@ public class SetorDAO {
 			return rs.next();
 		} catch (Exception e) {
 			e.getMessage();
+		}finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 		return false;
 	}

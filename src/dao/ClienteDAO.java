@@ -17,6 +17,8 @@ import entities.cliente.Cliente;
 public class ClienteDAO {
 
 	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public ClienteDAO() {
@@ -24,8 +26,6 @@ public class ClienteDAO {
 
 	public Cliente inserirCliente(Cliente cliente) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -64,12 +64,15 @@ public class ClienteDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public boolean alterar_cliente(Cliente cliente) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -100,14 +103,15 @@ public class ClienteDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public boolean excluirCliente(Integer codigo) {
 		conn = DB.getConnection();
-
-		PreparedStatement ps = null;
 
 		try {
 			conn.setAutoCommit(false);
@@ -121,23 +125,22 @@ public class ClienteDAO {
 		} catch (SQLIntegrityConstraintViolationException e) {
 			e.printStackTrace();
 			return false;
-		}
-
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
 		}
 	}
 
 	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
-			if(limite == null) {
+			if (limite == null) {
 				ps = conn.prepareStatement("SELECT * FROM clientes");
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT * FROM clientes LIMIT " + limite);
 			}
 			rs = ps.executeQuery();
@@ -166,22 +169,24 @@ public class ClienteDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public ArrayList<Cliente> listarClientes_nome(ArrayList<Cliente> clientes, String nome, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 
 		try {
-			if(limite == null) {
+			if (limite == null) {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ? LIMIT " + limite);
 			}
-			
+
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
 
@@ -209,20 +214,20 @@ public class ClienteDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 
 	}
-	
-	
+
 	public ArrayList<Cliente> listarClientes_codigo(ArrayList<Cliente> clientes, String codigo, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
 		try {
-			if(limite == null) {
+			if (limite == null) {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ? LIMIT " + limite);
 			}
 			ps.setString(1, codigo);
@@ -252,19 +257,20 @@ public class ClienteDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 
 	}
 
 	public ArrayList<Cliente> listarClientes_apelido(ArrayList<Cliente> clientes, String apelido, Integer limite) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
 		try {
-			if(limite == null) {
+			if (limite == null) {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ? LIMIT " + limite);
 			}
 			ps.setString(1, apelido);
@@ -294,6 +300,10 @@ public class ClienteDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 
 	}
@@ -305,11 +315,11 @@ public class ClienteDAO {
 		lista_clientes.clear();
 
 		if (tipo_busca.toUpperCase().equals("NOME")) {
-			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%" , 50);
+			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%", 50);
 		} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
 			lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%", 50);
 		} else {
-			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%" , 50);
+			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%", 50);
 		}
 
 		for (Cliente cliente : lista_clientes) {
@@ -319,26 +329,21 @@ public class ClienteDAO {
 
 	public String validarDocumento(String documento, String id) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
 		try {
-			if(id != null) {
-				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ? and idCliente = ?");
+			if (id != null) {
+				ps = conn
+						.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ? and idCliente = ?");
 				ps.setString(1, documento);
 				ps.setString(2, id);
 				rs = ps.executeQuery();
-				
-				if(rs.next()) {
+				if (rs.next()) {
 					return null;
 				}
-				
-			}else {
+			} else {
 				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ?");
 				ps.setString(1, documento);
 				rs = ps.executeQuery();
 			}
-			
 
 			if (rs.next()) {
 				return rs.getString("nome");
@@ -356,31 +361,35 @@ public class ClienteDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
 	}
-	
-	
+
 	public Boolean cliente_com_orcamento(String id_cliente) {
 		conn = DB.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
+
 		try {
 			ps = conn.prepareStatement("SELECT idCliente FROM orcamento WHERE idCliente = ?");
 			ps.setString(1, id_cliente);
 			rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return true;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+			DB.closeConnection(conn);
 		}
-		
 	}
 	
 	
