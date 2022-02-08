@@ -54,13 +54,15 @@ public class FaturamentoDAO {
 
 		try {
 			conn.setAutoCommit(false);
+			
+			// Removendo as parcelas existentes no banco de dados.
+			ps = conn.prepareStatement("DELETE FROM parcelas WHERE idOrcamento = ?");
+			ps.setInt(1, orcamento.getId_orcamento());
+			ps.execute();
+
 			// Testa se o orçamento possui alguma parcela.
 			if (orcamento.getParcelas().size() > 0) {
 
-				// Removendo as parcelas existentes no banco de dados.
-				ps = conn.prepareStatement("DELETE FROM parcelas WHERE idOrcamento = ?");
-				ps.setInt(1, orcamento.getId_orcamento());
-				ps.execute();
 
 				// Incuindo as parcelas salvas.
 				for (Parcela parc : orcamento.getParcelas()) {

@@ -253,7 +253,7 @@ public class Faturamento extends JDialog {
 							JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
 									"Parcelas do orçamento.", JOptionPane.NO_OPTION);
 
-							if(orcamentos_do_cliente != null) {
+							if (orcamentos_do_cliente != null) {
 								orcamentos_do_cliente.alimentar_lista_orcamento();
 							}
 							dispose();
@@ -952,11 +952,11 @@ public class Faturamento extends JDialog {
 			} else {
 				calcula_totais();
 				if (parcela_selecionada != null) {
-					if (orcamento.getValor_total() < total_parcelas + valor_digitado
-							- parcela_selecionada.getValor_parcela()) {
+					if (Double.compare(orcamento.getValor_total(),
+							(total_parcelas + valor_digitado - parcela_selecionada.getValor_parcela())) < 0) {
 						return false;
 					}
-				} else if (orcamento.getValor_total() < total_parcelas + valor_digitado) {
+				} else if (Double.compare(orcamento.getValor_total(), total_parcelas + valor_digitado) < 0) {
 					return false;
 				}
 			}
@@ -1084,7 +1084,8 @@ public class Faturamento extends JDialog {
 					centavos_faltantes = Double
 							.parseDouble(nf.format(centavos_faltantes).replaceAll("\\.", "").replace(",", "."));
 
-					nova_parcela.setValor_parcela(Double.parseDouble(nf.format(valor_parcela + centavos_faltantes).replaceAll("\\.", "").replace(",", ".")));
+					nova_parcela.setValor_parcela(Double.parseDouble(
+							nf.format(valor_parcela + centavos_faltantes).replaceAll("\\.", "").replace(",", ".")));
 				}
 			}
 			orcamento.getParcelas().add(nova_parcela);
@@ -1134,7 +1135,6 @@ public class Faturamento extends JDialog {
 		}
 	}
 
-	
 	public void aviso_fecha_tela() {
 		Boolean flag = false;
 		int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
@@ -1144,11 +1144,11 @@ public class Faturamento extends JDialog {
 		flag = opcao == JOptionPane.YES_OPTION;
 		if (flag) {
 			dispose();
-		}else {
+		} else {
 			setDefaultCloseOperation(0);
 		}
 	}
-	
+
 	public void abrir_faturamento(Faturamento tela_faturamento) {
 		ArrayList<Forma_pagamento> formas_de_pagamento = alimenta_formas_pagamento();
 
