@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import db.DB;
 import entities.cliente.Cliente;
+import entities.configuracoes.Configuracoes;
 import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
@@ -19,6 +20,8 @@ public class OrcamentoDAO {
 	private PreparedStatement ps;
 	private ResultSet rs;
 	private ResultSet rs2;
+	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
+	private Configuracoes conf = conf_dao.busca_configuracoes();
 
 	public Orcamento salvar_novo_orcamento(Orcamento orcamento) {
 		conn = DB.getConnection();
@@ -82,11 +85,7 @@ public class OrcamentoDAO {
 					+ "`quantidadeProdutos` = ?, `totalMercadoriasBruto` = ?, "
 					+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, " + "`valorTotal` = ? "
 					+ "WHERE (`idOrcamento` = ?)");
-			if (orcamento_editado.getCliente() != null) {
-				ps.setInt(1, orcamento_editado.getCliente().getIdCliente());
-			} else {
-				ps.setInt(1, 1);
-			}
+			ps.setInt(1, orcamento_editado.getCliente().getIdCliente());
 			ps.setInt(2, orcamento_editado.getQuantidade_produtos());
 			ps.setDouble(3, orcamento_editado.getTotal_mercadorias_bruto());
 			ps.setDouble(4, orcamento_editado.getTotal_mercadorias_liquido());
@@ -191,7 +190,6 @@ public class OrcamentoDAO {
 				ps.setInt(1, cliente.getIdCliente());
 			} else {
 				ps.setString(1, "%");
-				cliente = new Cliente();
 			}
 
 			if (!numero_orcamento_vazio) {
@@ -202,8 +200,10 @@ public class OrcamentoDAO {
 
 			rs = ps.executeQuery();
 			while (rs.next()) {
+
 				// Buscando dados do cliente.
 				if (cliente_vazio) {
+					cliente = new Cliente();
 					cliente.setIdCliente(rs.getInt("idCliente"));
 					cliente.setBloqueado(rs.getBoolean("bloqueado"));
 					cliente.setNome(rs.getString("nome"));
