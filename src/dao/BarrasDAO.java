@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import db.DB;
 import entities.produto.Barras_Produto;
+import entities.produto.Produto;
 
 public class BarrasDAO {
 
@@ -21,9 +22,9 @@ public class BarrasDAO {
 	}
 
 	// Incluir novo barras
-	public boolean novo_barras(String cod_item, String barras, Boolean principal) {
-
-		if (testa_barras_vinculado(barras)) {
+	public Produto novo_barras(String cod_item, String barras, Boolean principal) {
+		Produto prod = testa_barras_vinculado(barras);
+		if (prod == null) {
 			conn = DB.getConnection();
 			try {
 				conn.setAutoCommit(false);
@@ -35,20 +36,17 @@ public class BarrasDAO {
 				ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
 				ps.execute();
 				conn.commit();
-				return true;
+				return null;
 			}
-
 			catch (Exception e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Erro ao vincular novo código de barras!",
-						"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
-				return false;
+				return new Produto();
 			} finally {
 				DB.closeStatement(ps);
 				DB.closeConnection(conn);
 			}
 		} else {
-			return false;
+			return prod;
 		}
 	}
 
@@ -63,9 +61,8 @@ public class BarrasDAO {
 			ps.execute();
 			conn.commit();
 			return true;
-		} catch (Exception erro) {
-			JOptionPane.showMessageDialog(null, "Erro ao remover código de barras!",
-					"Exclusão de código de barras vinculado.", JOptionPane.WARNING_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		} finally {
 			DB.closeStatement(ps);
@@ -74,24 +71,27 @@ public class BarrasDAO {
 	}
 
 	// Verifica existencia do código de barras
-	public Boolean testa_barras_vinculado(String barras) {
+	public Produto testa_barras_vinculado(String barras) {
 		conn = DB.getConnection();
+		
+		Produto produto_encontrado = new Produto();
+		
 		try {
-			ps = conn.prepareStatement("SELECT * FROM barras_produto WHERE barras = ?");
+			ps = conn.prepareStatement("SELECT barras_produto.idProduto, produto.descricao "
+					+ "FROM barras_produto "
+					+ "INNER JOIN produto on barras_produto.idProduto = produto.idProduto WHERE barras = ?");
 			ps.setString(1, barras);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				JOptionPane.showMessageDialog(null, "Código de barras ja utilizado em outro produto!",
-						"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
-				return false;
+				produto_encontrado.setIdProduto(rs.getInt("idProduto"));
+				produto_encontrado.setDescricao(rs.getString("descricao"));
+				return produto_encontrado;
 			} else {
-				return true;
+				return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Erro ao vincular novo código de barras!",
-					"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
-			return false;
+			return new Produto();
 		} finally {
 			DB.closeStatement(ps);
 			DB.closeResultSet(rs);

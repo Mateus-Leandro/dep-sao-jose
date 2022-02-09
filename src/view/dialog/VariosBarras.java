@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -37,12 +38,9 @@ import javax.swing.text.MaskFormatter;
 
 import dao.BarrasDAO;
 import entities.produto.Barras_Produto;
+import entities.produto.Produto;
 import tables.tableModels.ModeloTabelaBarras;
-import view.panels.Panel_produtos;
 import view.tools.Jtext_tools;
-
-import javax.swing.ListSelectionModel;
-import java.awt.event.KeyAdapter;
 
 public class VariosBarras extends JDialog {
 
@@ -71,7 +69,6 @@ public class VariosBarras extends JDialog {
 	private JLabel lblExcluir;
 	private JLabel lblEsc;
 	private JLabel lblCancelar;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	BarrasDAO barras_dao = new BarrasDAO();
 	ArrayList<Barras_Produto> lista = new ArrayList<Barras_Produto>();
 	ModeloTabelaBarras modelo_tabela = new ModeloTabelaBarras(lista);
@@ -376,7 +373,7 @@ public class VariosBarras extends JDialog {
 					btnTornaPrincipal.setVisible(true);
 				}
 			}
-		}else {
+		} else {
 			dispose();
 		}
 
@@ -421,8 +418,10 @@ public class VariosBarras extends JDialog {
 
 			Boolean principal = lista.size() == 0;
 
-			if (barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal)) {
-				JOptionPane.showMessageDialog(null, "Código vinculado corretamente.", "Vinculação de código de barras",
+			Produto produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
+
+			if (produto_encontrado == null) {
+				JOptionPane.showMessageDialog(btnSalvar, "Código vinculado corretamente.", "Vinculação de código de barras",
 						JOptionPane.NO_OPTION);
 				modelo_tabela.addBarras(
 						new Barras_Produto(principal, barras, new java.sql.Date(System.currentTimeMillis())));
@@ -438,8 +437,13 @@ public class VariosBarras extends JDialog {
 				if (principal) {
 					txtCodigoBarrasPrincipal.setText(barras);
 				}
+			} else {
+				JOptionPane.showMessageDialog(btnSalvar,
+						"Código de barras ja utilizado no produto abaixo:\nCódigo: " + produto_encontrado.getIdProduto()
+								+ "\nDescrição: " + produto_encontrado.getDescricao(),
+						"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
+				fTxtCodigoVinculado.setText(null);
 			}
-
 		}
 	}
 
