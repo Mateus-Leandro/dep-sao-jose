@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import db.DB;
 import entities.cliente.Cliente;
-import entities.configuracoes.Configuracoes;
 import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
 import entities.orcamentos.Produto_Orcamento;
@@ -20,8 +19,6 @@ public class OrcamentoDAO {
 	private PreparedStatement ps;
 	private ResultSet rs;
 	private ResultSet rs2;
-	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
-	private Configuracoes conf = conf_dao.busca_configuracoes();
 
 	public Orcamento salvar_novo_orcamento(Orcamento orcamento) {
 		conn = DB.getConnection();

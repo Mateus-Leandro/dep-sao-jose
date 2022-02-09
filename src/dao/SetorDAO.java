@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -35,15 +34,12 @@ public class SetorDAO {
 
 			return setor;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao gravar setor!" + e.getMessage(), "Erro!",
-					JOptionPane.WARNING_MESSAGE);
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e.getMessage();
 			}
-			setor = null;
-			return setor;
+			return null;
 		} finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(ps);
@@ -101,12 +97,12 @@ public class SetorDAO {
 			}
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao excluir setor!", "Erro!", JOptionPane.WARNING_MESSAGE);
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			e.printStackTrace();
 			return false;
 		} finally {
 			DB.closeStatement(ps);

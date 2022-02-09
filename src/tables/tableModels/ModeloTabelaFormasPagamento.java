@@ -6,7 +6,6 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import entities.financeiro.Forma_pagamento;
-import entities.produto.Setor;
 
 public class ModeloTabelaFormasPagamento extends AbstractTableModel {
 

@@ -7,6 +7,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -29,8 +31,6 @@ import dao.FormaPagamentoDAO;
 import entities.financeiro.Forma_pagamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaFormasPagamento;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class CadastroFormaPagamento extends JDialog {
 

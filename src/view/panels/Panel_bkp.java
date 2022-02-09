@@ -1,11 +1,10 @@
 package view.panels;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
@@ -17,15 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import bkp.BkpBanco;
 import icons.Icones;
-import java.awt.Color;
-import javax.swing.UIManager;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextPane;
-import java.awt.SystemColor;
 
 public class Panel_bkp extends JPanel {
 	private JLabel lblBackupSistema;
@@ -39,7 +35,6 @@ public class Panel_bkp extends JPanel {
 	private JLabel lblTempoGasto;
 	private JTextField txtTempoGasto;
 	private Icones icones = new Icones();
-	private JFileChooser chooser;
 	private JLabel lblNovoBackup;
 	private JSeparator separador_infoBasicas_1;
 	private JButton btnRealizarBackup;
@@ -220,7 +215,7 @@ public class Panel_bkp extends JPanel {
 		panelValorTotal.setBounds(10, 527, 702, 125);
 		add(panelValorTotal);
 
-		lblAtencao = new JLabel("Atenção");
+		lblAtencao = new JLabel("Aten\u00E7\u00E3o");
 		lblAtencao.setForeground(Color.RED);
 		lblAtencao.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblAtencao.setBounds(10, 11, 91, 28);
@@ -231,7 +226,7 @@ public class Panel_bkp extends JPanel {
 		txtpnARealizaoDo.setEditable(false);
 		txtpnARealizaoDo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnARealizaoDo.setText(
-				"A realização do backup pode demorar um longo tempo caso houver um grande volume de dados. Após iniciar o backup não será possível cancelar a operação.");
+				"A realiza\u00E7\u00E3o do backup pode demorar um longo tempo caso houver um grande volume de dados. Ap\u00F3s iniciar o backup n\u00E3o ser\u00E1 poss\u00EDvel cancelar a opera\u00E7\u00E3o.");
 		txtpnARealizaoDo.setBounds(10, 56, 685, 58);
 		panelValorTotal.add(txtpnARealizaoDo);
 

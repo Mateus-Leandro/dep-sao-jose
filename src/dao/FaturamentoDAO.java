@@ -41,12 +41,11 @@ public class FaturamentoDAO {
 						new Forma_pagamento(rs.getInt("idFormaPagamento"), rs.getString("descricao")));
 				orcamento.getParcelas().add(parcela);
 			}
-
 			return orcamento.getParcelas();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}
+		} 
 	}
 
 	public Boolean salvar_parcelas(Orcamento orcamento) {
@@ -62,7 +61,6 @@ public class FaturamentoDAO {
 
 			// Testa se o orçamento possui alguma parcela.
 			if (orcamento.getParcelas().size() > 0) {
-
 
 				// Incuindo as parcelas salvas.
 				for (Parcela parc : orcamento.getParcelas()) {

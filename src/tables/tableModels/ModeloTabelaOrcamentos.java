@@ -13,8 +13,6 @@ import entities.orcamentos.Orcamento;
 public class ModeloTabelaOrcamentos extends AbstractTableModel {
 
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
-	private NumberFormat nf2 = new DecimalFormat("0.00");
-
 	private String colunas[] = { "Nº Orc.", "Cliente", "Qtd. Itens", "Total Merc", "Desconto", "Frete", "Valor Total",
 			"Status","Qtd.Par.", "Dt. Inclusão" };
 	private ArrayList<Orcamento> orcamentos;

@@ -268,7 +268,7 @@ public class Orcamentos_do_cliente extends JDialog {
 
 		cbxTipoPesquisaOrcamento = new JComboBox<String>();
 		cbxTipoPesquisaOrcamento.setBounds(97, 127, 97, 22);
-		cbxTipoPesquisaOrcamento.setModel(new DefaultComboBoxModel(new String[] { "N\u00FAmero" }));
+		cbxTipoPesquisaOrcamento.setModel(new DefaultComboBoxModel<String>(new String[] { "N\u00FAmero" }));
 		cbxTipoPesquisaOrcamento.setSelectedIndex(0);
 		cbxTipoPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		contentPane.add(cbxTipoPesquisaOrcamento);

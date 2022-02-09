@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.mysql.cj.xdevapi.Result;
-
 import db.DB;
 import entities.produto.Produto;
 import entities.produto.Setor;
@@ -63,12 +61,12 @@ public class ProdutoDAO {
 			conn.commit();
 
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao inserir novo produto!" + e.getMessage());
 			try {
 				conn.rollback();
 			} catch (SQLException erroRollBack) {
 				erroRollBack.printStackTrace();
 			}
+			e.printStackTrace();
 			return null;
 		} finally {
 			DB.closeResultSet(rs);
@@ -248,8 +246,6 @@ public class ProdutoDAO {
 			return produtos;
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produto por nome!", "Pesquisa produto por nome.",
-					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -306,8 +302,6 @@ public class ProdutoDAO {
 			return produtos;
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produtos por código!", "Pesquisa por código interno",
-					JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -359,8 +353,6 @@ public class ProdutoDAO {
 
 			return produtos;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao pesquisar produto por código de barras!",
-					"Pesquisa por código de barras.", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -415,8 +407,6 @@ public class ProdutoDAO {
 			return produtos;
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao pesquisar código de barras vinculado!" + e.getMessage(),
-					"Erro!", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return null;
 		} finally {

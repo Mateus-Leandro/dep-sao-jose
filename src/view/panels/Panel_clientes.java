@@ -107,7 +107,6 @@ public class Panel_clientes extends JPanel {
 	private Jtext_tools text_tools = new Jtext_tools();
 	private JLabel lblObg_nome;
 	private JLabel lblObg_celular;
-	private Boolean documento_valido;
 	private ClienteDAO cliente_dao = new ClienteDAO();
 	private Cliente cliente = new Cliente();
 	private Render_tabela_clientes render = new Render_tabela_clientes();
