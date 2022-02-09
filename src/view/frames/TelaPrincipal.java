@@ -3,6 +3,7 @@ package view.frames;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -11,10 +12,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import bkp.BkpBanco;
 import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
+import view.panels.Panel_bkp;
 import view.panels.Panel_clientes;
 import view.panels.Panel_configuracoes;
 import view.panels.Panel_orcamento;
@@ -32,6 +35,9 @@ public class TelaPrincipal extends JFrame {
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
+	private Panel_bkp panel_bkp;
+	private BkpBanco bkp_banco = new BkpBanco();
+	private Properties props = new Properties();
 
 	/**
 	 * Launch the application.
@@ -54,13 +60,6 @@ public class TelaPrincipal extends JFrame {
 	 */
 	public TelaPrincipal() {
 
-		if (configuracoes_do_sistema != null) {
-			if (configuracoes_do_sistema.getNome_empresa() != null) {
-				setTitle(configuracoes_do_sistema.getNome_empresa());
-			}
-		}else {
-			setTitle("NOME DA EMPRESA");
-		}
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 759, 734);
@@ -84,10 +83,23 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.addTab("Orçamentos", orcamentos);
 		tabbedPane.addTab("Configurações", configuracoes);
 
-		if (configuracoes_do_sistema == null) {
+		// Testa se a máquina que o sistema está executando faz backup.
+		Boolean faz_bkp = bkp_banco.faz_bkp(props);
+		if (faz_bkp) {
+			panel_bkp = new Panel_bkp();
+			tabbedPane.addTab("Backup", panel_bkp);
+		}
+
+		// Verifica se existe configuração e se existe nome para a empresa.
+		if (configuracoes_do_sistema != null) {
+			if (configuracoes_do_sistema.getNome_empresa() != null) {
+				setTitle(configuracoes_do_sistema.getNome_empresa());
+			}
+		} else {
+			setTitle("NOME DA EMPRESA");
 			ClienteDAO cliente_dao = new ClienteDAO();
 			ArrayList<Cliente> clientes_cadastrados = new ArrayList<Cliente>();
-			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, 1);
+			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, null, null,  1);
 			// Testa se existe algum cliente cadastrado. Se não existir é cadastrado um
 			// consumidor final.
 			if (clientes_cadastrados.size() < 1) {
