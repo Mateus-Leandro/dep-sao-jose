@@ -134,15 +134,49 @@ public class ClienteDAO {
 		}
 	}
 
-	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes, Integer limite) {
+	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes, String tipo_busca, String valor_buscado,
+			Integer limite) {
 		conn = DB.getConnection();
 
 		try {
-			if (limite == null) {
-				ps = conn.prepareStatement("SELECT * FROM clientes");
+			if (tipo_busca == null) {
+				if (limite == null) {
+					ps = conn.prepareStatement("SELECT * FROM clientes");
+				} else {
+					ps = conn.prepareStatement("SELECT * FROM clientes LIMIT " + limite);
+				}
 			} else {
-				ps = conn.prepareStatement("SELECT * FROM clientes LIMIT " + limite);
+				switch (tipo_busca.toUpperCase()) {
+				case "NOME":
+					if (limite == null) {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
+					} else {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ? LIMIT " + limite);
+					}
+					break;
+				case "APELIDO":
+					if (limite == null) {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
+					} else {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ? LIMIT " + limite);
+					}
+					break;
+				case "CÓDIGO":
+					if (limite == null) {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
+					} else {
+						ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ? LIMIT " + limite);
+					}
+					break;
+				}
+				
+				if(valor_buscado != null) {
+					ps.setString(1, valor_buscado);
+				}else {
+					ps.setString(1, "%");
+				}
 			}
+
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -163,137 +197,6 @@ public class ClienteDAO {
 				cliente.setCelular(rs.getString("celular"));
 				cliente.setTelefone(rs.getString("telefone"));
 				cliente.setDataCadastro(rs.getDate("dataCadastro"));
-				clientes.add(cliente);
-			}
-			return clientes;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			DB.closeStatement(ps);
-			DB.closeResultSet(rs);
-			DB.closeConnection(conn);
-		}
-
-	}
-
-	public ArrayList<Cliente> listarClientes_nome(ArrayList<Cliente> clientes, String nome, Integer limite) {
-		conn = DB.getConnection();
-
-		try {
-			if (limite == null) {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
-			} else {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ? LIMIT " + limite);
-			}
-
-			ps.setString(1, nome);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				Cliente cliente = new Cliente();
-				cliente.setIdCliente(rs.getInt("idCliente"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setApelido(rs.getString("apelido"));
-				cliente.setCpf_cnpj(rs.getString("documento"));
-				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
-				cliente.setCep(rs.getString("cep"));
-				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEndereco(rs.getString("endereco"));
-				cliente.setReferencia(rs.getString("referencia"));
-				cliente.setNumero(rs.getString("numero"));
-				cliente.setBairro(rs.getString("bairro"));
-				cliente.setEmail(rs.getString("email"));
-				cliente.setCelular(rs.getString("celular"));
-				cliente.setTelefone(rs.getString("telefone"));
-				cliente.setDataCadastro(rs.getDate("dataCadastro"));
-				cliente.setBloqueado(rs.getBoolean("bloqueado"));
-				clientes.add(cliente);
-			}
-			return clientes;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			DB.closeStatement(ps);
-			DB.closeResultSet(rs);
-			DB.closeConnection(conn);
-		}
-
-	}
-
-	public ArrayList<Cliente> listarClientes_codigo(ArrayList<Cliente> clientes, String codigo, Integer limite) {
-		conn = DB.getConnection();
-		try {
-			if (limite == null) {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
-			} else {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ? LIMIT " + limite);
-			}
-			ps.setString(1, codigo);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				Cliente cliente = new Cliente();
-				cliente.setIdCliente(rs.getInt("idCliente"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setApelido(rs.getString("apelido"));
-				cliente.setCpf_cnpj(rs.getString("documento"));
-				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
-				cliente.setCep(rs.getString("cep"));
-				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEndereco(rs.getString("endereco"));
-				cliente.setReferencia(rs.getString("referencia"));
-				cliente.setNumero(rs.getString("numero"));
-				cliente.setBairro(rs.getString("bairro"));
-				cliente.setEmail(rs.getString("email"));
-				cliente.setCelular(rs.getString("celular"));
-				cliente.setTelefone(rs.getString("telefone"));
-				cliente.setDataCadastro(rs.getDate("dataCadastro"));
-				cliente.setBloqueado(rs.getBoolean("bloqueado"));
-				clientes.add(cliente);
-			}
-			return clientes;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			DB.closeStatement(ps);
-			DB.closeResultSet(rs);
-			DB.closeConnection(conn);
-		}
-
-	}
-
-	public ArrayList<Cliente> listarClientes_apelido(ArrayList<Cliente> clientes, String apelido, Integer limite) {
-		conn = DB.getConnection();
-		try {
-			if (limite == null) {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
-			} else {
-				ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ? LIMIT " + limite);
-			}
-			ps.setString(1, apelido);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				Cliente cliente = new Cliente();
-				cliente.setIdCliente(rs.getInt("idCliente"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setApelido(rs.getString("apelido"));
-				cliente.setCpf_cnpj(rs.getString("documento"));
-				cliente.setInscricao_estadual(rs.getString("inscricaoEstadual"));
-				cliente.setCep(rs.getString("cep"));
-				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEndereco(rs.getString("endereco"));
-				cliente.setReferencia(rs.getString("referencia"));
-				cliente.setNumero(rs.getString("numero"));
-				cliente.setBairro(rs.getString("bairro"));
-				cliente.setEmail(rs.getString("email"));
-				cliente.setCelular(rs.getString("celular"));
-				cliente.setTelefone(rs.getString("telefone"));
-				cliente.setDataCadastro(rs.getDate("dataCadastro"));
-				cliente.setBloqueado(rs.getBoolean("bloqueado"));
 				clientes.add(cliente);
 			}
 			return clientes;
@@ -314,13 +217,7 @@ public class ClienteDAO {
 		list_model.clear();
 		lista_clientes.clear();
 
-		if (tipo_busca.toUpperCase().equals("NOME")) {
-			lista_clientes = listarClientes_nome(lista_clientes, texto_buscado + "%", 50);
-		} else if (tipo_busca.toUpperCase().equals("APELIDO")) {
-			lista_clientes = listarClientes_apelido(lista_clientes, texto_buscado + "%", 50);
-		} else {
-			lista_clientes = listarClientes_codigo(lista_clientes, texto_buscado + "%", 50);
-		}
+		lista_clientes = listarClientes(lista_clientes, tipo_busca, texto_buscado + "%", 50);
 
 		for (Cliente cliente : lista_clientes) {
 			list_model.addElement(cliente);
@@ -391,6 +288,5 @@ public class ClienteDAO {
 			DB.closeConnection(conn);
 		}
 	}
-	
-	
+
 }

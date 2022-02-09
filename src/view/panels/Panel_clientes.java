@@ -1267,27 +1267,13 @@ public class Panel_clientes extends JPanel {
 		String pesquisado = null;
 
 		if (fTxtPesquisa.getText().trim().isEmpty()) {
-			clientes = cliente_dao.listarClientes(clientes, 50);
+			clientes = cliente_dao.listarClientes(clientes, null, null, 50);
 			return clientes;
 		} else {
-
 			pesquisado = fTxtPesquisa.getText().trim() + "%";
-
-			switch (cbxTipoPesquisa.getSelectedItem().toString()) {
-
-			case "Código":
-				clientes = cliente_dao.listarClientes_codigo(clientes, pesquisado, 50);
-				break;
-			case "Nome":
-				clientes = cliente_dao.listarClientes_nome(clientes, pesquisado, 50);
-				break;
-			case "Apelido":
-				clientes = cliente_dao.listarClientes_apelido(clientes, pesquisado, 50);
-				break;
-			}
-
+			clientes = cliente_dao.listarClientes(clientes, cbxTipoPesquisa.getSelectedItem().toString(), pesquisado,
+					50);
 		}
-
 		return clientes;
 
 	}

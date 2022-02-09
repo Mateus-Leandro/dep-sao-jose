@@ -731,7 +731,6 @@ public class Orcamentos_do_cliente extends JDialog {
 		modelo_tabela_orcamentos.fireTableDataChanged();
 
 		mostra_totais_por_status(orcamentos_cliente);
-		
 	}
 
 
