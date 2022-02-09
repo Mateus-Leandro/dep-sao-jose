@@ -187,7 +187,6 @@ public class Panel_orcamento extends JPanel {
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("0.00");
 	private NumberFormat nf3 = new DecimalFormat("R$ ,##0.00");
-	private NumberFormat nf4 = new DecimalFormat(",##0.000");
 	private JFormattedTextField fTxtApelido;
 	private Cliente cliente_selecionado = null;
 	private Integer quantidade_de_produtos = 0;
@@ -211,6 +210,7 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblPorcentagemDesconto_1;
 	private JFormattedTextField fTxtPorcentDescFinal;
 	private JLabel lblValorDescontoFinal;
+	private Boolean editando_produto = false;
 
 	/**
 	 * Create the panel.
@@ -384,16 +384,16 @@ public class Panel_orcamento extends JPanel {
 		fTxtPorcentagemDesconto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPorcentDesconto) {
-				calcula_valor_desconto();
-				calcula_total_item();
-
 				if (digitaPorcentDesconto.getKeyCode() == digitaPorcentDesconto.VK_ENTER) {
 					fTxtValorDesconto.requestFocus();
+				} else {
+					calcula_valor_desconto(digitaPorcentDesconto);
+					calcula_total_item();
 				}
 			}
 		});
 		fTxtPorcentagemDesconto.setEnabled(false);
-		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(6, 3));
+		fTxtPorcentagemDesconto.setDocument(new FormataNumeral(5, 2));
 		fTxtPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPorcentagemDesconto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPorcentagemDesconto.setBounds(145, 5, 58, 20);
@@ -401,6 +401,7 @@ public class Panel_orcamento extends JPanel {
 
 		fTxtValorDesconto = new JFormattedTextField();
 		fTxtValorDesconto.addFocusListener(new FocusAdapter() {
+
 			@Override
 			public void focusGained(FocusEvent ganhoFocoValorDesconto) {
 				text_tools.move_cursor_inicio(fTxtValorDesconto);
@@ -410,15 +411,15 @@ public class Panel_orcamento extends JPanel {
 		fTxtValorDesconto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaDesconto) {
-				calcula_total_item();
-				calcula_porcentagem_desconto();
-
 				if (digitaDesconto.getKeyCode() == digitaDesconto.VK_ENTER) {
 					if (btnIncluir.isVisible()) {
 						incluir_produto();
 					} else {
 						salvar_edicao();
 					}
+				} else {
+					calcula_total_item();
+					calcula_porcentagem_desconto();
 				}
 			}
 		});
@@ -548,11 +549,11 @@ public class Panel_orcamento extends JPanel {
 		fTxtPrecoUnitario.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoUnitario) {
-				calcula_total_item();
-				calcula_valor_desconto();
-				
 				if (digitaPrecoUnitario.getKeyCode() == digitaPrecoUnitario.VK_ENTER) {
 					fTxtPorcentagemDesconto.requestFocus();
+				} else {
+					calcula_total_item();
+					calcula_valor_desconto(digitaPrecoUnitario);
 				}
 			}
 		});
@@ -610,7 +611,8 @@ public class Panel_orcamento extends JPanel {
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 						calcula_total_mercadorias();
 
-						// Desativa os campos de frete, valor de desconto final e porcentagem de desconto final, caso não exista produtos no orçamento.
+						// Desativa os campos de frete, valor de desconto final e porcentagem de
+						// desconto final, caso não exista produtos no orçamento.
 						if (quantidade_de_produtos < 1) {
 							fTxtFrete.setEditable(false);
 							fTxtValorDescFinal.setEditable(false);
@@ -893,11 +895,16 @@ public class Panel_orcamento extends JPanel {
 		fTxtPorcentDescFinal.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPorcentDescFinal) {
-				calcula_valor_desconto_final();
-				calcula_total_orcamento();
+
+				if (digitaPorcentDescFinal.getKeyCode() == digitaPorcentDescFinal.VK_ENTER) {
+					fTxtValorDescFinal.requestFocus();
+				} else {
+					calcula_valor_desconto_final(digitaPorcentDescFinal);
+					calcula_total_orcamento();
+				}
 			}
 		});
-		fTxtPorcentDescFinal.setDocument(new FormataNumeral(6, 3));
+		fTxtPorcentDescFinal.setDocument(new FormataNumeral(5, 2));
 		fTxtPorcentDescFinal.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtPorcentDescFinal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPorcentDescFinal.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -1445,7 +1452,7 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void incluir_produto() {
-		if (produto_selecionado != null) {
+		if (produto_selecionado != null || editando_produto) {
 
 			produto_incluso = new Produto_Orcamento();
 
@@ -1458,7 +1465,8 @@ public class Panel_orcamento extends JPanel {
 				quantidade_de_produtos = modelo_tabela.getRowCount();
 				fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 
-				// Ativa os campos de frete, desconto e porcentagem de desconto, caso não estejam ativos.
+				// Ativa os campos de frete, desconto e porcentagem de desconto, caso não
+				// estejam ativos.
 				if (!fTxtFrete.isEditable()) {
 					fTxtFrete.setEditable(true);
 					fTxtValorDescFinal.setEditable(true);
@@ -1574,6 +1582,7 @@ public class Panel_orcamento extends JPanel {
 				}
 
 				if (orcamento.getId_orcamento() != null) {
+					
 					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 					JOptionPane.showMessageDialog(lblQuantidade,
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
@@ -1628,6 +1637,9 @@ public class Panel_orcamento extends JPanel {
 						Gera_pdf gera_pdf = new Gera_pdf();
 						gera_pdf.monta_pdf_orcamento(orcamento);
 					}
+					
+					
+					
 				}
 
 				limpar_campos();
@@ -1670,7 +1682,7 @@ public class Panel_orcamento extends JPanel {
 			e1.printStackTrace();
 		}
 
-		if (quantidade > 0 && preco_unitario > 0 && valor_desconto <= preco_unitario) {
+		if (quantidade > 0 && preco_unitario > 0 && valor_desconto < preco_unitario) {
 
 			String codigo = null;
 			String nome_produto = null;
@@ -1684,7 +1696,7 @@ public class Panel_orcamento extends JPanel {
 				nome_produto = fTxtNomeProduto.getText().trim();
 
 				if (!fTxtCodigoBarra.getText().trim().isEmpty()) {
-					codigo_barras = fTxtCodigoBarra.getText();
+					codigo_barras = fTxtCodigoBarra.getText().trim();
 				}
 			} else {
 				codigo = produto_selecionado.getIdProduto().toString();
@@ -1726,11 +1738,11 @@ public class Panel_orcamento extends JPanel {
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 			}
 
-			if (valor_desconto > preco_unitario) {
-				JOptionPane.showMessageDialog(lblValorDesconto, "Desconto maior que preço unitário.",
+			if (valor_desconto >= preco_unitario) {
+				JOptionPane.showMessageDialog(lblValorDesconto, "Valor de desconto maior ou igual ao preço unitário.",
 						"Valor de desconto inválido!", JOptionPane.WARNING_MESSAGE);
 				fTxtValorEmAberto.setBorder(new LineBorder(Color.RED));
-				fTxtValorDesconto.requestFocus();
+				fTxtPorcentagemDesconto.requestFocus();
 			} else {
 				fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
 			}
@@ -1823,8 +1835,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtFrete.setEditable(false);
 		fTxtPorcentDescFinal.setEditable(false);
 		fTxtValorDescFinal.setEditable(false);
-		
-		
+
 		quantidade_de_produtos = 0;
 		total_mercadorias_bruto = 0.00;
 		total_mercadorias_liquido = 0.00;
@@ -1868,20 +1879,24 @@ public class Panel_orcamento extends JPanel {
 		return false;
 	}
 
-	public void calcula_valor_desconto_final() {
-		Double porcent_desc_final = 0.00;
-		Double desc_final = 0.00;
-		try {
-			if (!fTxtPorcentDescFinal.getText().trim().isEmpty()) {
-				porcent_desc_final = nf4.parse(fTxtPorcentDescFinal.getText()).doubleValue();
+	public void calcula_valor_desconto_final(KeyEvent digitado) {
+
+		if (digitado == null || teclou_digito(digitado.getKeyChar())
+				|| digitado.getKeyCode() == digitado.VK_BACK_SPACE) {
+			Double porcent_desc_final = 0.00;
+			Double desc_final = 0.00;
+			try {
+				if (!fTxtPorcentDescFinal.getText().trim().isEmpty()) {
+					porcent_desc_final = nf.parse(fTxtPorcentDescFinal.getText()).doubleValue();
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-		} catch (ParseException e) {
-			e.printStackTrace();
+
+			desc_final = (total_mercadorias_liquido + valor_frete) * (porcent_desc_final / 100);
+
+			fTxtValorDescFinal.setText(nf.format(desc_final));
 		}
-
-		desc_final = (total_mercadorias_liquido + valor_frete) * (porcent_desc_final / 100);
-
-		fTxtValorDescFinal.setText(nf.format(desc_final));
 	}
 
 	public void calcula_porcent_desc_final() {
@@ -1897,102 +1912,101 @@ public class Panel_orcamento extends JPanel {
 		porcent_desc_final = (valor_desconto * 100) / (total_mercadorias_liquido + valor_frete);
 
 		if (porcent_desc_final > 99.99) {
-			fTxtPorcentDescFinal.setText(nf4.format(0.00));
+			fTxtPorcentDescFinal.setText(nf.format(0.00));
 			fTxtValorDescFinal.setText(nf.format(0.00));
 			JOptionPane.showMessageDialog(lblQuantidade,
 					"O valor de desconto informado é igual ou maior ao total do orçamento.",
 					"Valor de desconto inválido.", JOptionPane.WARNING_MESSAGE);
 		} else {
-			fTxtPorcentDescFinal.setText(nf4.format(porcent_desc_final));
+			fTxtPorcentDescFinal.setText(nf.format(porcent_desc_final));
 		}
 
 	}
 
 	public void calcula_porcentagem_desconto() {
 
-		Double preco_unitario = 0.00;
-		Double valor_desconto = 0.00;
-		Double porcentagem_desconto = 0.00;
+		if (produto_selecionado != null || editando_produto) {
 
-		try {
-			if (!fTxtPrecoUnitario.getText().isEmpty()) {
-				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			Double preco_unitario = 0.00;
+			Double valor_desconto = 0.00;
+			Double porcentagem_desconto = 0.00;
+
+			try {
+				if (!fTxtPrecoUnitario.getText().isEmpty()) {
+					preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+				}
+				if (!fTxtValorDesconto.getText().isEmpty()) {
+					valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			if (!fTxtValorDesconto.getText().isEmpty()) {
-				valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
+
+			porcentagem_desconto = (valor_desconto * 100.00) / preco_unitario;
+
+			if (porcentagem_desconto <= 99.99) {
+				fTxtPorcentagemDesconto.setText(nf.format(porcentagem_desconto));
+				fTxtPorcentagemDesconto.setBorder(new LineBorder(Color.lightGray));
+			} else {
+				fTxtPorcentagemDesconto.setText(nf.format(99.99));
+				fTxtPorcentagemDesconto.setBorder(new LineBorder(Color.red));
 			}
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
-
-		porcentagem_desconto = (valor_desconto * 100.00) / preco_unitario;
-
-		if (porcentagem_desconto <= 100.00) {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
-		} else {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
-		}
-		fTxtPorcentagemDesconto.setText(nf4.format(porcentagem_desconto));
-
 	}
 
-	public void calcula_valor_desconto() {
+	public void calcula_valor_desconto(KeyEvent digitado) {
 
-		Double preco_unitario = 0.00;
-		Double valor_desconto = 0.00;
-		Double porcentagem_desconto = 0.00;
+		if (produto_selecionado != null || editando_produto) {
 
-		try {
-			if (!fTxtPrecoUnitario.getText().isEmpty()) {
-				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			if (teclou_digito(digitado.getKeyChar()) || digitado.getKeyCode() == digitado.VK_BACK_SPACE) {
+
+				Double preco_unitario = 0.00;
+				Double valor_desconto = 0.00;
+				Double porcentagem_desconto = 0.00;
+
+				try {
+					if (!fTxtPrecoUnitario.getText().isEmpty()) {
+						preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+					}
+					if (!fTxtPorcentagemDesconto.getText().isEmpty()) {
+						porcentagem_desconto = nf.parse(fTxtPorcentagemDesconto.getText()).doubleValue();
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+				valor_desconto = preco_unitario * (porcentagem_desconto / 100.00);
+				fTxtValorDesconto.setText(nf.format(valor_desconto));
 			}
-			if (!fTxtPorcentagemDesconto.getText().isEmpty()) {
-				porcentagem_desconto = nf4.parse(fTxtPorcentagemDesconto.getText()).doubleValue();
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
-
-		valor_desconto = preco_unitario * (porcentagem_desconto / 100.00);
-
-		if (porcentagem_desconto < 99.99) {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
-		} else {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
-		}
-		fTxtValorDesconto.setText(nf.format(valor_desconto));
 	}
 
 	public void calcula_total_item() {
+		if (produto_selecionado != null || editando_produto) {
 
-		Double preco_unitario = 0.00;
-		Double quantidade = 0.00;
-		Double valor_desconto = 0.00;
+			Double preco_unitario = 0.00;
+			Double quantidade = 0.00;
+			Double valor_desconto = 0.00;
 
-		try {
-			if (!fTxtPrecoUnitario.getText().isEmpty()) {
-				preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+			try {
+				if (!fTxtPrecoUnitario.getText().isEmpty()) {
+					preco_unitario = nf.parse(fTxtPrecoUnitario.getText()).doubleValue();
+				}
+
+				if (!fTxtQuantidade.getText().isEmpty()) {
+					quantidade = nf.parse(fTxtQuantidade.getText()).doubleValue();
+				}
+
+				if (!fTxtValorDesconto.getText().isEmpty()) {
+					valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
+				}
+
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
+			Double total_produto = ((preco_unitario - valor_desconto) * quantidade);
 
-			if (!fTxtQuantidade.getText().isEmpty()) {
-				quantidade = nf.parse(fTxtQuantidade.getText()).doubleValue();
-			}
-
-			if (!fTxtValorDesconto.getText().isEmpty()) {
-				valor_desconto = nf.parse(fTxtValorDesconto.getText()).doubleValue();
-			}
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		Double total_produto = ((preco_unitario - valor_desconto) * quantidade);
-
-		fTxtTotalItem.setText(nf.format(total_produto));
-
-		if (valor_desconto <= preco_unitario) {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.lightGray));
-		} else {
-			fTxtValorDesconto.setBorder(new LineBorder(Color.red));
+			fTxtTotalItem.setText(nf.format(total_produto));
 		}
 	}
 
@@ -2012,7 +2026,7 @@ public class Panel_orcamento extends JPanel {
 
 		// Considerando desconto dos itens
 		fTxtTotalMercadoriasLiquido.setText(nf.format(total_mercadorias_liquido));
-		calcula_valor_desconto_final();
+		calcula_valor_desconto_final(null);
 		calcula_porcent_desc_final();
 		calcula_total_orcamento();
 	}
@@ -2120,6 +2134,9 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void editar_produto() {
+
+		editando_produto = true;
+
 		Double quantidade = Double.parseDouble(tabelaProdutosInclusos
 				.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString().replace(".", "").replace(",", "."));
 		String preco_unit = tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 5).toString()
@@ -2141,13 +2158,15 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoProduto
 				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0).toString());
 		fTxtNomeProduto.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1));
-		fTxtCodigoBarra.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2));
+
+		fTxtCodigoBarra.setText((String)tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 2));
+
 		cbxFatorVenda.getModel().setSelectedItem(
 				(String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 3));
 		fTxtQuantidade
 				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString());
 		fTxtPrecoUnitario.setText(nf.format(preco_unit_form));
-		fTxtPorcentagemDesconto.setText(nf4.format((desconto_form * 100.00) / preco_unit_form));
+		fTxtPorcentagemDesconto.setText(nf.format((desconto_form * 100.00) / preco_unit_form));
 		fTxtValorDesconto.setText(nf.format(desconto_form));
 		fTxtTotalItem.setText(nf.format(total_form));
 
@@ -2184,6 +2203,8 @@ public class Panel_orcamento extends JPanel {
 			calcula_total_mercadorias();
 			fTxtNomeProduto.requestFocus();
 			btnLimpaDadosProduto.setEnabled(true);
+
+			editando_produto = false;
 		}
 	}
 
@@ -2205,6 +2226,8 @@ public class Panel_orcamento extends JPanel {
 
 		fTxtNomeProduto.setEditable(true);
 		fTxtCodigoProduto.setEditable(true);
+
+		editando_produto = false;
 	}
 
 	public Boolean excluir_produto(String codigo) {
@@ -2252,8 +2275,9 @@ public class Panel_orcamento extends JPanel {
 		if (orcamento_informado.getParcelas().size() > 0) {
 			parcelas = orcamento_informado.getParcelas();
 		}
-		
-		//Ativando campos de frete, porcentagem de desconto final e valor de desconto final.
+
+		// Ativando campos de frete, porcentagem de desconto final e valor de desconto
+		// final.
 		fTxtFrete.setEditable(true);
 		fTxtPorcentDescFinal.setEditable(true);
 		fTxtValorDescFinal.setEditable(true);
@@ -2319,9 +2343,17 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasLiquido.setText(nf.format(orcamento_selecionado.getTotal_mercadorias_liquido()));
 		fTxtFrete.setText(nf.format(orcamento_selecionado.getFrete()));
 		fTxtValorDescFinal.setText(nf.format(orcamento_selecionado.getDesconto_final()));
-		fTxtPorcentDescFinal.setText(nf4.format(porcent_desc_final));
+		fTxtPorcentDescFinal.setText(nf.format(porcent_desc_final));
 		fTxtTotalOrcamento.setText(nf.format(orcamento_selecionado.getValor_total()));
 		quantidade_de_produtos = orcamento_selecionado.getQuantidade_produtos();
 		modelo_tabela.fireTableDataChanged();
+	}
+
+	public Boolean teclou_digito(char tecla) {
+		if (Character.isDigit(tecla)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
