@@ -756,16 +756,17 @@ public class Panel_orcamento extends JPanel {
 		}
 
 		fTxtCodigoProduto = new JFormattedTextField(mascara_codigo_produto);
-		fTxtCodigoProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		fTxtCodigoProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickCodigoProduto) {
+				text_tools.move_cursor_inicio(fTxtCodigoProduto);
+			}
+		});
+		fTxtCodigoProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtCodigoProduto.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent perdaFocoNomeProduto) {
 				scrollPaneListaProdutos.setVisible(false);
-			}
-
-			@Override
-			public void focusGained(FocusEvent ganhoFocoCodigoProduto) {
-				text_tools.move_cursor_inicio(fTxtCodigoProduto);
 			}
 		});
 		fTxtCodigoProduto.setEnabled(false);
@@ -1862,7 +1863,7 @@ public class Panel_orcamento extends JPanel {
 						50);
 			} else if (tipo_busca.equals("CÓDIGO")) {
 				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos,
-						fTxtCodigoProduto.getText().trim() + "%", 50);
+						fTxtCodigoProduto.getText().trim(), 50);
 			} else {
 				lista_produtos = produto_dao.listarProdutosBarras(lista_produtos, texto_buscado + "%", 50);
 			}
