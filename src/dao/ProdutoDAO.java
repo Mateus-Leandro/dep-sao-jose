@@ -19,7 +19,6 @@ public class ProdutoDAO {
 	private Connection conn;
 	private PreparedStatement ps;
 	private ResultSet rs;
-
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public ProdutoDAO() {
@@ -350,6 +349,15 @@ public class ProdutoDAO {
 				produto.setDataCadastro(sdf.parse(data_formatada));
 				produtos.add(produto);
 			}
+			
+			//Alimentando produtos através do código de barras vinculado.
+			ArrayList<Produto> barras_vinculados = new ArrayList<Produto>();
+			barras_vinculados = listarProdutosBarrasVinculados(barras_vinculados, barras, 50);
+			for (Produto prod : barras_vinculados) {
+				if (!produtos.contains(prod)) {
+					produtos.add(prod);
+				}
+			}
 
 			return produtos;
 		} catch (Exception e) {
@@ -364,7 +372,7 @@ public class ProdutoDAO {
 	}
 
 	// Pesquisar barras vinculados
-	public ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras,
+	private ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras,
 			Integer limite) {
 		conn = DB.getConnection();
 
