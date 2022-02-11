@@ -413,7 +413,7 @@ public class Panel_clientes extends JPanel {
 		btnNovo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNovo) {
-
+				novo_cliente();
 			}
 		});
 		btnNovo.setIcon(null);
