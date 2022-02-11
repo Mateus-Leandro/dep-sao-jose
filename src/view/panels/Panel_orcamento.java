@@ -807,6 +807,10 @@ public class Panel_orcamento extends JPanel {
 					} else {
 						fTxtCodigoProduto.requestFocus();
 					}
+					
+					fTxtValorEmAberto.setBorder(new LineBorder(Color.lightGray));
+					fTxtQuantidade.setBorder(new LineBorder(Color.lightGray));
+					fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 				}
 			}
 		});
@@ -1819,7 +1823,7 @@ public class Panel_orcamento extends JPanel {
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.lightGray));
 			}
 
-			if (valor_desconto >= preco_unitario) {
+			if (valor_desconto >= preco_unitario && preco_unitario != 0.00) {
 				JOptionPane.showMessageDialog(lblValorDesconto, "Valor de desconto maior ou igual ao preço unitário.",
 						"Valor de desconto inválido!", JOptionPane.WARNING_MESSAGE);
 				fTxtValorEmAberto.setBorder(new LineBorder(Color.RED));
