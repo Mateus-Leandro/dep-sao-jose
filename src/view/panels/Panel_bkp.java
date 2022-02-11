@@ -69,7 +69,7 @@ public class Panel_bkp extends JPanel {
 		backup_sistema.setBounds(10, 50, 702, 9);
 		add(backup_sistema);
 
-		lblDiretorioDestino = new JLabel("Pasta padrão para o backup");
+		lblDiretorioDestino = new JLabel("Pasta padr\u00E3o para o backup");
 		lblDiretorioDestino.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblDiretorioDestino.setBounds(10, 107, 175, 19);
 		add(lblDiretorioDestino);
