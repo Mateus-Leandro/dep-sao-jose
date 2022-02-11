@@ -2,6 +2,7 @@ package view.panels;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -12,10 +13,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
@@ -112,6 +117,16 @@ public class Panel_clientes extends JPanel {
 	private Render_tabela_clientes render = new Render_tabela_clientes();
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes = conf_dao.busca_configuracoes();
+	private JLabel lblEsc;
+	private JLabel lblCancelar;
+	private JLabel lblF1;
+	private JLabel lblNovo;
+	private JLabel lblF5;
+	private JLabel lblRecarregarCliente;
+	private JLabel lblF3;
+	private JLabel lblEditar;
+	private JLabel lblF12;
+	private JLabel lblExcluir;
 
 	/**
 	 * Create the panel.
@@ -121,23 +136,15 @@ public class Panel_clientes extends JPanel {
 		setBorder(null);
 		setLayout(null);
 
-		MaskFormatter mascara_pesquisa = null;
+		// Atalhos do teclado
+		tecla_pressionada();
 
+		MaskFormatter mascara_pesquisa = null;
 		btnEditar = new JButton("Editar");
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
-				if (btnEditar.isEnabled()) {
-					ativar_campos();
-					btnEditar.setVisible(false);
-					btnEditar.setEnabled(false);
-					btnNovo.setVisible(false);
-					btnExcluir.setVisible(false);
-					btnSalvar.setVisible(true);
-					btnCancelar.setVisible(true);
-					fTxtDocumento.requestFocus();
-				}
-
+				editar_cliente();
 			}
 		});
 		btnEditar.setEnabled(false);
@@ -406,16 +413,7 @@ public class Panel_clientes extends JPanel {
 		btnNovo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNovo) {
-				if (btnNovo.isEnabled()) {
-					ativar_campos();
-					limpar_campos();
-					checkBoxJuridica.setSelected(false);
-					btnExcluir.setVisible(false);
-					btnEditar.setVisible(false);
-					btnNovo.setVisible(false);
-					fTxtDocumento.requestFocus();
-					tabelaClientes.clearSelection();
-				}
+
 			}
 		});
 		btnNovo.setIcon(null);
@@ -777,7 +775,7 @@ public class Panel_clientes extends JPanel {
 		ConfiguraLarguraColunaTabela(tabelaClientes);
 
 		scrollPane = new JScrollPane(tabelaClientes);
-		scrollPane.setBounds(16, 495, 693, 153);
+		scrollPane.setBounds(16, 495, 693, 140);
 		add(scrollPane);
 
 		tabelaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -854,15 +852,7 @@ public class Panel_clientes extends JPanel {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCancelar) {
-				tabelaClientes.clearSelection();
-				desativar_campos();
-				limpar_campos();
-				btnNovo.setVisible(true);
-				btnEditar.setVisible(true);
-				btnExcluir.setVisible(true);
-				checkBoxJuridica.setSelected(false);
-				fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
-				fTxtCelular.setBorder(new LineBorder(Color.lightGray));
+				cancelar_cliente();
 			}
 		});
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -968,6 +958,61 @@ public class Panel_clientes extends JPanel {
 		lblObg_celular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblObg_celular.setBounds(166, 371, 20, 15);
 		add(lblObg_celular);
+
+		lblEsc = new JLabel("Esc:");
+		lblEsc.setFont(new Font("Arial", Font.BOLD, 12));
+		lblEsc.setBounds(16, 638, 30, 14);
+		add(lblEsc);
+
+		lblCancelar = new JLabel("Cancelar");
+		lblCancelar.setForeground(Color.GRAY);
+		lblCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCancelar.setBounds(42, 638, 53, 14);
+		add(lblCancelar);
+
+		lblF1 = new JLabel("F1:");
+		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF1.setBounds(105, 638, 21, 14);
+		add(lblF1);
+
+		lblNovo = new JLabel("Novo");
+		lblNovo.setForeground(Color.BLUE);
+		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNovo.setBounds(122, 638, 35, 14);
+		add(lblNovo);
+
+		lblF5 = new JLabel("F5:");
+		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF5.setBounds(285, 638, 21, 14);
+		add(lblF5);
+
+		lblRecarregarCliente = new JLabel("Recarregar Clientes");
+		lblRecarregarCliente.setForeground(new Color(0, 128, 0));
+		lblRecarregarCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblRecarregarCliente.setBounds(302, 638, 128, 14);
+		add(lblRecarregarCliente);
+
+		lblF3 = new JLabel("F3:");
+		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF3.setBounds(576, 638, 21, 14);
+		add(lblF3);
+
+		lblEditar = new JLabel("Editar");
+		lblEditar.setForeground(new Color(139, 69, 19));
+		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblEditar.setBounds(594, 638, 35, 14);
+		add(lblEditar);
+
+		lblF12 = new JLabel("F12:");
+		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF12.setBounds(639, 638, 26, 14);
+		add(lblF12);
+
+		lblExcluir = new JLabel("Excluir");
+		lblExcluir.setForeground(Color.RED);
+		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblExcluir.setBounds(667, 638, 42, 14);
+		add(lblExcluir);
 
 	}
 
@@ -1088,7 +1133,7 @@ public class Panel_clientes extends JPanel {
 	}
 
 	public void valida_cliente() {
-		cliente = novo_cliente();
+		cliente = monta_cliente();
 
 		if (fTxtNomeCliente.getText().trim().isEmpty() || fTxtCelular.getText().equals("(  )     -    ")) {
 			if (fTxtNomeCliente.getText().trim().isEmpty()) {
@@ -1141,7 +1186,7 @@ public class Panel_clientes extends JPanel {
 		}
 	}
 
-	public Cliente novo_cliente() {
+	public Cliente monta_cliente() {
 		String documento = null;
 		String inscricao_estadual = null;
 		String nome = null;
@@ -1228,6 +1273,45 @@ public class Panel_clientes extends JPanel {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void novo_cliente() {
+		if (btnNovo.isEnabled()) {
+			ativar_campos();
+			limpar_campos();
+			checkBoxJuridica.setSelected(false);
+			btnExcluir.setVisible(false);
+			btnEditar.setVisible(false);
+			btnNovo.setVisible(false);
+			fTxtDocumento.requestFocus();
+			tabelaClientes.clearSelection();
+		}
+	}
+
+	public void cancelar_cliente() {
+		tabelaClientes.clearSelection();
+		desativar_campos();
+		limpar_campos();
+		btnNovo.setVisible(true);
+		btnEditar.setVisible(true);
+		btnExcluir.setVisible(true);
+		checkBoxJuridica.setSelected(false);
+		fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
+		fTxtCelular.setBorder(new LineBorder(Color.lightGray));
+		btnNovo.requestFocus();
+	}
+
+	public void editar_cliente() {
+		if (btnEditar.isEnabled()) {
+			ativar_campos();
+			btnEditar.setVisible(false);
+			btnEditar.setEnabled(false);
+			btnNovo.setVisible(false);
+			btnExcluir.setVisible(false);
+			btnSalvar.setVisible(true);
+			btnCancelar.setVisible(true);
+			fTxtDocumento.requestFocus();
 		}
 	}
 
@@ -1332,4 +1416,60 @@ public class Panel_clientes extends JPanel {
 		}
 	}
 
+	// Teclas de atalho
+	public void tecla_pressionada() {
+		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "novo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancelar");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "excluir");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "editar");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "recarregar");
+
+		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("cancelar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_cancelar) {
+				cancelar_cliente();
+			}
+		});
+
+		getActionMap().put("excluir", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_excluir) {
+				excluir_cliente();
+			}
+		});
+
+		getActionMap().put("novo", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_novo) {
+				novo_cliente();
+			}
+		});
+
+		getActionMap().put("editar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_editar) {
+				editar_cliente();
+			}
+		});
+
+		getActionMap().put("recarregar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_recarregar) {
+				recarregarTabela();
+			}
+		});
+	}
 }
