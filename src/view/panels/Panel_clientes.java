@@ -972,35 +972,35 @@ public class Panel_clientes extends JPanel {
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(105, 638, 21, 14);
+		lblF1.setBounds(149, 638, 21, 14);
 		add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(122, 638, 35, 14);
+		lblNovo.setBounds(166, 638, 35, 14);
 		add(lblNovo);
 
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(285, 638, 21, 14);
+		lblF5.setBounds(425, 638, 21, 14);
 		add(lblF5);
 
 		lblRecarregarCliente = new JLabel("Recarregar Clientes");
 		lblRecarregarCliente.setForeground(new Color(0, 128, 0));
 		lblRecarregarCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblRecarregarCliente.setBounds(302, 638, 128, 14);
+		lblRecarregarCliente.setBounds(442, 638, 128, 14);
 		add(lblRecarregarCliente);
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(576, 638, 21, 14);
+		lblF3.setBounds(288, 638, 21, 14);
 		add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(594, 638, 35, 14);
+		lblEditar.setBounds(306, 638, 35, 14);
 		add(lblEditar);
 
 		lblF12 = new JLabel("F12:");
@@ -1011,7 +1011,7 @@ public class Panel_clientes extends JPanel {
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(Color.RED);
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(667, 638, 42, 14);
+		lblExcluir.setBounds(664, 638, 42, 14);
 		add(lblExcluir);
 
 	}

@@ -118,6 +118,8 @@ public class Panel_produtos extends JPanel {
 	private JLabel lblEditar;
 	private JLabel lblF5;
 	private JLabel lblRecarregar;
+	private JLabel lblF7;
+	private JLabel lblSetores;
 
 	/**
 	 * Create the panel.
@@ -210,8 +212,7 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickMaisSetor) {
 				if (btnMaisSetor.isEnabled()) {
-					CadastroSetor cadastro_setor = new CadastroSetor(getPanelProdutos());
-					cadastro_setor.setVisible(true);
+					novo_setor();
 				}
 			}
 		});
@@ -623,18 +624,18 @@ public class Panel_produtos extends JPanel {
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(105, 638, 21, 14);
+		lblF1.setBounds(128, 638, 21, 14);
 		add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(122, 638, 35, 14);
+		lblNovo.setBounds(145, 638, 35, 14);
 		add(lblNovo);
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(639, 638, 26, 14);
+		lblF12.setBounds(642, 638, 26, 14);
 		add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
@@ -656,25 +657,36 @@ public class Panel_produtos extends JPanel {
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(576, 638, 21, 14);
+		lblF3.setBounds(216, 638, 21, 14);
 		add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(594, 638, 35, 14);
+		lblEditar.setBounds(234, 638, 35, 14);
 		add(lblEditar);
-		
+
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(285, 638, 21, 14);
+		lblF5.setBounds(322, 638, 21, 14);
 		add(lblF5);
-		
+
 		lblRecarregar = new JLabel("Recarregar Produtos");
 		lblRecarregar.setForeground(new Color(0, 128, 0));
 		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblRecarregar.setBounds(302, 638, 128, 14);
+		lblRecarregar.setBounds(339, 638, 128, 14);
 		add(lblRecarregar);
+
+		lblF7 = new JLabel("F7:");
+		lblF7.setFont(new Font("Arial", Font.BOLD, 12));
+		lblF7.setBounds(519, 638, 21, 14);
+		add(lblF7);
+
+		lblSetores = new JLabel("Setores");
+		lblSetores.setForeground(new Color(255, 140, 0));
+		lblSetores.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSetores.setBounds(537, 638, 48, 14);
+		add(lblSetores);
 
 	}
 
@@ -846,6 +858,11 @@ public class Panel_produtos extends JPanel {
 		}
 	}
 
+	public void novo_setor() {
+		CadastroSetor cadastro_setor = new CadastroSetor(getPanelProdutos());
+		cadastro_setor.setVisible(true);
+	}
+
 	public Produto gravarNovoProduto() {
 
 		ProdutoDAO produto_dao = new ProdutoDAO();
@@ -967,7 +984,7 @@ public class Panel_produtos extends JPanel {
 							JOptionPane.NO_OPTION);
 
 					btnNovo.setEnabled(true);
-					
+
 					btnNovo.setVisible(true);
 					lblPesquisarPor.setVisible(true);
 					fTxtPesquisa.setVisible(true);
@@ -977,7 +994,7 @@ public class Panel_produtos extends JPanel {
 
 					btnCancelar.setVisible(false);
 					btnSalvar.setVisible(false);
-					
+
 					fTxtCodigoBarras.setBorder(new LineBorder(Color.lightGray));
 					recarregarTabela();
 					return produto;
@@ -1121,6 +1138,7 @@ public class Panel_produtos extends JPanel {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "excluir");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "editar");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "recarregar");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "setores");
 
 		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
 
@@ -1133,8 +1151,6 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 
-//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
-
 		getActionMap().put("excluir", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
@@ -1143,8 +1159,6 @@ public class Panel_produtos extends JPanel {
 				excluir_item();
 			}
 		});
-
-//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
 
 		getActionMap().put("novo", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
@@ -1155,8 +1169,6 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 
-//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
-
 		getActionMap().put("editar", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
@@ -1165,7 +1177,6 @@ public class Panel_produtos extends JPanel {
 				editar_item();
 			}
 		});
-//		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
 
 		getActionMap().put("recarregar", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
@@ -1173,6 +1184,14 @@ public class Panel_produtos extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent atalho_recarregar) {
 				recarregarTabela();
+			}
+		});
+		getActionMap().put("setores", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_setores) {
+				novo_setor();
 			}
 		});
 

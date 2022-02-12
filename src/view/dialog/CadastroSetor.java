@@ -367,6 +367,7 @@ public class CadastroSetor extends JDialog {
 		fTxtCodigoSetor.setText(null);
 		fTxtNomeSetor.setText(null);
 		fTxtNomeSetor.setEditable(false);
+		btnNovo.requestFocus();
 	}
 
 	// Ação de salva_setor
@@ -465,7 +466,11 @@ public class CadastroSetor extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent atalho_cancelar) {
-				cancela_setor();
+				if (btnNovo.isVisible()) {
+					dispose();
+				} else {
+					cancela_setor();
+				}
 			}
 		});
 
