@@ -544,6 +544,7 @@ public class Orcamentos_do_cliente extends JDialog {
 								"Observação salva no orçamento Nº " + orcamento_selecionado.getId_orcamento() + ".",
 								"Observação do orçamento.", JOptionPane.NO_OPTION);
 						tabelaOrcamentos.clearSelection();
+						fTxtObservacao.setEditable(false);
 					}
 				} else {
 					JOptionPane.showMessageDialog(null,

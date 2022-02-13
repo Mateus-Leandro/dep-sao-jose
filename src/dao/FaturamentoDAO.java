@@ -87,12 +87,29 @@ public class FaturamentoDAO {
 						"UPDATE `banco_deposito`.`orcamento` SET `faturado` = '1' WHERE (`idOrcamento` = ?)");
 				ps.setInt(1, orcamento.getId_orcamento());
 				ps.execute();
+				
+				// Setando data de faturamento.
+				if(orcamento.getData_faturamento() == null) {
+					ps = conn.prepareStatement(
+							"UPDATE `banco_deposito`.`orcamento` SET `dataFaturamento` = ? WHERE (`idOrcamento` = ?)");
+					ps.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+					ps.setInt(2, orcamento.getId_orcamento());
+					ps.execute();
+				}
 
 			} else {
 				// Setando o orçamento como não faturado.
 				ps = conn.prepareStatement(
 						"UPDATE `banco_deposito`.`orcamento` SET `faturado` = '0' WHERE (`idOrcamento` = ?)");
 				ps.setInt(1, orcamento.getId_orcamento());
+				ps.execute();
+				
+				
+				// Removendo data de faturamento.
+				ps = conn.prepareStatement(
+						"UPDATE `banco_deposito`.`orcamento` SET `dataFaturamento` = ? WHERE (`idOrcamento` = ?)");
+				ps.setDate(1, null);
+				ps.setInt(2, orcamento.getId_orcamento());
 				ps.execute();
 			}
 

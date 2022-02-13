@@ -20,8 +20,8 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
-	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quantidade", "Pr.Unit.", "Desc. Unit",
-			"Total" };
+	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quant.", "Pr.Unit.", "Desconto",
+			"Total-Desc." };
 	private ArrayList<Produto_Orcamento> produtos_orcamento;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
@@ -117,9 +117,9 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 			case COLUNA_PRECO_UNIT:
 				return nf.format(produto_orcamento.getPreco_unitario().doubleValue());
 			case COLUNA_DESC:
-				return nf.format(produto_orcamento.getValor_desconto().doubleValue());
+				return nf.format(produto_orcamento.getValor_desconto());
 			case COLUNA_TOTAL:
-				return nf.format(produto_orcamento.getValor_total().doubleValue());
+				return nf.format(produto_orcamento.getValor_total() - produto_orcamento.getValor_desconto());
 			}
 			return null;
 		}else {

@@ -462,7 +462,7 @@ public class Panel_produtos extends JPanel {
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
 		cbxTipoPesquisa
-				.setModel(new DefaultComboBoxModel<String>(new String[] { "Nome", "C\u00F3digo", "Cod. Barras" }));
+				.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Nome", "Cod. Barras"}));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -573,7 +573,7 @@ public class Panel_produtos extends JPanel {
 		cbxFatorVenda.setEnabled(false);
 		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxFatorVenda
-				.setModel(new DefaultComboBoxModel<String>(new String[] { "UN", "MT", "KG", "L", "CX", "FD", "PCT" }));
+				.setModel(new DefaultComboBoxModel(new String[] {"UN", "PAR", "MT", "KG", "L", "CX", "FD", "PCT"}));
 		cbxFatorVenda.setBounds(113, 231, 57, 22);
 		add(cbxFatorVenda);
 		cbxSetor.addKeyListener(new KeyAdapter() {

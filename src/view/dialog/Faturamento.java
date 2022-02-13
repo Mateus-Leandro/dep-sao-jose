@@ -68,7 +68,7 @@ public class Faturamento extends JDialog {
 	private JLabel lblPagamento;
 	private JSeparator separador_pagamento;
 	private JLabel lblDataFaturamento;
-	private JTextField txtDataFaturamento;
+	private JTextField txtDataFaturamento = new JTextField();
 	private JScrollPane scrollPaneParcelas;
 	private JPanel panelTotalOrcamento;
 	private JLabel lblTotalOrcamento;
@@ -431,7 +431,6 @@ public class Faturamento extends JDialog {
 		lblDataFaturamento.setBounds(409, 126, 133, 20);
 		contentPanel.add(lblDataFaturamento);
 
-		txtDataFaturamento = new JTextField();
 		txtDataFaturamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDataFaturamento.setEditable(false);
 		txtDataFaturamento.setColumns(10);
@@ -773,6 +772,13 @@ public class Faturamento extends JDialog {
 	public void mostra_dados_orcamento(Orcamento orcamento) {
 		txtCliente.setText(orcamento.getCliente().getNome());
 		txtDataCriacao.setText(sdf.format(orcamento.getData_inclusao()));
+		if(orcamento.getData_faturamento() != null) {
+			txtDataFaturamento.setForeground(Color.black);
+			txtDataFaturamento.setText(sdf.format(orcamento.getData_faturamento()));
+		}else {
+			txtDataFaturamento.setForeground(Color.red);
+			txtDataFaturamento.setText("NÃO FATURADO");
+		}
 		txtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 		txtTotalOrcamento.setText(nf2.format(orcamento.getValor_total()));
 

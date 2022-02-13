@@ -48,7 +48,7 @@ public class Gera_pdf {
 	private PdfPCell cel_quantidade_produtos;
 
 	// Tabela de produtos
-	private float[] largura_colunas_produtos = { 8.9f, 18f, 7f, 10f, 10f, 10f, 10f };
+	private float[] largura_colunas_produtos = { 6.0f, 21.9f, 7f, 10f, 10f, 10f, 10f };
 	private PdfPTable tabela_produtos = new PdfPTable(largura_colunas_produtos);
 	private PdfPCell cel_codigo;
 	private PdfPCell cel_nome;
@@ -80,6 +80,7 @@ public class Gera_pdf {
 
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
+	private NumberFormat nf3 = new DecimalFormat("R$ ,##0.000");
 	private Double desconto_produtos;
 
 	public Gera_pdf() {
@@ -100,7 +101,7 @@ public class Gera_pdf {
 
 				monta_rodape(orcamento);
 
-				if (orcamento.getProdutos_do_orcamento().size() >= 10) {
+				if (orcamento.getProdutos_do_orcamento().size() > 9) {
 					documento.newPage();
 				}
 			}
@@ -218,8 +219,8 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
-			p.add("CÓDIGO" + gera_string(8, " ") + "DESCRIÇÃO" + gera_string(25, " ") + "UN" + gera_string(13, " ")
-					+ "QTD" + gera_string(18, " ") + "PR.UNIT" + gera_string(10, " ") + "DESC.UN." + gera_string(8, " ")
+			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(33, " ") + "UN" + gera_string(12, " ")
+					+ "QTD" + gera_string(18, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.UNIT." + gera_string(4, " ")
 					+ "PR.TOTAL");
 			documento.add(p);
 
@@ -233,6 +234,12 @@ public class Gera_pdf {
 
 	public void imprime_produtos(ArrayList<Produto_Orcamento> produtos) {
 
+		
+		nf.setRoundingMode(RoundingMode.DOWN);
+		nf2.setRoundingMode(RoundingMode.DOWN);
+		nf3.setRoundingMode(RoundingMode.DOWN);
+
+		
 		Paragraph p;
 		tabela_produtos = new PdfPTable(largura_colunas_produtos);
 
@@ -241,8 +248,7 @@ public class Gera_pdf {
 		for (Produto_Orcamento produto : produtos) {
 
 			// Calculando total de desconto
-			nf.setRoundingMode(RoundingMode.DOWN);
-			desconto_produtos += Double.parseDouble(nf.format(produto.getValor_desconto() * produto.getQuantidade())
+			desconto_produtos += Double.parseDouble(nf.format(produto.getValor_desconto())
 					.replaceAll("\\.", "").replace(",", "."));
 
 			if (linha_negrito) {
@@ -260,7 +266,7 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(String.format("%-20.20s", produto.getNome()));
+			p.add(String.format("%-32.32s", produto.getNome()));
 			cel_nome = new PdfPCell(p);
 
 			p = new Paragraph();
@@ -280,12 +286,12 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(nf2.format(produto.getValor_desconto()));
+			p.add(nf3.format(produto.getValor_desconto() / produto.getQuantidade()));
 			cel_desc_unit = new PdfPCell(p);
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(nf2.format(produto.getValor_total()));
+			p.add(nf2.format(produto.getValor_total() - produto.getValor_desconto()));
 			cel_valor = new PdfPCell(p);
 
 			linha_invisivel_tabela_produtos();
@@ -309,6 +315,8 @@ public class Gera_pdf {
 	}
 
 	public void monta_rodape(Orcamento orcamento) {
+		nf2.setRoundingMode(RoundingMode.DOWN);
+		
 		Paragraph p = new Paragraph();
 
 		Double desconto_orcamento = 0.00;
@@ -333,21 +341,21 @@ public class Gera_pdf {
 			cel_frete = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Desc. Prd.: " + nf2.format(desconto_produtos));
-			cel_desc_prd = new PdfPCell(p);
-
-			p = new Paragraph();
 			p.add("Desc. Orc.: " + nf2.format(desconto_orcamento));
 			cel_desc_orc = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Vlr. Tot.: " + nf2.format(orcamento.getValor_total()));
+			p.add("Desc. Prd.: " + nf2.format(desconto_produtos));
+			cel_desc_prd = new PdfPCell(p);
+
+			p = new Paragraph();
+			p.add("Total: " + nf2.format(orcamento.getValor_total()));
 			cel_vlr_tot = new PdfPCell(p);
 
 			linha_invisivel_tabela_totais();
 			tabela_totais.addCell(cel_frete);
-			tabela_totais.addCell(cel_desc_prd);
 			tabela_totais.addCell(cel_desc_orc);
+			tabela_totais.addCell(cel_desc_prd);
 			tabela_totais.addCell(cel_vlr_tot);
 			
 			tabela_totais.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -360,12 +368,19 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoMedia);
-			p.add("Assinatura do cliente:" + gera_string(50, "_") + gera_string(5, " ") + "Data:___/___/___");
+			p.add("Assinatura do cliente:" + gera_string(45, "_") + gera_string(5, " ") + "Vencimento:___/___/___");
 			documento.add(p);
-
+			
+			p = new Paragraph();
+			p.setFont(negritoPequena);
+			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
+			documento.add(p);
+			
 			p = new Paragraph();
 			p.add(gera_string(130, "-"));
 			documento.add(p);
+			
+			
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}

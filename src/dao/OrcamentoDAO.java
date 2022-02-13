@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,8 +30,8 @@ public class OrcamentoDAO {
 			// salvando cabeçalho do orçamento.
 			ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`orcamento` "
 					+ "(`idCliente`, `quantidadeProdutos`, `totalMercadoriasBruto`, "
-					+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `observacao`, `dataInclusao`) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+					+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `observacao`, `dataInclusao`, `dataFaturamento`) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, orcamento.getCliente().getIdCliente());
 			ps.setInt(2, orcamento.getQuantidade_produtos());
 			ps.setDouble(3, orcamento.getTotal_mercadorias_bruto());
@@ -42,6 +43,7 @@ public class OrcamentoDAO {
 			ps.setInt(9, orcamento.getNumero_de_parcelas());
 			ps.setString(10, orcamento.getObservacao());
 			ps.setDate(11, new java.sql.Date(System.currentTimeMillis()));
+			ps.setDate(12, (Date) orcamento.getData_faturamento());
 
 			ps.execute();
 
@@ -166,7 +168,7 @@ public class OrcamentoDAO {
 		try {
 			String consulta = "SELECT idOrcamento, clientes.*, " + "quantidadeProdutos, totalMercadoriasBruto, "
 					+ "totalMercadoriasLiquido, frete, descontoFinal, "
-					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao "
+					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao, dataFaturamento "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
 					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?";
 
@@ -233,6 +235,7 @@ public class OrcamentoDAO {
 				orcamento.setNumero_de_parcelas(rs.getInt("numeroParcelas"));
 				orcamento.setObservacao(rs.getString("observacao"));
 				orcamento.setData_inclusao(rs.getDate("dataInclusao"));
+				orcamento.setData_faturamento(rs.getDate("dataFaturamento"));
 				orcamento.setProdutos_do_orcamento(new ArrayList<Produto_Orcamento>());
 				orcamento.setParcelas(new ArrayList<Parcela>());
 

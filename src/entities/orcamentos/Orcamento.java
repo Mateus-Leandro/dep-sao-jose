@@ -21,6 +21,7 @@ public class Orcamento {
 	Integer numero_de_parcelas;
 	String observacao;
 	Date data_inclusao;
+	Date data_faturamento;
 	ArrayList<Produto_Orcamento> produtos_do_orcamento;
 	ArrayList<Parcela> parcelas;
 
@@ -29,7 +30,7 @@ public class Orcamento {
 
 	public Orcamento(Integer id_orcamento, Cliente cliente, Integer quantidade_produtos, Double total_mercadorias_bruto,
 			Double total_mercadorias_liquido, Double frete, Double desconto_final, Double valor_total, Boolean faturado,
-			Integer numero_de_parcelas, String observacao, Date data_inclusao,
+			Integer numero_de_parcelas, String observacao, Date data_inclusao, Date data_faturamento,
 			ArrayList<Produto_Orcamento> produtos_do_orcamento, ArrayList<Parcela> parcelas) {
 		this.id_orcamento = id_orcamento;
 		this.cliente = cliente;
@@ -43,6 +44,7 @@ public class Orcamento {
 		this.numero_de_parcelas = numero_de_parcelas;
 		this.observacao = observacao;
 		this.data_inclusao = data_inclusao;
+		this.data_faturamento = data_faturamento;
 		this.produtos_do_orcamento = produtos_do_orcamento;
 		this.parcelas = parcelas;
 	}
@@ -141,6 +143,15 @@ public class Orcamento {
 
 	public void setData_inclusao(Date data_inclusao) {
 		this.data_inclusao = data_inclusao;
+	}
+	
+
+	public Date getData_faturamento() {
+		return data_faturamento;
+	}
+
+	public void setData_faturamento(Date data_faturamento) {
+		this.data_faturamento = data_faturamento;
 	}
 
 	public ArrayList<Produto_Orcamento> getProdutos_do_orcamento() {
