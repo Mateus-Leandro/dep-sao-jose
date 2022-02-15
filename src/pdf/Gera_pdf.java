@@ -80,8 +80,6 @@ public class Gera_pdf {
 
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
-	private NumberFormat nf3 = new DecimalFormat("R$ ,##0.000");
-	private Double desconto_produtos;
 
 	public Gera_pdf() {
 	}
@@ -220,7 +218,7 @@ public class Gera_pdf {
 			p = new Paragraph();
 			p.setFont(new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
 			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(33, " ") + "UN" + gera_string(12, " ")
-					+ "QTD" + gera_string(18, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.UNIT." + gera_string(4, " ")
+					+ "QTD" + gera_string(18, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT." + gera_string(6, " ")
 					+ "PR.TOTAL");
 			documento.add(p);
 
@@ -233,23 +231,14 @@ public class Gera_pdf {
 	}
 
 	public void imprime_produtos(ArrayList<Produto_Orcamento> produtos) {
-
-		
 		nf.setRoundingMode(RoundingMode.DOWN);
-		nf2.setRoundingMode(RoundingMode.DOWN);
-		nf3.setRoundingMode(RoundingMode.DOWN);
+//		nf2.setRoundingMode(RoundingMode.DOWN);
 
-		
 		Paragraph p;
 		tabela_produtos = new PdfPTable(largura_colunas_produtos);
 
 		Boolean linha_negrito = false;
-		desconto_produtos = 0.00;
 		for (Produto_Orcamento produto : produtos) {
-
-			// Calculando total de desconto
-			desconto_produtos += Double.parseDouble(nf.format(produto.getValor_desconto())
-					.replaceAll("\\.", "").replace(",", "."));
 
 			if (linha_negrito) {
 				fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -286,7 +275,7 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(nf3.format(produto.getValor_desconto() / produto.getQuantidade()));
+			p.add(nf2.format(produto.getValor_desconto()));
 			cel_desc_unit = new PdfPCell(p);
 
 			p = new Paragraph();
@@ -315,8 +304,6 @@ public class Gera_pdf {
 	}
 
 	public void monta_rodape(Orcamento orcamento) {
-		nf2.setRoundingMode(RoundingMode.DOWN);
-		
 		Paragraph p = new Paragraph();
 
 		Double desconto_orcamento = 0.00;
@@ -345,7 +332,7 @@ public class Gera_pdf {
 			cel_desc_orc = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Desc. Prd.: " + nf2.format(desconto_produtos));
+			p.add("Desc. Prd.: " + nf2.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido()));
 			cel_desc_prd = new PdfPCell(p);
 
 			p = new Paragraph();
