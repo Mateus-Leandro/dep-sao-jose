@@ -2142,18 +2142,19 @@ public class Panel_orcamento extends JPanel {
 
 	public void calcula_total_mercadorias() {
 
-		nf.setRoundingMode(RoundingMode.DOWN);
-		
 		total_mercadorias_bruto = 0.00;
 		total_mercadorias_liquido = 0.00;
 		Double desconto = 0.00;
 		
 		for (Produto_Orcamento produto : lista_produtos_inclusos) {
-			total_mercadorias_bruto += produto.getPreco_unitario() * produto.getQuantidade();
+			total_mercadorias_bruto += produto.getValor_total();
 			desconto += produto.getValor_desconto();
 		}
+		
+		total_mercadorias_bruto = Math.round(total_mercadorias_bruto * 100) / 100d;
+		desconto = Math.round(desconto * 100) / 100d;
 		total_mercadorias_liquido = total_mercadorias_bruto - desconto;
-
+		
 		// Sem considerar desconto dos itens, frete e desconto final do orçamento.
 		fTxtTotalMercadoriasBruto.setText(nf.format(total_mercadorias_bruto));
 
@@ -2165,6 +2166,8 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void calcula_total_orcamento() {
+		
+		nf.setRoundingMode(RoundingMode.DOWN);
 
 		total_orcamento = 0.00;
 
