@@ -143,11 +143,10 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblProdutosInclusos;
 	private JScrollPane scrollPaneTabelaProdutosInclusos;
 	private JLabel lblTotais;
-	private JLabel lblTotalMercadotrias;
+	private JLabel lblTotalMercadoriasLiquido;
 	private JFormattedTextField fTxtTotalMercadoriasLiquido;
-	private JLabel lblTotalMercadoriasDesconto;
+	private JLabel lblTotalMercadoriasBruto;
 	private JFormattedTextField fTxtTotalMercadoriasBruto;
-	private JLabel lblSemDesconto;
 	private JLabel lblFrete;
 	private JFormattedTextField fTxtFrete;
 	private JFormattedTextField fTxtValorDescFinal;
@@ -155,7 +154,6 @@ public class Panel_orcamento extends JPanel {
 	private JPanel panelValorTotal;
 	private JFormattedTextField fTxtTotalOrcamento;
 	private JLabel lblValorTotalOrcamento;
-	private JLabel lblDescontoProduto;
 	private JLabel lblQuantidadeProdutos;
 	private JFormattedTextField fTxtQuantidadeTotal;
 	private JList<Produto> ltProdutos;
@@ -218,6 +216,9 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblTotalItem;
 	private JFormattedTextField fTxtTotalItem;
 	private DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
+	private JLabel lblTotalDescontoProduto;
+	private JSeparator separadorInformacoesDoCliente_2;
+	private JFormattedTextField fTxtTotalDescontoProduto;
 
 	/**
 	 * Create the panel.
@@ -361,12 +362,12 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalOrcamento.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalOrcamento.setColumns(10);
-		fTxtTotalOrcamento.setBounds(116, 11, 115, 20);
+		fTxtTotalOrcamento.setBounds(92, 11, 139, 20);
 		panelValorTotal.add(fTxtTotalOrcamento);
 
-		lblValorTotalOrcamento = new JLabel("Valor total R$");
+		lblValorTotalOrcamento = new JLabel("Valor total");
 		lblValorTotalOrcamento.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblValorTotalOrcamento.setBounds(7, 11, 107, 19);
+		lblValorTotalOrcamento.setBounds(7, 11, 82, 19);
 		panelValorTotal.add(lblValorTotalOrcamento);
 
 		panelDesconto = new JPanel();
@@ -434,16 +435,19 @@ public class Panel_orcamento extends JPanel {
 		fTxtValorDesconto.setColumns(10);
 
 		lblValorDesconto = new JLabel("R$");
+		lblValorDesconto.setForeground(new Color(255, 69, 0));
 		lblValorDesconto.setBounds(173, 6, 20, 19);
 		panelDesconto.add(lblValorDesconto);
 		lblValorDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
 		lblDesconto = new JLabel("Desconto");
+		lblDesconto.setForeground(new Color(255, 69, 0));
 		lblDesconto.setBounds(7, 5, 64, 19);
 		panelDesconto.add(lblDesconto);
 		lblDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
 		lblPorcentagemDesconto = new JLabel("%");
+		lblPorcentagemDesconto.setForeground(new Color(255, 69, 0));
 		lblPorcentagemDesconto.setBounds(76, 6, 18, 19);
 		panelDesconto.add(lblPorcentagemDesconto);
 		lblPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -672,13 +676,14 @@ public class Panel_orcamento extends JPanel {
 		lblTotais = new JLabel("Totais");
 		lblTotais.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTotais.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblTotais.setBounds(10, 394, 57, 29);
+		lblTotais.setBounds(10, 393, 57, 27);
 		produtos.add(lblTotais);
 
-		lblTotalMercadotrias = new JLabel("Total mercadorias (L\u00EDquido)");
-		lblTotalMercadotrias.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalMercadotrias.setBounds(10, 480, 179, 19);
-		produtos.add(lblTotalMercadotrias);
+		lblTotalMercadoriasLiquido = new JLabel("Tot. merc.(L\u00EDquido)");
+		lblTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTotalMercadoriasLiquido.setForeground(new Color(0, 128, 0));
+		lblTotalMercadoriasLiquido.setBounds(10, 481, 127, 19);
+		produtos.add(lblTotalMercadoriasLiquido);
 
 		fTxtTotalMercadoriasLiquido = new JFormattedTextField();
 		fTxtTotalMercadoriasLiquido.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -686,13 +691,14 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasLiquido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasLiquido.setColumns(10);
-		fTxtTotalMercadoriasLiquido.setBounds(182, 480, 90, 20);
+		fTxtTotalMercadoriasLiquido.setBounds(129, 480, 105, 20);
 		produtos.add(fTxtTotalMercadoriasLiquido);
 
-		lblTotalMercadoriasDesconto = new JLabel("Total mercadorias (Bruto)");
-		lblTotalMercadoriasDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalMercadoriasDesconto.setBounds(10, 450, 171, 19);
-		produtos.add(lblTotalMercadoriasDesconto);
+		lblTotalMercadoriasBruto = new JLabel("Tot. merc. (Bruto)");
+		lblTotalMercadoriasBruto.setForeground(Color.BLUE);
+		lblTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTotalMercadoriasBruto.setBounds(10, 451, 120, 19);
+		produtos.add(lblTotalMercadoriasBruto);
 
 		fTxtTotalMercadoriasBruto = new JFormattedTextField();
 		fTxtTotalMercadoriasBruto.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -700,17 +706,12 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasBruto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasBruto.setColumns(10);
-		fTxtTotalMercadoriasBruto.setBounds(182, 449, 97, 20);
+		fTxtTotalMercadoriasBruto.setBounds(125, 450, 109, 20);
 		produtos.add(fTxtTotalMercadoriasBruto);
-
-		lblSemDesconto = new JLabel("* N\u00E3o considera desc. dos itens");
-		lblSemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSemDesconto.setBounds(283, 455, 179, 14);
-		produtos.add(lblSemDesconto);
 
 		lblFrete = new JLabel("Frete");
 		lblFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFrete.setBounds(282, 418, 37, 19);
+		lblFrete.setBounds(328, 480, 37, 19);
 		produtos.add(lblFrete);
 
 		fTxtFrete = new JFormattedTextField();
@@ -732,7 +733,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtFrete.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtFrete.setColumns(10);
-		fTxtFrete.setBounds(318, 417, 77, 20);
+		fTxtFrete.setBounds(365, 477, 89, 20);
 		produtos.add(fTxtFrete);
 
 		lblDescontoGeral = new JLabel("Desc. final");
@@ -740,14 +741,9 @@ public class Panel_orcamento extends JPanel {
 		lblDescontoGeral.setBounds(417, 417, 68, 19);
 		produtos.add(lblDescontoGeral);
 
-		lblDescontoProduto = new JLabel("* Considera desconto dos itens");
-		lblDescontoProduto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDescontoProduto.setBounds(276, 485, 179, 14);
-		produtos.add(lblDescontoProduto);
-
 		lblQuantidadeProdutos = new JLabel("Quantidade de produtos");
 		lblQuantidadeProdutos.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblQuantidadeProdutos.setBounds(11, 420, 154, 19);
+		lblQuantidadeProdutos.setBounds(10, 424, 154, 19);
 		produtos.add(lblQuantidadeProdutos);
 
 		fTxtQuantidadeTotal = new JFormattedTextField();
@@ -756,7 +752,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidadeTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtQuantidadeTotal.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtQuantidadeTotal.setColumns(10);
-		fTxtQuantidadeTotal.setBounds(167, 417, 91, 20);
+		fTxtQuantidadeTotal.setBounds(161, 421, 96, 20);
 		produtos.add(fTxtQuantidadeTotal);
 
 		MaskFormatter mascara_codigo_produto = null;
@@ -1017,6 +1013,25 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItem.setColumns(10);
 		fTxtTotalItem.setBounds(67, 5, 105, 20);
 		panelTotalItem_1.add(fTxtTotalItem);
+
+		lblTotalDescontoProduto = new JLabel("Tot. Desc. Merc.");
+		lblTotalDescontoProduto.setForeground(new Color(255, 69, 0));
+		lblTotalDescontoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTotalDescontoProduto.setBounds(244, 452, 103, 19);
+		produtos.add(lblTotalDescontoProduto);
+
+		separadorInformacoesDoCliente_2 = new JSeparator();
+		separadorInformacoesDoCliente_2.setBounds(67, 407, 639, 9);
+		produtos.add(separadorInformacoesDoCliente_2);
+
+		fTxtTotalDescontoProduto = new JFormattedTextField();
+		fTxtTotalDescontoProduto.setHorizontalAlignment(SwingConstants.RIGHT);
+		fTxtTotalDescontoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		fTxtTotalDescontoProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		fTxtTotalDescontoProduto.setEditable(false);
+		fTxtTotalDescontoProduto.setColumns(10);
+		fTxtTotalDescontoProduto.setBounds(347, 449, 107, 20);
+		produtos.add(fTxtTotalDescontoProduto);
 
 		btnNovo = new JButton("Novo");
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -1766,10 +1781,9 @@ public class Panel_orcamento extends JPanel {
 
 	public boolean novo_produto(Produto_Orcamento novo_produto, Boolean editando_item) {
 
-		
 		nf.setRoundingMode(RoundingMode.DOWN);
 		nf2.setRoundingMode(RoundingMode.DOWN);
-		
+
 		Double quantidade = 0.00;
 		Double total_produto = 0.00;
 		Double valor_desconto = 0.00;
@@ -1949,6 +1963,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidadeTotal.setText(null);
 		fTxtTotalMercadoriasBruto.setText(null);
 		fTxtTotalMercadoriasLiquido.setText(null);
+		fTxtTotalDescontoProduto.setText(null);
 		fTxtFrete.setText(null);
 		fTxtValorDescFinal.setText(null);
 		fTxtPorcentDescFinal.setText(null);
@@ -2145,30 +2160,32 @@ public class Panel_orcamento extends JPanel {
 		total_mercadorias_bruto = 0.00;
 		total_mercadorias_liquido = 0.00;
 		Double desconto = 0.00;
-		
+
 		for (Produto_Orcamento produto : lista_produtos_inclusos) {
 			total_mercadorias_bruto += produto.getValor_total();
 			desconto += produto.getValor_desconto();
 		}
-		
+
 		total_mercadorias_bruto = Math.round(total_mercadorias_bruto * 100) / 100d;
 		desconto = Math.round(desconto * 100) / 100d;
 		total_mercadorias_liquido = total_mercadorias_bruto - desconto;
-		
+
 		// Sem considerar desconto dos itens, frete e desconto final do orçamento.
-		fTxtTotalMercadoriasBruto.setText(nf.format(total_mercadorias_bruto));
+		fTxtTotalMercadoriasBruto.setText(nf3.format(total_mercadorias_bruto));
 
 		// Considerando desconto dos itens
-		fTxtTotalMercadoriasLiquido.setText(nf.format(total_mercadorias_liquido));
+		fTxtTotalMercadoriasLiquido.setText(nf3.format(total_mercadorias_liquido));
+
+		fTxtTotalDescontoProduto.setText(nf3.format(desconto));
+
 		calcula_valor_desconto_final(null);
 		calcula_porcent_desc_final();
 		calcula_total_orcamento();
 	}
 
 	public void calcula_total_orcamento() {
-		
-		nf.setRoundingMode(RoundingMode.DOWN);
 
+		nf3.setRoundingMode(RoundingMode.DOWN);
 		total_orcamento = 0.00;
 
 		if (!fTxtValorDescFinal.getText().isEmpty()) {
@@ -2180,8 +2197,7 @@ public class Panel_orcamento extends JPanel {
 		}
 
 		total_orcamento = total_mercadorias_liquido - desconto_final + valor_frete;
-
-		fTxtTotalOrcamento.setText(nf.format(total_orcamento));
+		fTxtTotalOrcamento.setText(nf3.format(total_orcamento));
 	}
 
 	public void ativar_campos() {
@@ -2511,19 +2527,24 @@ public class Panel_orcamento extends JPanel {
 		if (orcamento_selecionado.getDesconto_final() != null) {
 			porcent_desc_final = (orcamento_selecionado.getDesconto_final() * 100)
 					/ (orcamento_selecionado.getTotal_mercadorias_liquido() + orcamento_selecionado.getFrete());
+			porcent_desc_final = Math.round(porcent_desc_final * 100) / 100d;
 		}
 
 		lista_produtos_inclusos.clear();
 		lista_produtos_inclusos.addAll(orcamento_selecionado.getProdutos_do_orcamento());
+		modelo_tabela.fireTableDataChanged();
+
 		fTxtQuantidadeTotal.setText(orcamento_selecionado.getQuantidade_produtos().toString());
-		fTxtTotalMercadoriasBruto.setText(nf.format(orcamento_selecionado.getTotal_mercadorias_bruto()));
-		fTxtTotalMercadoriasLiquido.setText(nf.format(orcamento_selecionado.getTotal_mercadorias_liquido()));
+		fTxtTotalMercadoriasBruto.setText(nf3.format(orcamento_selecionado.getTotal_mercadorias_bruto()));
+		fTxtTotalMercadoriasLiquido.setText(nf3.format(orcamento_selecionado.getTotal_mercadorias_liquido()));
 		fTxtFrete.setText(nf.format(orcamento_selecionado.getFrete()));
 		fTxtValorDescFinal.setText(nf.format(orcamento_selecionado.getDesconto_final()));
 		fTxtPorcentDescFinal.setText(nf.format(porcent_desc_final));
-		fTxtTotalOrcamento.setText(nf.format(orcamento_selecionado.getValor_total()));
+		fTxtTotalOrcamento.setText(nf3.format(orcamento_selecionado.getValor_total()));
+		fTxtTotalDescontoProduto.setText(nf3.format(orcamento_selecionado.getTotal_mercadorias_bruto()
+				- orcamento_selecionado.getTotal_mercadorias_liquido()));
+
 		quantidade_de_produtos = orcamento_selecionado.getQuantidade_produtos();
-		modelo_tabela.fireTableDataChanged();
 	}
 
 	public Boolean seleciona_produto() {
