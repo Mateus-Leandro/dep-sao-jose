@@ -20,7 +20,7 @@ public class Render_tabela_orcamentos extends DefaultTableCellRenderer {
 		JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		Color cor = Color.BLACK;
 
-		String status = (String) table.getValueAt(row, 7);
+		String status = (String) table.getValueAt(row, 8);
 
 		if (status.equals("N.FAT.")) {
 			cor = Color.BLACK;

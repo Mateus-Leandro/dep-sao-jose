@@ -146,7 +146,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 766, 452);
+		setBounds(100, 100, 814, 452);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -167,7 +167,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		ltClientes.setBounds(197, 104, 514, 70);
 
 		scrollPaneLtClientes = new JScrollPane(ltClientes);
-		scrollPaneLtClientes.setBounds(198, 96, 502, 58);
+		scrollPaneLtClientes.setBounds(198, 96, 587, 55);
 		scrollPaneLtClientes.setVisible(false);
 		contentPane.setLayout(null);
 
@@ -221,21 +221,21 @@ public class Orcamentos_do_cliente extends JDialog {
 		txtParcDif.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtParcDif.setEditable(false);
 		txtParcDif.setColumns(10);
-		txtParcDif.setBounds(648, 322, 89, 20);
+		txtParcDif.setBounds(696, 321, 89, 20);
 		contentPane.add(txtParcDif);
 		txtVencidos.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtVencidos.setToolTipText("Or\u00E7amentos com 1 ou mais parcelas n\u00E3o pagas e vencidas.");
 
 		txtVencidos.setEditable(false);
 		txtVencidos.setColumns(10);
-		txtVencidos.setBounds(424, 323, 95, 20);
+		txtVencidos.setBounds(457, 321, 95, 20);
 		contentPane.add(txtVencidos);
 		txtPendentes.setToolTipText("Or\u00E7amentos com 1 ou mais parcelas n\u00E3o pagas.");
 
 		txtPendentes.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtPendentes.setEditable(false);
 		txtPendentes.setColumns(10);
-		txtPendentes.setBounds(246, 323, 104, 20);
+		txtPendentes.setBounds(267, 321, 104, 20);
 		contentPane.add(txtPendentes);
 		txtPagos.setToolTipText("Or\u00E7amentos com todas as parcelas pagas.");
 
@@ -246,18 +246,18 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(txtPagos);
 
 		scrollPaneOrcamentos = new JScrollPane(tabelaOrcamentos);
-		scrollPaneOrcamentos.setBounds(12, 205, 725, 111);
+		scrollPaneOrcamentos.setBounds(12, 205, 773, 111);
 		contentPane.add(scrollPaneOrcamentos);
 		contentPane.add(scrollPaneLtClientes);
 
 		lblOrcamentos_do_realizados = new JLabel("Or\u00E7amentos Realizados");
-		lblOrcamentos_do_realizados.setBounds(228, 11, 287, 29);
+		lblOrcamentos_do_realizados.setBounds(267, 10, 287, 29);
 		lblOrcamentos_do_realizados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOrcamentos_do_realizados.setFont(new Font("Tahoma", Font.BOLD, 24));
 		contentPane.add(lblOrcamentos_do_realizados);
 
 		separador_orcamentos = new JSeparator();
-		separador_orcamentos.setBounds(10, 50, 727, 9);
+		separador_orcamentos.setBounds(10, 50, 775, 9);
 		contentPane.add(separador_orcamentos);
 
 		lblPesquisarPorOrcamento = new JLabel("Pesquisar por");
@@ -279,7 +279,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				alimentar_lista_orcamento();
 			}
 		});
-		fTxtPesquisaOrcamento.setBounds(202, 129, 386, 20);
+		fTxtPesquisaOrcamento.setBounds(202, 129, 395, 20);
 		fTxtPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtPesquisaOrcamento.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		contentPane.add(fTxtPesquisaOrcamento);
@@ -291,7 +291,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(lblCliente);
 
 		separador_cliente = new JSeparator();
-		separador_cliente.setBounds(62, 70, 675, 9);
+		separador_cliente.setBounds(62, 70, 723, 9);
 		contentPane.add(separador_cliente);
 
 		cbxTipoPesquisaCliente = new JComboBox<String>();
@@ -315,7 +315,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				scrollPaneLtClientes.setVisible(false);
 			}
 		});
-		fTxtPesquisaCliente.setBounds(198, 78, 502, 20);
+		fTxtPesquisaCliente.setBounds(198, 78, 587, 20);
 		fTxtPesquisaCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCliente) {
@@ -332,12 +332,12 @@ public class Orcamentos_do_cliente extends JDialog {
 
 			}
 		});
-		fTxtPesquisaCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPesquisaCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPesquisaCliente.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		contentPane.add(fTxtPesquisaCliente);
 
 		separador_orcamento = new JSeparator();
-		separador_orcamento.setBounds(91, 116, 646, 9);
+		separador_orcamento.setBounds(91, 116, 694, 9);
 		contentPane.add(separador_orcamento);
 
 		lblOrcamento = new JLabel("Or\u00E7amento");
@@ -351,22 +351,22 @@ public class Orcamentos_do_cliente extends JDialog {
 				alimentar_lista_orcamento();
 			}
 		});
-		checkBoxFaturado.setBounds(594, 127, 143, 23);
+		checkBoxFaturado.setBounds(603, 128, 144, 20);
 		checkBoxFaturado.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		contentPane.add(checkBoxFaturado);
 
 		separador_orcamentos1 = new JSeparator();
-		separador_orcamentos1.setBounds(12, 193, 265, 9);
+		separador_orcamentos1.setBounds(12, 193, 307, 9);
 		contentPane.add(separador_orcamentos1);
 
 		lblOrcamentosDoCliente = new JLabel("Or\u00E7amentos do cliente");
 		lblOrcamentosDoCliente.setToolTipText("");
 		lblOrcamentosDoCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblOrcamentosDoCliente.setBounds(281, 182, 160, 20);
+		lblOrcamentosDoCliente.setBounds(328, 182, 160, 20);
 		contentPane.add(lblOrcamentosDoCliente);
 
 		separador_orcamentos2 = new JSeparator();
-		separador_orcamentos2.setBounds(440, 193, 297, 9);
+		separador_orcamentos2.setBounds(489, 193, 296, 9);
 		contentPane.add(separador_orcamentos2);
 
 		fTxtObservacao = new JFormattedTextField();
@@ -374,7 +374,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		fTxtObservacao.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtObservacao.setEditable(false);
 		fTxtObservacao.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		fTxtObservacao.setBounds(10, 380, 727, 29);
+		fTxtObservacao.setBounds(10, 380, 775, 24);
 		contentPane.add(fTxtObservacao);
 
 		lblObservacoes = new JLabel("Observa\u00E7\u00E3o");
@@ -384,7 +384,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		contentPane.add(lblObservacoes);
 
 		separador_observacoes = new JSeparator();
-		separador_observacoes.setBounds(97, 364, 287, 9);
+		separador_observacoes.setBounds(97, 364, 333, 9);
 		contentPane.add(separador_observacoes);
 
 		btnExcluirOrcamento = new JButton("Excluir");
@@ -490,7 +490,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			}
 		});
 		btnEditarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnEditarObservacao.setBounds(392, 356, 164, 20);
+		btnEditarObservacao.setBounds(440, 357, 164, 20);
 		btnEditarObservacao.setIcon(icones.getIcone_editar());
 		contentPane.add(btnEditarObservacao);
 
@@ -523,7 +523,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		btnExcluirObservacao.setEnabled(false);
 		btnExcluirObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnExcluirObservacao.setBounds(566, 356, 172, 20);
+		btnExcluirObservacao.setBounds(614, 357, 172, 20);
 		btnExcluirObservacao.setIcon(icones.getIcone_excluir());
 		contentPane.add(btnExcluirObservacao);
 		btnSalvarObservacao.addMouseListener(new MouseAdapter() {
@@ -563,7 +563,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 
 		btnSalvarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnSalvarObservacao.setBounds(421, 349, 164, 20);
+		btnSalvarObservacao.setBounds(469, 350, 164, 20);
 		btnSalvarObservacao.setIcon(icones.getIcone_salvar());
 		btnSalvarObservacao.setVisible(false);
 		contentPane.add(btnSalvarObservacao);
@@ -579,7 +579,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 
 		btnCancelarObservacao.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnCancelarObservacao.setBounds(595, 349, 135, 20);
+		btnCancelarObservacao.setBounds(643, 350, 135, 20);
 		btnCancelarObservacao.setIcon(icones.getIcone_cancelar());
 		btnCancelarObservacao.setVisible(false);
 		contentPane.add(btnCancelarObservacao);
@@ -597,7 +597,7 @@ public class Orcamentos_do_cliente extends JDialog {
 				}
 			}
 		});
-		btnFaturar.setBounds(594, 157, 143, 29);
+		btnFaturar.setBounds(635, 160, 150, 29);
 		contentPane.add(btnFaturar);
 
 		btnImprimir = new JButton("Imprimir");
@@ -612,7 +612,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		});
 		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnImprimir.setEnabled(false);
-		btnImprimir.setBounds(461, 157, 122, 29);
+		btnImprimir.setBounds(503, 160, 122, 29);
 		btnImprimir.setIcon(icones.getIcone_impressora());
 		contentPane.add(btnImprimir);
 
@@ -625,20 +625,20 @@ public class Orcamentos_do_cliente extends JDialog {
 		lgPendentes = new JLabel("pendentes");
 		lgPendentes.setForeground(new Color(0, 0, 255));
 		lgPendentes.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
-		lgPendentes.setBounds(169, 325, 82, 20);
+		lgPendentes.setBounds(190, 323, 78, 20);
 		contentPane.add(lgPendentes);
 
 		lblVencidos = new JLabel("vencidos");
 
 		lblVencidos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
 		lblVencidos.setForeground(Color.RED);
-		lblVencidos.setBounds(360, 325, 64, 20);
+		lblVencidos.setBounds(393, 323, 64, 20);
 		contentPane.add(lblVencidos);
 
 		lgParcDif = new JLabel("Parc. <> Tot.Orc.");
 		lgParcDif.setForeground(new Color(128, 0, 128));
 		lgParcDif.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
-		lgParcDif.setBounds(527, 324, 122, 20);
+		lgParcDif.setBounds(575, 323, 122, 20);
 		contentPane.add(lgParcDif);
 		
 		btnReload = new JButton();
@@ -652,7 +652,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			}
 		});
 		btnReload.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnReload.setBounds(705, 77, 32, 20);
+		btnReload.setBounds(753, 128, 32, 20);
 		btnReload.setIcon(icones.getIcone_reload());
 		contentPane.add(btnReload);
 
@@ -660,16 +660,17 @@ public class Orcamentos_do_cliente extends JDialog {
 
 	// Configurando largura das colunas da tabela de orçamentos
 	public void ConfiguraLarguraColunaTabelaOrcamento(JTable tabela) {
-		tabela.getColumnModel().getColumn(0).setPreferredWidth(50); // Número do orçamento.
+		tabela.getColumnModel().getColumn(0).setPreferredWidth(42); // Número do orçamento.
 		tabela.getColumnModel().getColumn(1).setPreferredWidth(150); // Nome do cliente
 		tabela.getColumnModel().getColumn(2).setPreferredWidth(60); // Quantidade de itens.
 		tabela.getColumnModel().getColumn(3).setPreferredWidth(90); // Total mercadorias.
-		tabela.getColumnModel().getColumn(4).setPreferredWidth(90); // Desconto.
-		tabela.getColumnModel().getColumn(5).setPreferredWidth(90); // Frete.
-		tabela.getColumnModel().getColumn(6).setPreferredWidth(90); // Valor total.
-		tabela.getColumnModel().getColumn(7).setPreferredWidth(68); // Status.
-		tabela.getColumnModel().getColumn(8).setPreferredWidth(55); // Quantidade de parcelas
-		tabela.getColumnModel().getColumn(9).setPreferredWidth(80); // Data inclusão.
+		tabela.getColumnModel().getColumn(4).setPreferredWidth(90); // Desconto final.
+		tabela.getColumnModel().getColumn(5).setPreferredWidth(90); // Desconto Produto.
+		tabela.getColumnModel().getColumn(6).setPreferredWidth(90); // Frete.
+		tabela.getColumnModel().getColumn(7).setPreferredWidth(90); // Valor total.
+		tabela.getColumnModel().getColumn(8).setPreferredWidth(68); // Status.
+		tabela.getColumnModel().getColumn(9).setPreferredWidth(55); // Quantidade de parcelas
+		tabela.getColumnModel().getColumn(10).setPreferredWidth(80); // Data inclusão.
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela_orcamentos);
 		tabelaOrcamentos.setRowSorter(sorter);
@@ -678,15 +679,19 @@ public class Orcamentos_do_cliente extends JDialog {
 		sorter.setComparator(4, spv);
 		sorter.setComparator(5, spv);
 		sorter.setComparator(6, spv);
+		sorter.setComparator(7, spv);
 
 		tabela.setDefaultRenderer(Object.class, render);
 		tabela.getColumnModel().getColumn(0).setCellRenderer(render);
+		tabela.getColumnModel().getColumn(1).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(2).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(3).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(4).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(5).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(6).setCellRenderer(render);
+		tabela.getColumnModel().getColumn(7).setCellRenderer(render);
 		tabela.getColumnModel().getColumn(8).setCellRenderer(render);
+		tabela.getColumnModel().getColumn(9).setCellRenderer(render);
 
 	}
 
@@ -743,7 +748,7 @@ public class Orcamentos_do_cliente extends JDialog {
 
 		if (orcamentos.size() > 0) {
 			for (int n = 0; n < tabelaOrcamentos.getRowCount(); n++) {
-				switch (tabelaOrcamentos.getValueAt(n, 7).toString()) {
+				switch (tabelaOrcamentos.getValueAt(n, 8).toString()) {
 				case "PAGO":
 					pagos ++;
 					break;

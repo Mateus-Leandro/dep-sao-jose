@@ -1,6 +1,7 @@
 package tables.tableModels;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import entities.orcamentos.Orcamento;
 public class ModeloTabelaOrcamentos extends AbstractTableModel {
 
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
-	private String colunas[] = { "Nº Orc.", "Cliente", "Qtd. Itens", "Total Merc", "Desconto", "Frete", "Valor Total",
+	private String colunas[] = { "Nº", "Cliente", "Qtd. Itens", "Total Merc", "Desc.Fin.", "Desc. Prd.", "Frete", "Valor Total",
 			"Status","Qtd.Par.", "Dt. Inclusão" };
 	private ArrayList<Orcamento> orcamentos;
 	private final int COLUNA_NUMERO_ORCAMENTO = 0;
@@ -21,11 +22,12 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	private final int COLUNA_QUANTIDADE_ITENS = 2;
 	private final int COLUNA_TOTAL_MERCADORIAS = 3;
 	private final int COLUNA_VALOR_DESCONTO = 4;
-	private final int COLUNA_VALOR_FRETE = 5;
-	private final int COLUNA_TOTAL_ORCAMENTO = 6;
-	private final int COLUNA_STATUS = 7;
-	private final int COLUNA_QTD_PARCELAS = 8;
-	private final int COLUNA_DATA_INCLUSAO = 9;
+	private final int COLUNA_VALOR_DESCONTO_PRODUTO = 5;
+	private final int COLUNA_VALOR_FRETE = 6;
+	private final int COLUNA_TOTAL_ORCAMENTO = 7;
+	private final int COLUNA_STATUS = 8;
+	private final int COLUNA_QTD_PARCELAS = 9;
+	private final int COLUNA_DATA_INCLUSAO = 10;
 
 	public ModeloTabelaOrcamentos(ArrayList<Orcamento> orcamentos) {
 		this.orcamentos = orcamentos;
@@ -63,6 +65,8 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return BigDecimal.class;
 		case COLUNA_VALOR_DESCONTO:
 			return BigDecimal.class;
+		case COLUNA_VALOR_DESCONTO_PRODUTO:
+			return BigDecimal.class;
 		case COLUNA_VALOR_FRETE:
 			return BigDecimal.class;
 		case COLUNA_TOTAL_ORCAMENTO:
@@ -93,6 +97,8 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 			return nf.format(orcamento.getTotal_mercadorias_liquido());
 		case COLUNA_VALOR_DESCONTO:
 			return nf.format(orcamento.getDesconto_final());
+		case COLUNA_VALOR_DESCONTO_PRODUTO:
+			return nf.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido());
 		case COLUNA_VALOR_FRETE:
 			return nf.format(orcamento.getFrete());
 		case COLUNA_TOTAL_ORCAMENTO:
