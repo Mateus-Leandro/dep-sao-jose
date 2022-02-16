@@ -1767,8 +1767,19 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void cancelar_orcamento() {
-		desativar_campos();
-		limpar_campos();
+		
+		Boolean flag = true;
+		if(quantidade_de_produtos > 0) {
+			int opcao = JOptionPane.showConfirmDialog(lblQuantidade,
+					"ATENÇÃO!\nDeseja sair do orçamento atual?\nTODAS AS ALTERAÇÕES REALIZADAS NÃO SERÃO SALVAS.",
+					"Sair do orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+			flag = opcao == JOptionPane.YES_OPTION;
+		}
+		
+		if(flag) {
+			desativar_campos();
+			limpar_campos();
+		}
 	}
 
 	public boolean novo_produto(Produto_Orcamento novo_produto, Boolean editando_item) {
