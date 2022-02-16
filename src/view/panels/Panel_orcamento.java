@@ -718,6 +718,7 @@ public class Panel_orcamento extends JPanel {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				calcula_valor_desconto_final(digitaValorFrete);
 				calcula_total_orcamento();
 			}
 		});
