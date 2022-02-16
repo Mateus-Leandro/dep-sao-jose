@@ -2025,6 +2025,7 @@ public class Panel_orcamento extends JPanel {
 				|| digitado.getKeyCode() == digitado.VK_BACK_SPACE) {
 			Double porcent_desc_final = 0.00;
 			Double desc_final = 0.00;
+
 			try {
 				if (!fTxtPorcentDescFinal.getText().trim().isEmpty()) {
 					porcent_desc_final = nf.parse(fTxtPorcentDescFinal.getText()).doubleValue();
@@ -2049,7 +2050,9 @@ public class Panel_orcamento extends JPanel {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+
 		porcent_desc_final = (valor_desconto * 100) / (total_mercadorias_liquido + valor_frete);
+		porcent_desc_final = Math.round(porcent_desc_final * 100) / 100d;
 
 		if (porcent_desc_final > 99.99) {
 			fTxtPorcentDescFinal.setText(nf.format(0.00));
