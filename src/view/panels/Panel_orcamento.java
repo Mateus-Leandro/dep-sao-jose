@@ -279,17 +279,9 @@ public class Panel_orcamento extends JPanel {
 		ltProdutos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickListaProduto) {
-
 				produto_selecionado = ltProdutos.getSelectedValue();
 
-				// Testa se o produto está bloqueado
-				if (produto_selecionado.getBloqueadoVenda()) {
-					JOptionPane.showMessageDialog(lblQuantidade,
-							"O produto selecionado está bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orçamento.",
-							"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
-					fTxtNomeProduto.requestFocus();
-				} else {
-					// Testa se o produto já foi incluso no orçamento.
+				if (!produto_bloqueado()) {
 					if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
 						limpar_dados_produto();
 						fTxtNomeProduto.requestFocus();
@@ -866,7 +858,6 @@ public class Panel_orcamento extends JPanel {
 				} else {
 					if (!seleciona_produto()) {
 						lista_produtos.clear();
-
 						fTxtCodigoBarra.requestFocus();
 					}
 				}
@@ -2019,6 +2010,22 @@ public class Panel_orcamento extends JPanel {
 		return false;
 	}
 
+	public boolean produto_bloqueado() {
+		if (produto_selecionado.getBloqueadoVenda()) {
+			lista_produtos.clear();
+			produto_selecionado = null;
+			fTxtCodigoProduto.setText(null);
+			fTxtNomeProduto.setText(null);
+			fTxtCodigoBarra.setText(null);
+			JOptionPane.showMessageDialog(lblQuantidade,
+					"O produto selecionado está bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orçamento.",
+					"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void calcula_valor_desconto_final(KeyEvent digitado) {
 
 		if (digitado == null || teclou_digito(digitado.getKeyChar())
@@ -2553,16 +2560,20 @@ public class Panel_orcamento extends JPanel {
 	public Boolean seleciona_produto() {
 		if (lista_produtos.size() == 1) {
 			produto_selecionado = lista_produtos.get(0);
-			if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
-				limpar_dados_produto();
-				return false;
+			if (!produto_bloqueado()) {
+				if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
+					limpar_dados_produto();
+					return false;
+				} else {
+					exibe_dados_produto_selecionado();
+					fTxtCodigoBarra.setEditable(false);
+					fTxtCodigoProduto.setEditable(false);
+					fTxtNomeProduto.setEditable(false);
+					fTxtQuantidade.requestFocus();
+					return true;
+				}
 			} else {
-				exibe_dados_produto_selecionado();
-				fTxtCodigoBarra.setEditable(false);
-				fTxtCodigoProduto.setEditable(false);
-				fTxtNomeProduto.setEditable(false);
-				fTxtQuantidade.requestFocus();
-				return true;
+				return false;
 			}
 		} else {
 			return false;
