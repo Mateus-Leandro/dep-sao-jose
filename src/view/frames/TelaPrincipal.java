@@ -2,13 +2,19 @@ package view.frames;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.swing.AbstractAction;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
@@ -28,16 +34,18 @@ public class TelaPrincipal extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Configuracoes configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
+	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
+	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private Panel_clientes clientes = new Panel_clientes();
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
-	private Panel_bkp panel_bkp;
+	private Panel_bkp panel_bkp = new Panel_bkp();
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Properties props = new Properties();
+	private Boolean faz_bkp = bkp_banco.faz_bkp(props);
 
 	/**
 	 * Launch the application.
@@ -59,7 +67,6 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
-
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 759, 734);
@@ -81,25 +88,30 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.addTab("Clientes", clientes);
 		tabbedPane.addTab("Produtos", produtos);
 		tabbedPane.addTab("Orçamentos", orcamentos);
-		tabbedPane.addTab("Configurações", configuracoes);
 
-		// Testa se a máquina que o sistema está executando faz backup.
-		Boolean faz_bkp = bkp_banco.faz_bkp(props);
-		if (faz_bkp) {
-			panel_bkp = new Panel_bkp();
-			tabbedPane.addTab("Backup", panel_bkp);
+		if (!configuracoes_do_sistema.getSo_orcamento()) {
+			tabbedPane.addTab("Configurações", configuracoes);
+			// Testa se a máquina que o sistema está executando faz backup.
+			if (faz_bkp) {
+				tabbedPane.addTab("Backup", panel_bkp);
+			}
 		}
 
 		// Verifica se existe configuração e se existe nome para a empresa.
 		if (configuracoes_do_sistema != null) {
+			so_orcamentos();
 			if (configuracoes_do_sistema.getNome_empresa() != null) {
-				setTitle(configuracoes_do_sistema.getNome_empresa());
+				if (configuracoes_do_sistema.getSo_orcamento()) {
+					setTitle(configuracoes_do_sistema.getNome_empresa() + "*");
+				} else {
+					setTitle(configuracoes_do_sistema.getNome_empresa());
+				}
 			}
 		} else {
 			setTitle("NOME DA EMPRESA");
 			ClienteDAO cliente_dao = new ClienteDAO();
 			ArrayList<Cliente> clientes_cadastrados = new ArrayList<Cliente>();
-			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, null, null,  1);
+			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, null, null, 1);
 			// Testa se existe algum cliente cadastrado. Se não existir é cadastrado um
 			// consumidor final.
 			if (clientes_cadastrados.size() < 1) {
@@ -110,27 +122,60 @@ public class TelaPrincipal extends JFrame {
 				clientes.salvar_cliente(consumidor_final);
 			}
 
-			desativa_abas_configuracao_inicial();
+			abas_configuracao_inicial(false);
 			JOptionPane.showMessageDialog(null, "Necessário realizar configuração inicial do sistema.",
 					"Configuração inicial", JOptionPane.WARNING_MESSAGE);
 		}
 
 	}
 
-	public void desativa_abas_configuracao_inicial() {
-		tabbedPane.setEnabledAt(0, false);
-		tabbedPane.setEnabledAt(1, false);
-		tabbedPane.setEnabledAt(2, false);
-		muda_aba(3);
-	}
-
-	public void ativa_abas_configuracao_inicial() {
-		tabbedPane.setEnabledAt(0, true);
-		tabbedPane.setEnabledAt(1, true);
-		tabbedPane.setEnabledAt(2, true);
+	public void abas_configuracao_inicial(Boolean ativada) {
+		tabbedPane.setEnabledAt(0, ativada);
+		tabbedPane.setEnabledAt(1, ativada);
+		tabbedPane.setEnabledAt(2, ativada);
 	}
 
 	public void muda_aba(int numero_aba) {
 		tabbedPane.setSelectedIndex(numero_aba);
 	}
+
+	// Atalho para simplificar o sistema, não permitindo o controle financeiro,
+	// acesso a configurações e tela de backup.
+	public void so_orcamentos() {
+		InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0), "so_orcamentos_sim");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), "so_orcamentos_nao");
+
+		rootPane.getActionMap().put("so_orcamentos_sim", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_setores) {
+				configuracoes_do_sistema = conf_dao.busca_configuracoes();
+				setTitle(configuracoes_do_sistema.getNome_empresa() + "*");
+				conf_dao.so_orcamentos(true);
+				tabbedPane.remove(configuracoes);
+				tabbedPane.remove(panel_bkp);
+				orcamentos.so_orcamento(true);
+			}
+		});
+
+		rootPane.getActionMap().put("so_orcamentos_nao", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_setores) {
+				configuracoes_do_sistema = conf_dao.busca_configuracoes();
+				setTitle(configuracoes_do_sistema.getNome_empresa());
+				conf_dao.so_orcamentos(false);
+				tabbedPane.addTab("Configurações", configuracoes);
+				if (faz_bkp) {
+					tabbedPane.addTab("Backup", panel_bkp);
+				}
+				orcamentos.so_orcamento(false);
+			}
+		});
+
+	}
+
 }

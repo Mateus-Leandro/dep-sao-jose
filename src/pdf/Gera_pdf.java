@@ -30,7 +30,8 @@ public class Gera_pdf {
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 	private Document documento = new Document();
-
+	private Boolean orcamento_nao_salvo;
+	
 	// tabela cabeçalho1
 	private float[] largura_colunas_cabecalho1 = { 23f, 25f, 10f };
 	private PdfPTable tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
@@ -88,15 +89,23 @@ public class Gera_pdf {
 		try {
 			cria_pastas();
 
-			File arquivo = new File("C:/dep/pdf/Orçamento_" + orcamento.getId_orcamento().toString() + ".pdf");
+			// Teste para verificar se está sendo impresso um orçamento sem salvar (Sem Id)
+			orcamento_nao_salvo = orcamento.getId_orcamento() == null;
+
+			File arquivo;
+			if(!orcamento_nao_salvo) {
+				arquivo = new File("C:/dep/pdf/Orçamento_" + orcamento.getId_orcamento().toString() + ".pdf");
+			}else {
+				String home_usuario = System.getProperty("user.home");
+				arquivo = new File(home_usuario + "/Desktop/"+ "Orçamento.pdf");
+			}
+			
 			PdfWriter.getInstance(documento, new FileOutputStream(arquivo));
 			documento.open();
 
 			for (int n = 0; n < 2; n++) {
 				monta_cabecalho_orcamento(orcamento);
-
 				imprime_produtos(orcamento.getProdutos_do_orcamento());
-
 				monta_rodape(orcamento);
 
 				if (orcamento.getProdutos_do_orcamento().size() > 9) {
@@ -157,12 +166,22 @@ public class Gera_pdf {
 			documento.add(p);
 
 			tabela_cabecalho2 = new PdfPTable(largura_colunas_cabecalho2);
-			p = new Paragraph("Orçamento Nº: " + String.format("%06d", orcamento.getId_orcamento()));
-			p.setFont(fontePadraoMedia);
+			p = new Paragraph();
+			String numero_orcamento;
+			if(!orcamento_nao_salvo) {
+				numero_orcamento = "Orcamento Nº: " + String.format("%06d", orcamento.getId_orcamento());
+				p.add(numero_orcamento);
+			}else {
+				numero_orcamento =  "Informações do cliente";
+				p.setFont(new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD));
+				p.add(numero_orcamento);
+			}
 			cel_orcamento = new PdfPCell(p);
-
-			p = new Paragraph("Criado em: " + formata_data.format(orcamento.getData_inclusao()));
-			p.setFont(fontePadraoMedia);
+			
+			p = new Paragraph("");
+			if(!orcamento_nao_salvo) {
+				p.add("Criado em: " + formata_data.format(orcamento.getData_inclusao()));
+			}
 			cel_data_criacao = new PdfPCell(p);
 
 			p = new Paragraph("Cliente: " + String.format("%-50.50s", orcamento.getCliente().getNome()));
@@ -173,6 +192,8 @@ public class Gera_pdf {
 			String numero = "";
 			String bairro = "";
 			String cidade = "";
+			
+			
 			if (orcamento.getCliente().getEndereco() != null) {
 				rua = orcamento.getCliente().getEndereco();
 			}
@@ -232,7 +253,6 @@ public class Gera_pdf {
 
 	public void imprime_produtos(ArrayList<Produto_Orcamento> produtos) {
 		nf.setRoundingMode(RoundingMode.DOWN);
-//		nf2.setRoundingMode(RoundingMode.DOWN);
 
 		Paragraph p;
 		tabela_produtos = new PdfPTable(largura_colunas_produtos);
@@ -255,7 +275,7 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(String.format("%-32.32s", produto.getNome()));
+			p.add(String.format("%-30.30s", produto.getNome()));
 			cel_nome = new PdfPCell(p);
 
 			p = new Paragraph();

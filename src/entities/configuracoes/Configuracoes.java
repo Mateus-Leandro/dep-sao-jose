@@ -16,6 +16,7 @@ public class Configuracoes {
 	private String gera_PDF;
 	private String vincula_barras;
 	private Cliente consumidor_final;
+	private Boolean so_orcamento;
 
 	public Configuracoes() {
 	}
@@ -142,4 +143,12 @@ public class Configuracoes {
 		this.consumidor_final = consumidor_final;
 	}
 
+	public Boolean getSo_orcamento() {
+		return so_orcamento;
+	}
+
+	public void setSo_orcamento(Boolean so_orcamento) {
+		this.so_orcamento = so_orcamento;
+	}
+	
 }

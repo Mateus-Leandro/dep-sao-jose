@@ -15,7 +15,6 @@ public class ConfiguracaoDAO {
 	ResultSet rs;
 
 	public Boolean salva_configuracao(Configuracoes configuracao) {
-
 		conn = DB.getConnection();
 
 		try {
@@ -60,13 +59,39 @@ public class ConfiguracaoDAO {
 
 	}
 
+	public Boolean so_orcamentos(Boolean ativado) {
+		conn = DB.getConnection();
+
+		try {
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement("UPDATE `banco_deposito`.`configuracoes` SET `so_orcamento` = ?");
+			ps.setBoolean(1, ativado);
+			ps.execute();
+
+			conn.commit();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return false;
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeConnection(conn);
+		}
+
+	}
+
 	public Configuracoes busca_configuracoes() {
 		conn = DB.getConnection();
 		Configuracoes conf = new Configuracoes();
 		try {
 			ps = conn.prepareStatement(
 					"SELECT nome_empresa, responsavel, cnpj, inscricao_estadual, tel_fixo, configuracoes.celular, "
-							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc, gera_pdf, vincula_barras, idConsumidor_final, clientes.nome, clientes.endereco, clientes.numero, clientes.bairro, clientes.cidade "
+							+ "configuracoes.email, configuracoes.endereco, salva_parc_dif, alt_orc, gera_pdf, vincula_barras, so_orcamento, idConsumidor_final, clientes.nome, clientes.endereco, clientes.numero, clientes.bairro, clientes.cidade "
 							+ "FROM configuracoes " + "LEFT JOIN clientes "
 							+ "ON clientes.idCliente = configuracoes.idConsumidor_final");
 			rs = ps.executeQuery();
@@ -84,6 +109,7 @@ public class ConfiguracaoDAO {
 				conf.setAltera_orc(rs.getString("alt_orc"));
 				conf.setGera_PDF(rs.getString("gera_pdf"));
 				conf.setVincula_barras(rs.getString("vincula_barras"));
+				conf.setSo_orcamento(rs.getBoolean("so_orcamento"));
 
 				Cliente consumidor_final = new Cliente();
 				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));

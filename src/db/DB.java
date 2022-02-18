@@ -22,7 +22,7 @@ public class DB {
 
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
-
+		
 		File arquivo_db = new File("C:/dep/conf/db.properties");
 		if (!arquivo_db.exists()) {
 
@@ -139,5 +139,4 @@ public class DB {
 
 		System.exit(0);
 	}
-
 }

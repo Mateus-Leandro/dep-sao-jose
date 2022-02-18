@@ -219,7 +219,10 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblTotalDescontoProduto;
 	private JSeparator separadorInformacoesDoCliente_2;
 	private JFormattedTextField fTxtTotalDescontoProduto;
-
+	private JButton btnImprimir;
+	private Gera_pdf gera_pdf = new Gera_pdf();
+	private Boolean cliente_vazio = true;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -230,6 +233,24 @@ public class Panel_orcamento extends JPanel {
 		nf.setRoundingMode(RoundingMode.DOWN);
 
 		setLayout(null);
+
+		btnImprimir = new JButton("Imprimir");
+		btnImprimir.setEnabled(false);
+		btnImprimir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickImprimeOrcamento) {
+				if(btnImprimir.isEnabled()) {
+					Orcamento orcamento = new Orcamento();
+					orcamento = montar_orcamento(orcamento);
+					gera_pdf.monta_pdf_orcamento(orcamento);
+				}
+			}
+		});
+		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnImprimir.setBounds(471, 70, 123, 29);
+		btnImprimir.setIcon(icones.getIcone_impressora());
+		btnImprimir.setVisible(false);
+		add(btnImprimir);
 
 		panelNumeroOrcamento.setLayout(null);
 		panelNumeroOrcamento.setBorder(UIManager.getBorder("DesktopIcon.border"));
@@ -618,12 +639,13 @@ public class Panel_orcamento extends JPanel {
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 						calcula_total_mercadorias();
 
-						// Desativa os campos de frete, valor de desconto final e porcentagem de
-						// desconto final, caso não exista produtos no orçamento.
+						// Desativa os campos de frete, valor de desconto final, porcentagem de
+						// desconto final e botão imprimir, caso não exista produtos no orçamento.
 						if (quantidade_de_produtos < 1) {
 							fTxtFrete.setEditable(false);
 							fTxtValorDescFinal.setEditable(false);
 							fTxtPorcentDescFinal.setEditable(false);
+							btnImprimir.setEnabled(false);
 						}
 					}
 				}
@@ -1056,7 +1078,7 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnSalvar.setIcon(icones.getIcone_salvar());
 		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(460, 70, 120, 29);
+		btnSalvar.setBounds(366, 70, 95, 29);
 		btnSalvar.setVisible(false);
 		add(btnSalvar);
 
@@ -1548,6 +1570,9 @@ public class Panel_orcamento extends JPanel {
 		btnPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPesquisaOrcamento.setBounds(120, 70, 120, 29);
 		add(btnPesquisaOrcamento);
+		if(configuracoes_do_sistema.getSo_orcamento()) {
+			btnPesquisaOrcamento.setVisible(false);
+		}
 
 	}
 
@@ -1579,12 +1604,13 @@ public class Panel_orcamento extends JPanel {
 					fTxtCodigoProduto.requestFocus();
 				}
 
-				// Ativa os campos de frete, desconto e porcentagem de desconto, caso não
+				// Ativa os campos de frete, desconto,porcentagem de desconto e botão imprimir, caso não
 				// estejam ativos.
 				if (!fTxtFrete.isEditable()) {
 					fTxtFrete.setEditable(true);
 					fTxtValorDescFinal.setEditable(true);
 					fTxtPorcentDescFinal.setEditable(true);
+					btnImprimir.setEnabled(true);
 				}
 			}
 		} else {
@@ -1662,31 +1688,26 @@ public class Panel_orcamento extends JPanel {
 					"Confirmar orçamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
-			Boolean cliente_vazio = cliente_selecionado == null;
-
-			if (cliente_vazio && flag) {
-				configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando configurações.
-				opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Nenhum cliente foi informado!\n"
-						+ "Caso confirmar o orçamento será gravado utilizando o cliente configurado como consumidor final:"
-						+ "\n\nConsumidor final" + "\nCódigo: "
-						+ configuracoes_do_sistema.getConsumidor_final().getIdCliente().toString() + "\nNome: "
-						+ configuracoes_do_sistema.getConsumidor_final().getNome()
-						+ "\n\nDeseja confirmar o orçamento?", "Confirmar orçamento.", JOptionPane.YES_OPTION,
-						JOptionPane.WARNING_MESSAGE);
-				flag = opcao == JOptionPane.YES_OPTION;
+			if (flag) {
+				if (cliente_vazio()) {
+					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando configurações.
+					opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Nenhum cliente foi informado!\n"
+							+ "Caso confirmar o orçamento será gravado utilizando o cliente configurado como consumidor final:"
+							+ "\n\nConsumidor final" + "\nCódigo: "
+							+ configuracoes_do_sistema.getConsumidor_final().getIdCliente().toString() + "\nNome: "
+							+ configuracoes_do_sistema.getConsumidor_final().getNome()
+							+ "\n\nDeseja confirmar o orçamento?", "Confirmar orçamento.", JOptionPane.YES_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+					flag = opcao == JOptionPane.YES_OPTION;
+				}
 			}
 
+			
 			if (flag) {
 				Orcamento orcamento = new Orcamento();
 				orcamento = montar_orcamento(orcamento);
 
-				// Se o cliente não for informado, busca o consumidor final.
-				if (cliente_vazio) {
-					cliente_selecionado = configuracoes_do_sistema.getConsumidor_final();
-				}
-
 				orcamento.setCliente(cliente_selecionado);
-
 				OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 
 				if (fTxtNumeroOrcamento.getText().trim().isEmpty()) {
@@ -1694,9 +1715,7 @@ public class Panel_orcamento extends JPanel {
 				} else {
 					orcamento_dao.salvar_orcamento_editado(orcamento);
 				}
-
 				if (orcamento.getId_orcamento() != null) {
-
 					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 					JOptionPane.showMessageDialog(lblQuantidade,
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
@@ -1705,7 +1724,6 @@ public class Panel_orcamento extends JPanel {
 					// Testa se o orçamento foi editado e se seu valor original foi alterado.
 					flag = false;
 					Boolean valor_alterado = orcamento.getValor_total().compareTo(valor_original) != 0;
-
 					if (valor_alterado) {
 						if (orcamento.getParcelas() != null) {
 							if (orcamento.getParcelas().size() > 0) {
@@ -1715,7 +1733,6 @@ public class Panel_orcamento extends JPanel {
 							flag = false;
 						}
 					}
-
 					if (!flag) {
 						opcao = JOptionPane.showConfirmDialog(lblQuantidade,
 								"Deseja prosseguir para a manutenção das parcelas?", "Manutenção das parcelas.",
@@ -1726,11 +1743,6 @@ public class Panel_orcamento extends JPanel {
 					if (flag) {
 						Faturamento faturamento = new Faturamento(null, orcamento);
 						faturamento.abrir_faturamento(faturamento);
-
-						/*
-						 * // Não deixando usuário fechar a tela.
-						 * faturamento.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-						 */
 					}
 
 					// Testa se após salvar será gerado o pdf do orçamento.
@@ -1748,7 +1760,6 @@ public class Panel_orcamento extends JPanel {
 					}
 
 					if (flag) {
-						Gera_pdf gera_pdf = new Gera_pdf();
 						gera_pdf.monta_pdf_orcamento(orcamento);
 					}
 
@@ -1767,16 +1778,15 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void cancelar_orcamento() {
-		
+
 		Boolean flag = true;
-		if(quantidade_de_produtos > 0) {
+		if (quantidade_de_produtos > 0) {
 			int opcao = JOptionPane.showConfirmDialog(lblQuantidade,
 					"ATENÇÃO!\nDeseja sair do orçamento atual?\nTODAS AS ALTERAÇÕES REALIZADAS NÃO SERÃO SALVAS.",
 					"Sair do orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 			flag = opcao == JOptionPane.YES_OPTION;
 		}
-		
-		if(flag) {
+		if (flag) {
 			desativar_campos();
 			limpar_campos();
 		}
@@ -2258,6 +2268,17 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItemComDesconto.setEnabled(true);
 		fTxtTotalOrcamento.setEnabled(true);
 		checkboxLeitorBarras.setVisible(true);
+		
+		//Campos gerais
+		tabbedPane.setEnabled(true);
+		btnCancelar.setVisible(true);
+		configuracoes_do_sistema = conf_dao.busca_configuracoes();
+		if(!configuracoes_do_sistema.getSo_orcamento()) {
+			btnSalvar.setVisible(true);
+		}
+		btnLimpaCliente.setEnabled(true);
+		btnLimpaDadosProduto.setEnabled(true);
+		btnImprimir.setVisible(true);
 	}
 
 	public void desativar_campos() {
@@ -2303,10 +2324,15 @@ public class Panel_orcamento extends JPanel {
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		btnLimpaDadosProduto.setEnabled(false);
-		btnPesquisaOrcamento.setVisible(true);
+		configuracoes_do_sistema = conf_dao.busca_configuracoes();
+		if(!configuracoes_do_sistema.getSo_orcamento()) {
+			btnPesquisaOrcamento.setVisible(true);
+		}
 		btnNovo.setVisible(true);
 		tabbedPane.setSelectedIndex(0);
 		checkboxLeitorBarras.setVisible(false);
+		btnImprimir.setVisible(false);
+		btnImprimir.setEnabled(false);
 	}
 
 	public void editar_produto() {
@@ -2456,13 +2482,8 @@ public class Panel_orcamento extends JPanel {
 
 	public void novo_orcamento() {
 		ativar_campos();
-		tabbedPane.setEnabled(true);
-		btnCancelar.setVisible(true);
-		btnSalvar.setVisible(true);
 		btnNovo.setVisible(false);
 		btnPesquisaOrcamento.setVisible(false);
-		btnLimpaCliente.setEnabled(true);
-		btnLimpaDadosProduto.setEnabled(true);
 		fTxtCodigoProduto.requestFocus();
 	}
 
@@ -2508,6 +2529,11 @@ public class Panel_orcamento extends JPanel {
 		Boolean faturado = false;
 		Integer numero_de_parcelas = 0;
 
+		if(cliente_vazio) {
+			configuracoes_do_sistema = conf_dao.busca_configuracoes();
+			cliente_selecionado = configuracoes_do_sistema.getConsumidor_final();
+		}
+		
 		orcamento = new Orcamento(id_orcamento, cliente_selecionado, quantidade_de_produtos,
 				Double.valueOf(nf2.format(total_mercadorias_bruto).replaceAll(",", "\\.")),
 				Double.valueOf(nf2.format(total_mercadorias_liquido).replaceAll(",", "\\.")), valor_frete,
@@ -2619,11 +2645,36 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoBarra.setEditable(false);
 	}
 
+	public Boolean cliente_vazio() {
+		cliente_vazio = cliente_selecionado == null;
+		return cliente_vazio;
+	}
+
 	public Boolean teclou_digito(char tecla) {
 		if (Character.isDigit(tecla)) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	
+	public void so_orcamento(Boolean so_orcamento) {
+		Boolean orcamento_em_andamento = !btnNovo.isVisible();
+		if(!so_orcamento) {
+			if(orcamento_em_andamento) {
+				btnSalvar.setVisible(true);
+			}else {
+				btnPesquisaOrcamento.setVisible(true);
+			}
+			conf_dao.so_orcamentos(false);
+		}else {
+			if(orcamento_em_andamento) {
+				btnSalvar.setVisible(false);
+			}else {
+				btnPesquisaOrcamento.setVisible(false);
+			}
+			conf_dao.so_orcamentos(true);
 		}
 	}
 }
