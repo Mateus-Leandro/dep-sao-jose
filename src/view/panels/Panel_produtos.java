@@ -225,10 +225,10 @@ public class Panel_produtos extends JPanel {
 		btnMaisBarras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickMaisBarras) {
-
 				if (btnMaisBarras.isEnabled()) {
 					VariosBarras varios_barras = new VariosBarras(txtCodigo.getText().trim(), fTxtCodigoBarras,
 							fTxtNomeProduto.getText().trim());
+					varios_barras.setLocationRelativeTo(btnMaisBarras);
 					varios_barras.setVisible(true);
 				}
 			}
@@ -860,6 +860,7 @@ public class Panel_produtos extends JPanel {
 
 	public void novo_setor() {
 		CadastroSetor cadastro_setor = new CadastroSetor(getPanelProdutos());
+		cadastro_setor.setLocationRelativeTo(btnMaisSetor);
 		cadastro_setor.setVisible(true);
 	}
 
