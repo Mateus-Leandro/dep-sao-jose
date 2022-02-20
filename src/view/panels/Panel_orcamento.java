@@ -3,6 +3,7 @@ package view.panels;
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -19,10 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -33,6 +37,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -222,7 +227,7 @@ public class Panel_orcamento extends JPanel {
 	private JButton btnImprimir;
 	private Gera_pdf gera_pdf = new Gera_pdf();
 	private Boolean cliente_vazio = true;
-	
+
 	/**
 	 * Create the panel.
 	 */
@@ -231,7 +236,7 @@ public class Panel_orcamento extends JPanel {
 		// Truncar valores, e não arredondar.
 		nf.setRoundingMode(RoundingMode.DOWN);
 		nf.setRoundingMode(RoundingMode.DOWN);
-
+		tecla_pressionada();
 		setLayout(null);
 
 		btnImprimir = new JButton("Imprimir");
@@ -239,7 +244,7 @@ public class Panel_orcamento extends JPanel {
 		btnImprimir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickImprimeOrcamento) {
-				if(btnImprimir.isEnabled()) {
+				if (btnImprimir.isEnabled()) {
 					Orcamento orcamento = new Orcamento();
 					orcamento = montar_orcamento(orcamento);
 					gera_pdf.monta_pdf_orcamento(orcamento);
@@ -796,14 +801,15 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCodigoProduto) {
-				if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_ENTER) {
-					alimentar_lista_produtos("CÓDIGO", fTxtCodigoProduto.getText().trim());
-				} else {
-					if (fTxtCodigoProduto.getText().trim().isEmpty()) {
-						fTxtNomeProduto.requestFocus();
+
+				if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_F2) {
+					if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_ENTER) {
+						alimentar_lista_produtos("CÓDIGO", fTxtCodigoProduto.getText().trim());
 					} else {
-						if (!seleciona_produto()) {
-							lista_produtos.clear();
+						if (!fTxtCodigoProduto.getText().trim().isEmpty()) {
+							if (!seleciona_produto()) {
+								lista_produtos.clear();
+							}
 						}
 					}
 				}
@@ -876,12 +882,20 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoBarra.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCodigoBarras) {
-				if (digitaCodigoBarras.getKeyCode() != digitaCodigoBarras.VK_ENTER) {
-					alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim());
+				if (fTxtCodigoBarra.getText().trim().isEmpty()) {
+					lista_produtos.clear();
+					scrollPaneListaProdutos.setVisible(false);
 				} else {
-					if (!seleciona_produto()) {
-						lista_produtos.clear();
-						fTxtCodigoBarra.requestFocus();
+					if (digitaCodigoBarras.getKeyCode() == digitaCodigoBarras.VK_ENTER) {
+						if (!seleciona_produto()) {
+							lista_produtos.clear();
+							fTxtCodigoBarra.requestFocus();
+						}
+					} else {
+						if (digitaCodigoBarras.getKeyCode() != digitaCodigoBarras.VK_F2
+								&& teclou_digito(digitaCodigoBarras.getKeyChar())) {
+							alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim());
+						}
 					}
 				}
 			}
@@ -995,21 +1009,22 @@ public class Panel_orcamento extends JPanel {
 		lblValorDescontoFinal.setBounds(169, 6, 20, 19);
 		panelDescontoFinal.add(lblValorDescontoFinal);
 
-		checkboxLeitorBarras = new Checkbox("Leitor Cod. Barras");
+		checkboxLeitorBarras = new Checkbox("Leitor Cod. Barras (F2)");
+		checkboxLeitorBarras.setForeground(new Color(139, 0, 0));
 		checkboxLeitorBarras.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickLeitor) {
 				lista_produtos.clear();
 				limpar_dados_produto();
-
 				if (clickLeitor.getStateChange() == clickLeitor.SELECTED) {
 					ativa_leitor();
 				} else {
 					desativa_leitor();
 				}
+				scrollPaneListaProdutos.setVisible(false);
 			}
 		});
 		checkboxLeitorBarras.setFont(new Font("Dialog", Font.PLAIN, 14));
-		checkboxLeitorBarras.setBounds(10, 11, 135, 22);
+		checkboxLeitorBarras.setBounds(10, 11, 163, 22);
 		checkboxLeitorBarras.setVisible(false);
 		produtos.add(checkboxLeitorBarras);
 
@@ -1570,7 +1585,7 @@ public class Panel_orcamento extends JPanel {
 		btnPesquisaOrcamento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPesquisaOrcamento.setBounds(120, 70, 120, 29);
 		add(btnPesquisaOrcamento);
-		if(configuracoes_do_sistema.getSo_orcamento()) {
+		if (configuracoes_do_sistema.getSo_orcamento()) {
 			btnPesquisaOrcamento.setVisible(false);
 		}
 
@@ -1604,7 +1619,8 @@ public class Panel_orcamento extends JPanel {
 					fTxtCodigoProduto.requestFocus();
 				}
 
-				// Ativa os campos de frete, desconto,porcentagem de desconto e botão imprimir, caso não
+				// Ativa os campos de frete, desconto,porcentagem de desconto e botão imprimir,
+				// caso não
 				// estejam ativos.
 				if (!fTxtFrete.isEditable()) {
 					fTxtFrete.setEditable(true);
@@ -1612,6 +1628,9 @@ public class Panel_orcamento extends JPanel {
 					fTxtPorcentDescFinal.setEditable(true);
 					btnImprimir.setEnabled(true);
 				}
+
+				produto_selecionado = null;
+				lista_produtos.clear();
 			}
 		} else {
 			JOptionPane.showMessageDialog(lblQuantidade, "Necessário selecionar um produto.",
@@ -1702,7 +1721,6 @@ public class Panel_orcamento extends JPanel {
 				}
 			}
 
-			
 			if (flag) {
 				Orcamento orcamento = new Orcamento();
 				orcamento = montar_orcamento(orcamento);
@@ -1905,19 +1923,18 @@ public class Panel_orcamento extends JPanel {
 		lista_produtos.clear();
 		ProdutoDAO produto_dao = new ProdutoDAO();
 
-		if (fTxtNomeProduto.getText().trim().isEmpty() && fTxtCodigoProduto.getText().trim().isEmpty()
-				&& fTxtCodigoBarra.getText().trim().isEmpty()) {
-			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, "%", 50);
-		} else {
-			if (tipo_busca.equals("NOME")) {
-				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%",
-						50);
-			} else if (tipo_busca.equals("CÓDIGO")) {
-				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, fTxtCodigoProduto.getText().trim(),
-						50);
-			} else {
-				lista_produtos = produto_dao.listarProdutosBarras(lista_produtos, texto_buscado + "%", 50);
-			}
+		switch (tipo_busca) {
+		case "NOME":
+			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%", 50);
+			break;
+		case "CÓDIGO":
+			lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, fTxtCodigoProduto.getText().trim(), 50);
+			break;
+		case "BARRAS":
+			lista_produtos = produto_dao.listarProdutosBarras(lista_produtos, texto_buscado + "%", 50);
+			break;
+		default:
+			break;
 		}
 
 		for (Produto produto : lista_produtos) {
@@ -2268,12 +2285,12 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItemComDesconto.setEnabled(true);
 		fTxtTotalOrcamento.setEnabled(true);
 		checkboxLeitorBarras.setVisible(true);
-		
-		//Campos gerais
+
+		// Campos gerais
 		tabbedPane.setEnabled(true);
 		btnCancelar.setVisible(true);
 		configuracoes_do_sistema = conf_dao.busca_configuracoes();
-		if(!configuracoes_do_sistema.getSo_orcamento()) {
+		if (!configuracoes_do_sistema.getSo_orcamento()) {
 			btnSalvar.setVisible(true);
 		}
 		btnLimpaCliente.setEnabled(true);
@@ -2325,7 +2342,7 @@ public class Panel_orcamento extends JPanel {
 		btnSalvar.setVisible(false);
 		btnLimpaDadosProduto.setEnabled(false);
 		configuracoes_do_sistema = conf_dao.busca_configuracoes();
-		if(!configuracoes_do_sistema.getSo_orcamento()) {
+		if (!configuracoes_do_sistema.getSo_orcamento()) {
 			btnPesquisaOrcamento.setVisible(true);
 		}
 		btnNovo.setVisible(true);
@@ -2529,11 +2546,11 @@ public class Panel_orcamento extends JPanel {
 		Boolean faturado = false;
 		Integer numero_de_parcelas = 0;
 
-		if(cliente_vazio) {
+		if (cliente_vazio) {
 			configuracoes_do_sistema = conf_dao.busca_configuracoes();
 			cliente_selecionado = configuracoes_do_sistema.getConsumidor_final();
 		}
-		
+
 		orcamento = new Orcamento(id_orcamento, cliente_selecionado, quantidade_de_produtos,
 				Double.valueOf(nf2.format(total_mercadorias_bruto).replaceAll(",", "\\.")),
 				Double.valueOf(nf2.format(total_mercadorias_liquido).replaceAll(",", "\\.")), valor_frete,
@@ -2619,17 +2636,25 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void ativa_leitor() {
-		fTxtCodigoProduto.setEditable(false);
-		fTxtNomeProduto.setEditable(false);
-		fTxtCodigoBarra.setEditable(true);
-		fTxtCodigoBarra.requestFocus();
+		if (produto_selecionado == null) {
+			checkboxLeitorBarras.setState(true);
+			limpar_dados_produto();
+			fTxtCodigoProduto.setEditable(false);
+			fTxtNomeProduto.setEditable(false);
+			fTxtCodigoBarra.setEditable(true);
+			fTxtCodigoBarra.requestFocus();
+		}
 	}
 
 	public void desativa_leitor() {
-		fTxtCodigoProduto.setEditable(true);
-		fTxtNomeProduto.setEditable(true);
-		fTxtCodigoBarra.setEditable(false);
-		fTxtCodigoProduto.requestFocus();
+		if (produto_selecionado == null) {
+			limpar_dados_produto();
+			checkboxLeitorBarras.setState(false);
+			fTxtCodigoProduto.setEditable(true);
+			fTxtNomeProduto.setEditable(true);
+			fTxtCodigoBarra.setEditable(false);
+			fTxtCodigoProduto.requestFocus();
+		}
 	}
 
 	public void exibe_dados_produto_selecionado() {
@@ -2657,24 +2682,46 @@ public class Panel_orcamento extends JPanel {
 			return false;
 		}
 	}
-	
-	
+
 	public void so_orcamento(Boolean so_orcamento) {
 		Boolean orcamento_em_andamento = !btnNovo.isVisible();
-		if(!so_orcamento) {
-			if(orcamento_em_andamento) {
+		if (!so_orcamento) {
+			if (orcamento_em_andamento) {
 				btnSalvar.setVisible(true);
-			}else {
+			} else {
 				btnPesquisaOrcamento.setVisible(true);
 			}
 			conf_dao.so_orcamentos(false);
-		}else {
-			if(orcamento_em_andamento) {
+		} else {
+			if (orcamento_em_andamento) {
 				btnSalvar.setVisible(false);
-			}else {
+			} else {
 				btnPesquisaOrcamento.setVisible(false);
 			}
 			conf_dao.so_orcamentos(true);
 		}
+	}
+
+	// Teclas de atalho
+	public void tecla_pressionada() {
+		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "leitor_barras");
+
+		setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+
+		getActionMap().put("leitor_barras", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent atalho_leitor_barras) {
+				if (!btnNovo.isVisible()) {
+					if (checkboxLeitorBarras.getState()) {
+						desativa_leitor();
+					} else {
+						ativa_leitor();
+					}
+				}
+			}
+		});
 	}
 }
