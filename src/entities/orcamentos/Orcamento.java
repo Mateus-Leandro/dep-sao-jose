@@ -2,6 +2,7 @@ package entities.orcamentos;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import entities.cliente.Cliente;
@@ -144,7 +145,6 @@ public class Orcamento {
 	public void setData_inclusao(Date data_inclusao) {
 		this.data_inclusao = data_inclusao;
 	}
-	
 
 	public Date getData_faturamento() {
 		return data_faturamento;
@@ -177,21 +177,23 @@ public class Orcamento {
 	public String getStatusPagamento(Orcamento orcamento) {
 		int vencidas = 0;
 		int pendentes = 0;
-		int pagas = 0;
 		Double total_parcelas = 0.00;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+		Calendar vencimento = Calendar.getInstance();
+		Calendar hoje = Calendar.getInstance();
+		hoje.setTime(new Date());
+		hoje.set(Calendar.HOUR_OF_DAY, 0);
+		hoje.set(Calendar.MINUTE, 0);
+		hoje.set(Calendar.SECOND, 0);
+		hoje.set(Calendar.MILLISECOND, 0);
+
 		if (orcamento.getParcelas().size() > 0) {
 			for (Parcela parc : orcamento.getParcelas()) {
 				total_parcelas += parc.getValor_parcela();
 				if (parc.getData_pagamento() == null) {
-					
 					// Testa se a parcela esta vencida
-					Date hoje = new Date();
-					String data_vencimento = sdf.format(parc.getData_vencimento());
-					
-					if (data_vencimento.compareTo(sdf.format(hoje)) < 0) {
+					vencimento.setTime(parc.getData_vencimento());
+					if (vencimento.compareTo(hoje) < 0) {
 						vencidas++;
 					} else {
 						pendentes++;
