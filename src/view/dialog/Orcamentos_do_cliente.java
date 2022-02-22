@@ -593,6 +593,7 @@ public class Orcamentos_do_cliente extends JDialog {
 			public void mousePressed(MouseEvent clickFaturar) {
 				if (btnFaturar.isEnabled()) {
 					Faturamento faturamento = new Faturamento(getOrcamentosDoCliente(), orcamento_selecionado);
+					faturamento.setLocationRelativeTo(btnFaturar);
 					faturamento.abrir_faturamento(faturamento);
 				}
 			}
