@@ -29,7 +29,7 @@ public class Gera_pdf {
 
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
-	private Document documento = new Document();
+	private Document documento;
 	private Boolean orcamento_nao_salvo;
 	
 	// tabela cabeçalho1
@@ -87,6 +87,7 @@ public class Gera_pdf {
 
 	public void monta_pdf_orcamento(Orcamento orcamento) {
 		try {
+			documento = new Document();
 			cria_pastas();
 
 			// Teste para verificar se está sendo impresso um orçamento sem salvar (Sem Id)
