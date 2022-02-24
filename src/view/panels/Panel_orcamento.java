@@ -114,14 +114,10 @@ public class Panel_orcamento extends JPanel {
 	private JFormattedTextField fTxtValorEmAberto;
 	private JLabel lblPrimeiraCompra;
 	private JFormattedTextField fTxtPrimeiraCompra;
-	private JLabel lblSomentesVendaspendentes;
-	private JLabel lblVendaspendentes;
 	private JLabel lblUltimaCompra;
 	private JFormattedTextField fTxtUltimaCompra;
 	private JLabel lblValorDaMaior;
 	private JFormattedTextField fTxtMaiorCompra;
-	private JLabel lblVendaspendentes_1;
-	private JLabel lblObservacaoFinanceira;
 	private JList<Cliente> ltClientes;
 	private DefaultListModel<Cliente> list_model = new DefaultListModel<Cliente>();
 	private ArrayList<Cliente> lista_clientes = new ArrayList<Cliente>();
@@ -1439,7 +1435,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalVendido.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtTotalVendido.setEditable(false);
 		fTxtTotalVendido.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalVendido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalVendido.setEnabled(false);
 		fTxtTotalVendido.setBounds(115, 364, 100, 20);
@@ -1455,7 +1451,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtValorEmAberto.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtValorEmAberto.setEditable(false);
 		fTxtValorEmAberto.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtValorEmAberto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtValorEmAberto.setEnabled(false);
 		fTxtValorEmAberto.setBounds(116, 328, 99, 20);
@@ -1471,35 +1467,23 @@ public class Panel_orcamento extends JPanel {
 		fTxtPrimeiraCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtPrimeiraCompra.setEditable(false);
 		fTxtPrimeiraCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrimeiraCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrimeiraCompra.setEnabled(false);
 		fTxtPrimeiraCompra.setBounds(599, 329, 104, 20);
 		cliente.add(fTxtPrimeiraCompra);
 
-		lblSomentesVendaspendentes = new JLabel("* Or\u00E7amento confirmado");
-		lblSomentesVendaspendentes.setToolTipText("");
-		lblSomentesVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblSomentesVendaspendentes.setBounds(225, 365, 125, 20);
-		cliente.add(lblSomentesVendaspendentes);
-
-		lblVendaspendentes = new JLabel("* O\u00E7amento confirmado");
-		lblVendaspendentes.setToolTipText("");
-		lblVendaspendentes.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes.setBounds(225, 328, 123, 20);
-		cliente.add(lblVendaspendentes);
-
 		lblUltimaCompra = new JLabel("Data da \u00FAltima compra");
 		lblUltimaCompra.setToolTipText("");
 		lblUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUltimaCompra.setBounds(438, 364, 145, 20);
+		lblUltimaCompra.setBounds(448, 364, 145, 20);
 		cliente.add(lblUltimaCompra);
 
 		fTxtUltimaCompra = new JFormattedTextField();
 		fTxtUltimaCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtUltimaCompra.setEditable(false);
 		fTxtUltimaCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtUltimaCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtUltimaCompra.setEnabled(false);
 		fTxtUltimaCompra.setBounds(599, 362, 104, 20);
@@ -1515,23 +1499,11 @@ public class Panel_orcamento extends JPanel {
 		fTxtMaiorCompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtMaiorCompra.setEditable(false);
 		fTxtMaiorCompra.setToolTipText("N\u00E3o considera or\u00E7amentos");
-		fTxtMaiorCompra.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtMaiorCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtMaiorCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtMaiorCompra.setEnabled(false);
 		fTxtMaiorCompra.setBounds(155, 395, 100, 20);
 		cliente.add(fTxtMaiorCompra);
-
-		lblVendaspendentes_1 = new JLabel("* Or\u00E7amento confirmado");
-		lblVendaspendentes_1.setToolTipText("");
-		lblVendaspendentes_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblVendaspendentes_1.setBounds(263, 397, 125, 20);
-		cliente.add(lblVendaspendentes_1);
-
-		lblObservacaoFinanceira = new JLabel("Observa\u00E7\u00E3o Financeira");
-		lblObservacaoFinanceira.setToolTipText("");
-		lblObservacaoFinanceira.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblObservacaoFinanceira.setBounds(10, 439, 161, 20);
-		cliente.add(lblObservacaoFinanceira);
 
 		btnLimpaCliente = new JButton();
 		btnLimpaCliente.setEnabled(false);
@@ -1564,11 +1536,11 @@ public class Panel_orcamento extends JPanel {
 		cliente.add(fTxtApelido);
 
 		lblTextoObservacao = new JLabel(
-				"* Os valores acima consideram somente or\u00E7amentos confirmados. (Ormentos com pelo menos 1 parcela lan\u00E7ada).");
-		lblTextoObservacao.setForeground(Color.RED);
+				"* Os valores acima consideram somente or\u00E7amentos confirmados. (1 ou mais parcelas lan\u00E7adas).");
+		lblTextoObservacao.setForeground(Color.BLUE);
 		lblTextoObservacao.setToolTipText("");
-		lblTextoObservacao.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblTextoObservacao.setBounds(10, 470, 645, 20);
+		lblTextoObservacao.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblTextoObservacao.setBounds(10, 458, 634, 20);
 		cliente.add(lblTextoObservacao);
 
 		btnPesquisaOrcamento = new JButton("Pesquisar");
@@ -2546,7 +2518,7 @@ public class Panel_orcamento extends JPanel {
 		Boolean faturado = false;
 		Integer numero_de_parcelas = 0;
 
-		if (cliente_vazio) {
+		if (cliente_vazio()) {
 			configuracoes_do_sistema = conf_dao.busca_configuracoes();
 			cliente_selecionado = configuracoes_do_sistema.getConsumidor_final();
 		}
