@@ -2,41 +2,48 @@ package bkp;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import tools.Props_tools;
+
 public class BkpBanco {
 
 	private File pasta_conf = new File("C:/dep/conf/");
 	private File arquivo_conf_bkp = new File(pasta_conf + "/bkp.properties");
 	private File pasta_bkp = new File("C:/dep/backups/");
-	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	private File log_bkp = new File(pasta_bkp + "/log_bkp.properties");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	private String data_backup;
+	private Props_tools props_tools = new Props_tools();
 
 	public Boolean realiza_backup(String pasta_destino) {
+		long inicio = System.currentTimeMillis();
+
 		monta_arquivo_conf_db();
 		monta_bkp(pasta_destino);
 		File arquivo_bkp = new File(pasta_destino + "\\bkp_" + data_backup + ".sql");
+
 		try {
-			// Aguardando alguns milésimos para que seja verificado o tamanho do arquivo.
-			Thread.sleep(300);
+			// Aguardando alguns milésimos para que seja verificado o tamanho do arquivo e
+			// se ele existe.
+			Thread.sleep(700);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		if (arquivo_bkp.exists()) {
 			if (arquivo_bkp.length() > 0) {
+				grava_log(System.currentTimeMillis() - inicio);
 				return true;
 			} else {
-				while (!arquivo_bkp.delete())
-					;
+				while (!arquivo_bkp.delete());
 				return false;
 			}
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -69,7 +76,6 @@ public class BkpBanco {
 				saida.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.exit(0);
 			}
 		}
 	}
@@ -77,7 +83,7 @@ public class BkpBanco {
 	public void monta_bkp(String pasta_destino) {
 		try {
 
-			Properties props = le_arquivo_conf_bkp();
+			Properties props = props_tools.le_arquivo(arquivo_conf_bkp);
 			String faz_bkp = props.getProperty("faz_bkp");
 
 			if (faz_bkp.toUpperCase().equals("SIM")) {
@@ -98,26 +104,26 @@ public class BkpBanco {
 		}
 	}
 
-	public Properties le_arquivo_conf_bkp() {
-		FileInputStream fs;
-		Properties props = new Properties();
-		monta_arquivo_conf_db();
-		try {
-			fs = new FileInputStream(arquivo_conf_bkp);
-			props.load(fs);
-			fs.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return props;
-	}
-
 	public Boolean faz_bkp(Properties prop) {
-		prop = le_arquivo_conf_bkp();
+		prop = props_tools.le_arquivo(arquivo_conf_bkp);
 		if (prop.getProperty("faz_bkp").equals("SIM")) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void grava_log(long tempo_gasto) {
+		try {
+			BufferedWriter log = new BufferedWriter(new FileWriter(log_bkp));
+
+			Date hoje = new Date();
+			log.write("data_bkp=" + sdf.format(hoje).replaceAll("[-]", "/"));
+			log.newLine();
+			log.write("tempo=" + tempo_gasto);
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

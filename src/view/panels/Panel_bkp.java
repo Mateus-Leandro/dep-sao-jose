@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import javax.swing.UIManager;
 
 import bkp.BkpBanco;
 import icons.Icones;
+import tools.Props_tools;
 
 public class Panel_bkp extends JPanel {
 	private JLabel lblBackupSistema;
@@ -29,11 +32,11 @@ public class Panel_bkp extends JPanel {
 	private JLabel lblDiretorioDestino;
 	private JTextField txtPastaPadraoBkp;
 	private JLabel lblDataUltimoBackup;
-	private JTextField txtDataUltimoBackup;
+	private JTextField txtDataUltimoBackup = new JTextField();
 	private JLabel lblInformacoesBasicas;
 	private JSeparator separador_infoBasicas;
 	private JLabel lblTempoGasto;
-	private JTextField txtTempoGasto;
+	private JTextField txtTempoGasto = new JTextField();
 	private Icones icones = new Icones();
 	private JLabel lblNovoBackup;
 	private JSeparator separador_infoBasicas_1;
@@ -41,9 +44,12 @@ public class Panel_bkp extends JPanel {
 	private JLabel lblTamanhoAtualBanco;
 	private JTextField txtTamanhoBanco;
 	private File caminho_banco = new File("C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Data\\banco_deposito");
+	private File log_bkp = new File("C:\\dep\\backups\\log_bkp.properties");
+	private Properties log = null;
 	private JLabel lblTamanhoAproximado;
 	private BkpBanco bkp_banco = new BkpBanco();
-	private Properties props_bkp = bkp_banco.le_arquivo_conf_bkp();
+	private Props_tools props_tools = new Props_tools();
+	private Properties props_bkp = props_tools.le_arquivo(new File("C:\\dep\\conf\\bkp.properties"));
 	private JLabel lblPastaDestino;
 	private JTextField txtDestinoBkp;
 	private JButton btnPastaDestino;
@@ -53,11 +59,13 @@ public class Panel_bkp extends JPanel {
 	private JTextPane txtpnARealizaoDo;
 	private JSeparator separator;
 	private JButton btnLimpaPastaSelecionada;
+	private NumberFormat nf = new DecimalFormat("0.00");
 
 	/**
 	 * Create the panel.
 	 */
 	public Panel_bkp() {
+		le_log();
 		setLayout(null);
 		lblBackupSistema = new JLabel("Configura\u00E7\u00F5es de Backup do Sistema");
 		lblBackupSistema.setHorizontalAlignment(SwingConstants.CENTER);
@@ -87,7 +95,6 @@ public class Panel_bkp extends JPanel {
 		lblDataUltimoBackup.setBounds(10, 143, 144, 19);
 		add(lblDataUltimoBackup);
 
-		txtDataUltimoBackup = new JTextField();
 		txtDataUltimoBackup.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDataUltimoBackup.setEditable(false);
 		txtDataUltimoBackup.setBounds(155, 142, 96, 20);
@@ -109,10 +116,9 @@ public class Panel_bkp extends JPanel {
 		lblTempoGasto.setBounds(10, 205, 196, 19);
 		add(lblTempoGasto);
 
-		txtTempoGasto = new JTextField();
 		txtTempoGasto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtTempoGasto.setEditable(false);
-		txtTempoGasto.setBounds(216, 204, 107, 20);
+		txtTempoGasto.setBounds(216, 204, 196, 20);
 		add(txtTempoGasto);
 		txtTempoGasto.setColumns(10);
 
@@ -134,6 +140,7 @@ public class Panel_bkp extends JPanel {
 					if (bkp_banco.realiza_backup(txtDestinoBkp.getText())) {
 						JOptionPane.showMessageDialog(null, "Backup realizado com sucesso!!!",
 								"Backup do sistema.", JOptionPane.NO_OPTION);
+						le_log();
 					} else {
 						JOptionPane.showMessageDialog(null,
 								"Não foi possível realizar o backup do sistema!\nVerifique as configurações presentes no arquivo C:\\dep\\conf\\bkp.properties",
@@ -157,7 +164,7 @@ public class Panel_bkp extends JPanel {
 		txtTamanhoBanco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtTamanhoBanco.setEditable(false);
 		txtTamanhoBanco.setColumns(10);
-		txtTamanhoBanco.setBounds(203, 173, 154, 20);
+		txtTamanhoBanco.setBounds(203, 173, 209, 20);
 		add(txtTamanhoBanco);
 
 		long tamanho = (long) (pega_tamanho_banco() / 1048576.0);
@@ -166,7 +173,7 @@ public class Panel_bkp extends JPanel {
 		lblTamanhoAproximado = new JLabel("* Tamanho aproximado.");
 		lblTamanhoAproximado.setForeground(Color.BLUE);
 		lblTamanhoAproximado.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblTamanhoAproximado.setBounds(367, 175, 135, 19);
+		lblTamanhoAproximado.setBounds(419, 175, 135, 19);
 		add(lblTamanhoAproximado);
 
 		lblPastaDestino = new JLabel("Pasta de destino");
@@ -266,5 +273,21 @@ public class Panel_bkp extends JPanel {
 	public String pega_caminho_padrao_bkp() {
 		String caminho_padrao = props_bkp.getProperty("destino_bkp");
 		return caminho_padrao;
+	}
+	
+	public void le_log() {
+		if(log_bkp.exists()) {
+			log = props_tools.le_arquivo(log_bkp);
+			if(log.getProperty("tempo") != null) {
+				Double tempo_gasto = Double.parseDouble(log.getProperty("tempo"));
+				tempo_gasto = tempo_gasto / 1000;
+				txtTempoGasto.setText(nf.format(tempo_gasto) + " segundos");
+			}
+			
+			if(log.getProperty("data_bkp") != null) {
+				String data = log.getProperty("data_bkp");
+				txtDataUltimoBackup.setText(data.replaceAll(data, data));
+			}
+		}
 	}
 }
