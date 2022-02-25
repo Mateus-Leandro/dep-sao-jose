@@ -40,7 +40,7 @@ import dao.BarrasDAO;
 import entities.produto.Barras_Produto;
 import entities.produto.Produto;
 import tables.tableModels.ModeloTabelaBarras;
-import view.tools.Jtext_tools;
+import tools.Jtext_tools;
 
 public class VariosBarras extends JDialog {
 

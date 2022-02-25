@@ -50,10 +50,10 @@ import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterMonetario;
+import tools.Jtext_tools;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
 import view.formatFields.FormataNumeral;
-import view.tools.Jtext_tools;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;

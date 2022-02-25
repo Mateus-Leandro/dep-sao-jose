@@ -27,8 +27,8 @@ import dao.ConfiguracaoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 import icons.Icones;
+import tools.Jtext_tools;
 import view.frames.TelaPrincipal;
-import view.tools.Jtext_tools;
 
 import java.awt.Color;
 import java.awt.event.FocusAdapter;

@@ -49,7 +49,7 @@ import entities.configuracoes.Configuracoes;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
-import view.tools.Jtext_tools;
+import tools.Jtext_tools;
 
 public class Panel_clientes extends JPanel {
 	private JLabel lblCadastroDeClientes;

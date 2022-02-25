@@ -1,4 +1,4 @@
-package view.tools;
+package tools;
 
 import java.awt.Component;
 import java.awt.TextField;

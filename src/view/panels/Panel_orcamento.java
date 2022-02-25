@@ -62,10 +62,10 @@ import entities.produto.Produto;
 import icons.Icones;
 import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
+import tools.Jtext_tools;
 import view.dialog.Faturamento;
 import view.dialog.Orcamentos_do_cliente;
 import view.formatFields.FormataNumeral;
-import view.tools.Jtext_tools;
 
 public class Panel_orcamento extends JPanel {
 	/**
