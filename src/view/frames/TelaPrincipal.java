@@ -2,6 +2,7 @@ package view.frames;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
+import icons.Icones;
 import view.panels.Panel_bkp;
 import view.panels.Panel_clientes;
 import view.panels.Panel_configuracoes;
@@ -46,7 +48,6 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Properties props = new Properties();
 	private Boolean faz_bkp = bkp_banco.faz_bkp(props);
-
 	/**
 	 * Launch the application.
 	 */
@@ -67,6 +68,7 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/ferramentas.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 759, 734);
