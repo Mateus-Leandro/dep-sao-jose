@@ -28,9 +28,13 @@ public class Props_tools {
 	public Boolean getProperty(Properties prop, String property, File arquivo) {
 		prop = le_arquivo(arquivo);
 		if(prop != null) {
-			if (prop.getProperty(property).equals("SIM")) {
-				return true;
-			} else {
+			if(prop.getProperty(property) != null) {
+				if (prop.getProperty(property).equals("SIM")) {
+					return true;
+				} else {
+					return false;
+				}
+			}else {
 				return false;
 			}
 		}else {

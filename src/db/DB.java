@@ -43,8 +43,7 @@ public class DB {
 						conn = DriverManager.getConnection(url, props);
 					} catch (SQLException e) {
 						JOptionPane.showMessageDialog(null,
-								"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
-										+ arquivo_db,
+								"Não foi possível conectar com o banco de dados.",
 								"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
 						System.exit(0);
 						return null;
