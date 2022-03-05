@@ -324,7 +324,7 @@ public class Panel_orcamento extends JPanel {
 
 		ltProdutos.setBounds(438, 77, 267, 79);
 		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-		scrollPaneListaProdutos.setBounds(273, 74, 233, 77);
+		scrollPaneListaProdutos.setBounds(199, 74, 307, 111);
 		produtos.add(scrollPaneListaProdutos);
 		scrollPaneListaProdutos.setVisible(false);
 		produtos.add(btnCancelar_editado);
@@ -466,9 +466,9 @@ public class Panel_orcamento extends JPanel {
 		panelDesconto.add(lblPorcentagemDesconto);
 		lblPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		lblNomeProduto = new JLabel("Nome Produto");
+		lblNomeProduto = new JLabel("Prod.");
 		lblNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeProduto.setBounds(177, 59, 97, 19);
+		lblNomeProduto.setBounds(163, 56, 37, 19);
 		produtos.add(lblNomeProduto);
 
 		MaskFormatter mascara_nome_produto = null;
@@ -517,7 +517,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setColumns(10);
-		fTxtNomeProduto.setBounds(273, 55, 233, 20);
+		fTxtNomeProduto.setBounds(199, 55, 307, 20);
 		produtos.add(fTxtNomeProduto);
 
 		lblInclusãoDeProdutos = new JLabel("Inclus\u00E3o de produtos");
@@ -530,9 +530,9 @@ public class Panel_orcamento extends JPanel {
 		separadorInformacoesDoCliente_1.setBounds(10, 41, 695, 9);
 		produtos.add(separadorInformacoesDoCliente_1);
 
-		lblCodigoProduto = new JLabel("C\u00F3digo");
+		lblCodigoProduto = new JLabel("C\u00F3d.");
 		lblCodigoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodigoProduto.setBounds(10, 61, 45, 19);
+		lblCodigoProduto.setBounds(11, 56, 30, 19);
 		produtos.add(lblCodigoProduto);
 
 		lblFatorVenda = new JLabel("Fator de venda");
@@ -814,7 +814,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoProduto.setColumns(10);
-		fTxtCodigoProduto.setBounds(57, 57, 63, 20);
+		fTxtCodigoProduto.setBounds(43, 55, 67, 20);
 		produtos.add(fTxtCodigoProduto);
 
 		btnLimpaDadosProduto = new JButton();
@@ -839,7 +839,7 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnLimpaDadosProduto.setEnabled(false);
 		btnLimpaDadosProduto.setIcon(icones.getIcone_limpar());
-		btnLimpaDadosProduto.setBounds(126, 59, 27, 19);
+		btnLimpaDadosProduto.setBounds(115, 56, 27, 19);
 		produtos.add(btnLimpaDadosProduto);
 
 		lblCodBarra = new JLabel("Cod.Barra");
