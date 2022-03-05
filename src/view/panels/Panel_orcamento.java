@@ -2104,6 +2104,7 @@ public class Panel_orcamento extends JPanel {
 			}
 
 			porcentagem_desconto = (valor_desconto * 100.00) / valor_produto;
+			porcentagem_desconto = Math.round(porcentagem_desconto * 100) / 100d;
 
 			if (porcentagem_desconto > 99.99) {
 				fTxtPorcentagemDesconto.setText(nf.format(99.99));
@@ -2137,7 +2138,7 @@ public class Panel_orcamento extends JPanel {
 				}
 
 				valor_desconto = total_produto * (porcentagem_desconto / 100.00);
-				valor_desconto = Math.round(valor_desconto * 100) / 100d;
+				valor_desconto = Math.round(valor_desconto * 10000) / 10000d;
 				fTxtValorDesconto.setText(nf.format(valor_desconto));
 			}
 		}
@@ -2171,8 +2172,8 @@ public class Panel_orcamento extends JPanel {
 			Double total_produto = (preco_unitario * quantidade);
 			Double total_produto_com_desconto = (total_produto - valor_desconto);
 			
-			total_produto =  Math.round(total_produto * 100) / 100d;
-			total_produto_com_desconto = Math.round(total_produto_com_desconto * 100) / 100d;
+			total_produto =  Math.round(total_produto * 10000) / 10000d;
+			total_produto_com_desconto = Math.round(total_produto_com_desconto * 10000) / 10000d;
 			
 			fTxtTotalItem.setText(nf.format(total_produto));
 			fTxtTotalItemComDesconto.setText(nf.format(total_produto_com_desconto));
@@ -2190,8 +2191,8 @@ public class Panel_orcamento extends JPanel {
 			desconto += produto.getValor_desconto();
 		}
 
-		total_mercadorias_bruto = Math.round(total_mercadorias_bruto * 100) / 100d;
-		desconto = Math.round(desconto * 100) / 100d;
+		total_mercadorias_bruto = Math.round(total_mercadorias_bruto * 10000) / 10000d;
+		desconto = Math.round(desconto * 10000) / 10000d;
 		total_mercadorias_liquido = total_mercadorias_bruto - desconto;
 
 		// Sem considerar desconto dos itens, frete e desconto final do orçamento.
@@ -2369,11 +2370,11 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidade
 				.setText(tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString());
 		fTxtPrecoUnitario.setText(nf.format(preco_unit));
-		fTxtPorcentagemDesconto.setText(nf.format((desconto * 100.00) / (total + desconto)));
-		fTxtValorDesconto.setText(nf.format(desconto));
 		fTxtTotalItem.setText(nf.format(total + desconto));
 		fTxtTotalItemComDesconto.setText(nf.format(total));
-
+		fTxtValorDesconto.setText(nf.format(desconto));
+		calcula_porcentagem_desconto();
+		
 		fTxtNomeProduto.setEditable(false);
 		fTxtCodigoProduto.setEditable(false);
 
@@ -2567,7 +2568,7 @@ public class Panel_orcamento extends JPanel {
 		if (orcamento_selecionado.getDesconto_final() != null) {
 			porcent_desc_final = (orcamento_selecionado.getDesconto_final() * 100)
 					/ (orcamento_selecionado.getTotal_mercadorias_liquido() + orcamento_selecionado.getFrete());
-			porcent_desc_final = Math.round(porcent_desc_final * 100) / 100d;
+			porcent_desc_final = Math.round(porcent_desc_final * 10000) / 10000d;
 		}
 
 		lista_produtos_inclusos.clear();
