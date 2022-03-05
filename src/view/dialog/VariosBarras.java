@@ -242,7 +242,7 @@ public class VariosBarras extends JDialog {
 
 		MaskFormatter mascara_barras = null;
 		try {
-			mascara_barras = new MaskFormatter("##############");
+			mascara_barras = new MaskFormatter("###############");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -414,35 +414,43 @@ public class VariosBarras extends JDialog {
 	public void salvar_barras() {
 		btnSalvar.doClick();
 		if (!fTxtCodigoVinculado.getText().trim().isEmpty()) {
-			String barras = fTxtCodigoVinculado.getText().trim();
+			if (fTxtCodigoVinculado.getText().trim().length() < 15) {
+				String barras = fTxtCodigoVinculado.getText().trim();
 
-			Boolean principal = lista.size() == 0;
+				Boolean principal = lista.size() == 0;
 
-			Produto produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
+				Produto produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras,
+						principal);
 
-			if (produto_encontrado == null) {
-				JOptionPane.showMessageDialog(btnSalvar, "Código vinculado corretamente.", "Vinculação de código de barras",
-						JOptionPane.NO_OPTION);
-				modelo_tabela.addBarras(
-						new Barras_Produto(principal, barras, new java.sql.Date(System.currentTimeMillis())));
-				btnSalvar.setVisible(false);
-				btnCancelar.setVisible(false);
-				btnNovo.setVisible(true);
-				fTxtCodigoVinculado.setVisible(false);
-				lblVinculado.setVisible(false);
+				if (produto_encontrado == null) {
+					JOptionPane.showMessageDialog(btnSalvar, "Código vinculado corretamente.",
+							"Vinculação de código de barras", JOptionPane.NO_OPTION);
+					modelo_tabela.addBarras(
+							new Barras_Produto(principal, barras, new java.sql.Date(System.currentTimeMillis())));
+					btnSalvar.setVisible(false);
+					btnCancelar.setVisible(false);
+					btnNovo.setVisible(true);
+					fTxtCodigoVinculado.setVisible(false);
+					lblVinculado.setVisible(false);
 
-				fTxtCodigoVinculado.setText(null);
+					fTxtCodigoVinculado.setText(null);
 
-				// Se o código de barras for o principal, é alterado no campos e exibido.
-				if (principal) {
-					txtCodigoBarrasPrincipal.setText(barras);
+					// Se o código de barras for o principal, é alterado no campos e exibido.
+					if (principal) {
+						txtCodigoBarrasPrincipal.setText(barras);
+					}
+				} else {
+					JOptionPane.showMessageDialog(btnSalvar,
+							"Código de barras ja utilizado no produto abaixo:\nCódigo: "
+									+ produto_encontrado.getIdProduto() + "\nDescrição: "
+									+ produto_encontrado.getDescricao(),
+							"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
+					fTxtCodigoVinculado.setText(null);
 				}
 			} else {
-				JOptionPane.showMessageDialog(btnSalvar,
-						"Código de barras ja utilizado no produto abaixo:\nCódigo: " + produto_encontrado.getIdProduto()
-								+ "\nDescrição: " + produto_encontrado.getDescricao(),
-						"Vinculação de código de barras", JOptionPane.WARNING_MESSAGE);
 				fTxtCodigoVinculado.setText(null);
+				JOptionPane.showMessageDialog(btnSalvar, "Código Inválido", "Vinculação de código de barras.",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
