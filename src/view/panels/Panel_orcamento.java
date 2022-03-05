@@ -2568,7 +2568,7 @@ public class Panel_orcamento extends JPanel {
 		if (orcamento_selecionado.getDesconto_final() != null) {
 			porcent_desc_final = (orcamento_selecionado.getDesconto_final() * 100)
 					/ (orcamento_selecionado.getTotal_mercadorias_liquido() + orcamento_selecionado.getFrete());
-			porcent_desc_final = Math.round(porcent_desc_final * 10000) / 10000d;
+			porcent_desc_final = Math.round(porcent_desc_final * 100) / 100d;
 		}
 
 		lista_produtos_inclusos.clear();
