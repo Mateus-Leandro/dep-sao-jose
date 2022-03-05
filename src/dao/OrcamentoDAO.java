@@ -171,18 +171,19 @@ public class OrcamentoDAO {
 					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao, dataFaturamento "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
 					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?";
-
+				
+			String ordem = " ORDER BY idOrcamento DESC";
 			if (limite == null) {
 				if (so_faturados) {
-					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true");
+					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + ordem);
 				} else {
-					ps = conn.prepareStatement(consulta);
+					ps = conn.prepareStatement(consulta + ordem);
 				}
 			} else {
 				if (so_faturados) {
-					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + " LIMIT " + limite);
+					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + ordem + " LIMIT " + limite);
 				} else {
-					ps = conn.prepareStatement(consulta + " LIMIT " + limite);
+					ps = conn.prepareStatement(consulta + ordem + " LIMIT " + limite);
 				}
 			}
 			if (!cliente_vazio) {
