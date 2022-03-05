@@ -91,7 +91,7 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 			Boolean fracionado = false;
 
 			if (produto_orcamento.getFator_venda().equals("MT") || produto_orcamento.getFator_venda().equals("KG")
-					|| produto_orcamento.getFator_venda().equals("L")) {
+					|| produto_orcamento.getFator_venda().equals("L") || produto_orcamento.getFator_venda().contentEquals("PAR")) {
 				fracionado = true;
 			} else {
 				fracionado = false;
@@ -119,7 +119,9 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 			case COLUNA_DESC:
 				return nf.format(produto_orcamento.getValor_desconto());
 			case COLUNA_TOTAL:
-				return nf.format(produto_orcamento.getValor_total() - produto_orcamento.getValor_desconto());
+				Double total_produto = produto_orcamento.getValor_total() - produto_orcamento.getValor_desconto();
+				total_produto = Math.round(total_produto * 10000) / 10000d;
+				return nf.format(total_produto);
 			}
 			return null;
 		}else {
