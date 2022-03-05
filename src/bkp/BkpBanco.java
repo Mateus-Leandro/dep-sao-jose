@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
@@ -17,11 +18,12 @@ public class BkpBanco {
 	private File pasta_bkp = new File("C:/dep/backups/");
 	private File log_bkp = new File(pasta_bkp + "/log_bkp.properties");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-	private String data_backup;
+	private String data_backup = sdf.format(new Date());
+	private String arquivo_bkp = "/bkp_" + data_backup + ".sql";
 	private Props_tools props_tools = new Props_tools();
 	private Properties prop;
 	private long inicio;
-
+	
 	public Boolean realiza_backup(String pasta_destino) {
 		inicio = System.currentTimeMillis();
 
@@ -94,11 +96,9 @@ public class BkpBanco {
 					String senha = props.getProperty("senha_banco");
 					String nome_banco = props.getProperty("nome_banco");
 					String comando = mysql_path + "mysqldump.exe";
-					
-					data_backup = sdf.format(new Date());
-					
+
 					ProcessBuilder proc = new ProcessBuilder(comando, "--user=" + usuario, "--password=" + senha,
-							nome_banco, "--result-file=" + pasta_destino + "\\bkp_" + data_backup + ".sql");
+							nome_banco, "--result-file=" + pasta_destino + arquivo_bkp);
 					proc.start();
 				}
 			}
@@ -131,11 +131,36 @@ public class BkpBanco {
 	
 	public Boolean bkp_diario() {
 		inicio = System.currentTimeMillis();
-		if(realiza_backup(pasta_bkp.getAbsolutePath())) {
-			grava_log(System.currentTimeMillis() - inicio);
-			return true;
-		}else {
+		File bkp = new File(pasta_bkp + arquivo_bkp);
+		remove_bkp_antigo();
+
+		if(bkp.exists()) {
 			return false;
+		}else {
+			if(realiza_backup(pasta_bkp.getAbsolutePath())) {
+				grava_log(System.currentTimeMillis() - inicio);
+				return true;
+			}else {
+				return false;
+			}
+		}
+	}
+	
+	
+	public void remove_bkp_antigo() {
+		Calendar hoje = Calendar.getInstance();
+		Date data_bkp;
+		File bkp_antigo;
+		
+		for(int n = 5; n < 30; n++) {
+			hoje.setTime(new Date());
+			hoje.add(Calendar.DAY_OF_MONTH, -n);
+			data_bkp = hoje.getTime();
+			
+			bkp_antigo = new File(pasta_bkp.getAbsoluteFile() + "\\bkp_" + sdf.format(data_bkp) + ".sql");
+			while(bkp_antigo.exists()) {
+				bkp_antigo.delete();
+			}
 		}
 	}
 }
