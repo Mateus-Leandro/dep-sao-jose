@@ -2170,7 +2170,10 @@ public class Panel_orcamento extends JPanel {
 			}
 			Double total_produto = (preco_unitario * quantidade);
 			Double total_produto_com_desconto = (total_produto - valor_desconto);
-
+			
+			total_produto =  Math.round(total_produto * 100) / 100d;
+			total_produto_com_desconto = Math.round(total_produto_com_desconto * 100) / 100d;
+			
 			fTxtTotalItem.setText(nf.format(total_produto));
 			fTxtTotalItemComDesconto.setText(nf.format(total_produto_com_desconto));
 		}
