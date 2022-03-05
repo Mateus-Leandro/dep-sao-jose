@@ -46,8 +46,9 @@ public class TelaPrincipal extends JFrame {
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
 	private Panel_bkp panel_bkp = new Panel_bkp();
 	private BkpBanco bkp_banco = new BkpBanco();
-	private Properties props = new Properties();
-	private Boolean faz_bkp = bkp_banco.faz_bkp(props);
+	private Boolean faz_bkp = bkp_banco.faz_bkp();
+	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
+	 
 	/**
 	 * Launch the application.
 	 */
@@ -68,6 +69,13 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		if(faz_bkp_diario) {
+			if(bkp_banco.bkp_diario()) {
+				JOptionPane.showMessageDialog(null, "Backup diário realizado." , "Backup diário.",JOptionPane.NO_OPTION);
+				panel_bkp.le_log();
+			}
+		}
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/ferramentas.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
