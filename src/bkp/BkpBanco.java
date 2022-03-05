@@ -106,9 +106,14 @@ public class BkpBanco {
 
 	public Boolean faz_bkp(Properties prop) {
 		prop = props_tools.le_arquivo(arquivo_conf_bkp);
-		if (prop.getProperty("faz_bkp").equals("SIM")) {
-			return true;
-		} else {
+		
+		if(prop != null) {
+			if (prop.getProperty("faz_bkp").equals("SIM")) {
+				return true;
+			} else {
+				return false;
+			}
+		}else {
 			return false;
 		}
 	}
