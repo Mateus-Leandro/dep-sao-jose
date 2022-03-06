@@ -30,6 +30,8 @@ import view.panels.Panel_clientes;
 import view.panels.Panel_configuracoes;
 import view.panels.Panel_orcamento;
 import view.panels.Panel_produtos;
+import javax.swing.JLabel;
+import java.awt.Color;
 
 public class TelaPrincipal extends JFrame {
 	/**
@@ -48,7 +50,8 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	 
+	public String versao = "versão 06.03.22";  
+	
 	/**
 	 * Launch the application.
 	 */
@@ -106,19 +109,19 @@ public class TelaPrincipal extends JFrame {
 				tabbedPane.addTab("Backup", panel_bkp);
 			}
 		}
-
+		
 		// Verifica se existe configuração e se existe nome para a empresa.
 		if (configuracoes_do_sistema != null) {
 			so_orcamentos();
 			if (configuracoes_do_sistema.getNome_empresa() != null) {
 				if (configuracoes_do_sistema.getSo_orcamento()) {
-					setTitle(configuracoes_do_sistema.getNome_empresa() + "*");
+					setTitle(configuracoes_do_sistema.getNome_empresa() + "*" + " - " + versao);
 				} else {
-					setTitle(configuracoes_do_sistema.getNome_empresa());
+					setTitle(configuracoes_do_sistema.getNome_empresa() + " - " + versao);
 				}
 			}
 		} else {
-			setTitle("NOME DA EMPRESA");
+			setTitle("NOME DA EMPRESA" + " - " + versao);
 			ClienteDAO cliente_dao = new ClienteDAO();
 			ArrayList<Cliente> clientes_cadastrados = new ArrayList<Cliente>();
 			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, null, null, 1);
@@ -187,5 +190,4 @@ public class TelaPrincipal extends JFrame {
 		});
 
 	}
-
 }

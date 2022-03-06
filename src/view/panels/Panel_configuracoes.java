@@ -218,7 +218,7 @@ public class Panel_configuracoes extends JPanel {
 						btnConfigurar.setEnabled(true);
 						desativar_campos();
 						tela_principal.abas_configuracao_inicial(true);
-						tela_principal.setTitle(configuracoes_do_sistema.getNome_empresa());
+						tela_principal.setTitle(configuracoes_do_sistema.getNome_empresa() + " - " + tela_principal.versao);
 					}
 				}
 			}
