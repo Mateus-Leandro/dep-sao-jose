@@ -18,11 +18,12 @@ import javax.swing.JOptionPane;
 public class DB {
 
 	private static Connection conn = null;
-	private boolean existe_pasta;
+	private static int tentativas_conexao = 0;
+	private static Boolean reconectar;
 
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
-		
+
 		File arquivo_db = new File("C:/dep/conf/db.properties");
 		if (!arquivo_db.exists()) {
 
@@ -42,11 +43,19 @@ public class DB {
 
 						conn = DriverManager.getConnection(url, props);
 					} catch (SQLException e) {
-						JOptionPane.showMessageDialog(null,
-								"Não foi possível conectar com o banco de dados.",
-								"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
-						System.exit(0);
-						return null;
+						int opcao = JOptionPane.showConfirmDialog(null,
+								"Erro na conexão com o banco dados.\nDeseja tentar reconectar?",
+								"Conexão com o banco de dados.", JOptionPane.YES_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+
+						reconectar = opcao == JOptionPane.YES_OPTION;
+						e.printStackTrace();
+
+						if (reconectar) {
+							getConnection();
+						} else {
+							System.exit(0);
+						}
 					}
 				}
 			} catch (HeadlessException | SQLException e) {
