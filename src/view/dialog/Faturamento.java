@@ -1004,7 +1004,7 @@ public class Faturamento extends JDialog {
 				}
 			}
 		}
-
+//		total_parcelas = Math.round(total_parcelas * 10000) / 10000d;
 		valor_em_aberto = orcamento.getValor_total() - valor_pago;
 
 		// Verifica se o campo de valor da parcela está vazio.
