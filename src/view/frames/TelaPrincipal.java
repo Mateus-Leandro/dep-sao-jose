@@ -50,7 +50,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "versão 06.03.22";  
+	public String versao = "versão 07.03.22";  
 	
 	/**
 	 * Launch the application.
@@ -165,7 +165,7 @@ public class TelaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent atalho_setores) {
 				configuracoes_do_sistema = conf_dao.busca_configuracoes();
-				setTitle(configuracoes_do_sistema.getNome_empresa() + "*");
+				setTitle(configuracoes_do_sistema.getNome_empresa() + "*" + " - " + versao);
 				conf_dao.so_orcamentos(true);
 				tabbedPane.remove(configuracoes);
 				tabbedPane.remove(panel_bkp);
@@ -179,7 +179,7 @@ public class TelaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent atalho_setores) {
 				configuracoes_do_sistema = conf_dao.busca_configuracoes();
-				setTitle(configuracoes_do_sistema.getNome_empresa());
+				setTitle(configuracoes_do_sistema.getNome_empresa()  + " - " + versao);
 				conf_dao.so_orcamentos(false);
 				tabbedPane.addTab("Configurações", configuracoes);
 				if (faz_bkp) {
