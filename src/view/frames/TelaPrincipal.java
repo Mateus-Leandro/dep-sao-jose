@@ -46,7 +46,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "versão 07.03.22";  
+	public String versao = "v. 08.03.22";  
 	
 	/**
 	 * Launch the application.
