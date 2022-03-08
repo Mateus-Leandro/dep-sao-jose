@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.InputMap;
@@ -24,14 +23,11 @@ import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
 import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
-import icons.Icones;
 import view.panels.Panel_bkp;
 import view.panels.Panel_clientes;
 import view.panels.Panel_configuracoes;
 import view.panels.Panel_orcamento;
 import view.panels.Panel_produtos;
-import javax.swing.JLabel;
-import java.awt.Color;
 
 public class TelaPrincipal extends JFrame {
 	/**

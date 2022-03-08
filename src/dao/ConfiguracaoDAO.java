@@ -10,9 +10,9 @@ import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 
 public class ConfiguracaoDAO {
-	Connection conn;
-	PreparedStatement ps;
-	ResultSet rs;
+	private Connection conn;
+	private	PreparedStatement ps;
+	private ResultSet rs;
 
 	public Boolean salva_configuracao(Configuracoes configuracao) {
 		conn = DB.getConnection();
