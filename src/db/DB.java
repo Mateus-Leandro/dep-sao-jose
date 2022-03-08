@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,12 +14,17 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.dbcp.BasicDataSource;
+
+
 public class DB {
 
 	private static Connection conn = null;
-	private static int tentativas_conexao = 0;
 	private static Boolean reconectar;
-
+	private static String url;
+	private static Properties props;
+	private static BasicDataSource dataSource;
+	
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
 
@@ -38,10 +42,11 @@ public class DB {
 			try {
 				if (conn == null || conn.isClosed()) {
 					try {
-						Properties props = carregarDados();
-						String url = props.getProperty("dburl");
+						props = carregarDados();
+						url = props.getProperty("dburl");
 
-						conn = DriverManager.getConnection(url, props);
+						// Busca conexão do pool
+						conn = getDataSource().getConnection();
 					} catch (SQLException e) {
 						int opcao = JOptionPane.showConfirmDialog(null,
 								"Erro na conexão com o banco dados.\nDeseja tentar reconectar?",
@@ -72,11 +77,6 @@ public class DB {
 			props.load(fs);
 			return props;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Impossível conectar com o banco de dados.\nVerifique as informações de conexão presentes no arquivo "
-							+ "C:/dep/conf/db.properties",
-					"Conexão com o banco de dados.", JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
 			return null;
 		}
 	}
@@ -147,4 +147,23 @@ public class DB {
 
 		System.exit(0);
 	}
+	
+	
+	// pool para controle de conexões com o banco de dados.
+	public static BasicDataSource getDataSource () {
+		if(dataSource == null) {
+			BasicDataSource ds = new BasicDataSource();
+			ds.setUrl(url);
+			ds.setUsername(props.getProperty("user"));
+			ds.setPassword(props.getProperty("password"));
+			
+			ds.setMinIdle(5);
+			ds.setMaxIdle(10);
+			ds.setMaxOpenPreparedStatements(50);
+			dataSource = ds;
+		}
+		
+		return dataSource;
+	}
+	
 }
