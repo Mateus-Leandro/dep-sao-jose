@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
+import tools.Log_tools;
+
 
 public class DB {
 
@@ -24,6 +26,7 @@ public class DB {
 	private static String url;
 	private static Properties props;
 	private static BasicDataSource dataSource;
+	private static Log_tools log_tools = new Log_tools();
 	
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
@@ -48,13 +51,15 @@ public class DB {
 						// Busca conexão do pool
 						conn = getDataSource().getConnection();
 					} catch (SQLException e) {
+						e.printStackTrace();
+						log_tools.grava_log_error("DB.java", "getConnection" + " | [Erro de conexão]", e);
+
 						int opcao = JOptionPane.showConfirmDialog(null,
 								"Erro na conexão com o banco dados.\nDeseja tentar reconectar?",
 								"Conexão com o banco de dados.", JOptionPane.YES_OPTION,
 								JOptionPane.WARNING_MESSAGE);
 
 						reconectar = opcao == JOptionPane.YES_OPTION;
-						e.printStackTrace();
 
 						if (reconectar) {
 							getConnection();
