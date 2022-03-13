@@ -32,6 +32,13 @@ public class Gera_pdf {
 	private Document documento;
 	private Boolean orcamento_nao_salvo;
 	
+	// tabela título
+	private float[] largura_colunas_titulo = {18f, 25f};
+	private PdfPTable tabela_titulo = new PdfPTable(largura_colunas_titulo);
+	private PdfPCell cel_via_cliente;
+	private PdfPCell cel_titulo;
+
+	
 	// tabela cabeçalho1
 	private float[] largura_colunas_cabecalho1 = { 23f, 25f, 10f };
 	private PdfPTable tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
@@ -81,6 +88,9 @@ public class Gera_pdf {
 
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
+	
+	
+	private String via;
 
 	public Gera_pdf() {
 	}
@@ -105,6 +115,12 @@ public class Gera_pdf {
 			documento.open();
 
 			for (int n = 0; n < 2; n++) {
+				
+				if(n == 1) {
+					via = "via cliente";
+				}else {
+					via = "via loja";
+				}
 				monta_cabecalho_orcamento(orcamento);
 				imprime_produtos(orcamento.getProdutos_do_orcamento());
 				monta_rodape(orcamento);
@@ -130,19 +146,33 @@ public class Gera_pdf {
 
 	public void monta_cabecalho_orcamento(Orcamento orcamento) {
 		try {
+			tabela_titulo = new PdfPTable(largura_colunas_titulo);
+			
 			Paragraph p = new Paragraph();
-
+			p.setFont(negritoPequena);
+			p.add("-" + via + "-");
+			cel_via_cliente = new PdfPCell(p);
+			
+			p = new Paragraph();
 			p.setFont(fonteCabecalho);
 			p.add("ORÇAMENTO");
-			p.setAlignment(Element.ALIGN_CENTER);
-			documento.add(p);
-
+			cel_titulo = new PdfPCell(p);
+			
+			linha_invisivel_tabela_titulo();
+			
+			tabela_titulo.addCell(cel_via_cliente);
+			tabela_titulo.addCell(cel_titulo);
+			tabela_titulo.setHorizontalAlignment(Element.ALIGN_LEFT);
+			tabela_titulo.setWidthPercentage(100);
+			documento.add(tabela_titulo);
+			
+			
 			p = new Paragraph();
 			p.add(gera_string(74, "="));
 			documento.add(p);
-
+			
+			
 			tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
-
 			p = new Paragraph(formata_data.format(new Date()) + " - " + formata_hora.format(new Date()));
 			cel_data_hora = new PdfPCell(p);
 
@@ -185,7 +215,13 @@ public class Gera_pdf {
 			}
 			cel_data_criacao = new PdfPCell(p);
 
-			p = new Paragraph("Cliente: " + String.format("%-50.50s", orcamento.getCliente().getNome()));
+			
+			String apelido = "";
+			if(orcamento.getCliente().getApelido() != null) {
+				apelido = " - (" + orcamento.getCliente().getApelido() + ")";
+			}
+			
+			p = new Paragraph("Cliente: " + String.format("%-50.50s", orcamento.getCliente().getNome() + apelido));
 			p.setFont(fontePadraoMedia);
 			cel_cliente = new PdfPCell(p);
 
@@ -200,18 +236,18 @@ public class Gera_pdf {
 			}
 
 			if (orcamento.getCliente().getNumero() != null) {
-				numero = orcamento.getCliente().getNumero();
+				numero = ", Nº " + orcamento.getCliente().getNumero();
 			}
 
 			if (orcamento.getCliente().getBairro() != null) {
-				bairro = orcamento.getCliente().getBairro();
+				bairro =  ", " + orcamento.getCliente().getBairro();
 			}
 			if (orcamento.getCliente().getCidade() != null) {
-				cidade = orcamento.getCliente().getCidade();
+				cidade = " - " + orcamento.getCliente().getCidade();
 			}
 
 			p = new Paragraph(
-					"Endereço: " + String.format("%-59.59s", rua + " Nº " + numero + ", " + bairro + " - " + cidade));
+					"Endereço: " + String.format("%-59.59s", String.format("%-28.28s", rua) + numero + bairro + cidade));
 			p.setFont(fontePadraoMedia);
 			cel_endereco = new PdfPCell(p);
 
@@ -428,6 +464,11 @@ public class Gera_pdf {
 		cel_data_hora.setBorderColor(BaseColor.WHITE);
 		cel_nome_empresa.setBorderColor(BaseColor.WHITE);
 		cel_celular.setBorderColor(BaseColor.WHITE);
+	}
+
+	public void linha_invisivel_tabela_titulo() {
+		cel_titulo.setBorderColor(BaseColor.WHITE);
+		cel_via_cliente.setBorderColor(BaseColor.WHITE);
 	}
 
 	public void linha_invisivel_tabela_cabecalho2() {
