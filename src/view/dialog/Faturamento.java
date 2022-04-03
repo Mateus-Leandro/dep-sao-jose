@@ -772,10 +772,10 @@ public class Faturamento extends JDialog {
 	public void mostra_dados_orcamento(Orcamento orcamento) {
 		txtCliente.setText(orcamento.getCliente().getNome());
 		txtDataCriacao.setText(sdf.format(orcamento.getData_inclusao()));
-		if(orcamento.getData_faturamento() != null) {
+		if (orcamento.getData_faturamento() != null) {
 			txtDataFaturamento.setForeground(Color.black);
 			txtDataFaturamento.setText(sdf.format(orcamento.getData_faturamento()));
-		}else {
+		} else {
 			txtDataFaturamento.setForeground(Color.red);
 			txtDataFaturamento.setText("NÃO FATURADO");
 		}
@@ -1003,8 +1003,9 @@ public class Faturamento extends JDialog {
 					valor_pago += parc.getValor_parcela();
 				}
 			}
+			total_parcelas = Math.round(total_parcelas * 10000) / 10000d;
 		}
-//		total_parcelas = Math.round(total_parcelas * 10000) / 10000d;
+
 		valor_em_aberto = orcamento.getValor_total() - valor_pago;
 
 		// Verifica se o campo de valor da parcela está vazio.
