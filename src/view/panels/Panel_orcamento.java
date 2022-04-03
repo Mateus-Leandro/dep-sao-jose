@@ -2011,7 +2011,7 @@ public class Panel_orcamento extends JPanel {
 
 	public boolean produto_ja_incluso(Integer codigo, ArrayList<Produto_Orcamento> produtos_inclusos) {
 		for (Produto_Orcamento produto_orcamento : produtos_inclusos) {
-			if (produto_orcamento.getCodigo() == codigo) {
+			if (produto_orcamento.getCodigo().equals(codigo)) {
 				JOptionPane.showMessageDialog(lblQuantidade, "O produto selecionado já está presente no orçamento.",
 						"Produto já incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
 				produto_selecionado = null;
@@ -2171,10 +2171,10 @@ public class Panel_orcamento extends JPanel {
 			}
 			Double total_produto = (preco_unitario * quantidade);
 			Double total_produto_com_desconto = (total_produto - valor_desconto);
-			
-			total_produto =  Math.round(total_produto * 10000) / 10000d;
+
+			total_produto = Math.round(total_produto * 10000) / 10000d;
 			total_produto_com_desconto = Math.round(total_produto_com_desconto * 10000) / 10000d;
-			
+
 			fTxtTotalItem.setText(nf.format(total_produto));
 			fTxtTotalItemComDesconto.setText(nf.format(total_produto_com_desconto));
 		}
@@ -2374,7 +2374,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItemComDesconto.setText(nf.format(total));
 		fTxtValorDesconto.setText(nf.format(desconto));
 		calcula_porcentagem_desconto();
-		
+
 		fTxtNomeProduto.setEditable(false);
 		fTxtCodigoProduto.setEditable(false);
 
