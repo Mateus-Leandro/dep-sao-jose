@@ -31,14 +31,13 @@ public class Gera_pdf {
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 	private Document documento;
 	private Boolean orcamento_nao_salvo;
-	
+
 	// tabela título
-	private float[] largura_colunas_titulo = {18f, 25f};
+	private float[] largura_colunas_titulo = { 18f, 25f };
 	private PdfPTable tabela_titulo = new PdfPTable(largura_colunas_titulo);
 	private PdfPCell cel_via_cliente;
 	private PdfPCell cel_titulo;
 
-	
 	// tabela cabeçalho1
 	private float[] largura_colunas_cabecalho1 = { 23f, 25f, 10f };
 	private PdfPTable tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
@@ -56,7 +55,7 @@ public class Gera_pdf {
 	private PdfPCell cel_quantidade_produtos;
 
 	// Tabela de produtos
-	private float[] largura_colunas_produtos = { 6.0f, 21.9f, 7f, 10f, 10f, 10f, 10f };
+	private float[] largura_colunas_produtos = {6.0f, 24f, 5f, 10f, 10f, 10f, 10f };
 	private PdfPTable tabela_produtos = new PdfPTable(largura_colunas_produtos);
 	private PdfPCell cel_codigo;
 	private PdfPCell cel_nome;
@@ -74,9 +73,10 @@ public class Gera_pdf {
 	private PdfPCell cel_desc_orc;
 	private PdfPCell cel_vlr_tot;
 
-	// Celular em branco
+	// Celula em branco
 	private PdfPCell cel_em_branco = new PdfPCell();
 
+	
 	// Fontes
 	private static Font fonteCabecalho = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 	private static Font fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10);
@@ -88,8 +88,7 @@ public class Gera_pdf {
 
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
-	
-	
+
 	private String via;
 
 	public Gera_pdf() {
@@ -104,28 +103,28 @@ public class Gera_pdf {
 			orcamento_nao_salvo = orcamento.getId_orcamento() == null;
 
 			File arquivo;
-			if(!orcamento_nao_salvo) {
+			if (!orcamento_nao_salvo) {
 				arquivo = new File("C:/dep/pdf/Orçamento_" + orcamento.getId_orcamento().toString() + ".pdf");
-			}else {
+			} else {
 				String home_usuario = System.getProperty("user.home");
-				arquivo = new File(home_usuario + "/Desktop/"+ "Orçamento.pdf");
+				arquivo = new File(home_usuario + "/Desktop/" + "Orçamento.pdf");
 			}
-			
+
 			PdfWriter.getInstance(documento, new FileOutputStream(arquivo));
 			documento.open();
 
 			for (int n = 0; n < 2; n++) {
-				
-				if(n == 1) {
+
+				if (n == 1) {
 					via = "via cliente";
-				}else {
+				} else {
 					via = "via loja";
 				}
 				monta_cabecalho_orcamento(orcamento);
-				imprime_produtos(orcamento.getProdutos_do_orcamento());
+				imprime_produtos(orcamento);
 				monta_rodape(orcamento);
 
-				if (orcamento.getProdutos_do_orcamento().size() > 9) {
+				if (orcamento.getProdutos_do_orcamento().size() > 11) {
 					documento.newPage();
 				}
 			}
@@ -147,31 +146,29 @@ public class Gera_pdf {
 	public void monta_cabecalho_orcamento(Orcamento orcamento) {
 		try {
 			tabela_titulo = new PdfPTable(largura_colunas_titulo);
-			
+
 			Paragraph p = new Paragraph();
 			p.setFont(negritoPequena);
 			p.add("-" + via + "-");
 			cel_via_cliente = new PdfPCell(p);
-			
+
 			p = new Paragraph();
 			p.setFont(fonteCabecalho);
 			p.add("ORÇAMENTO");
 			cel_titulo = new PdfPCell(p);
-			
+
 			linha_invisivel_tabela_titulo();
-			
+
 			tabela_titulo.addCell(cel_via_cliente);
 			tabela_titulo.addCell(cel_titulo);
 			tabela_titulo.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_titulo.setWidthPercentage(100);
 			documento.add(tabela_titulo);
-			
-			
+
 			p = new Paragraph();
 			p.add(gera_string(74, "="));
 			documento.add(p);
-			
-			
+
 			tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
 			p = new Paragraph(formata_data.format(new Date()) + " - " + formata_hora.format(new Date()));
 			cel_data_hora = new PdfPCell(p);
@@ -199,28 +196,27 @@ public class Gera_pdf {
 			tabela_cabecalho2 = new PdfPTable(largura_colunas_cabecalho2);
 			p = new Paragraph();
 			String numero_orcamento;
-			if(!orcamento_nao_salvo) {
+			if (!orcamento_nao_salvo) {
 				numero_orcamento = "Orcamento Nº: " + String.format("%06d", orcamento.getId_orcamento());
 				p.add(numero_orcamento);
-			}else {
-				numero_orcamento =  "Informações do cliente";
-				p.setFont(new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD));
+			} else {
+				numero_orcamento = "Informações do cliente";
+				p.setFont(new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD));
 				p.add(numero_orcamento);
 			}
 			cel_orcamento = new PdfPCell(p);
-			
+
 			p = new Paragraph("");
-			if(!orcamento_nao_salvo) {
+			if (!orcamento_nao_salvo) {
 				p.add("Criado em: " + formata_data.format(orcamento.getData_inclusao()));
 			}
 			cel_data_criacao = new PdfPCell(p);
 
-			
 			String apelido = "";
-			if(orcamento.getCliente().getApelido() != null) {
+			if (orcamento.getCliente().getApelido() != null) {
 				apelido = " - (" + orcamento.getCliente().getApelido() + ")";
 			}
-			
+
 			p = new Paragraph("Cliente: " + String.format("%-50.50s", orcamento.getCliente().getNome() + apelido));
 			p.setFont(fontePadraoMedia);
 			cel_cliente = new PdfPCell(p);
@@ -229,8 +225,7 @@ public class Gera_pdf {
 			String numero = "";
 			String bairro = "";
 			String cidade = "";
-			
-			
+
 			if (orcamento.getCliente().getEndereco() != null) {
 				rua = orcamento.getCliente().getEndereco();
 			}
@@ -240,14 +235,14 @@ public class Gera_pdf {
 			}
 
 			if (orcamento.getCliente().getBairro() != null) {
-				bairro =  ", " + orcamento.getCliente().getBairro();
+				bairro = ", " + orcamento.getCliente().getBairro();
 			}
 			if (orcamento.getCliente().getCidade() != null) {
 				cidade = " - " + orcamento.getCliente().getCidade();
 			}
 
-			p = new Paragraph(
-					"Endereço: " + String.format("%-59.59s", String.format("%-28.28s", rua) + numero + bairro + cidade));
+			p = new Paragraph("Endereço: "
+					+ String.format("%-59.59s", String.format("%-28.28s", rua) + numero + bairro + cidade));
 			p.setFont(fontePadraoMedia);
 			cel_endereco = new PdfPCell(p);
 
@@ -274,13 +269,15 @@ public class Gera_pdf {
 			documento.add(p);
 
 			p = new Paragraph();
+			p.setLeading(10);
 			p.setFont(new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
-			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(33, " ") + "UN" + gera_string(12, " ")
-					+ "QTD" + gera_string(18, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT." + gera_string(6, " ")
-					+ "PR.TOTAL");
+			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(38, " ") + "UN" + gera_string(8, " ")
+					+ "QTD" + gera_string(17, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT."
+					+ gera_string(6, " ") + "PR.TOTAL");
 			documento.add(p);
 
 			p = new Paragraph();
+			p.setLeading(10);
 			p.add(gera_string(130, "-"));
 			documento.add(p);
 		} catch (DocumentException e) {
@@ -288,14 +285,14 @@ public class Gera_pdf {
 		}
 	}
 
-	public void imprime_produtos(ArrayList<Produto_Orcamento> produtos) {
+	public void imprime_produtos(Orcamento orcamento) {
 		nf.setRoundingMode(RoundingMode.DOWN);
 
 		Paragraph p;
 		tabela_produtos = new PdfPTable(largura_colunas_produtos);
 
 		Boolean linha_negrito = false;
-		for (Produto_Orcamento produto : produtos) {
+		for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
 
 			if (linha_negrito) {
 				fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -312,7 +309,7 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(String.format("%-30.30s", produto.getNome()));
+			p.add(String.format("%-28.28s", produto.getNome()));
 			cel_nome = new PdfPCell(p);
 
 			p = new Paragraph();
@@ -351,9 +348,26 @@ public class Gera_pdf {
 			tabela_produtos.addCell(cel_valor);
 
 		}
-		tabela_produtos.setHorizontalAlignment(Element.ALIGN_LEFT);
-		tabela_produtos.setWidthPercentage(100);
 		try {
+			Paragraph p2 = new Paragraph();
+			p2.add(" ");
+			PdfPCell cel_vazia = new PdfPCell(p2);
+			cel_vazia.setBorderColor(BaseColor.WHITE);
+			int linhas;
+			
+			if (orcamento.getProdutos_do_orcamento().size() < 12) {
+				linhas = 10;
+			}else {
+				linhas = 34;
+			}
+			
+			for (int n = 0; n < 7 * (linhas - orcamento.getProdutos_do_orcamento().size()); n++) {
+				tabela_produtos.addCell(cel_vazia);
+			}
+
+			tabela_produtos.setHorizontalAlignment(Element.ALIGN_LEFT);
+			tabela_produtos.setWidthPercentage(100);
+
 			documento.add(tabela_produtos);
 		} catch (DocumentException e) {
 			e.printStackTrace();
@@ -362,7 +376,6 @@ public class Gera_pdf {
 
 	public void monta_rodape(Orcamento orcamento) {
 		Paragraph p = new Paragraph();
-
 		Double desconto_orcamento = 0.00;
 		Double frete = 0.00;
 
@@ -389,7 +402,8 @@ public class Gera_pdf {
 			cel_desc_orc = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Desc. Prd.: " + nf2.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido()));
+			p.add("Desc. Prd.: "
+					+ nf2.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido()));
 			cel_desc_prd = new PdfPCell(p);
 
 			p = new Paragraph();
@@ -401,30 +415,35 @@ public class Gera_pdf {
 			tabela_totais.addCell(cel_desc_orc);
 			tabela_totais.addCell(cel_desc_prd);
 			tabela_totais.addCell(cel_vlr_tot);
-			
+
 			tabela_totais.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_totais.setWidthPercentage(100);
+			
 			documento.add(tabela_totais);
-
+			
 			p = new Paragraph();
 			p.add(gera_string(130, "-"));
+			p.setLeading(10);
 			documento.add(p);
 
 			p = new Paragraph();
 			p.setFont(fontePadraoMedia);
 			p.add("Assinatura do cliente:" + gera_string(45, "_") + gera_string(5, " ") + "Vencimento:___/___/___");
 			documento.add(p);
-			
+
 			p = new Paragraph();
 			p.setFont(negritoPequena);
 			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
 			documento.add(p);
+
 			
-			p = new Paragraph();
-			p.add(gera_string(130, "-"));
-			documento.add(p);
-			
-			
+			if (via.equals("via loja")) {
+				p = new Paragraph();
+				p.add(gera_string(130, "-"));
+				p.setLeading(10);
+				documento.add(p);
+			}
+
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
@@ -437,17 +456,6 @@ public class Gera_pdf {
 			string_ += string_passada;
 		}
 		return string_;
-	}
-
-	public void quebra_linha(int quantidade_de_linhas) {
-		for (int n = 0; n < quantidade_de_linhas; n++) {
-			try {
-				Paragraph p = new Paragraph(" ");
-				documento.add(p);
-			} catch (DocumentException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public void linha_invisivel_tabela_produtos() {
