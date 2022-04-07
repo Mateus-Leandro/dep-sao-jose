@@ -357,8 +357,10 @@ public class Gera_pdf {
 			
 			if (orcamento.getProdutos_do_orcamento().size() < 12) {
 				linhas = 10;
-			}else {
+			}else if(orcamento.getProdutos_do_orcamento().size() < 40) {
 				linhas = 34;
+			}else {
+				linhas = 86;
 			}
 			
 			for (int n = 0; n < 7 * (linhas - orcamento.getProdutos_do_orcamento().size()); n++) {
@@ -437,7 +439,7 @@ public class Gera_pdf {
 			documento.add(p);
 
 			
-			if (via.equals("via loja")) {
+			if (via.equals("via loja") && orcamento.getProdutos_do_orcamento().size() < 12) {
 				p = new Paragraph();
 				p.add(gera_string(130, "-"));
 				p.setLeading(10);
