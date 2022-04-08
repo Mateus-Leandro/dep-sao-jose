@@ -55,7 +55,7 @@ public class Gera_pdf {
 	private PdfPCell cel_quantidade_produtos;
 
 	// Tabela de produtos
-	private float[] largura_colunas_produtos = {6.0f, 24f, 5f, 10f, 10f, 10f, 10f };
+	private float[] largura_colunas_produtos = { 6.0f, 24f, 5f, 10f, 10f, 10f, 10f };
 	private PdfPTable tabela_produtos = new PdfPTable(largura_colunas_produtos);
 	private PdfPCell cel_codigo;
 	private PdfPCell cel_nome;
@@ -76,7 +76,6 @@ public class Gera_pdf {
 	// Celula em branco
 	private PdfPCell cel_em_branco = new PdfPCell();
 
-	
 	// Fontes
 	private static Font fonteCabecalho = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 	private static Font fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10);
@@ -151,7 +150,7 @@ public class Gera_pdf {
 			p.setFont(negritoPequena);
 			p.add("-" + via + "-");
 			cel_via_cliente = new PdfPCell(p);
-
+			
 			p = new Paragraph();
 			p.setFont(fonteCabecalho);
 			p.add("ORÇAMENTO");
@@ -271,9 +270,9 @@ public class Gera_pdf {
 			p = new Paragraph();
 			p.setLeading(10);
 			p.setFont(new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
-			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(38, " ") + "UN" + gera_string(8, " ")
-					+ "QTD" + gera_string(17, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT."
-					+ gera_string(6, " ") + "PR.TOTAL");
+			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(38, " ") + "UN" + gera_string(8, " ") + "QTD"
+					+ gera_string(17, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT." + gera_string(6, " ")
+					+ "PR.TOTAL");
 			documento.add(p);
 
 			p = new Paragraph();
@@ -349,26 +348,22 @@ public class Gera_pdf {
 
 		}
 		try {
-			Paragraph p2 = new Paragraph();
-			p2.add(" ");
-			PdfPCell cel_vazia = new PdfPCell(p2);
-			cel_vazia.setBorderColor(BaseColor.WHITE);
-			int linhas;
-			
-			if (orcamento.getProdutos_do_orcamento().size() < 12) {
-				linhas = 10;
-			}else if(orcamento.getProdutos_do_orcamento().size() < 40) {
-				linhas = 34;
-			}else {
-				linhas = 86;
-			}
-			
-			for (int n = 0; n < 7 * (linhas - orcamento.getProdutos_do_orcamento().size()); n++) {
-				tabela_produtos.addCell(cel_vazia);
-			}
-
 			tabela_produtos.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_produtos.setWidthPercentage(100);
+
+			int linhas = 0;
+			if (orcamento.getProdutos_do_orcamento().size() < 12) {
+				if (orcamento.getProdutos_do_orcamento().size() == 1) {
+					linhas = 155;
+				} else {
+					linhas = 158;
+				} 
+			} else if(orcamento.getProdutos_do_orcamento().size() < 40) {
+				linhas = 548;
+			}else {
+				linhas = 1310;
+			}
+			tabela_produtos.setSpacingAfter(linhas - (orcamento.getProdutos_do_orcamento().size() * 14));
 
 			documento.add(tabela_produtos);
 		} catch (DocumentException e) {
@@ -420,9 +415,9 @@ public class Gera_pdf {
 
 			tabela_totais.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_totais.setWidthPercentage(100);
-			
+
 			documento.add(tabela_totais);
-			
+
 			p = new Paragraph();
 			p.add(gera_string(130, "-"));
 			p.setLeading(10);
@@ -438,7 +433,6 @@ public class Gera_pdf {
 			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
 			documento.add(p);
 
-			
 			if (via.equals("via loja") && orcamento.getProdutos_do_orcamento().size() < 12) {
 				p = new Paragraph();
 				p.add(gera_string(130, "-"));
