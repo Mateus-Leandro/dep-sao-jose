@@ -196,7 +196,7 @@ public class Gera_pdf {
 			p = new Paragraph();
 			String numero_orcamento;
 			if (!orcamento_nao_salvo) {
-				numero_orcamento = "Orcamento Nº: " + String.format("%06d", orcamento.getId_orcamento());
+				numero_orcamento = "Orçamento Nº: " + String.format("%06d", orcamento.getId_orcamento());
 				p.add(numero_orcamento);
 			} else {
 				numero_orcamento = "Informações do cliente";
@@ -395,7 +395,7 @@ public class Gera_pdf {
 			cel_frete = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Desc. Orc.: " + nf2.format(desconto_orcamento));
+			p.add("Desc. Orç.: " + nf2.format(desconto_orcamento));
 			cel_desc_orc = new PdfPCell(p);
 
 			p = new Paragraph();
