@@ -83,6 +83,13 @@ public class Produto_Orcamento {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((codigo_barras == null) ? 0 : codigo_barras.hashCode());
+		result = prime * result + ((fator_venda == null) ? 0 : fator_venda.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((preco_unitario == null) ? 0 : preco_unitario.hashCode());
+		result = prime * result + ((quantidade == null) ? 0 : quantidade.hashCode());
+		result = prime * result + ((valor_desconto == null) ? 0 : valor_desconto.hashCode());
+		result = prime * result + ((valor_total == null) ? 0 : valor_total.hashCode());
 		return result;
 	}
 
@@ -100,9 +107,42 @@ public class Produto_Orcamento {
 				return false;
 		} else if (!codigo.equals(other.codigo))
 			return false;
+		if (codigo_barras == null) {
+			if (other.codigo_barras != null)
+				return false;
+		} else if (!codigo_barras.equals(other.codigo_barras))
+			return false;
+		if (fator_venda == null) {
+			if (other.fator_venda != null)
+				return false;
+		} else if (!fator_venda.equals(other.fator_venda))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (preco_unitario == null) {
+			if (other.preco_unitario != null)
+				return false;
+		} else if (!preco_unitario.equals(other.preco_unitario))
+			return false;
+		if (quantidade == null) {
+			if (other.quantidade != null)
+				return false;
+		} else if (!quantidade.equals(other.quantidade))
+			return false;
+		if (valor_desconto == null) {
+			if (other.valor_desconto != null)
+				return false;
+		} else if (!valor_desconto.equals(other.valor_desconto))
+			return false;
+		if (valor_total == null) {
+			if (other.valor_total != null)
+				return false;
+		} else if (!valor_total.equals(other.valor_total))
+			return false;
 		return true;
 	}
-	
-	
-	
+		
 }

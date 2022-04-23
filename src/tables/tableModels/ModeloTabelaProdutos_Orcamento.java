@@ -135,8 +135,8 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
-	public void removeProduto(int index_produto) {
-		this.produtos_orcamento.remove(index_produto);
+	public void removeProduto(Produto_Orcamento produto) {
+		this.produtos_orcamento.remove(produto);
 		this.fireTableDataChanged();
 	}
 
