@@ -809,6 +809,8 @@ public class Panel_orcamento extends JPanel {
 							if (!seleciona_produto()) {
 								lista_produtos.clear();
 							}
+						}else {
+							fTxtNomeProduto.requestFocus();
 						}
 					}
 				}
