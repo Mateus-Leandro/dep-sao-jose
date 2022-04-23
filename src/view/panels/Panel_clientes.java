@@ -49,6 +49,7 @@ import entities.configuracoes.Configuracoes;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
+import tools.JTextFieldLimit;
 import tools.Jtext_tools;
 
 public class Panel_clientes extends JPanel {
@@ -139,7 +140,6 @@ public class Panel_clientes extends JPanel {
 		// Atalhos do teclado
 		tecla_pressionada();
 
-		MaskFormatter mascara_pesquisa = null;
 		btnEditar = new JButton("Editar");
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -183,13 +183,9 @@ public class Panel_clientes extends JPanel {
 		lblCadastroDeClientes.setFont(new Font("Tahoma", Font.BOLD, 24));
 		add(lblCadastroDeClientes);
 
-		try {
-			mascara_pesquisa = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtPesquisa = new JFormattedTextField(mascara_pesquisa);
+		fTxtPesquisa = new JFormattedTextField();
+		JTextFieldLimit limitDocument_pesquisa = new JTextFieldLimit(30);
+		fTxtPesquisa.setDocument(limitDocument_pesquisa);
 		fTxtPesquisa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -340,13 +336,10 @@ public class Panel_clientes extends JPanel {
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNome);
 
-		MaskFormatter mascara_nome = null;
-		try {
-			mascara_nome = new MaskFormatter("*********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+
+		fTxtNomeCliente = new JFormattedTextField();
+		JTextFieldLimit limitDocument_nome = new JTextFieldLimit(45);
+		fTxtNomeCliente.setDocument(limitDocument_nome);
 		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNome) {
@@ -367,20 +360,15 @@ public class Panel_clientes extends JPanel {
 		fTxtNomeCliente.setBounds(57, 186, 317, 20);
 		add(fTxtNomeCliente);
 
-		MaskFormatter mascara_apelido = null;
-		try {
-			mascara_apelido = new MaskFormatter("********************");
-		} catch (ParseException e2) {
-			e2.printStackTrace();
-		}
-
 		lblApelido = new JLabel("Apelido");
 		lblApelido.setBounds(398, 189, 46, 20);
 		lblApelido.setToolTipText("");
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblApelido);
 
-		fTxtApelido = new JFormattedTextField(mascara_apelido);
+		fTxtApelido = new JFormattedTextField();
+		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(40);
+		fTxtApelido.setDocument(limitDocument_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterApelido) {
@@ -478,14 +466,9 @@ public class Panel_clientes extends JPanel {
 		btnLimpaCep.setToolTipText("Limpar Cep");
 		add(btnLimpaCep);
 
-		MaskFormatter mascara_cidade = null;
-		try {
-			mascara_cidade = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade = new JFormattedTextField();
+		JTextFieldLimit limitDocument_cidade = new JTextFieldLimit(30);
+		fTxtCidade.setDocument(limitDocument_cidade);
 		fTxtCidade.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterCidade) {
@@ -518,15 +501,9 @@ public class Panel_clientes extends JPanel {
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEndereco);
 
-		MaskFormatter mascara_endereco = null;
-
-		try {
-			mascara_endereco = new MaskFormatter("*************************************************");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-
-		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco = new JFormattedTextField();
+		JTextFieldLimit limitDocument_endereco = new JTextFieldLimit(49);
+		fTxtEndereco.setDocument(limitDocument_endereco);
 		fTxtEndereco.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEndereco) {
@@ -553,14 +530,9 @@ public class Panel_clientes extends JPanel {
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNumero);
 
-		MaskFormatter mascara_numero = null;
-		try {
-			mascara_numero = new MaskFormatter("********");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero = new JFormattedTextField();
+		JTextFieldLimit limitDocument_numero = new JTextFieldLimit(8);
+		fTxtNumero.setDocument(limitDocument_numero);
 		fTxtNumero.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNumero) {
@@ -586,16 +558,10 @@ public class Panel_clientes extends JPanel {
 		lblReferencia.setToolTipText("");
 		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblReferencia);
-
-		MaskFormatter mascara_referencia = null;
-
-		try {
-			mascara_referencia = new MaskFormatter("*************************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		
+		fTxtReferencia = new JFormattedTextField();
+		JTextFieldLimit limitDocument_referencia = new JTextFieldLimit(49);
+		fTxtReferencia.setDocument(limitDocument_referencia);
 		fTxtReferencia.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterReferencia) {
@@ -604,6 +570,7 @@ public class Panel_clientes extends JPanel {
 				}
 			}
 		});
+		
 		fTxtReferencia.setEditable(false);
 		fTxtReferencia.addMouseListener(new MouseAdapter() {
 			@Override
@@ -622,14 +589,9 @@ public class Panel_clientes extends JPanel {
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblBairro);
 
-		MaskFormatter mascara_bairro = null;
-		try {
-			mascara_bairro = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro = new JFormattedTextField();
+		JTextFieldLimit limitDocument_bairro = new JTextFieldLimit(30);
+		fTxtBairro.setDocument(limitDocument_bairro);
 		fTxtBairro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterBairro) {
@@ -730,14 +692,9 @@ public class Panel_clientes extends JPanel {
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEmai);
 
-		MaskFormatter mascara_email = null;
-		try {
-			mascara_email = new MaskFormatter("********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail = new JFormattedTextField();
+		JTextFieldLimit limitDocument_email = new JTextFieldLimit(40);
+		fTxtEmail.setDocument(limitDocument_email);
 		fTxtEmail.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEmail) {

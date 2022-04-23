@@ -50,6 +50,7 @@ import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterMonetario;
+import tools.JTextFieldLimit;
 import tools.Jtext_tools;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
@@ -59,7 +60,7 @@ public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
 	private JLabel lblCodigo;
 	private JLabel lblNome;
-	private JFormattedTextField fTxtNomeProduto;
+	private JFormattedTextField fTxtNomeProduto = new JFormattedTextField();
 	private JLabel lblSetor;
 	private JLabel lblCodigoBarras;
 	private JFormattedTextField fTxtCodigoBarras;
@@ -144,14 +145,15 @@ public class Panel_produtos extends JPanel {
 		lblNome.setBounds(325, 153, 38, 19);
 		add(lblNome);
 
-		MaskFormatter mascara_nome_produto = null;
-		try {
+/*		try {
 			mascara_nome_produto = new MaskFormatter("*************************************************");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+*/
+		JTextFieldLimit limitDocument = new JTextFieldLimit(49);
+	    fTxtNomeProduto.setDocument(limitDocument);
+		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNomeProduto) {
