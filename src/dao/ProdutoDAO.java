@@ -203,22 +203,17 @@ public class ProdutoDAO {
 	public ArrayList<Produto> listarProdutosNome(ArrayList<Produto> produtos, String nome, Integer limite) {
 		conn = DB.getConnection();
 
+		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
+				+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+				+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+				+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+				+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+				+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao";
 		try {
 			if (limite == null) {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao");
+				ps = conn.prepareStatement(select);
 			} else {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.descricao LIKE ? ORDER BY descricao LIMIT "
-						+ limite);
+				ps = conn.prepareStatement(select + " LIMIT " + limite);
 			}
 
 			ps.setString(1, nome);
@@ -258,22 +253,18 @@ public class ProdutoDAO {
 	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno, Integer limite) {
 		conn = DB.getConnection();
 
+		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
+				+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+				+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+				+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+				+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+				+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao";
 		try {
 
 			if (limite == null) {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao");
+				ps = conn.prepareStatement(select);
 			} else {
-				ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-						+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-						+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-						+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-						+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-						+ "WHERE barras_produto.principal IS NOT FALSE AND produto.idProduto LIKE ? ORDER BY descricao LIMIT "
+				ps = conn.prepareStatement(select + " LIMIT "
 						+ limite);
 			}
 

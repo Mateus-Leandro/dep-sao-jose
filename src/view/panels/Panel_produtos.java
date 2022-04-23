@@ -819,7 +819,9 @@ public class Panel_produtos extends JPanel {
 	// Recarrega a tabela de produtos.
 	public void recarregarTabela() {
 		if (btnReload.isEnabled()) {
-			produtos.clear();
+			if(!produtos.isEmpty()) {
+				produtos.clear();
+			}
 			produtos = alimentarListaProdutos(produtos);
 			modelo = new ModeloTabelaProdutos(produtos);
 			tabelaProdutos.setModel(modelo);
