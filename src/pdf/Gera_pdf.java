@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import com.itextpdf.text.BaseColor;
@@ -72,6 +71,12 @@ public class Gera_pdf {
 	private PdfPCell cel_desc_prd;
 	private PdfPCell cel_desc_orc;
 	private PdfPCell cel_vlr_tot;
+	
+	// Tabela assinatura/vencimento 
+	private float[] largura_colunas_assinatura = {90f, 30f};
+	private PdfPTable tabela_assinatura;
+	private PdfPCell cel_assinatura;
+	private PdfPCell cel_vencimento;
 
 	// Celula em branco
 	private PdfPCell cel_em_branco = new PdfPCell();
@@ -80,11 +85,13 @@ public class Gera_pdf {
 	private static Font fonteCabecalho = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 	private static Font fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10);
 	private static Font fontePadraoMedia = new Font(Font.FontFamily.HELVETICA, 11);
+	private static Font fontePadraoMediaVermelha = new Font(Font.FontFamily.HELVETICA, 11, 0, BaseColor.RED);
 	private static Font negritoPequena = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+	private static Font negritoPequenaVermelha = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.RED);
 
+	// Formatação
 	private SimpleDateFormat formata_data = new SimpleDateFormat("dd/MM/yyyy");
 	private SimpleDateFormat formata_hora = new SimpleDateFormat("HH:mm:ss");
-
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 	private NumberFormat nf2 = new DecimalFormat("R$ ,##0.00");
 
@@ -412,7 +419,6 @@ public class Gera_pdf {
 			tabela_totais.addCell(cel_desc_orc);
 			tabela_totais.addCell(cel_desc_prd);
 			tabela_totais.addCell(cel_vlr_tot);
-
 			tabela_totais.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_totais.setWidthPercentage(100);
 
@@ -423,13 +429,28 @@ public class Gera_pdf {
 			p.setLeading(10);
 			documento.add(p);
 
+			tabela_assinatura = new PdfPTable(largura_colunas_assinatura);
 			p = new Paragraph();
 			p.setFont(fontePadraoMedia);
-			p.add("Assinatura do cliente:" + gera_string(45, "_") + gera_string(5, " ") + "Vencimento:___/___/___");
-			documento.add(p);
+			p.add("Assinatura do cliente:" + gera_string(38, "_")); 
+			
+			cel_assinatura = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.setFont(negritoPequena);
+			p.setFont(fontePadraoMediaVermelha);
+			p.add("Vencimento:___/___/___");
+			cel_vencimento = new PdfPCell(p);
+			
+			linha_invisivel_tabela_assinatura();
+			tabela_assinatura.addCell(cel_assinatura);
+			tabela_assinatura.addCell(cel_vencimento);
+			tabela_assinatura.setHorizontalAlignment(Element.ALIGN_LEFT);
+			tabela_assinatura.setWidthPercentage(100);
+			
+			documento.add(tabela_assinatura);
+			
+			p = new Paragraph();
+			p.setFont(negritoPequenaVermelha);
 			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
 			documento.add(p);
 
@@ -489,5 +510,10 @@ public class Gera_pdf {
 		cel_desc_prd.setBorderColor(BaseColor.WHITE);
 		cel_desc_orc.setBorderColor(BaseColor.WHITE);
 		cel_vlr_tot.setBorderColor(BaseColor.WHITE);
+	}
+	
+	public void linha_invisivel_tabela_assinatura() {
+		cel_assinatura.setBorderColor(BaseColor.WHITE);
+		cel_vencimento.setBorderColor(BaseColor.WHITE);
 	}
 }
