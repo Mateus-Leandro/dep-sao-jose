@@ -68,6 +68,9 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		UIManager.put("OptionPane.yesButtonText", "Sim"); 
+		UIManager.put("OptionPane.noButtonText",  "Não");
+		
 		if(faz_bkp_diario) {
 			if(bkp_banco.bkp_diario()) {
 				JOptionPane.showMessageDialog(null, "Backup diário realizado." , "Backup diário.",JOptionPane.NO_OPTION);
