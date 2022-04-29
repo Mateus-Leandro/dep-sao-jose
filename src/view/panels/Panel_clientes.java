@@ -184,7 +184,7 @@ public class Panel_clientes extends JPanel {
 		add(lblCadastroDeClientes);
 
 		fTxtPesquisa = new JFormattedTextField();
-		JTextFieldLimit limitDocument_pesquisa = new JTextFieldLimit(30);
+		JTextFieldLimit limitDocument_pesquisa = new JTextFieldLimit(30,"texto");
 		fTxtPesquisa.setDocument(limitDocument_pesquisa);
 		fTxtPesquisa.addMouseListener(new MouseAdapter() {
 			@Override
@@ -338,7 +338,7 @@ public class Panel_clientes extends JPanel {
 
 
 		fTxtNomeCliente = new JFormattedTextField();
-		JTextFieldLimit limitDocument_nome = new JTextFieldLimit(45);
+		JTextFieldLimit limitDocument_nome = new JTextFieldLimit(45,"texto");
 		fTxtNomeCliente.setDocument(limitDocument_nome);
 		fTxtNomeCliente.addKeyListener(new KeyAdapter() {
 			@Override
@@ -367,7 +367,7 @@ public class Panel_clientes extends JPanel {
 		add(lblApelido);
 
 		fTxtApelido = new JFormattedTextField();
-		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(40);
+		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(40,"texto");
 		fTxtApelido.setDocument(limitDocument_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
@@ -467,7 +467,7 @@ public class Panel_clientes extends JPanel {
 		add(btnLimpaCep);
 
 		fTxtCidade = new JFormattedTextField();
-		JTextFieldLimit limitDocument_cidade = new JTextFieldLimit(30);
+		JTextFieldLimit limitDocument_cidade = new JTextFieldLimit(30,"texto");
 		fTxtCidade.setDocument(limitDocument_cidade);
 		fTxtCidade.addKeyListener(new KeyAdapter() {
 			@Override
@@ -502,7 +502,7 @@ public class Panel_clientes extends JPanel {
 		add(lblEndereco);
 
 		fTxtEndereco = new JFormattedTextField();
-		JTextFieldLimit limitDocument_endereco = new JTextFieldLimit(49);
+		JTextFieldLimit limitDocument_endereco = new JTextFieldLimit(49,"texto");
 		fTxtEndereco.setDocument(limitDocument_endereco);
 		fTxtEndereco.addKeyListener(new KeyAdapter() {
 			@Override
@@ -531,7 +531,7 @@ public class Panel_clientes extends JPanel {
 		add(lblNumero);
 
 		fTxtNumero = new JFormattedTextField();
-		JTextFieldLimit limitDocument_numero = new JTextFieldLimit(8);
+		JTextFieldLimit limitDocument_numero = new JTextFieldLimit(8,"texto");
 		fTxtNumero.setDocument(limitDocument_numero);
 		fTxtNumero.addKeyListener(new KeyAdapter() {
 			@Override
@@ -560,7 +560,7 @@ public class Panel_clientes extends JPanel {
 		add(lblReferencia);
 		
 		fTxtReferencia = new JFormattedTextField();
-		JTextFieldLimit limitDocument_referencia = new JTextFieldLimit(49);
+		JTextFieldLimit limitDocument_referencia = new JTextFieldLimit(49,"texto");
 		fTxtReferencia.setDocument(limitDocument_referencia);
 		fTxtReferencia.addKeyListener(new KeyAdapter() {
 			@Override
@@ -590,7 +590,7 @@ public class Panel_clientes extends JPanel {
 		add(lblBairro);
 
 		fTxtBairro = new JFormattedTextField();
-		JTextFieldLimit limitDocument_bairro = new JTextFieldLimit(30);
+		JTextFieldLimit limitDocument_bairro = new JTextFieldLimit(30,"texto");
 		fTxtBairro.setDocument(limitDocument_bairro);
 		fTxtBairro.addKeyListener(new KeyAdapter() {
 			@Override
@@ -693,7 +693,7 @@ public class Panel_clientes extends JPanel {
 		add(lblEmai);
 
 		fTxtEmail = new JFormattedTextField();
-		JTextFieldLimit limitDocument_email = new JTextFieldLimit(40);
+		JTextFieldLimit limitDocument_email = new JTextFieldLimit(40,"texto");
 		fTxtEmail.setDocument(limitDocument_email);
 		fTxtEmail.addKeyListener(new KeyAdapter() {
 			@Override

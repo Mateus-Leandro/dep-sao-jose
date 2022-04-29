@@ -145,14 +145,8 @@ public class Panel_produtos extends JPanel {
 		lblNome.setBounds(325, 153, 38, 19);
 		add(lblNome);
 
-/*		try {
-			mascara_nome_produto = new MaskFormatter("*************************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-*/
-		JTextFieldLimit limitDocument = new JTextFieldLimit(49);
-	    fTxtNomeProduto.setDocument(limitDocument);
+		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49,"texto");
+	    fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override

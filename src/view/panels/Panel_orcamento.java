@@ -45,7 +45,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.text.MaskFormatter;
 
 import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
@@ -62,6 +61,7 @@ import entities.produto.Produto;
 import icons.Icones;
 import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
+import tools.JTextFieldLimit;
 import tools.Jtext_tools;
 import view.dialog.Faturamento;
 import view.dialog.Orcamentos_do_cliente;
@@ -471,14 +471,9 @@ public class Panel_orcamento extends JPanel {
 		lblNomeProduto.setBounds(163, 56, 37, 19);
 		produtos.add(lblNomeProduto);
 
-		MaskFormatter mascara_nome_produto = null;
-		try {
-			mascara_nome_produto = new MaskFormatter("***********************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNomeProduto = new JFormattedTextField(mascara_nome_produto);
+		fTxtNomeProduto = new JFormattedTextField();
+		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49,"texto");
+		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -774,15 +769,9 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidadeTotal.setBounds(161, 421, 96, 20);
 		produtos.add(fTxtQuantidadeTotal);
 
-		MaskFormatter mascara_codigo_produto = null;
-
-		try {
-			mascara_codigo_produto = new MaskFormatter("######");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCodigoProduto = new JFormattedTextField(mascara_codigo_produto);
+		fTxtCodigoProduto = new JFormattedTextField();
+		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6,"inteiro");
+		fTxtCodigoProduto.setDocument(limitDocument_codigoProduto);
 		fTxtCodigoProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCodigoProduto) {
@@ -809,7 +798,7 @@ public class Panel_orcamento extends JPanel {
 							if (!seleciona_produto()) {
 								lista_produtos.clear();
 							}
-						}else {
+						} else {
 							fTxtNomeProduto.requestFocus();
 						}
 					}
@@ -852,14 +841,9 @@ public class Panel_orcamento extends JPanel {
 		lblCodBarra.setBounds(519, 55, 63, 19);
 		produtos.add(lblCodBarra);
 
-		MaskFormatter mascara_barras = null;
-		try {
-			mascara_barras = new MaskFormatter("##############");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCodigoBarra = new JFormattedTextField(mascara_barras);
+		fTxtCodigoBarra = new JFormattedTextField();
+		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14,"inteiro");
+		fTxtCodigoBarra.setDocument(limitDocument_codigoBarra);
 		fTxtCodigoBarra.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCodigoBarras) {
@@ -1119,23 +1103,8 @@ public class Panel_orcamento extends JPanel {
 		ltClientes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickListaClientes) {
-				Boolean flag = true;
 				cliente_selecionado = ltClientes.getSelectedValue();
-				if (cliente_selecionado.getBloqueado()) {
-					int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
-							"ATENÇÃO!\nO cliente selecionado está bloqueado.\nDeseja utilizá-lo no orçamento mesmo assim?\n",
-							"Cliente bloqueado.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
-					flag = opcao == JOptionPane.YES_OPTION;
-				}
-
-				if (flag) {
-					exibir_dados_cliente();
-				} else {
-					cliente_selecionado = null;
-					fTxtNomeCliente.setText(null);
-					fTxtNomeCliente.requestFocus();
-				}
-				scrollPaneListaClientes.setVisible(false);
+				seleciona_cliente();
 			}
 		});
 		ltClientes.setBounds(48, 79, 267, 66);
@@ -1160,14 +1129,9 @@ public class Panel_orcamento extends JPanel {
 		lblNomeCliente.setBounds(10, 61, 48, 19);
 		cliente.add(lblNomeCliente);
 
-		MaskFormatter mascara_nome = null;
-		try {
-			mascara_nome = new MaskFormatter("*********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNomeCliente = new JFormattedTextField(mascara_nome);
+		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(35,"texto");
+		fTxtNomeCliente = new JFormattedTextField();
+		fTxtNomeCliente.setDocument(limitDocument_nomeCliente);
 		fTxtNomeCliente.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent perdaFocoNomeCliente) {
@@ -1187,9 +1151,15 @@ public class Panel_orcamento extends JPanel {
 				if (fTxtNomeCliente.getText().trim().isEmpty()) {
 					alimentar_lista_clientes("NOME", null);
 				} else {
-					alimentar_lista_clientes("NOME", fTxtNomeCliente.getText().trim());
+					if (digitaNomeCliente.getKeyCode() == digitaNomeCliente.VK_ENTER) {
+						if (lista_clientes.size() == 1) {
+							cliente_selecionado = lista_clientes.get(0);
+							seleciona_cliente();
+						}
+					} else {
+						alimentar_lista_clientes("NOME", fTxtNomeCliente.getText().trim());
+					}
 				}
-
 			}
 		});
 		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1234,15 +1204,7 @@ public class Panel_orcamento extends JPanel {
 		lblCep.setBounds(10, 125, 28, 20);
 		cliente.add(lblCep);
 
-		MaskFormatter mascara_cep = null;
-
-		try {
-			mascara_cep = new MaskFormatter("#####-###");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCep = new JFormattedTextField(mascara_cep);
+		fTxtCep = new JFormattedTextField();
 		fTxtCep.setEditable(false);
 		fTxtCep.setEnabled(false);
 		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1256,14 +1218,7 @@ public class Panel_orcamento extends JPanel {
 		lblCidade.setBounds(205, 129, 44, 20);
 		cliente.add(lblCidade);
 
-		MaskFormatter mascara_cidade = null;
-		try {
-			mascara_cidade = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCidade = new JFormattedTextField(mascara_cidade);
+		fTxtCidade = new JFormattedTextField();
 		fTxtCidade.setEditable(false);
 		fTxtCidade.setEnabled(false);
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1277,15 +1232,7 @@ public class Panel_orcamento extends JPanel {
 		lblEndereco.setBounds(10, 165, 65, 20);
 		cliente.add(lblEndereco);
 
-		MaskFormatter mascara_endereco = null;
-
-		try {
-			mascara_endereco = new MaskFormatter("*************************************************");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-
-		fTxtEndereco = new JFormattedTextField(mascara_endereco);
+		fTxtEndereco = new JFormattedTextField();
 		fTxtEndereco.setEditable(false);
 		fTxtEndereco.setEnabled(false);
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1299,15 +1246,7 @@ public class Panel_orcamento extends JPanel {
 		lblReferencia.setBounds(9, 198, 65, 20);
 		cliente.add(lblReferencia);
 
-		MaskFormatter mascara_referencia = null;
-
-		try {
-			mascara_referencia = new MaskFormatter("*************************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtReferencia = new JFormattedTextField(mascara_referencia);
+		fTxtReferencia = new JFormattedTextField();
 		fTxtReferencia.setEditable(false);
 		fTxtReferencia.setEnabled(false);
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1321,14 +1260,7 @@ public class Panel_orcamento extends JPanel {
 		lblNumero.setBounds(463, 165, 16, 20);
 		cliente.add(lblNumero);
 
-		MaskFormatter mascara_numero = null;
-		try {
-			mascara_numero = new MaskFormatter("********");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtNumero = new JFormattedTextField(mascara_numero);
+		fTxtNumero = new JFormattedTextField();
 		fTxtNumero.setEditable(false);
 		fTxtNumero.setEnabled(false);
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1342,14 +1274,7 @@ public class Panel_orcamento extends JPanel {
 		lblBairro.setBounds(437, 198, 40, 20);
 		cliente.add(lblBairro);
 
-		MaskFormatter mascara_bairro = null;
-		try {
-			mascara_bairro = new MaskFormatter("******************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtBairro = new JFormattedTextField(mascara_bairro);
+		fTxtBairro = new JFormattedTextField();
 		fTxtBairro.setEditable(false);
 		fTxtBairro.setEnabled(false);
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1363,14 +1288,7 @@ public class Panel_orcamento extends JPanel {
 		lblCelular.setBounds(9, 231, 46, 20);
 		cliente.add(lblCelular);
 
-		MaskFormatter mascara_celular = null;
-		try {
-			mascara_celular = new MaskFormatter("(##)#####-####");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtCelular = new JFormattedTextField(mascara_celular);
+		fTxtCelular = new JFormattedTextField();
 		fTxtCelular.setEditable(false);
 		fTxtCelular.setEnabled(false);
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1384,14 +1302,7 @@ public class Panel_orcamento extends JPanel {
 		lblTelFixo.setBounds(187, 232, 50, 20);
 		cliente.add(lblTelFixo);
 
-		MaskFormatter mascara_telefone = null;
-		try {
-			mascara_telefone = new MaskFormatter("(##)####-####");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo = new JFormattedTextField();
 		fTxtTelFixo.setEditable(false);
 		fTxtTelFixo.setEnabled(false);
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1405,14 +1316,7 @@ public class Panel_orcamento extends JPanel {
 		lblEmai.setBounds(365, 233, 40, 20);
 		cliente.add(lblEmai);
 
-		MaskFormatter mascara_email = null;
-		try {
-			mascara_email = new MaskFormatter("********************************************");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		fTxtEmail = new JFormattedTextField(mascara_email);
+		fTxtEmail = new JFormattedTextField();
 		fTxtEmail.setEditable(false);
 		fTxtEmail.setEnabled(false);
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1524,6 +1428,8 @@ public class Panel_orcamento extends JPanel {
 		cliente.add(btnLimpaCliente);
 
 		fTxtApelido = new JFormattedTextField();
+		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(45,"texto");
+		fTxtApelido.setDocument(limitDocument_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaApelidoCliente) {
@@ -1762,6 +1668,10 @@ public class Panel_orcamento extends JPanel {
 
 				limpar_campos();
 				desativar_campos();
+			}else {
+				tabbedPane.setSelectedComponent(cliente);
+				fTxtNomeCliente.setText(null);
+				fTxtNomeCliente.requestFocus();
 			}
 
 		} else {
@@ -2016,7 +1926,8 @@ public class Panel_orcamento extends JPanel {
 
 	public boolean produto_ja_incluso(Integer codigo, ArrayList<Produto_Orcamento> produtos_inclusos) {
 		for (Produto_Orcamento produto_orcamento : produtos_inclusos) {
-			if (produto_orcamento.getCodigo().equals(codigo) && !produto_orcamento.getNome().substring(0,3).equals("*__")) {
+			if (produto_orcamento.getCodigo().equals(codigo)
+					&& !produto_orcamento.getNome().substring(0, 3).equals("*__")) {
 				JOptionPane.showMessageDialog(lblQuantidade, "O produto selecionado já está presente no orçamento.",
 						"Produto já incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
 				produto_selecionado = null;
@@ -2371,8 +2282,7 @@ public class Panel_orcamento extends JPanel {
 
 		cbxFatorVenda.getModel().setSelectedItem(
 				(String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 3));
-		fTxtQuantidade
-				.setText(quantidade.toString());
+		fTxtQuantidade.setText(quantidade.toString());
 		fTxtPrecoUnitario.setText(nf.format(preco_unit));
 		fTxtTotalItem.setText(nf.format(total + desconto));
 		fTxtTotalItemComDesconto.setText(nf.format(total));
@@ -2621,6 +2531,26 @@ public class Panel_orcamento extends JPanel {
 			}
 		} else {
 			return false;
+		}
+	}
+
+	public void seleciona_cliente() {
+		Boolean flag = true;
+		if (cliente_selecionado.getBloqueado()) {
+			int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+					"ATENÇÃO!\nO cliente selecionado está bloqueado.\nDeseja utilizá-lo no orçamento mesmo assim?\n",
+					"Cliente bloqueado.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+			flag = opcao == JOptionPane.YES_OPTION;
+		}
+
+		if (flag) {
+			exibir_dados_cliente();
+			scrollPaneListaClientes.setVisible(false);
+			btnSalvar.requestFocus();
+		} else {
+			cliente_selecionado = null;
+			fTxtNomeCliente.setText(null);
+			fTxtNomeCliente.requestFocus();
 		}
 	}
 
