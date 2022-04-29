@@ -1110,7 +1110,7 @@ public class Panel_orcamento extends JPanel {
 		ltClientes.setBounds(48, 79, 267, 66);
 
 		scrollPaneListaClientes = new JScrollPane(ltClientes);
-		scrollPaneListaClientes.setBounds(48, 79, 267, 66);
+		scrollPaneListaClientes.setBounds(48, 79, 320, 119);
 		scrollPaneListaClientes.setVisible(false);
 		cliente.add(scrollPaneListaClientes);
 
@@ -1162,9 +1162,9 @@ public class Panel_orcamento extends JPanel {
 				}
 			}
 		});
-		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtNomeCliente.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeCliente.setColumns(10);
-		fTxtNomeCliente.setBounds(48, 61, 267, 20);
+		fTxtNomeCliente.setBounds(48, 61, 320, 20);
 		cliente.add(fTxtNomeCliente);
 
 		lblApelido = new JLabel("Apelido");
@@ -1179,7 +1179,7 @@ public class Panel_orcamento extends JPanel {
 
 		txtDocumento = new JTextField();
 		txtDocumento.setEnabled(false);
-		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDocumento.setEditable(false);
 		txtDocumento.setColumns(10);
 		txtDocumento.setBounds(88, 91, 133, 20);
@@ -1192,7 +1192,7 @@ public class Panel_orcamento extends JPanel {
 
 		txtIe = new JTextField();
 		txtIe.setEnabled(false);
-		txtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtIe.setEditable(false);
 		txtIe.setColumns(10);
 		txtIe.setBounds(570, 91, 133, 20);
@@ -1207,7 +1207,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtCep = new JFormattedTextField();
 		fTxtCep.setEditable(false);
 		fTxtCep.setEnabled(false);
-		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCep.setBounds(40, 127, 78, 20);
 		cliente.add(fTxtCep);
@@ -1221,7 +1221,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtCidade = new JFormattedTextField();
 		fTxtCidade.setEditable(false);
 		fTxtCidade.setEnabled(false);
-		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCidade.setBounds(256, 127, 239, 20);
 		cliente.add(fTxtCidade);
@@ -1235,7 +1235,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtEndereco = new JFormattedTextField();
 		fTxtEndereco.setEditable(false);
 		fTxtEndereco.setEnabled(false);
-		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEndereco.setBounds(73, 163, 348, 20);
 		cliente.add(fTxtEndereco);
@@ -1249,7 +1249,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtReferencia = new JFormattedTextField();
 		fTxtReferencia.setEditable(false);
 		fTxtReferencia.setEnabled(false);
-		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtReferencia.setBounds(79, 196, 342, 20);
 		cliente.add(fTxtReferencia);
@@ -1263,7 +1263,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNumero = new JFormattedTextField();
 		fTxtNumero.setEditable(false);
 		fTxtNumero.setEnabled(false);
-		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNumero.setBounds(481, 164, 90, 20);
 		cliente.add(fTxtNumero);
@@ -1277,9 +1277,9 @@ public class Panel_orcamento extends JPanel {
 		fTxtBairro = new JFormattedTextField();
 		fTxtBairro.setEditable(false);
 		fTxtBairro.setEnabled(false);
-		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(482, 194, 220, 20);
+		fTxtBairro.setBounds(480, 197, 220, 20);
 		cliente.add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
@@ -1291,9 +1291,9 @@ public class Panel_orcamento extends JPanel {
 		fTxtCelular = new JFormattedTextField();
 		fTxtCelular.setEditable(false);
 		fTxtCelular.setEnabled(false);
-		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCelular.setBounds(55, 231, 104, 20);
+		fTxtCelular.setBounds(55, 231, 110, 20);
 		cliente.add(fTxtCelular);
 
 		lblTelFixo = new JLabel("Tel. Fixo");
@@ -1305,7 +1305,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtTelFixo = new JFormattedTextField();
 		fTxtTelFixo.setEditable(false);
 		fTxtTelFixo.setEnabled(false);
-		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTelFixo.setBounds(244, 231, 104, 20);
 		cliente.add(fTxtTelFixo);
@@ -1319,7 +1319,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtEmail = new JFormattedTextField();
 		fTxtEmail.setEditable(false);
 		fTxtEmail.setEnabled(false);
-		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtEmail.setBounds(405, 232, 297, 20);
 		cliente.add(fTxtEmail);
@@ -1424,7 +1424,7 @@ public class Panel_orcamento extends JPanel {
 			}
 		});
 		btnLimpaCliente.setIcon(icones.getIcone_limpar());
-		btnLimpaCliente.setBounds(325, 61, 27, 19);
+		btnLimpaCliente.setBounds(378, 61, 27, 19);
 		cliente.add(btnLimpaCliente);
 
 		fTxtApelido = new JFormattedTextField();
@@ -1433,14 +1433,22 @@ public class Panel_orcamento extends JPanel {
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaApelidoCliente) {
-				if (fTxtApelido.getText().trim().isEmpty()) {
-					alimentar_lista_clientes("APELIDO", null);
-				} else {
-					alimentar_lista_clientes("APELIDO", fTxtApelido.getText().trim());
+				
+				if(digitaApelidoCliente.getKeyCode() == digitaApelidoCliente.VK_ENTER) {
+					if (lista_clientes.size() == 1) {
+						cliente_selecionado = lista_clientes.get(0);
+						seleciona_cliente();
+					}
+				}else {
+					if (fTxtApelido.getText().trim().isEmpty()) {
+						alimentar_lista_clientes("APELIDO", null);
+					} else {
+						alimentar_lista_clientes("APELIDO", fTxtApelido.getText().trim());
+					}
 				}
 			}
 		});
-		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtApelido.setEnabled(false);
 		fTxtApelido.setColumns(10);
 		fTxtApelido.setBounds(463, 61, 240, 20);
@@ -2611,6 +2619,18 @@ public class Panel_orcamento extends JPanel {
 				btnPesquisaOrcamento.setVisible(true);
 			}
 			conf_dao.so_orcamentos(false);
+			lblResumoFinanceiro.setVisible(true);
+			lblValorEmAberto.setVisible(true);
+			lblValorComprado.setVisible(true);
+			lblValorDaMaior.setVisible(true);
+			lblPrimeiraCompra.setVisible(true);
+			lblUltimaCompra.setVisible(true);
+			lblTextoObservacao.setVisible(true);
+			fTxtMaiorCompra.setVisible(true);
+			fTxtPrimeiraCompra.setVisible(true);
+			fTxtUltimaCompra.setVisible(true);
+			fTxtValorEmAberto.setVisible(true);
+			fTxtTotalVendido.setVisible(true);
 		} else {
 			if (orcamento_em_andamento) {
 				btnSalvar.setVisible(false);
@@ -2618,8 +2638,21 @@ public class Panel_orcamento extends JPanel {
 				btnPesquisaOrcamento.setVisible(false);
 			}
 			conf_dao.so_orcamentos(true);
+			lblResumoFinanceiro.setVisible(false);
+			lblValorEmAberto.setVisible(false);
+			lblValorComprado.setVisible(false);
+			lblValorDaMaior.setVisible(false);
+			lblPrimeiraCompra.setVisible(false);
+			lblUltimaCompra.setVisible(false);
+			lblTextoObservacao.setVisible(false);
+			fTxtMaiorCompra.setVisible(false);
+			fTxtPrimeiraCompra.setVisible(false);
+			fTxtUltimaCompra.setVisible(false);
+			fTxtValorEmAberto.setVisible(false);
+			fTxtTotalVendido.setVisible(false);
 		}
 	}
+	
 
 	// Teclas de atalho
 	public void tecla_pressionada() {

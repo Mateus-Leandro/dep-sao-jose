@@ -46,7 +46,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "v. 23.04.22";  
+	public String versao = "v. 28.04.22";  
 	
 	/**
 	 * Launch the application.
@@ -145,10 +145,6 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.setEnabledAt(0, ativada);
 		tabbedPane.setEnabledAt(1, ativada);
 		tabbedPane.setEnabledAt(2, ativada);
-	}
-
-	public void muda_aba(int numero_aba) {
-		tabbedPane.setSelectedIndex(numero_aba);
 	}
 
 	// Atalho para simplificar o sistema, não permitindo o controle financeiro,
