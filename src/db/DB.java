@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Base64;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -160,8 +161,7 @@ public class DB {
 			BasicDataSource ds = new BasicDataSource();
 			ds.setUrl(url);
 			ds.setUsername(props.getProperty("user"));
-			ds.setPassword(props.getProperty("password"));
-			
+			ds.setPassword(decript(props.getProperty("password")));
 			ds.setMinIdle(5);
 			ds.setMaxIdle(10);
 			ds.setMaxOpenPreparedStatements(50);
@@ -171,4 +171,11 @@ public class DB {
 		return dataSource;
 	}
 	
+	//Descriptografa a senha do arquivo db.properties,
+	//utilizando base64 de forma a igonarar os 2 primeiro e 2 ultimos caracteres.
+	public static String decript(String pValor) {
+		pValor = pValor.substring(2, pValor.length() - 2);
+	    return new String(Base64.getDecoder().decode(pValor.getBytes()));
+	}
+
 }
