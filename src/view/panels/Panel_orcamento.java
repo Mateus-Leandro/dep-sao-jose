@@ -1604,7 +1604,7 @@ public class Panel_orcamento extends JPanel {
 					opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Nenhum cliente foi informado!\n"
 							+ "Caso confirmar o orçamento será gravado utilizando o cliente configurado como consumidor final:"
 							+ "\n\nConsumidor final" + "\nCódigo: "
-							+ configuracoes_do_sistema.getConsumidor_final().getIdCliente().toString() + "\nNome: "
+							+ configuracoes_do_sistema.getConsumidor_final().getId().toString() + "\nNome: "
 							+ configuracoes_do_sistema.getConsumidor_final().getNome()
 							+ "\n\nDeseja confirmar o orçamento?", "Confirmar orçamento.", JOptionPane.YES_OPTION,
 							JOptionPane.WARNING_MESSAGE);

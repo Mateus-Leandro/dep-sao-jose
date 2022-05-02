@@ -1119,12 +1119,12 @@ public class Panel_clientes extends JPanel {
 					JOptionPane
 							.showMessageDialog(
 									fTxtCidade, "Cliente cadastrado com sucesso." + "\nCódigo: "
-											+ cliente.getIdCliente() + "\nNome: " + cliente.getNome(),
+											+ cliente.getId() + "\nNome: " + cliente.getNome(),
 									"Novo cliente", JOptionPane.NO_OPTION);
 				}
 			} else {
 
-				cliente.setIdCliente(Integer.parseInt(txtCodigo.getText().trim()));
+				cliente.setId(Integer.parseInt(txtCodigo.getText().trim()));
 
 				if (cliente_dao.alterar_cliente(cliente)) {
 					fTxtNomeCliente.setBorder(new LineBorder(Color.lightGray));
@@ -1226,7 +1226,7 @@ public class Panel_clientes extends JPanel {
 	public boolean salvar_cliente(Cliente cliente) {
 		cliente = cliente_dao.inserirCliente(cliente);
 
-		if (cliente.getIdCliente() != null) {
+		if (cliente.getId() != null) {
 			return true;
 		} else {
 			return false;
@@ -1277,7 +1277,7 @@ public class Panel_clientes extends JPanel {
 			boolean flag;
 			Integer codigo = (Integer) tabelaClientes.getValueAt(tabelaClientes.getSelectedRow(), 0);
 
-			if (codigo.equals(configuracoes.getConsumidor_final().getIdCliente())) {
+			if (codigo.equals(configuracoes.getConsumidor_final().getId())) {
 				JOptionPane.showMessageDialog(null,
 						"Impossível excluir cliente.\nO cliente selecionado está sendo usado como consumidor final nas configurações do sistema.",
 						"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);

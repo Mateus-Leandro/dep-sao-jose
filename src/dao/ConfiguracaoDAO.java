@@ -39,7 +39,7 @@ public class ConfiguracaoDAO {
 			ps.setString(10, configuracao.getAltera_orc());
 			ps.setString(11, configuracao.getGera_PDF());
 			ps.setString(12, configuracao.getVincula_barras());
-			ps.setInt(13, configuracao.getConsumidor_final().getIdCliente());
+			ps.setInt(13, configuracao.getConsumidor_final().getId());
 
 			ps.execute();
 			conn.commit();
@@ -112,7 +112,7 @@ public class ConfiguracaoDAO {
 				conf.setSo_orcamento(rs.getBoolean("so_orcamento"));
 
 				Cliente consumidor_final = new Cliente();
-				consumidor_final.setIdCliente(rs.getInt("idConsumidor_final"));
+				consumidor_final.setId(rs.getInt("idConsumidor_final"));
 				consumidor_final.setNome(rs.getString("clientes.nome"));
 				consumidor_final.setEndereco(rs.getString("clientes.endereco"));
 				consumidor_final.setNumero(rs.getString("clientes.numero"));

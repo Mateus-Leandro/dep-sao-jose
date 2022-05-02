@@ -32,7 +32,7 @@ public class OrcamentoDAO {
 					+ "(`idCliente`, `quantidadeProdutos`, `totalMercadoriasBruto`, "
 					+ "`totalMercadoriasLiquido`, `frete`, `descontoFinal`, `valorTotal`, `faturado`, `numeroParcelas`, `observacao`, `dataInclusao`, `dataFaturamento`) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, orcamento.getCliente().getIdCliente());
+			ps.setInt(1, orcamento.getCliente().getId());
 			ps.setInt(2, orcamento.getQuantidade_produtos());
 			ps.setDouble(3, orcamento.getTotal_mercadorias_bruto());
 			ps.setDouble(4, orcamento.getTotal_mercadorias_liquido());
@@ -84,7 +84,7 @@ public class OrcamentoDAO {
 					+ "`quantidadeProdutos` = ?, `totalMercadoriasBruto` = ?, "
 					+ "`totalMercadoriasLiquido` = ?, `frete` = ?, `descontoFinal` = ?, " + "`valorTotal` = ? "
 					+ "WHERE (`idOrcamento` = ?)");
-			ps.setInt(1, orcamento_editado.getCliente().getIdCliente());
+			ps.setInt(1, orcamento_editado.getCliente().getId());
 			ps.setInt(2, orcamento_editado.getQuantidade_produtos());
 			ps.setDouble(3, orcamento_editado.getTotal_mercadorias_bruto());
 			ps.setDouble(4, orcamento_editado.getTotal_mercadorias_liquido());
@@ -187,7 +187,7 @@ public class OrcamentoDAO {
 				}
 			}
 			if (!cliente_vazio) {
-				ps.setInt(1, cliente.getIdCliente());
+				ps.setInt(1, cliente.getId());
 			} else {
 				ps.setString(1, "%");
 			}
@@ -204,7 +204,7 @@ public class OrcamentoDAO {
 				// Buscando dados do cliente.
 				if (cliente_vazio) {
 					cliente = new Cliente();
-					cliente.setIdCliente(rs.getInt("idCliente"));
+					cliente.setId(rs.getInt("idCliente"));
 					cliente.setBloqueado(rs.getBoolean("bloqueado"));
 					cliente.setNome(rs.getString("nome"));
 					cliente.setApelido(rs.getString("apelido"));

@@ -18,7 +18,7 @@ public class Resumo_financeiroDAO {
 	public Resumo_financeiro carregar_resumo_financeiro(Cliente cliente, Resumo_financeiro resumo) {
 		conn = DB.getConnection();
 
-		int id_cliente = cliente.getIdCliente();
+		int id_cliente = cliente.getId();
 		try {
 
 			// Calculando valor total em orçamentos

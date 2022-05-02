@@ -108,7 +108,7 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 		Cliente cliente = this.clientes.get(rowIndex);
 		switch (columIndex) {
 		case COLUNA_CODIGO:
-			return cliente.getIdCliente();
+			return cliente.getId();
 		case COLUNA_BLOQUEADO:
 			return cliente.getBloqueado();
 		case COLUNA_NOME:
@@ -150,7 +150,7 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 	}
 
 	public void removeProduto(Integer codigo_cliente) {
-		this.clientes.removeIf(cliente -> cliente.getIdCliente().equals(codigo_cliente));
+		this.clientes.removeIf(cliente -> cliente.getId().equals(codigo_cliente));
 		this.fireTableDataChanged();
 	}
 

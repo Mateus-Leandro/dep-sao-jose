@@ -102,7 +102,7 @@ public class Panel_configuracoes extends JPanel {
 				scrollPaneConsumidorFinal.setVisible(false);
 				consumidor_final = ltConsumidorFinal.getSelectedValue();
 				fTxtConsumidorFinal.setText(consumidor_final.getNome());
-				fTxtCodigoConsumidor.setText(consumidor_final.getIdCliente().toString());
+				fTxtCodigoConsumidor.setText(consumidor_final.getId().toString());
 				valida_campos();
 			}
 		});
@@ -794,7 +794,7 @@ public class Panel_configuracoes extends JPanel {
 			if (configuracoes_do_sistema.getConsumidor_final() != null) {
 				consumidor_final = configuracoes_do_sistema.getConsumidor_final();
 				fTxtConsumidorFinal.setText(consumidor_final.getNome());
-				fTxtCodigoConsumidor.setText(consumidor_final.getIdCliente().toString());
+				fTxtCodigoConsumidor.setText(consumidor_final.getId().toString());
 			} else {
 				fTxtConsumidorFinal.setText(null);
 				fTxtCodigoConsumidor.setText(null);

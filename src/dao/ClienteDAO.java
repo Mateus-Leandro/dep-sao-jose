@@ -29,7 +29,7 @@ public class ClienteDAO {
 
 		try {
 			conn.setAutoCommit(false);
-			cliente.setIdCliente(null);
+			cliente.setId(null);
 			ps = conn.prepareStatement(
 					"INSERT INTO clientes " + "(nome, apelido, documento, inscricaoEstadual, cep, cidade, endereco, "
 							+ "referencia, numero, bairro, email, celular, telefone, bloqueado, dataCadastro)"
@@ -56,7 +56,7 @@ public class ClienteDAO {
 			rs = ps.getGeneratedKeys();
 
 			if (rs.next()) {
-				cliente.setIdCliente(rs.getInt(1));
+				cliente.setId(rs.getInt(1));
 			}
 
 			return cliente;
@@ -94,7 +94,7 @@ public class ClienteDAO {
 			ps.setString(12, cliente.getCelular());
 			ps.setString(13, cliente.getTelefone());
 			ps.setBoolean(14, cliente.getBloqueado());
-			ps.setInt(15, cliente.getIdCliente());
+			ps.setInt(15, cliente.getId());
 
 			ps.execute();
 			conn.commit();
@@ -181,7 +181,7 @@ public class ClienteDAO {
 
 			while (rs.next()) {
 				Cliente cliente = new Cliente();
-				cliente.setIdCliente(rs.getInt("idCliente"));
+				cliente.setId(rs.getInt("idCliente"));
 				cliente.setBloqueado(rs.getBoolean("bloqueado"));
 				cliente.setNome(rs.getString("nome"));
 				cliente.setApelido(rs.getString("apelido"));

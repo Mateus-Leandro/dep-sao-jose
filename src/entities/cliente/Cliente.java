@@ -1,11 +1,9 @@
 package entities.cliente;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Cliente {
-	private Integer idCliente = null;
+	private Integer id = null;
 	private String nome;
 	private String apelido;
 	private boolean pessoa_juridica;
@@ -27,10 +25,10 @@ public class Cliente {
 
 	
 	
-	public Cliente(Integer idCliente, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
+	public Cliente(Integer id, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
 			String inscricao_estadual, String cep, String cidade, String endereco,
 			String referencia, String numero, String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro) {
-		this.idCliente = idCliente;
+		this.id = id;
 		this.nome = nome;
 		this.apelido = apelido;
 		this.pessoa_juridica = pessoa_juridica;
@@ -52,12 +50,12 @@ public class Cliente {
 	public Cliente() {
 	}
 
-	public Integer getIdCliente() {
-		return idCliente;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
+	public void setId(Integer idCliente) {
+		this.id = idCliente;
 	}
 
 	public String getNome() {
@@ -193,7 +191,7 @@ public class Cliente {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((idCliente == null) ? 0 : idCliente.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -206,10 +204,10 @@ public class Cliente {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (idCliente == null) {
-			if (other.idCliente != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!idCliente.equals(other.idCliente))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
