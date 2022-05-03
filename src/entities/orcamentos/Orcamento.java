@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import entities.cliente.Cliente;
 import entities.financeiro.Parcela;
+import entities.pessoa.Cliente;
+import entities.produto.Produto_orcamento;
 
 public class Orcamento {
 
@@ -23,7 +24,7 @@ public class Orcamento {
 	String observacao;
 	Date data_inclusao;
 	Date data_faturamento;
-	ArrayList<Produto_Orcamento> produtos_do_orcamento;
+	ArrayList<Produto_orcamento> produtos_do_orcamento;
 	ArrayList<Parcela> parcelas;
 
 	public Orcamento() {
@@ -32,7 +33,7 @@ public class Orcamento {
 	public Orcamento(Integer id_orcamento, Cliente cliente, Integer quantidade_produtos, Double total_mercadorias_bruto,
 			Double total_mercadorias_liquido, Double frete, Double desconto_final, Double valor_total, Boolean faturado,
 			Integer numero_de_parcelas, String observacao, Date data_inclusao, Date data_faturamento,
-			ArrayList<Produto_Orcamento> produtos_do_orcamento, ArrayList<Parcela> parcelas) {
+			ArrayList<Produto_orcamento> produtos_do_orcamento, ArrayList<Parcela> parcelas) {
 		this.id_orcamento = id_orcamento;
 		this.cliente = cliente;
 		this.quantidade_produtos = quantidade_produtos;
@@ -154,11 +155,11 @@ public class Orcamento {
 		this.data_faturamento = data_faturamento;
 	}
 
-	public ArrayList<Produto_Orcamento> getProdutos_do_orcamento() {
+	public ArrayList<Produto_orcamento> getProdutos_do_orcamento() {
 		return produtos_do_orcamento;
 	}
 
-	public void setProdutos_do_orcamento(ArrayList<Produto_Orcamento> produtos_do_orcamento) {
+	public void setProdutos_do_orcamento(ArrayList<Produto_orcamento> produtos_do_orcamento) {
 		this.produtos_do_orcamento = produtos_do_orcamento;
 	}
 

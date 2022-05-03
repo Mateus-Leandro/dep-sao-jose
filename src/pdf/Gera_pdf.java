@@ -22,7 +22,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import dao.ConfiguracaoDAO;
 import entities.configuracoes.Configuracoes;
 import entities.orcamentos.Orcamento;
-import entities.orcamentos.Produto_Orcamento;
+import entities.produto.Produto_orcamento;
 
 public class Gera_pdf {
 
@@ -298,7 +298,7 @@ public class Gera_pdf {
 		tabela_produtos = new PdfPTable(largura_colunas_produtos);
 
 		Boolean linha_negrito = false;
-		for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
+		for (Produto_orcamento produto : orcamento.getProdutos_do_orcamento()) {
 
 			if (linha_negrito) {
 				fontePadraoPequena = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -310,17 +310,17 @@ public class Gera_pdf {
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(produto.getCodigo().toString());
+			p.add(produto.getIdProduto().toString());
 			cel_codigo = new PdfPCell(p);
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(String.format("%-28.28s", produto.getNome()));
+			p.add(String.format("%-28.28s", produto.getDescricao()));
 			cel_nome = new PdfPCell(p);
 
 			p = new Paragraph();
 			p.setFont(fontePadraoPequena);
-			p.add(produto.getFator_venda());
+			p.add(produto.getUnidadeVenda());
 			cel_fator = new PdfPCell(p);
 
 			p = new Paragraph();

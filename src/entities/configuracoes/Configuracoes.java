@@ -1,6 +1,6 @@
 package entities.configuracoes;
 
-import entities.cliente.Cliente;
+import entities.pessoa.Cliente;
 
 public class Configuracoes {
 	private String nome_empresa;

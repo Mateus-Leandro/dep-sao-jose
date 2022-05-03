@@ -1,8 +1,9 @@
-package entities.cliente;
+package entities.pessoa;
 
 import java.util.Date;
 
-public class Cliente {
+public abstract class Pessoa {
+
 	private Integer id = null;
 	private String nome;
 	private String apelido;
@@ -20,14 +21,10 @@ public class Cliente {
 	private String telefone;
 	private Boolean bloqueado;
 	private Date dataCadastro;
-	
-	
 
-	
-	
-	public Cliente(Integer id, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
-			String inscricao_estadual, String cep, String cidade, String endereco,
-			String referencia, String numero, String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro) {
+	public Pessoa(Integer id, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
+			String inscricao_estadual, String cep, String cidade, String endereco, String referencia, String numero,
+			String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro) {
 		this.id = id;
 		this.nome = nome;
 		this.apelido = apelido;
@@ -36,7 +33,7 @@ public class Cliente {
 		this.inscricao_estadual = inscricao_estadual;
 		this.cep = cep;
 		this.cidade = cidade;
-		Endereco = endereco;
+		this.Endereco = endereco;
 		this.referencia = referencia;
 		this.numero = numero;
 		this.bairro = bairro;
@@ -46,8 +43,8 @@ public class Cliente {
 		this.bloqueado = bloqueado;
 		this.dataCadastro = dataCadastro;
 	}
-	
-	public Cliente() {
+
+	public Pessoa() {
 	}
 
 	public Integer getId() {
@@ -113,8 +110,7 @@ public class Cliente {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	
-	
+
 	public String getEndereco() {
 		return Endereco;
 	}
@@ -178,45 +174,12 @@ public class Cliente {
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-	
+
 	public Boolean getBloqueado() {
 		return bloqueado;
 	}
-	
-	public void setBloqueado (Boolean bloqueado) {
+
+	public void setBloqueado(Boolean bloqueado) {
 		this.bloqueado = bloqueado;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cliente other = (Cliente) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return  nome;
-	}
-	
-	
-	
 }

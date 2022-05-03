@@ -2,221 +2,84 @@ package entities.produto;
 
 import java.util.Date;
 
-public class Produto {
+public abstract class Produto {
 	private Integer idProduto;
 	private String descricao;
 	private Setor setor;
 	private String unidadeVenda;
 	private Double prVenda;
-	private Double PrCusto;
-	private Double margem;
-	private Double PrSugerido;
-	private Double margemPraticada;
-	private boolean bloqueadoVenda;
+	private String codigo_barra;
 	private Date dataCadastro;
-	private String codigo_barra;	
-	
+
 	public Produto() {
 	}
 
-	
-	
-	
-	public Produto(Integer idProduto, String descricao, Setor setor, String unidadeVenda, Double prVenda, Double prCusto,
-			Double margem, Double prSugerido, Double margemPraticada, boolean bloqueadoVenda, Date dataCadastro,
-			String codigo_barra) {
+	public Produto(Integer idProduto, String descricao, Setor setor, String unidadeVenda, Double prVenda,
+			String codigo_barra, Date dataCadastro) {
 		this.idProduto = idProduto;
 		this.descricao = descricao;
 		this.setor = setor;
 		this.unidadeVenda = unidadeVenda;
 		this.prVenda = prVenda;
-		PrCusto = prCusto;
-		this.margem = margem;
-		PrSugerido = prSugerido;
-		this.margemPraticada = margemPraticada;
-		this.bloqueadoVenda = bloqueadoVenda;
-		this.dataCadastro = dataCadastro;
 		this.codigo_barra = codigo_barra;
+		this.dataCadastro = dataCadastro;
 	}
-
-
 
 	public Integer getIdProduto() {
 		return idProduto;
 	}
 
-
-
-
 	public void setIdProduto(Integer idProduto) {
 		this.idProduto = idProduto;
 	}
-
-
-
 
 	public String getDescricao() {
 		return descricao;
 	}
 
-
-
-
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-
-
 
 	public Setor getSetor() {
 		return setor;
 	}
 
-
-
-
 	public void setSetor(Setor setor) {
 		this.setor = setor;
 	}
-
-
-
 
 	public String getUnidadeVenda() {
 		return unidadeVenda;
 	}
 
-
-
-
 	public void setUnidadeVenda(String unidadeVenda) {
 		this.unidadeVenda = unidadeVenda;
 	}
-
-
-
 
 	public Double getPrecoVenda() {
 		return prVenda;
 	}
 
-
-
-
 	public void setPrecoVenda(Double prVenda) {
 		this.prVenda = prVenda;
 	}
-
-
-
-
-	public Double getPrCusto() {
-		return PrCusto;
-	}
-
-
-
-
-	public void setPrCusto(Double prCusto) {
-		PrCusto = prCusto;
-	}
-
-
-
-
-	public Double getMargem() {
-		return margem;
-	}
-
-
-
-
-	public void setMargem(Double margem) {
-		this.margem = margem;
-	}
-
-
-
-
-	public Double getPrSugerido() {
-		return PrSugerido;
-	}
-
-
-
-
-	public void setPrSugerido(Double prSugerido) {
-		PrSugerido = prSugerido;
-	}
-
-
-
-
-	public Double getMargemPraticada() {
-		return margemPraticada;
-	}
-
-
-
-
-	public void setMargemPraticada(Double margemPraticada) {
-		this.margemPraticada = margemPraticada;
-	}
-
-
-
-
-	public boolean getBloqueadoVenda() {
-		return bloqueadoVenda;
-	}
-
-
-
-
-	public void setBloqueadoVenda(boolean bloqueadoVenda) {
-		this.bloqueadoVenda = bloqueadoVenda;
-	}
-
-
-
 
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
 
-
-
-
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-
-
-
 
 	public String getCodigo_barra() {
 		return codigo_barra;
 	}
 
-
-
-
 	public void setCodigo_barra(String codigo_barra) {
 		this.codigo_barra = codigo_barra;
 	}
-
-
-
-	
-	
-
-	@Override
-	public String toString() {
-		return descricao;
-	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -242,7 +105,4 @@ public class Produto {
 			return false;
 		return true;
 	}
-
-	
-	
 }

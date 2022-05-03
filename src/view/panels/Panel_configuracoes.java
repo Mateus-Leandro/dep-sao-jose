@@ -24,8 +24,8 @@ import javax.swing.text.MaskFormatter;
 
 import dao.ClienteDAO;
 import dao.ConfiguracaoDAO;
-import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
+import entities.pessoa.Cliente;
 import icons.Icones;
 import tools.Jtext_tools;
 import view.frames.TelaPrincipal;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.cliente.Cliente;
+import entities.pessoa.Cliente;
 
 public class ModeloTabelaClientes extends AbstractTableModel {
 
@@ -149,7 +149,7 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
-	public void removeProduto(Integer codigo_cliente) {
+	public void removeCliente(Integer codigo_cliente) {
 		this.clientes.removeIf(cliente -> cliente.getId().equals(codigo_cliente));
 		this.fireTableDataChanged();
 	}

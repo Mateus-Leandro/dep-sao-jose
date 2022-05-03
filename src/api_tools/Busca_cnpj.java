@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import entities.cliente.Cliente;
+import entities.pessoa.Cliente;
 
 public class Busca_cnpj {
 

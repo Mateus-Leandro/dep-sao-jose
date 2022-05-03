@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.produto.Produto;
+import entities.produto.Produto_cadastro;
 import entities.produto.Setor;
 
 public class ProdutoDAO {
@@ -25,7 +25,7 @@ public class ProdutoDAO {
 	}
 
 //------------Inserir-----------------
-	public Produto inserirProduto(Produto produto) {
+	public Produto_cadastro inserirProduto(Produto_cadastro produto) {
 		conn = DB.getConnection();
 
 		try {
@@ -49,7 +49,7 @@ public class ProdutoDAO {
 			ps.setDouble(6, produto.getMargem());
 			ps.setDouble(7, produto.getPrSugerido());
 			ps.setDouble(8, produto.getMargemPraticada());
-			ps.setBoolean(9, produto.getBloqueadoVenda());
+			ps.setBoolean(9, produto.isBloqueadoVenda());
 			ps.setDate(10, new java.sql.Date(System.currentTimeMillis()));
 			ps.execute();
 			rs = ps.getGeneratedKeys();
@@ -76,7 +76,7 @@ public class ProdutoDAO {
 	}
 
 	// ----------- Alterar---------------
-	public boolean alterarProduto(Produto produto) {
+	public boolean alterarProduto(Produto_cadastro produto) {
 		conn = DB.getConnection();
 
 		try {
@@ -98,7 +98,7 @@ public class ProdutoDAO {
 			ps.setDouble(6, produto.getMargem());
 			ps.setDouble(7, produto.getPrSugerido());
 			ps.setDouble(8, produto.getMargemPraticada());
-			ps.setBoolean(9, produto.getBloqueadoVenda());
+			ps.setBoolean(9, produto.isBloqueadoVenda());
 			ps.setInt(10, produto.getIdProduto());
 			ps.executeUpdate();
 
@@ -158,7 +158,7 @@ public class ProdutoDAO {
 	}
 
 //---------Listar---------------
-	public ArrayList<Produto> listarTodosProdutos(ArrayList<Produto> produtos) {
+	public ArrayList<Produto_cadastro> listarTodosProdutos(ArrayList<Produto_cadastro> produtos) {
 		conn = DB.getConnection();
 
 		try {
@@ -171,7 +171,7 @@ public class ProdutoDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Produto produto = new Produto();
+				Produto_cadastro produto = new Produto_cadastro();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setCodigo_barra(rs.getString(3));
@@ -200,7 +200,7 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por nome-----
-	public ArrayList<Produto> listarProdutosNome(ArrayList<Produto> produtos, String nome, Integer limite) {
+	public ArrayList<Produto_cadastro> listarProdutosNome(ArrayList<Produto_cadastro> produtos, String nome, Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
@@ -220,7 +220,7 @@ public class ProdutoDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Produto produto = new Produto();
+				Produto_cadastro produto = new Produto_cadastro();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setCodigo_barra(rs.getString(3));
@@ -250,7 +250,7 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por código interno----
-	public ArrayList<Produto> listarProdutosCodigo(ArrayList<Produto> produtos, String codInterno, Integer limite) {
+	public ArrayList<Produto_cadastro> listarProdutosCodigo(ArrayList<Produto_cadastro> produtos, String codInterno, Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
@@ -272,7 +272,7 @@ public class ProdutoDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Produto produto = new Produto();
+				Produto_cadastro produto = new Produto_cadastro();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setCodigo_barra(rs.getString(3));
@@ -302,7 +302,7 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por código de barras----
-	public ArrayList<Produto> listarProdutosBarras(ArrayList<Produto> produtos, String barras, Integer limite) {
+	public ArrayList<Produto_cadastro> listarProdutosBarras(ArrayList<Produto_cadastro> produtos, String barras, Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
@@ -324,7 +324,7 @@ public class ProdutoDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Produto produto = new Produto();
+				Produto_cadastro produto = new Produto_cadastro();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setCodigo_barra(rs.getString(3));
@@ -342,9 +342,9 @@ public class ProdutoDAO {
 			}
 			
 			//Alimentando produtos através do código de barras vinculado.
-			ArrayList<Produto> barras_vinculados = new ArrayList<Produto>();
+			ArrayList<Produto_cadastro> barras_vinculados = new ArrayList<Produto_cadastro>();
 			barras_vinculados = listarProdutosBarrasVinculados(barras_vinculados, barras, 50);
-			for (Produto prod : barras_vinculados) {
+			for (Produto_cadastro prod : barras_vinculados) {
 				if (!produtos.contains(prod)) {
 					produtos.add(prod);
 				}
@@ -363,7 +363,7 @@ public class ProdutoDAO {
 	}
 
 	// Pesquisar barras vinculados
-	private ArrayList<Produto> listarProdutosBarrasVinculados(ArrayList<Produto> produtos, String barras,
+	private ArrayList<Produto_cadastro> listarProdutosBarrasVinculados(ArrayList<Produto_cadastro> produtos, String barras,
 			Integer limite) {
 		conn = DB.getConnection();
 
@@ -385,7 +385,7 @@ public class ProdutoDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Produto produto = new Produto();
+				Produto_cadastro produto = new Produto_cadastro();
 				produto.setIdProduto(rs.getInt("idProduto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setCodigo_barra(rs.getString(3));

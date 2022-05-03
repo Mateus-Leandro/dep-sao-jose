@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import db.DB;
 import entities.produto.Barras_Produto;
-import entities.produto.Produto;
+import entities.produto.Produto_cadastro;
 
 public class BarrasDAO {
 
@@ -22,8 +22,8 @@ public class BarrasDAO {
 	}
 
 	// Incluir novo barras
-	public Produto novo_barras(String cod_item, String barras, Boolean principal) {
-		Produto prod = testa_barras_vinculado(barras);
+	public Produto_cadastro novo_barras(String cod_item, String barras, Boolean principal) {
+		Produto_cadastro prod = testa_barras_vinculado(barras);
 		if (prod == null) {
 			conn = DB.getConnection();
 			try {
@@ -40,7 +40,7 @@ public class BarrasDAO {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				return new Produto();
+				return new Produto_cadastro();
 			} finally {
 				DB.closeStatement(ps);
 				DB.closeConnection(conn);
@@ -71,10 +71,10 @@ public class BarrasDAO {
 	}
 
 	// Verifica existencia do código de barras
-	public Produto testa_barras_vinculado(String barras) {
+	public Produto_cadastro testa_barras_vinculado(String barras) {
 		conn = DB.getConnection();
 		
-		Produto produto_encontrado = new Produto();
+		Produto_cadastro produto_encontrado = new Produto_cadastro();
 		
 		try {
 			ps = conn.prepareStatement("SELECT barras_produto.idProduto, produto.descricao "
@@ -91,7 +91,7 @@ public class BarrasDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Produto();
+			return new Produto_cadastro();
 		} finally {
 			DB.closeStatement(ps);
 			DB.closeResultSet(rs);

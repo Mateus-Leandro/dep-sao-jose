@@ -51,13 +51,13 @@ import dao.ConfiguracaoDAO;
 import dao.OrcamentoDAO;
 import dao.ProdutoDAO;
 import dao.Resumo_financeiroDAO;
-import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
 import entities.financeiro.Parcela;
 import entities.financeiro.Resumo_financeiro;
 import entities.orcamentos.Orcamento;
-import entities.orcamentos.Produto_Orcamento;
-import entities.produto.Produto;
+import entities.pessoa.Cliente;
+import entities.produto.Produto_cadastro;
+import entities.produto.Produto_orcamento;
 import icons.Icones;
 import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
@@ -157,9 +157,9 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblValorTotalOrcamento;
 	private JLabel lblQuantidadeProdutos;
 	private JFormattedTextField fTxtQuantidadeTotal;
-	private JList<Produto> ltProdutos;
-	private DefaultListModel<Produto> list_model_produtos = new DefaultListModel<Produto>();
-	private ArrayList<Produto> lista_produtos = new ArrayList<Produto>();
+	private JList<Produto_cadastro> ltProdutos;
+	private DefaultListModel<Produto_cadastro> list_model_produtos = new DefaultListModel<Produto_cadastro>();
+	private ArrayList<Produto_cadastro> lista_produtos = new ArrayList<Produto_cadastro>();
 	private JFormattedTextField fTxtCodigoProduto;
 	private JScrollPane scrollPaneListaProdutos;
 	private JScrollPane scrollPaneListaClientes;
@@ -169,14 +169,14 @@ public class Panel_orcamento extends JPanel {
 	private JButton btnLimpaDadosProduto;
 	private JTable tabelaProdutosInclusos;
 	private ListSelectionModel lsm;
-	private ArrayList<Produto_Orcamento> lista_produtos_inclusos = new ArrayList<Produto_Orcamento>();
+	private ArrayList<Produto_orcamento> lista_produtos_inclusos = new ArrayList<Produto_orcamento>();
 	private ModeloTabelaProdutos_Orcamento modelo_tabela = new ModeloTabelaProdutos_Orcamento(lista_produtos_inclusos);
 	private JPanel panelTotalItem;
 	private JFormattedTextField fTxtTotalItemComDesconto;
 	private JLabel lblTotalComDesconto;
 	private JLabel lblCodBarra;
 	private JFormattedTextField fTxtCodigoBarra;
-	private Produto produto_selecionado;
+	private Produto_cadastro produto_selecionado;
 	private Jtext_tools text_tools = new Jtext_tools();
 	private JButton btnSalvar_editado;
 	private JButton btnCancelar_editado;
@@ -201,7 +201,7 @@ public class Panel_orcamento extends JPanel {
 	private ArrayList<Parcela> parcelas = new ArrayList<Parcela>();
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
-	private Produto_Orcamento produto_incluso = new Produto_Orcamento();
+	private Produto_orcamento produto_incluso = new Produto_orcamento();
 	private JLabel lblObg_produto;
 	private JLabel lblObg_produto_1;
 	private JLabel lblObg_quantidade;
@@ -223,6 +223,7 @@ public class Panel_orcamento extends JPanel {
 	private JButton btnImprimir;
 	private Gera_pdf gera_pdf = new Gera_pdf();
 	private Boolean cliente_vazio = true;
+	private Produto_orcamento produto_editado = new Produto_orcamento();
 
 	/**
 	 * Create the panel.
@@ -295,7 +296,7 @@ public class Panel_orcamento extends JPanel {
 		btnCancelar_editado.setBounds(585, 196, 120, 29);
 		btnCancelar_editado.setVisible(false);
 
-		ltProdutos = new JList<Produto>();
+		ltProdutos = new JList<Produto_cadastro>();
 		ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ltProdutos.setVisibleRowCount(10);
 		ltProdutos.addMouseListener(new MouseAdapter() {
@@ -472,7 +473,7 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(lblNomeProduto);
 
 		fTxtNomeProduto = new JFormattedTextField();
-		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49,"texto");
+		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
 		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
@@ -770,7 +771,7 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(fTxtQuantidadeTotal);
 
 		fTxtCodigoProduto = new JFormattedTextField();
-		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6,"inteiro");
+		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6, "inteiro");
 		fTxtCodigoProduto.setDocument(limitDocument_codigoProduto);
 		fTxtCodigoProduto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -842,7 +843,7 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(lblCodBarra);
 
 		fTxtCodigoBarra = new JFormattedTextField();
-		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14,"inteiro");
+		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14, "inteiro");
 		fTxtCodigoBarra.setDocument(limitDocument_codigoBarra);
 		fTxtCodigoBarra.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1129,7 +1130,7 @@ public class Panel_orcamento extends JPanel {
 		lblNomeCliente.setBounds(10, 61, 48, 19);
 		cliente.add(lblNomeCliente);
 
-		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(35,"texto");
+		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(35, "texto");
 		fTxtNomeCliente = new JFormattedTextField();
 		fTxtNomeCliente.setDocument(limitDocument_nomeCliente);
 		fTxtNomeCliente.addFocusListener(new FocusAdapter() {
@@ -1428,18 +1429,18 @@ public class Panel_orcamento extends JPanel {
 		cliente.add(btnLimpaCliente);
 
 		fTxtApelido = new JFormattedTextField();
-		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(45,"texto");
+		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(45, "texto");
 		fTxtApelido.setDocument(limitDocument_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaApelidoCliente) {
-				
-				if(digitaApelidoCliente.getKeyCode() == digitaApelidoCliente.VK_ENTER) {
+
+				if (digitaApelidoCliente.getKeyCode() == digitaApelidoCliente.VK_ENTER) {
 					if (lista_clientes.size() == 1) {
 						cliente_selecionado = lista_clientes.get(0);
 						seleciona_cliente();
 					}
-				}else {
+				} else {
 					if (fTxtApelido.getText().trim().isEmpty()) {
 						alimentar_lista_clientes("APELIDO", null);
 					} else {
@@ -1492,7 +1493,7 @@ public class Panel_orcamento extends JPanel {
 	public void incluir_produto() {
 		if (produto_selecionado != null || editando_produto) {
 
-			produto_incluso = new Produto_Orcamento();
+			produto_incluso = new Produto_orcamento();
 
 			if (novo_produto(produto_incluso, false)) {
 				modelo_tabela.addProduto(produto_incluso);
@@ -1676,7 +1677,7 @@ public class Panel_orcamento extends JPanel {
 
 				limpar_campos();
 				desativar_campos();
-			}else {
+			} else {
 				tabbedPane.setSelectedComponent(cliente);
 				fTxtNomeCliente.setText(null);
 				fTxtNomeCliente.requestFocus();
@@ -1705,7 +1706,7 @@ public class Panel_orcamento extends JPanel {
 		}
 	}
 
-	public boolean novo_produto(Produto_Orcamento novo_produto, Boolean editando_item) {
+	public boolean novo_produto(Produto_orcamento novo_produto, Boolean editando_item) {
 
 		nf.setRoundingMode(RoundingMode.DOWN);
 		nf2.setRoundingMode(RoundingMode.DOWN);
@@ -1760,10 +1761,10 @@ public class Panel_orcamento extends JPanel {
 					codigo_barras = produto_selecionado.getCodigo_barra();
 				}
 			}
-			novo_produto.setCodigo(Integer.parseInt(codigo));
-			novo_produto.setNome(nome_produto);
-			novo_produto.setCodigo_barras(codigo_barras);
-			novo_produto.setFator_venda(fator);
+			novo_produto.setIdProduto(Integer.parseInt(codigo));
+			novo_produto.setDescricao(nome_produto);
+			novo_produto.setCodigo_barra(codigo_barras);
+			novo_produto.setUnidadeVenda(fator);
 			novo_produto.setQuantidade(quantidade);
 			novo_produto.setPreco_unitario(preco_unitario);
 			novo_produto.setValor_desconto(valor_desconto);
@@ -1832,7 +1833,7 @@ public class Panel_orcamento extends JPanel {
 			break;
 		}
 
-		for (Produto produto : lista_produtos) {
+		for (Produto_cadastro produto : lista_produtos) {
 			list_model_produtos.addElement(produto);
 		}
 
@@ -1932,10 +1933,10 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeCliente.requestFocus();
 	}
 
-	public boolean produto_ja_incluso(Integer codigo, ArrayList<Produto_Orcamento> produtos_inclusos) {
-		for (Produto_Orcamento produto_orcamento : produtos_inclusos) {
-			if (produto_orcamento.getCodigo().equals(codigo)
-					&& !produto_orcamento.getNome().substring(0, 3).equals("*__")) {
+	public boolean produto_ja_incluso(Integer codigo, ArrayList<Produto_orcamento> produtos_inclusos) {
+		for (Produto_orcamento produto_orcamento : produtos_inclusos) {
+			if (produto_orcamento.getIdProduto().equals(codigo)
+					&& !produto_orcamento.getDescricao().substring(0, 3).equals("*__")) {
 				JOptionPane.showMessageDialog(lblQuantidade, "O produto selecionado já está presente no orçamento.",
 						"Produto já incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
 				produto_selecionado = null;
@@ -1946,7 +1947,7 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public boolean produto_bloqueado() {
-		if (produto_selecionado.getBloqueadoVenda()) {
+		if (produto_selecionado.isBloqueadoVenda()) {
 			lista_produtos.clear();
 			produto_selecionado = null;
 			fTxtCodigoProduto.setText(null);
@@ -2110,7 +2111,7 @@ public class Panel_orcamento extends JPanel {
 		total_mercadorias_liquido = 0.00;
 		Double desconto = 0.00;
 
-		for (Produto_Orcamento produto : lista_produtos_inclusos) {
+		for (Produto_orcamento produto : lista_produtos_inclusos) {
 			total_mercadorias_bruto += produto.getValor_total();
 			desconto += produto.getValor_desconto();
 		}
@@ -2261,9 +2262,6 @@ public class Panel_orcamento extends JPanel {
 			fTxtCodigoBarra.setEditable(false);
 		}
 
-		Double quantidade = Double.parseDouble(tabelaProdutosInclusos
-				.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4).toString().replace(".", "").replace(",", "."));
-
 		Double preco_unit = 0.00;
 		Double desconto = 0.00;
 		Double total = 0.00;
@@ -2290,7 +2288,7 @@ public class Panel_orcamento extends JPanel {
 
 		cbxFatorVenda.getModel().setSelectedItem(
 				(String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 3));
-		fTxtQuantidade.setText(quantidade.toString());
+		fTxtQuantidade.setText((String) tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 4));
 		fTxtPrecoUnitario.setText(nf.format(preco_unit));
 		fTxtTotalItem.setText(nf.format(total + desconto));
 		fTxtTotalItemComDesconto.setText(nf.format(total));
@@ -2312,15 +2310,17 @@ public class Panel_orcamento extends JPanel {
 		btnSalvar_editado.setEnabled(true);
 		btnCancelar_editado.setEnabled(true);
 		fTxtQuantidade.requestFocus();
+		
+		novo_produto(produto_editado, editando_produto); // Pegando informações do item selecionado.
 	}
 
 	public void salvar_edicao() {
-		Produto_Orcamento produto = new Produto_Orcamento();
+		Produto_orcamento produto = new Produto_orcamento();
 
 		if (novo_produto(produto, true)) {
-			for (Produto_Orcamento produto_editado : lista_produtos_inclusos) {
-				if (produto_editado.getCodigo().equals(Integer.parseInt(fTxtCodigoProduto.getText().trim()))) {
-					lista_produtos_inclusos.set(lista_produtos_inclusos.indexOf(produto_editado), produto);
+			for (Produto_orcamento produto_ed : lista_produtos_inclusos) {
+				if (produto_ed.equals(produto_editado)) { // Compara o produto da lista com o produto que foi selecionado para edição.
+					lista_produtos_inclusos.set(lista_produtos_inclusos.indexOf(produto_ed), produto);
 				}
 			}
 			modelo_tabela.fireTableDataChanged();
@@ -2386,9 +2386,9 @@ public class Panel_orcamento extends JPanel {
 		Boolean flag = opcao == JOptionPane.YES_OPTION;
 
 		if (flag) {
-			for (Produto_Orcamento produto_excluido : lista_produtos_inclusos) {
-				if (produto_excluido.getCodigo().equals(Integer.parseInt(codigo))) {
-					if (produto_excluido.getNome().substring(0, 3).equals("*__")) {
+			for (Produto_orcamento produto_excluido : lista_produtos_inclusos) {
+				if (produto_excluido.getIdProduto().equals(Integer.parseInt(codigo))) {
+					if (produto_excluido.getDescricao().substring(0, 3).equals("*__")) {
 						Double valor_liquido = produto_excluido.getValor_total() - produto_excluido.getValor_desconto();
 						if ((valor_liquido).compareTo(valor) == 0) {
 							modelo_tabela.removeProduto(produto_excluido);
@@ -2652,7 +2652,6 @@ public class Panel_orcamento extends JPanel {
 			fTxtTotalVendido.setVisible(false);
 		}
 	}
-	
 
 	// Teclas de atalho
 	public void tecla_pressionada() {

@@ -38,7 +38,7 @@ import javax.swing.text.MaskFormatter;
 
 import dao.BarrasDAO;
 import entities.produto.Barras_Produto;
-import entities.produto.Produto;
+import entities.produto.Produto_cadastro;
 import tables.tableModels.ModeloTabelaBarras;
 import tools.Jtext_tools;
 import tools.Prod_tools;
@@ -420,7 +420,7 @@ public class VariosBarras extends JDialog {
 
 		if (prod_tools.valida_barras(barras)) {
 			Boolean principal = lista.size() == 0;
-			Produto produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
+			Produto_cadastro produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
 
 			// Se não encontrar nenhum item que ja possui este código de barras
 			if (produto_encontrado == null) { 

@@ -44,7 +44,7 @@ import dao.ConfiguracaoDAO;
 import dao.ProdutoDAO;
 import dao.SetorDAO;
 import entities.configuracoes.Configuracoes;
-import entities.produto.Produto;
+import entities.produto.Produto_cadastro;
 import entities.produto.Setor;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
@@ -88,7 +88,7 @@ public class Panel_produtos extends JPanel {
 	private JSeparator separador_clientes_cadastrados_2;
 	private JTable tabelaProdutos;
 	private JScrollPane scrollPane;
-	ArrayList<Produto> produtos = new ArrayList<Produto>();
+	ArrayList<Produto_cadastro> produtos = new ArrayList<Produto_cadastro>();
 	ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 	private JLabel lblPesquisarPor;
 	private JComboBox<String> cbxTipoPesquisa;
@@ -145,8 +145,8 @@ public class Panel_produtos extends JPanel {
 		lblNome.setBounds(325, 153, 38, 19);
 		add(lblNome);
 
-		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49,"texto");
-	    fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
+		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
+		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
@@ -457,8 +457,7 @@ public class Panel_produtos extends JPanel {
 
 		cbxTipoPesquisa = new JComboBox<String>();
 		cbxTipoPesquisa.setMaximumRowCount(3);
-		cbxTipoPesquisa
-				.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Nome", "Cod. Barras"}));
+		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
@@ -569,7 +568,7 @@ public class Panel_produtos extends JPanel {
 		cbxFatorVenda.setEnabled(false);
 		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxFatorVenda
-				.setModel(new DefaultComboBoxModel(new String[] {"UN", "PAR", "MT", "KG", "L", "CX", "FD", "PCT"}));
+				.setModel(new DefaultComboBoxModel(new String[] { "UN", "PAR", "MT", "KG", "L", "CX", "FD", "PCT" }));
 		cbxFatorVenda.setBounds(113, 231, 57, 22);
 		add(cbxFatorVenda);
 		cbxSetor.addKeyListener(new KeyAdapter() {
@@ -815,7 +814,7 @@ public class Panel_produtos extends JPanel {
 	// Recarrega a tabela de produtos.
 	public void recarregarTabela() {
 		if (btnReload.isEnabled()) {
-			if(!produtos.isEmpty()) {
+			if (!produtos.isEmpty()) {
 				produtos.clear();
 			}
 			produtos = alimentarListaProdutos(produtos);
@@ -862,7 +861,7 @@ public class Panel_produtos extends JPanel {
 		cadastro_setor.setVisible(true);
 	}
 
-	public Produto gravarNovoProduto() {
+	public Produto_cadastro gravarNovoProduto() {
 
 		ProdutoDAO produto_dao = new ProdutoDAO();
 		NumberFormat nf = new DecimalFormat("#,###0.00");
@@ -912,8 +911,9 @@ public class Panel_produtos extends JPanel {
 			codigo_barra = fTxtCodigoBarras.getText().trim();
 		}
 
-		Produto produto = new Produto(null, descricao, (Setor) setor, unidadeVenda, precoVenda, precoCusto, margem,
-				prSugerido, margemPraticada, bloqueadoVenda, dataCadastro, codigo_barra);
+		Produto_cadastro produto = new Produto_cadastro(null, descricao, (Setor) setor, unidadeVenda, precoVenda,
+				codigo_barra, dataCadastro, precoCusto, margem, prSugerido, margemPraticada, bloqueadoVenda);
+
 		fTxtPrecoVenda.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		fTxtNomeProduto.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
@@ -1024,7 +1024,7 @@ public class Panel_produtos extends JPanel {
 	}
 
 	// Alimentar lista de produtos
-	public ArrayList<Produto> alimentarListaProdutos(ArrayList<Produto> produtos) {
+	public ArrayList<Produto_cadastro> alimentarListaProdutos(ArrayList<Produto_cadastro> produtos) {
 		ProdutoDAO produto_dao = new ProdutoDAO();
 
 		String pesquisado = fTxtPesquisa.getText().trim() + "%";

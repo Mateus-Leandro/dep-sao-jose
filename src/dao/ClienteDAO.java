@@ -12,7 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import db.DB;
-import entities.cliente.Cliente;
+import entities.pessoa.Cliente;
 
 public class ClienteDAO {
 

@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import db.DB;
-import entities.cliente.Cliente;
 import entities.financeiro.Resumo_financeiro;
+import entities.pessoa.Cliente;
 
 public class Resumo_financeiroDAO {
 	private Connection conn;

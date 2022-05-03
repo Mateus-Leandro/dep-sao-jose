@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import db.DB;
-import entities.cliente.Cliente;
 import entities.configuracoes.Configuracoes;
+import entities.pessoa.Cliente;
 
 public class ConfiguracaoDAO {
 	private Connection conn;

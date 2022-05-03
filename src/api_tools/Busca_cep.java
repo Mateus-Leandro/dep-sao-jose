@@ -7,7 +7,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import entities.cliente.Cliente;
+import entities.pessoa.Cliente;
 
 public class Busca_cep {
 	String cep = null;

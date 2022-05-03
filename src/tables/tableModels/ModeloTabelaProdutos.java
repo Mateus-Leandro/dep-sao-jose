@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.produto.Produto;
+import entities.produto.Produto_cadastro;
 import entities.produto.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
 
 	private String colunas[] = { "Cod", "Nome", "Fator", "Setor", "Pr.Custo", "Mg%", "Pr.Sug.", "Pr.Venda", "Mg% P.",
 			"Cod. Barras", "Bloq.", "Dt. Cad." };
-	private ArrayList<Produto> produtos;
+	private ArrayList<Produto_cadastro> produtos;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
 	private final int COLUNA_FATOR = 2;
@@ -29,7 +29,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 	private final int COLUNA_BLOQUEADO_VENDA = 10;
 	private final int COLUNA_DATA_CADASTRO = 11;
 
-	public ModeloTabelaProdutos(ArrayList<Produto> produtos) {
+	public ModeloTabelaProdutos(ArrayList<Produto_cadastro> produtos) {
 		this.produtos = produtos;
 	}
 
@@ -87,7 +87,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columIndex) {
-		Produto produto = this.produtos.get(rowIndex);
+		Produto_cadastro produto = this.produtos.get(rowIndex);
 
 		NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 		NumberFormat nf2 = new DecimalFormat("0.00");
@@ -114,14 +114,14 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_MARGEM_PRATICADA:
 			return nf2.format(produto.getMargemPraticada());
 		case COLUNA_BLOQUEADO_VENDA:
-			return produto.getBloqueadoVenda();
+			return produto.isBloqueadoVenda();
 		case COLUNA_DATA_CADASTRO:
 			return produto.getDataCadastro();
 		}
 		return null;
 	}
 
-	public void addProduto(Produto p) {
+	public void addProduto(Produto_cadastro p) {
 		this.produtos.add(p);
 		this.fireTableDataChanged();
 	}
@@ -131,7 +131,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
-	public void recarregarTabela(JTable tabela, ArrayList<Produto> produtos) {
+	public void recarregarTabela(JTable tabela, ArrayList<Produto_cadastro> produtos) {
 		ModeloTabelaProdutos modelo = new ModeloTabelaProdutos(produtos);
 		tabela.setModel(modelo);
 	}

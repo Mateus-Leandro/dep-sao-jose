@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.orcamentos.Produto_Orcamento;
+import entities.produto.Produto_orcamento;
 
 public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
@@ -22,7 +22,7 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
 	private String colunas[] = { "Cod.", "Nome", "Cod. Barras", "Unid.", "Quant.", "Pr.Unit.", "Desconto",
 			"Total-Desc." };
-	private ArrayList<Produto_Orcamento> produtos_orcamento;
+	private ArrayList<Produto_orcamento> produtos_orcamento;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
 	private final int COLUNA_BARRAS = 2;
@@ -32,7 +32,7 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	private final int COLUNA_DESC = 6;
 	private final int COLUNA_TOTAL = 7;
 
-	public ModeloTabelaProdutos_Orcamento(ArrayList<Produto_Orcamento> produtos_orcamento) {
+	public ModeloTabelaProdutos_Orcamento(ArrayList<Produto_orcamento> produtos_orcamento) {
 		this.produtos_orcamento = produtos_orcamento;
 	}
 
@@ -83,15 +83,15 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columIndex) {
 
 		if (rowIndex != -1) {
-			Produto_Orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
+			Produto_orcamento produto_orcamento = this.produtos_orcamento.get(rowIndex);
 
 			nf.setRoundingMode(RoundingMode.DOWN);
 			nf2.setRoundingMode(RoundingMode.DOWN);
 
 			Boolean fracionado = false;
 
-			if (produto_orcamento.getFator_venda().equals("MT") || produto_orcamento.getFator_venda().equals("KG")
-					|| produto_orcamento.getFator_venda().equals("L") || produto_orcamento.getFator_venda().contentEquals("PAR")) {
+			if (produto_orcamento.getUnidadeVenda().equals("MT") || produto_orcamento.getUnidadeVenda().equals("KG")
+					|| produto_orcamento.getUnidadeVenda().equals("L") || produto_orcamento.getUnidadeVenda().contentEquals("PAR")) {
 				fracionado = true;
 			} else {
 				fracionado = false;
@@ -99,13 +99,13 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
 			switch (columIndex) {
 			case COLUNA_CODIGO:
-				return produto_orcamento.getCodigo();
+				return produto_orcamento.getIdProduto();
 			case COLUNA_NOME:
-				return produto_orcamento.getNome();
+				return produto_orcamento.getDescricao();
 			case COLUNA_BARRAS:
-				return produto_orcamento.getCodigo_barras();
+				return produto_orcamento.getCodigo_barra();
 			case COLUNA_UNID:
-				return produto_orcamento.getFator_venda();
+				return produto_orcamento.getUnidadeVenda();
 			case COLUNA_QUANTIDADE:
 				if (fracionado) {
 					return nf2.format(produto_orcamento.getQuantidade());
@@ -130,17 +130,17 @@ public class ModeloTabelaProdutos_Orcamento extends AbstractTableModel {
 
 	}
 
-	public void addProduto(Produto_Orcamento p) {
+	public void addProduto(Produto_orcamento p) {
 		this.produtos_orcamento.add(p);
 		this.fireTableDataChanged();
 	}
 
-	public void removeProduto(Produto_Orcamento produto) {
+	public void removeProduto(Produto_orcamento produto) {
 		this.produtos_orcamento.remove(produto);
 		this.fireTableDataChanged();
 	}
 
-	public void recarregarTabela(JTable tabela, ArrayList<Produto_Orcamento> produtos_orcamento) {
+	public void recarregarTabela(JTable tabela, ArrayList<Produto_orcamento> produtos_orcamento) {
 		ModeloTabelaProdutos_Orcamento modelo = new ModeloTabelaProdutos_Orcamento(produtos_orcamento);
 		tabela.setModel(modelo);
 	}

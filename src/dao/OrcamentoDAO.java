@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import db.DB;
-import entities.cliente.Cliente;
 import entities.financeiro.Parcela;
 import entities.orcamentos.Orcamento;
-import entities.orcamentos.Produto_Orcamento;
+import entities.pessoa.Cliente;
+import entities.produto.Produto_orcamento;
 
 public class OrcamentoDAO {
 
@@ -171,7 +171,7 @@ public class OrcamentoDAO {
 					+ "valorTotal, faturado, numeroParcelas, observacao, dataInclusao, dataFaturamento "
 					+ "FROM orcamento INNER JOIN clientes ON clientes.idCliente = orcamento.idCliente "
 					+ "WHERE orcamento.idCliente LIKE ? AND idOrcamento LIKE ?";
-				
+
 			String ordem = " ORDER BY idOrcamento DESC";
 			if (limite == null) {
 				if (so_faturados) {
@@ -181,7 +181,8 @@ public class OrcamentoDAO {
 				}
 			} else {
 				if (so_faturados) {
-					ps = conn.prepareStatement(consulta + " AND orcamento.faturado = true" + ordem + " LIMIT " + limite);
+					ps = conn
+							.prepareStatement(consulta + " AND orcamento.faturado = true" + ordem + " LIMIT " + limite);
 				} else {
 					ps = conn.prepareStatement(consulta + ordem + " LIMIT " + limite);
 				}
@@ -237,7 +238,7 @@ public class OrcamentoDAO {
 				orcamento.setObservacao(rs.getString("observacao"));
 				orcamento.setData_inclusao(rs.getDate("dataInclusao"));
 				orcamento.setData_faturamento(rs.getDate("dataFaturamento"));
-				orcamento.setProdutos_do_orcamento(new ArrayList<Produto_Orcamento>());
+				orcamento.setProdutos_do_orcamento(new ArrayList<Produto_orcamento>());
 				orcamento.setParcelas(new ArrayList<Parcela>());
 
 				// Listando os produtos do orçamento.
@@ -254,11 +255,11 @@ public class OrcamentoDAO {
 
 				// adicionando os itens do orçamento na lista de produtos do orçamento.
 				while (rs2.next()) {
-					Produto_Orcamento produto = new Produto_Orcamento();
-					produto.setCodigo(rs2.getInt("codigo"));
-					produto.setNome(rs2.getString("descricao"));
-					produto.setCodigo_barras(rs2.getString("barras"));
-					produto.setFator_venda(rs2.getString("fator"));
+					Produto_orcamento produto = new Produto_orcamento();
+					produto.setIdProduto(rs2.getInt("codigo"));
+					produto.setDescricao(rs2.getString("descricao"));
+					produto.setCodigo_barra(rs2.getString("barras"));
+					produto.setUnidadeVenda(rs2.getString("fator"));
 					produto.setQuantidade(rs2.getDouble("quantidade"));
 					produto.setPreco_unitario(rs2.getDouble("preco_unitario"));
 					produto.setValor_desconto(rs2.getDouble("desconto"));
@@ -326,15 +327,15 @@ public class OrcamentoDAO {
 		conn = DB.getConnection();
 		try {
 			// Inserindo os proutos do orçamento salvo.
-			for (Produto_Orcamento produto : orcamento.getProdutos_do_orcamento()) {
+			for (Produto_orcamento produto : orcamento.getProdutos_do_orcamento()) {
 				ps = conn.prepareStatement("INSERT INTO `banco_deposito`.`produto_orcamento` "
 						+ "(`idOrcamento`, `idProdutoOrcamento`, `quantidade`,`fator`, "
 						+ "`precoUnitario`, `descontoProduto`, `totalProduto`) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 				ps.setInt(1, orcamento.getId_orcamento());
-				ps.setInt(2, produto.getCodigo());
+				ps.setInt(2, produto.getIdProduto());
 				ps.setDouble(3, produto.getQuantidade());
-				ps.setString(4, produto.getFator_venda());
+				ps.setString(4, produto.getUnidadeVenda());
 				ps.setDouble(5, produto.getPreco_unitario());
 				ps.setDouble(6, produto.getValor_desconto());
 				ps.setDouble(7, produto.getValor_total());
