@@ -19,8 +19,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import bkp.BkpBanco;
-import dao.ClienteDAO;
-import dao.ConfiguracaoDAO;
+import dao.configuracoes.ConfiguracaoDAO;
+import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
 import view.panels.Panel_bkp;

@@ -41,13 +41,13 @@ import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JDateChooser;
 
-import dao.ConfiguracaoDAO;
-import dao.FaturamentoDAO;
-import dao.FormaPagamentoDAO;
+import dao.configuracoes.ConfiguracaoDAO;
+import dao.financeiro.FaturamentoDAO;
+import dao.financeiro.FormaPagamentoDAO;
 import entities.configuracoes.Configuracoes;
 import entities.financeiro.Forma_pagamento;
 import entities.financeiro.Parcela;
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaParcelas;
 import view.formatFields.FormataNumeral;

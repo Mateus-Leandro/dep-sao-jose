@@ -1,4 +1,4 @@
-package dao;
+package dao.financeiro;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import db.DB;
 import entities.financeiro.Forma_pagamento;
 import entities.financeiro.Parcela;
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 
 public class FaturamentoDAO {
 

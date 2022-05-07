@@ -1,4 +1,4 @@
-package dao;
+package dao.orcamento;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -7,9 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dao.financeiro.FaturamentoDAO;
 import db.DB;
 import entities.financeiro.Parcela;
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 import entities.pessoa.Cliente;
 import entities.produto.Produto_orcamento;
 

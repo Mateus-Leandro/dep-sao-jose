@@ -40,9 +40,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.MaskFormatter;
 
-import dao.ConfiguracaoDAO;
-import dao.ProdutoDAO;
-import dao.SetorDAO;
+import dao.configuracoes.ConfiguracaoDAO;
+import dao.produto.ProdutoDAO;
+import dao.produto.SetorDAO;
 import entities.configuracoes.Configuracoes;
 import entities.produto.Produto_cadastro;
 import entities.produto.Setor;

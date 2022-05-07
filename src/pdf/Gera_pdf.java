@@ -19,9 +19,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dao.ConfiguracaoDAO;
+import dao.configuracoes.ConfiguracaoDAO;
 import entities.configuracoes.Configuracoes;
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 import entities.produto.Produto_orcamento;
 
 public class Gera_pdf {

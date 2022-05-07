@@ -32,7 +32,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import dao.FormaPagamentoDAO;
+import dao.financeiro.FormaPagamentoDAO;
 import entities.financeiro.Forma_pagamento;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaFormasPagamento;

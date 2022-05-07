@@ -1,4 +1,4 @@
-package dao;
+package dao.pessoa;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

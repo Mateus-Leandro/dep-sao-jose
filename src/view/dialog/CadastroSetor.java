@@ -31,7 +31,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
-import dao.SetorDAO;
+import dao.produto.SetorDAO;
 import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
 import tools.Jtext_tools;

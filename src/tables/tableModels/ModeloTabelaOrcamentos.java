@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 
 public class ModeloTabelaOrcamentos extends AbstractTableModel {
 

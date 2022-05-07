@@ -42,8 +42,8 @@ import javax.swing.text.MaskFormatter;
 
 import api_tools.Busca_cep;
 import api_tools.Busca_cnpj;
-import dao.ClienteDAO;
-import dao.ConfiguracaoDAO;
+import dao.configuracoes.ConfiguracaoDAO;
+import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
 import icons.Icones;

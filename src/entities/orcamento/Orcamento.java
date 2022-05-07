@@ -1,4 +1,4 @@
-package entities.orcamentos;
+package entities.orcamento;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

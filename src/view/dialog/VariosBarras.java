@@ -36,7 +36,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
-import dao.BarrasDAO;
+import dao.produto.BarrasDAO;
 import entities.produto.Barras_Produto;
 import entities.produto.Produto_cadastro;
 import tables.tableModels.ModeloTabelaBarras;

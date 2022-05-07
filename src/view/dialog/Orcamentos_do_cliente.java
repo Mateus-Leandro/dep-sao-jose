@@ -40,12 +40,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import dao.ClienteDAO;
-import dao.ConfiguracaoDAO;
-import dao.FaturamentoDAO;
-import dao.OrcamentoDAO;
+import dao.configuracoes.ConfiguracaoDAO;
+import dao.financeiro.FaturamentoDAO;
+import dao.orcamento.OrcamentoDAO;
+import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
-import entities.orcamentos.Orcamento;
+import entities.orcamento.Orcamento;
 import entities.pessoa.Cliente;
 import entities.produto.Produto_orcamento;
 import icons.Icones;
