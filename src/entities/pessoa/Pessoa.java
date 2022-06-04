@@ -2,7 +2,7 @@ package entities.pessoa;
 
 import java.util.Date;
 
-public abstract class Pessoa {
+public class Pessoa {
 
 	private Integer id = null;
 	private String nome;

@@ -104,7 +104,6 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columIndex) {
-
 		Cliente cliente = this.clientes.get(rowIndex);
 		switch (columIndex) {
 		case COLUNA_CODIGO:

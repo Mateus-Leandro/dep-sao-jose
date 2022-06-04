@@ -1,4 +1,4 @@
-package view.panels;
+package view.panels.produto;
 
 import java.awt.Color;
 import java.awt.Font;

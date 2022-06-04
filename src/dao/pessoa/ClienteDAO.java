@@ -9,10 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 
 import db.DB;
 import entities.pessoa.Cliente;
+import entities.pessoa.Pessoa;
 
 public class ClienteDAO {
 
@@ -24,7 +24,7 @@ public class ClienteDAO {
 	public ClienteDAO() {
 	}
 
-	public Cliente inserirCliente(Cliente cliente) {
+	public Pessoa inserirCliente(Pessoa cliente) {
 		conn = DB.getConnection();
 
 		try {
@@ -71,7 +71,7 @@ public class ClienteDAO {
 		}
 	}
 
-	public boolean alterar_cliente(Cliente cliente) {
+	public boolean alterar_cliente(Pessoa cliente) {
 		conn = DB.getConnection();
 
 		try {
@@ -169,10 +169,10 @@ public class ClienteDAO {
 					}
 					break;
 				}
-				
-				if(valor_buscado != null) {
+
+				if (valor_buscado != null) {
 					ps.setString(1, valor_buscado);
-				}else {
+				} else {
 					ps.setString(1, "%");
 				}
 			}
@@ -243,14 +243,14 @@ public class ClienteDAO {
 			}
 
 			if (rs.next()) {
-				return rs.getString("nome");
+				return "Código: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
 			} else {
-				ps = conn.prepareStatement("SELECT nome FROM clientes WHERE documento = ?");
+				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ?");
 				ps.setString(1, documento);
 				rs = ps.executeQuery();
 
 				if (rs.next()) {
-					return rs.getString("nome");
+					return "Código: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
 				} else {
 					return null;
 				}
@@ -267,7 +267,6 @@ public class ClienteDAO {
 
 	public Boolean cliente_com_orcamento(String id_cliente) {
 		conn = DB.getConnection();
-
 		try {
 			ps = conn.prepareStatement("SELECT idCliente FROM orcamento WHERE idCliente = ?");
 			ps.setString(1, id_cliente);

@@ -53,7 +53,8 @@ import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaOrcamentos;
 import tables.tableRenders.Render_tabela_orcamentos;
 import tables.tableSorters.SorterMonetario;
-import view.panels.Panel_orcamento;
+import view.panels.orcamento.Panel_orcamento;
+
 import javax.swing.JTextField;
 
 public class Orcamentos_do_cliente extends JDialog {

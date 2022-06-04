@@ -8,14 +8,14 @@ import java.util.Date;
 
 import db.DB;
 import entities.financeiro.Resumo_financeiro;
-import entities.pessoa.Cliente;
+import entities.pessoa.Pessoa;
 
 public class Resumo_financeiroDAO {
 	private Connection conn;
 	private ResultSet rs;
 	private PreparedStatement ps;
 
-	public Resumo_financeiro carregar_resumo_financeiro(Cliente cliente, Resumo_financeiro resumo) {
+	public Resumo_financeiro carregar_resumo_financeiro(Pessoa cliente, Resumo_financeiro resumo) {
 		conn = DB.getConnection();
 
 		int id_cliente = cliente.getId();

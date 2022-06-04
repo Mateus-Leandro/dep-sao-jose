@@ -1,4 +1,4 @@
-package view.panels;
+package view.panels.orcamento;
 
 import java.awt.Checkbox;
 import java.awt.Color;

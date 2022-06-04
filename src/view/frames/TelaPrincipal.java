@@ -24,10 +24,11 @@ import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
 import view.panels.Panel_bkp;
-import view.panels.Panel_clientes;
-import view.panels.Panel_configuracoes;
-import view.panels.Panel_orcamento;
-import view.panels.Panel_produtos;
+import view.panels.configuracoes.Panel_configuracoes;
+import view.panels.orcamento.Panel_orcamento;
+import view.panels.pessoa.Panel_cliente;
+import view.panels.pessoa.Panel_fornecedor;
+import view.panels.produto.Panel_produtos;
 
 public class TelaPrincipal extends JFrame {
 	/**
@@ -38,7 +39,8 @@ public class TelaPrincipal extends JFrame {
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	private Panel_clientes clientes = new Panel_clientes();
+	public Panel_cliente clientes = new Panel_cliente();
+	private Panel_fornecedor fornecedores =  new Panel_fornecedor();
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
@@ -46,7 +48,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "v. 02.05.22";  
+	public String versao = "v. 14.05.22";  
 	
 	/**
 	 * Launch the application.
@@ -98,6 +100,7 @@ public class TelaPrincipal extends JFrame {
 		orcamentos.setVisible(true);
 
 		tabbedPane.addTab("Clientes", clientes);
+		tabbedPane.addTab("Fornecedores", fornecedores);
 		tabbedPane.addTab("Produtos", produtos);
 		tabbedPane.addTab("Orçamentos", orcamentos);
 
@@ -131,7 +134,7 @@ public class TelaPrincipal extends JFrame {
 				Cliente consumidor_final = new Cliente(null, "Consumidor final", null, false, null, null, null, null,
 						null, null, null, null, null, "(99)99999-9999", null, false,
 						new java.sql.Date(System.currentTimeMillis()));
-				clientes.salvar_cliente(consumidor_final);
+				clientes.salvar_pessoa(consumidor_final);
 			}
 
 			abas_configuracao_inicial(false);

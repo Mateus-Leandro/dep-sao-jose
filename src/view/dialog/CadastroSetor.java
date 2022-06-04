@@ -35,7 +35,7 @@ import dao.produto.SetorDAO;
 import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
 import tools.Jtext_tools;
-import view.panels.Panel_produtos;
+import view.panels.produto.Panel_produtos;
 
 import java.awt.Color;
 import javax.swing.ListSelectionModel;

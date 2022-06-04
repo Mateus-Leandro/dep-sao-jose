@@ -1,5 +1,6 @@
-package view.panels;
+package view.panels.configuracoes;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -29,10 +30,6 @@ import entities.pessoa.Cliente;
 import icons.Icones;
 import tools.Jtext_tools;
 import view.frames.TelaPrincipal;
-
-import java.awt.Color;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class Panel_configuracoes extends JPanel {
 	private JLabel lblconfiguracoes;

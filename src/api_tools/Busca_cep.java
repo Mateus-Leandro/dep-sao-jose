@@ -8,6 +8,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import entities.pessoa.Cliente;
+import entities.pessoa.Pessoa;
 
 public class Busca_cep {
 	String cep = null;
@@ -16,7 +17,7 @@ public class Busca_cep {
 		this.cep = cep;
 	}
 
-	public Cliente busca_endereco(Cliente cliente) {
+	public Pessoa busca_endereco(Pessoa pessoa) {
 		try {
 			URL url = new URL("http://cep.republicavirtual.com.br/web_cep.php?cep=" + cep + "&fornato=xml");
 			SAXReader xml = new SAXReader();
@@ -28,10 +29,10 @@ public class Busca_cep {
 			for (Iterator<Element> it = root.elementIterator(); it.hasNext();) {
 				Element element = it.next();
 				if (element.getQualifiedName().equals("cidade")) {
-					cliente.setCidade(element.getText());
+					pessoa.setCidade(element.getText());
 				}
 				if (element.getQualifiedName().equals("bairro")) {
-					cliente.setBairro(element.getText());
+					pessoa.setBairro(element.getText());
 				}
 				if (element.getQualifiedName().equals("tipo_logradouro")) {
 					tipo_logradouro = element.getText();
@@ -42,9 +43,9 @@ public class Busca_cep {
 
 			}
 
-			cliente.setEndereco(tipo_logradouro + " " + logradouro);
+			pessoa.setEndereco(tipo_logradouro + " " + logradouro);
 
-			return cliente;
+			return pessoa;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
