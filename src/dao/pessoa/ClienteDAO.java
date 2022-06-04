@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -19,7 +18,6 @@ public class ClienteDAO {
 	private Connection conn;
 	private PreparedStatement ps;
 	private ResultSet rs;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public ClienteDAO() {
 	}
@@ -31,7 +29,7 @@ public class ClienteDAO {
 			conn.setAutoCommit(false);
 			cliente.setId(null);
 			ps = conn.prepareStatement(
-					"INSERT INTO clientes " + "(nome, apelido, documento, inscricaoEstadual, cep, cidade, endereco, "
+					"INSERT INTO clientes (nome, apelido, documento, inscricaoEstadual, cep, cidade, endereco, "
 							+ "referencia, numero, bairro, email, celular, telefone, bloqueado, dataCadastro)"
 							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					PreparedStatement.RETURN_GENERATED_KEYS);
@@ -62,6 +60,11 @@ public class ClienteDAO {
 			return cliente;
 
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -101,6 +104,11 @@ public class ClienteDAO {
 
 			return true;
 		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -126,6 +134,11 @@ public class ClienteDAO {
 			e.printStackTrace();
 			return false;
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 			return false;
 		} finally {
