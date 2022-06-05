@@ -231,6 +231,7 @@ public class Panel_pessoa extends JPanel {
 				if (enterDocumento.getKeyCode() == enterDocumento.VK_ENTER) {
 					if (fTxtIe.isVisible()) {
 						fTxtIe.requestFocus();
+						pega_dados_pessoa_juridica();
 					} else {
 						fTxtNomePessoa.requestFocus();
 					}
@@ -827,7 +828,7 @@ public class Panel_pessoa extends JPanel {
 		limpar_endereco();
 	}
 
-	public void pega_dados_pessoa_juridica(String tipo_pessoa) {
+	public void pega_dados_pessoa_juridica() {
 		Cliente cliente = new Cliente();
 		String documento;
 		if (fTxtDocumento.getText().equals("   .   .   -  ") && fTxtDocumento.getText().equals("  .   .   /    -  ")) {
@@ -848,7 +849,7 @@ public class Panel_pessoa extends JPanel {
 							fTxtNomePessoa.setText(cliente.getNome());
 							fTxtApelido.setText(cliente.getApelido());
 							fTxtCep.setText(cliente.getCep());
-							buscaCep(tipo_pessoa);
+							buscaCep(fTxtCep.getText().trim());
 							fTxtNumero.setText(cliente.getNumero());
 							fTxtReferencia.setText(cliente.getReferencia());
 							fTxtTelFixo.setText(cliente.getTelefone());
