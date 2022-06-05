@@ -144,7 +144,7 @@ public class Panel_cliente extends Panel_pessoa {
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel<String>(new String[] { "Nome", "Apelido", "C\u00F3digo" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
-		cbxTipoPesquisa.setBounds(105, 462, 96, 25);
+		cbxTipoPesquisa.setBounds(105, 453, 96, 25);
 		add(cbxTipoPesquisa);
 
 		setBorder(null);
@@ -198,7 +198,7 @@ public class Panel_cliente extends Panel_pessoa {
 		ConfiguraLarguraColunaTabela(tabela);
 
 		scrollPaneTabela = new JScrollPane(tabela);
-		scrollPaneTabela.setBounds(16, 495, 693, 132);
+		scrollPaneTabela.setBounds(16, 487, 693, 131);
 		add(scrollPaneTabela);
 		
 		lblClientesCadastrados = new JLabel("Clientes Cadastrados");

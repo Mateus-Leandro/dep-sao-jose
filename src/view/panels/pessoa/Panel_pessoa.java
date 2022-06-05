@@ -114,7 +114,6 @@ public class Panel_pessoa extends JPanel {
 	protected AbstractTableModel modelo_tabela;
 	protected JTable tabela;
 	private String tipo_pessoa;
-	private Panel_fornecedor panel_fornecedor;
 	private Panel_cliente panel_cliente;
 
 	/**
@@ -152,7 +151,7 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtPesquisa.setBounds(211, 464, 454, 20);
+		fTxtPesquisa.setBounds(211, 456, 454, 20);
 		add(fTxtPesquisa);
 
 		txtCodigo = new JTextField();
@@ -655,7 +654,7 @@ public class Panel_pessoa extends JPanel {
 		lblPesquisarPor = new JLabel("Pesquisar por");
 		lblPesquisarPor.setToolTipText("");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPesquisarPor.setBounds(16, 464, 89, 20);
+		lblPesquisarPor.setBounds(16, 456, 89, 20);
 		add(lblPesquisarPor);
 
 		separador_2 = new JSeparator();
@@ -700,7 +699,7 @@ public class Panel_pessoa extends JPanel {
 
 		btnReload = new JButton();
 		btnReload.setIcon(icones.getIcone_reload());
-		btnReload.setBounds(675, 462, 34, 22);
+		btnReload.setBounds(675, 454, 34, 22);
 		add(btnReload);
 
 		lblObg_nome = new JLabel("*");
@@ -717,57 +716,57 @@ public class Panel_pessoa extends JPanel {
 
 		lblEsc = new JLabel("Esc:");
 		lblEsc.setFont(new Font("Arial", Font.BOLD, 12));
-		lblEsc.setBounds(16, 638, 30, 14);
+		lblEsc.setBounds(16, 629, 30, 14);
 		add(lblEsc);
 
 		lblCancelar = new JLabel("Cancelar");
 		lblCancelar.setForeground(Color.GRAY);
 		lblCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCancelar.setBounds(42, 638, 53, 14);
+		lblCancelar.setBounds(42, 629, 53, 14);
 		add(lblCancelar);
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(170, 638, 21, 14);
+		lblF1.setBounds(170, 629, 21, 14);
 		add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(187, 638, 35, 14);
+		lblNovo.setBounds(187, 629, 35, 14);
 		add(lblNovo);
 
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(473, 638, 21, 14);
+		lblF5.setBounds(473, 629, 21, 14);
 		add(lblF5);
 
 		lblRecarregar = new JLabel("Recarregar");
 		lblRecarregar.setForeground(new Color(0, 128, 0));
 		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblRecarregar.setBounds(490, 638, 65, 14);
+		lblRecarregar.setBounds(490, 629, 65, 14);
 		add(lblRecarregar);
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(320, 638, 21, 14);
+		lblF3.setBounds(320, 629, 21, 14);
 		add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(338, 638, 35, 14);
+		lblEditar.setBounds(338, 629, 35, 14);
 		add(lblEditar);
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(639, 638, 26, 14);
+		lblF12.setBounds(639, 629, 26, 14);
 		add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(Color.RED);
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(664, 638, 42, 14);
+		lblExcluir.setBounds(664, 629, 42, 14);
 		add(lblExcluir);
 
 	}

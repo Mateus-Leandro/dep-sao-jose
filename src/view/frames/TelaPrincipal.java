@@ -26,8 +26,8 @@ import entities.pessoa.Cliente;
 import view.panels.Panel_bkp;
 import view.panels.configuracoes.Panel_configuracoes;
 import view.panels.orcamento.Panel_orcamento;
+import view.panels.pessoa.Panel_Fornecedor;
 import view.panels.pessoa.Panel_cliente;
-import view.panels.pessoa.Panel_fornecedor;
 import view.panels.produto.Panel_produtos;
 
 public class TelaPrincipal extends JFrame {
@@ -40,7 +40,7 @@ public class TelaPrincipal extends JFrame {
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	public Panel_cliente clientes = new Panel_cliente();
-	private Panel_fornecedor fornecedores =  new Panel_fornecedor();
+	private Panel_Fornecedor fornecedores = new Panel_Fornecedor();
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
@@ -91,7 +91,7 @@ public class TelaPrincipal extends JFrame {
 
 		tabbedPane.setBorder(UIManager.getBorder("CheckBoxMenuItem.border"));
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		tabbedPane.setBounds(5, 5, 733, 687);
+		tabbedPane.setBounds(5, 5, 733, 679);
 		contentPane.add(tabbedPane);
 		setLocationRelativeTo(null);
 
