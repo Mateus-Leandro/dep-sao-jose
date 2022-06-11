@@ -34,6 +34,7 @@ import entities.pessoa.Cliente;
 import entities.pessoa.Pessoa;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
+import tables.tableSorters.SorterData;
 import tools.Jtext_tools;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -132,7 +133,6 @@ public class Panel_cliente extends Panel_pessoa {
 		// Atalhos do teclado
 		tecla_pressionada(novo_cliente);
 
-	
 		lblTitulo = new JLabel("T\u00EDtulo da tela");
 		lblTitulo.setBounds(247, 11, 244, 29);
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -200,13 +200,13 @@ public class Panel_cliente extends Panel_pessoa {
 		scrollPaneTabela = new JScrollPane(tabela);
 		scrollPaneTabela.setBounds(16, 487, 693, 131);
 		add(scrollPaneTabela);
-		
+
 		lblClientesCadastrados = new JLabel("Clientes Cadastrados");
 		lblClientesCadastrados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClientesCadastrados.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblClientesCadastrados.setBounds(250, 421, 214, 29);
 		add(lblClientesCadastrados);
-		
+
 		tabela.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent selecaoLinhaTabela) {
@@ -270,6 +270,7 @@ public class Panel_cliente extends Panel_pessoa {
 
 	// Configurando largura das colunas da tabela
 	public void ConfiguraLarguraColunaTabela(JTable tabelaProdutos) {
+		SorterData sorter_data = new SorterData();
 		tabela.getColumnModel().getColumn(0).setPreferredWidth(40); // Codigo
 		tabela.getColumnModel().getColumn(1).setPreferredWidth(50); // Bloqueado
 		tabela.getColumnModel().getColumn(2).setPreferredWidth(150); // Nome
@@ -288,8 +289,9 @@ public class Panel_cliente extends Panel_pessoa {
 		tabela.getColumnModel().getColumn(15).setPreferredWidth(70); // Data Cadastro
 
 		// Definindo o sorter da tabela para ordenação das colunas.
-		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela);
 		tabela.setRowSorter(sorter);
+		sorter.setComparator(15, sorter_data);
 		// Definindo o render da coluna para que seja pintada corretamente quando o
 		// cliente está bloqueado.
 		tabela.getColumnModel().getColumn(0).setCellRenderer(render);

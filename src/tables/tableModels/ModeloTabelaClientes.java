@@ -1,6 +1,6 @@
 package tables.tableModels;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
@@ -13,9 +13,10 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 	/**
 	 * 
 	 */
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
-	private String colunas[] = { "Cod", "Bloq.", "Nome", "Apelido", "Celular", "Endereco", "Numero", "Referencia", "Cidade",
-			"Bairro", "Cep", "Documento", "I.E.", "Email", "Telefone", "Dt. Cad." };
+	private String colunas[] = { "Cod", "Bloq.", "Nome", "Apelido", "Celular", "Endereco", "Numero", "Referencia",
+			"Cidade", "Bairro", "Cep", "Documento", "I.E.", "Email", "Telefone", "Dt. Cad." };
 	private ArrayList<Cliente> clientes;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_BLOQUEADO = 1;
@@ -96,7 +97,7 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 		case COLUNA_TELEFONE:
 			return String.class;
 		case COLUNA_DATA_CADASTRO:
-			return Date.class;
+			return String.class;
 		default:
 			return String.class;
 		}
@@ -137,9 +138,9 @@ public class ModeloTabelaClientes extends AbstractTableModel {
 		case COLUNA_TELEFONE:
 			return cliente.getTelefone();
 		case COLUNA_DATA_CADASTRO:
-			return cliente.getDataCadastro();
+			return sdf.format(cliente.getDataCadastro());
 		}
-		
+
 		return null;
 	}
 
