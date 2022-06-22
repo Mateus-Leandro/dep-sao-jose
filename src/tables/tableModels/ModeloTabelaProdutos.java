@@ -3,6 +3,7 @@ package tables.tableModels;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
@@ -13,6 +14,7 @@ import entities.produto.Setor;
 
 public class ModeloTabelaProdutos extends AbstractTableModel {
 
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private String colunas[] = { "Cod", "Nome", "Fator", "Setor", "Pr.Custo", "Mg%", "Pr.Sug.", "Pr.Venda", "Mg% P.",
 			"Cod. Barras", "Bloq.", "Dt. Cad." };
 	private ArrayList<Produto_cadastro> produtos;
@@ -79,7 +81,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_BLOQUEADO_VENDA:
 			return Boolean.class;
 		case COLUNA_DATA_CADASTRO:
-			return java.util.Date.class;
+			return String.class;
 		default:
 			return String.class;
 		}
@@ -116,7 +118,7 @@ public class ModeloTabelaProdutos extends AbstractTableModel {
 		case COLUNA_BLOQUEADO_VENDA:
 			return produto.isBloqueadoVenda();
 		case COLUNA_DATA_CADASTRO:
-			return produto.getDataCadastro();
+			return sdf.format(produto.getDataCadastro());
 		}
 		return null;
 	}

@@ -49,6 +49,7 @@ import entities.produto.Setor;
 import icons.Icones;
 import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableRenders.Render_tabela_produtos;
+import tables.tableSorters.SorterData;
 import tables.tableSorters.SorterMonetario;
 import tools.JTextFieldLimit;
 import tools.Jtext_tools;
@@ -1052,7 +1053,7 @@ public class Panel_produtos extends JPanel {
 	public void ConfiguraLarguraColunaTabela(JTable tabelaProdutos) {
 
 		SorterMonetario spv = new SorterMonetario();
-
+		SorterData sorter_data = new SorterData();
 		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(40); // Código
 		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(160); // Nome
 		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(45); // Fator
@@ -1069,6 +1070,7 @@ public class Panel_produtos extends JPanel {
 		sorter.setComparator(4, spv);
 		sorter.setComparator(6, spv);
 		sorter.setComparator(7, spv);
+		sorter.setComparator(11, sorter_data);
 
 		tabelaProdutos.setRowSorter(sorter);
 		// Pintando linhas de acordo com o status do cliente(bloqueado)
