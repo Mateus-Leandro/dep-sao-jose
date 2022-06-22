@@ -4,27 +4,30 @@ import java.util.Date;
 
 public class Fornecedor extends Pessoa {
 
-	private boolean participa_cotacao;
+	private boolean bloqueado_cotacao;
 	private Integer numero_de_pedidos;
 	private Integer ultimo_pedido;
+	
+	public Fornecedor() {
+	}
 
 	public Fornecedor(Integer id, String nome, String apelido, boolean pessoa_juridica, String cpf_cnpj,
 			String inscricao_estadual, String cep, String cidade, String endereco, String referencia, String numero,
 			String bairro, String email, String celular, String telefone, Boolean bloqueado, Date dataCadastro,
-			boolean participa_cotacao, Integer numero_de_pedidos, Integer ultimo_pedido) {
+			boolean bloqueado_cotacao, Integer numero_de_pedidos, Integer ultimo_pedido) {
 		super(id, nome, apelido, pessoa_juridica, cpf_cnpj, inscricao_estadual, cep, cidade, endereco, referencia,
 				numero, bairro, email, celular, telefone, bloqueado, dataCadastro);
-		this.participa_cotacao = participa_cotacao;
+		this.bloqueado_cotacao = bloqueado_cotacao;
 		this.numero_de_pedidos = numero_de_pedidos;
 		this.ultimo_pedido = ultimo_pedido;
 	}
 
-	public boolean isParticipa_cotacao() {
-		return participa_cotacao;
+	public boolean getBloqueadoCotacao() {
+		return bloqueado_cotacao;
 	}
 
-	public void setParticipa_cotacao(boolean participa_cotacao) {
-		this.participa_cotacao = participa_cotacao;
+	public void setBloqueado_cotacao(boolean bloqueado_cotacao) {
+		this.bloqueado_cotacao = bloqueado_cotacao;
 	}
 
 	public Integer getNumero_de_pedidos() {

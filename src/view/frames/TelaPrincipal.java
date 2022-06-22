@@ -48,8 +48,8 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "v. 14.05.22";  
-	
+	public String versao = "v. 14.05.22";
+
 	/**
 	 * Launch the application.
 	 */
@@ -70,16 +70,17 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
-		UIManager.put("OptionPane.yesButtonText", "Sim"); 
-		UIManager.put("OptionPane.noButtonText",  "Não");
-		
-		if(faz_bkp_diario) {
-			if(bkp_banco.bkp_diario()) {
-				JOptionPane.showMessageDialog(null, "Backup diário realizado." , "Backup diário.",JOptionPane.NO_OPTION);
+		UIManager.put("OptionPane.yesButtonText", "Sim");
+		UIManager.put("OptionPane.noButtonText", "Não");
+
+		if (faz_bkp_diario) {
+			if (bkp_banco.bkp_diario()) {
+				JOptionPane.showMessageDialog(null, "Backup diário realizado.", "Backup diário.",
+						JOptionPane.NO_OPTION);
 				panel_bkp.le_log();
 			}
 		}
-		
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/ferramentas.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,7 +112,7 @@ public class TelaPrincipal extends JFrame {
 				tabbedPane.addTab("Backup", panel_bkp);
 			}
 		}
-		
+
 		// Verifica se existe configuração e se existe nome para a empresa.
 		if (configuracoes_do_sistema != null) {
 			so_orcamentos();
@@ -177,7 +178,7 @@ public class TelaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent atalho_setores) {
 				configuracoes_do_sistema = conf_dao.busca_configuracoes();
-				setTitle(configuracoes_do_sistema.getNome_empresa()  + " - " + versao);
+				setTitle(configuracoes_do_sistema.getNome_empresa() + " - " + versao);
 				conf_dao.so_orcamentos(false);
 				tabbedPane.addTab("Configurações", configuracoes);
 				if (faz_bkp) {

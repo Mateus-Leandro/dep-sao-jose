@@ -35,14 +35,15 @@ import api_tools.Busca_cep;
 import api_tools.Busca_cnpj;
 import dao.configuracoes.ConfiguracaoDAO;
 import dao.pessoa.ClienteDAO;
+import dao.pessoa.FornecedorDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
+import entities.pessoa.Fornecedor;
 import entities.pessoa.Pessoa;
 import icons.Icones;
 import tables.tableRenders.Render_tabela_clientes;
 import tools.JTextFieldLimit;
 import tools.Jtext_tools;
-import view.frames.TelaPrincipal;
 
 public class Panel_pessoa extends JPanel {
 	protected JTextField txtCodigo;
@@ -98,6 +99,7 @@ public class Panel_pessoa extends JPanel {
 	private JLabel lblObg_nome;
 	private JLabel lblObg_celular;
 	private ClienteDAO cliente_dao = new ClienteDAO();
+	protected FornecedorDAO fornecedor_dao = new FornecedorDAO();
 	private Render_tabela_clientes render = new Render_tabela_clientes();
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes = conf_dao.busca_configuracoes();
@@ -281,7 +283,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblNome = new JLabel("Nome");
 		lblNome.setBounds(15, 188, 40, 20);
-		lblNome.setToolTipText("");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNome);
 
@@ -310,7 +311,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblApelido = new JLabel("Apelido");
 		lblApelido.setBounds(398, 189, 46, 20);
-		lblApelido.setToolTipText("");
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblApelido);
 
@@ -339,7 +339,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblCep = new JLabel("Cep");
 		lblCep.setBounds(16, 255, 28, 20);
-		lblCep.setToolTipText("");
 		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCep);
 
@@ -425,13 +424,11 @@ public class Panel_pessoa extends JPanel {
 
 		lblCidade = new JLabel("Cidade");
 		lblCidade.setBounds(211, 259, 44, 20);
-		lblCidade.setToolTipText("");
 		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCidade);
 
 		lblEndereco = new JLabel("Endereco");
 		lblEndereco.setBounds(16, 295, 65, 20);
-		lblEndereco.setToolTipText("");
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEndereco);
 
@@ -460,7 +457,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblNumero = new JLabel("N\u00B0");
 		lblNumero.setBounds(525, 257, 16, 20);
-		lblNumero.setToolTipText("");
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNumero);
 
@@ -489,7 +485,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblReferencia = new JLabel("Referencia");
 		lblReferencia.setBounds(16, 328, 65, 20);
-		lblReferencia.setToolTipText("");
 		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblReferencia);
 
@@ -519,7 +514,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblBairro = new JLabel("Bairro");
 		lblBairro.setBounds(425, 288, 40, 20);
-		lblBairro.setToolTipText("");
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblBairro);
 
@@ -548,7 +542,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblCelular = new JLabel("Celular");
 		lblCelular.setBounds(16, 361, 46, 20);
-		lblCelular.setToolTipText("");
 		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCelular);
 
@@ -583,7 +576,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblTelFixo = new JLabel("Tel. Fixo");
 		lblTelFixo.setBounds(194, 362, 50, 20);
-		lblTelFixo.setToolTipText("");
 		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblTelFixo);
 
@@ -610,7 +602,6 @@ public class Panel_pessoa extends JPanel {
 
 		lblEmai = new JLabel("Email");
 		lblEmai.setBounds(426, 326, 34, 20);
-		lblEmai.setToolTipText("");
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEmai);
 
@@ -645,7 +636,6 @@ public class Panel_pessoa extends JPanel {
 		btnSalvar.setVisible(false);
 		add(btnSalvar);
 
-		
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnCancelar.setBounds(595, 393, 114, 29);
 		btnCancelar.setIcon(icones.getIcone_cancelar());
@@ -653,7 +643,6 @@ public class Panel_pessoa extends JPanel {
 		add(btnCancelar);
 
 		lblPesquisarPor = new JLabel("Pesquisar por");
-		lblPesquisarPor.setToolTipText("");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPesquisarPor.setBounds(16, 456, 89, 20);
 		add(lblPesquisarPor);
@@ -873,6 +862,14 @@ public class Panel_pessoa extends JPanel {
 			} else {
 				salvo = cliente_dao.alterar_cliente(pessoa);
 			}
+		} else {
+			tipo_pessoa = "Fornecedor";
+			if (pessoa.getId() == null) {
+				pessoa = fornecedor_dao.inserirFornecedor(pessoa);
+				salvo = pessoa.getId() != null;
+			} else {
+				salvo = fornecedor_dao.alterarFornecedor(pessoa);
+			}
 		}
 
 		if (salvo) {
@@ -952,7 +949,7 @@ public class Panel_pessoa extends JPanel {
 					excluido = cliente_dao.excluirCliente(pessoa.getId());
 					break;
 				case "fornecedor":
-
+					excluido = fornecedor_dao.excluirFornecedor(pessoa.getId());
 					break;
 				default:
 					break;
@@ -1050,6 +1047,10 @@ public class Panel_pessoa extends JPanel {
 		if (pessoa instanceof Cliente) {
 			pessoa = new Cliente(id, nome, apelido, checkBoxJuridica.isSelected(), documento, inscricao_estadual, cep,
 					cidade, endereco, referencia, numero, bairro, email, celular, telefone, false, data_cadastro);
+		} else {
+			pessoa = new Fornecedor(id, nome, apelido, checkBoxJuridica.isSelected(), documento, inscricao_estadual,
+					cep, cidade, endereco, referencia, numero, bairro, email, celular, telefone, false, data_cadastro,
+					false, 0, null);
 		}
 
 		return pessoa;
@@ -1064,6 +1065,8 @@ public class Panel_pessoa extends JPanel {
 		} else {
 			tipo_pessoa = "fornecedor";
 		}
+
+		valido = valida_documento(tipo_pessoa);
 
 		if (fTxtNomePessoa.getText().isBlank() || fTxtCelular.getText().equals("(  )     -    ")) {
 			if (fTxtNomePessoa.getText().isBlank()) {
@@ -1080,20 +1083,19 @@ public class Panel_pessoa extends JPanel {
 				valido = false;
 			}
 		}
+
 		return valido;
 	}
 
 	public void editar_pessoa() {
-		if (btnEditar.isEnabled()) {
-			ativar_campos();
-			btnEditar.setEnabled(false);
-			btnEditar.setEnabled(false);
-			btnNovo.setEnabled(false);
-			btnExcluir.setEnabled(false);
-			btnSalvar.setVisible(true);
-			btnCancelar.setVisible(true);
-			fTxtDocumento.requestFocus();
-		}
+		ativar_campos();
+		btnEditar.setEnabled(false);
+		btnEditar.setEnabled(false);
+		btnNovo.setEnabled(false);
+		btnExcluir.setEnabled(false);
+		btnSalvar.setVisible(true);
+		btnCancelar.setVisible(true);
+		fTxtDocumento.requestFocus();
 	}
 
 	public void buscaCep(String cep) {
@@ -1134,6 +1136,8 @@ public class Panel_pessoa extends JPanel {
 			case "cliente":
 				nome_pessoa = cliente_dao.validarDocumento(documento, codigo);
 				break;
+			case "fornecedor":
+				nome_pessoa = fornecedor_dao.validarDocumento(documento, codigo);
 			default:
 				break;
 			}
@@ -1219,7 +1223,9 @@ public class Panel_pessoa extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent atalho_editar) {
-				editar_pessoa();
+				if (btnEditar.isEnabled()) {
+					editar_pessoa();
+				}
 			}
 		});
 
