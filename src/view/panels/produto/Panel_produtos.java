@@ -400,7 +400,7 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setAutoResizeMode(tabelaProdutos.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(tabelaProdutos);
-		scrollPane.setBounds(16, 483, 693, 152);
+		scrollPane.setBounds(16, 483, 693, 140);
 		add(scrollPane);
 
 		recarregarTabela();
@@ -619,68 +619,68 @@ public class Panel_produtos extends JPanel {
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(128, 638, 21, 14);
+		lblF1.setBounds(128, 629, 21, 14);
 		add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(145, 638, 35, 14);
+		lblNovo.setBounds(145, 629, 35, 14);
 		add(lblNovo);
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(642, 638, 26, 14);
+		lblF12.setBounds(642, 629, 26, 14);
 		add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(new Color(255, 0, 0));
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(667, 638, 42, 14);
+		lblExcluir.setBounds(667, 629, 42, 14);
 		add(lblExcluir);
 
 		lblEsc = new JLabel("Esc:");
 		lblEsc.setFont(new Font("Arial", Font.BOLD, 12));
-		lblEsc.setBounds(16, 638, 30, 14);
+		lblEsc.setBounds(16, 629, 30, 14);
 		add(lblEsc);
 
 		lblCancelar = new JLabel("Cancelar");
 		lblCancelar.setForeground(Color.GRAY);
 		lblCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCancelar.setBounds(42, 638, 53, 14);
+		lblCancelar.setBounds(42, 629, 53, 14);
 		add(lblCancelar);
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(216, 638, 21, 14);
+		lblF3.setBounds(216, 629, 21, 14);
 		add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(234, 638, 35, 14);
+		lblEditar.setBounds(234, 629, 35, 14);
 		add(lblEditar);
 
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(322, 638, 21, 14);
+		lblF5.setBounds(322, 629, 21, 14);
 		add(lblF5);
 
 		lblRecarregar = new JLabel("Recarregar Produtos");
 		lblRecarregar.setForeground(new Color(0, 128, 0));
 		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblRecarregar.setBounds(339, 638, 128, 14);
+		lblRecarregar.setBounds(339, 629, 128, 14);
 		add(lblRecarregar);
 
 		lblF7 = new JLabel("F7:");
 		lblF7.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF7.setBounds(519, 638, 21, 14);
+		lblF7.setBounds(519, 629, 21, 14);
 		add(lblF7);
 
 		lblSetores = new JLabel("Setores");
 		lblSetores.setForeground(new Color(255, 140, 0));
 		lblSetores.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblSetores.setBounds(537, 638, 48, 14);
+		lblSetores.setBounds(537, 629, 48, 14);
 		add(lblSetores);
 
 	}

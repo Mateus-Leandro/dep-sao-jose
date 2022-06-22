@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -20,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -36,8 +37,6 @@ import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
 import tables.tableSorters.SorterData;
 import tools.Jtext_tools;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Panel_cliente extends Panel_pessoa {
 	protected JLabel lblTitulo;
@@ -171,6 +170,7 @@ public class Panel_cliente extends Panel_pessoa {
 			public void mousePressed(MouseEvent clickCancelarCliente) {
 				cancelar_pessoa();
 				checkBoxBloqueado.setEnabled(false);
+				tabela.clearSelection();
 			}
 		});
 
@@ -198,7 +198,7 @@ public class Panel_cliente extends Panel_pessoa {
 		ConfiguraLarguraColunaTabela(tabela);
 
 		scrollPaneTabela = new JScrollPane(tabela);
-		scrollPaneTabela.setBounds(16, 487, 693, 131);
+		scrollPaneTabela.setBounds(16, 487, 693, 136);
 		add(scrollPaneTabela);
 
 		lblClientesCadastrados = new JLabel("Clientes Cadastrados");
