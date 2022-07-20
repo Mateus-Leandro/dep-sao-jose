@@ -169,9 +169,9 @@ public class FornecedorDAO {
 				switch (tipo_busca.toUpperCase()) {
 				case "NOME":
 					if (limite == null) {
-						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE nome LIKE ?");
+						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE razao LIKE ?");
 					} else {
-						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE nome LIKE ? LIMIT " + limite);
+						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE razao LIKE ? LIMIT " + limite);
 					}
 					break;
 				case "NOME FANT.":
@@ -182,7 +182,7 @@ public class FornecedorDAO {
 								"SELECT * FROM fornecedores WHERE nomeFantasia LIKE ? LIMIT " + limite);
 					}
 					break;
-				case "CÓDIGO":
+				case "COD.":
 					if (limite == null) {
 						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE id LIKE ?");
 					} else {

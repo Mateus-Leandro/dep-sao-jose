@@ -202,8 +202,8 @@ public class Panel_pessoa extends JPanel {
 		checkBoxJuridica.setEnabled(false);
 		add(checkBoxJuridica);
 
-		lblDocumento = new JLabel("CPF");
-		lblDocumento.setBounds(339, 156, 34, 17);
+		lblDocumento = new JLabel("Documento");
+		lblDocumento.setBounds(295, 156, 78, 17);
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblDocumento);
 

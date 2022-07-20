@@ -25,6 +25,8 @@ import entities.pessoa.Fornecedor;
 import tables.tableModels.ModeloTabelaFornecedores;
 import tables.tableRenders.Render_tabela_fornecedores;
 import tables.tableSorters.SorterData;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Panel_Fornecedor extends Panel_pessoa {
 	private JLabel lblCadastroDeFornecedor;
@@ -40,6 +42,12 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
 	
 	public Panel_Fornecedor() {
+		fTxtPesquisa.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaPesquisaFornecedor) {
+				recarregarTabela();
+			}
+		});
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluirFornecedor) {
