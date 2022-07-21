@@ -2,18 +2,25 @@ package view.panels.pessoa;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
@@ -22,11 +29,10 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import entities.pessoa.Fornecedor;
+import entities.pessoa.Pessoa;
 import tables.tableModels.ModeloTabelaFornecedores;
 import tables.tableRenders.Render_tabela_fornecedores;
 import tables.tableSorters.SorterData;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Panel_Fornecedor extends Panel_pessoa {
 	private JLabel lblCadastroDeFornecedor;
@@ -36,12 +42,13 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	private JLabel lblFornecedoresCadastrados;
 	private ArrayList<Fornecedor> lista_fornecedores = new ArrayList<Fornecedor>();
 	private JScrollPane scrollPane;
-	private JTable tabela;
 	private ModeloTabelaFornecedores modelo_tabela;
+	private JTable tabela = new JTable(modelo_tabela);
 	private Fornecedor fornecedor = new Fornecedor();
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
-	
+
 	public Panel_Fornecedor() {
+		tecla_pressionada(fornecedor);
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPesquisaFornecedor) {
@@ -51,7 +58,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickExcluirFornecedor) {
-				if(excluir_pessoa(monta_pessoa(fornecedor))) {
+				if (excluir_pessoa(monta_pessoa(fornecedor))) {
 					recarregarTabela();
 				}
 			}
@@ -59,7 +66,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEditarFornecedor) {
-				if(btnEditar.isEnabled()) {
+				if (btnEditar.isEnabled()) {
 					editar_pessoa();
 					if (checkBoxBloqueadoPedido.isSelected()) {
 						checkBoxBloqueadoCotacao.setEnabled(false);
@@ -133,7 +140,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 
 		alimentarListaFornecedores();
 		modelo_tabela = new ModeloTabelaFornecedores(lista_fornecedores);
-		tabela = new JTable(modelo_tabela);
+		tabela.setModel(modelo_tabela);
 		tabela.setBounds(16, 487, 692, 131);
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabela.getTableHeader().setReorderingAllowed(false);
@@ -298,8 +305,36 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela);
 		sorter.setComparator(10, sorter_data);
 		tabela.setRowSorter(sorter);
-		
+
 		tabela.setDefaultRenderer(Object.class, render);
 		tabela.getColumnModel().getColumn(0).setCellRenderer(render);
+	}
+
+	// Teclas de atalho
+	public void tecla_pressionada(Pessoa pessoa_atalho) {
+		super.tecla_pressionada(pessoa_atalho, tabela);
+		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "excluir");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "atualizar");
+
+		getActionMap().put("excluir", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent atalho_excluir) {
+				if (excluir_pessoa(pessoa_atalho)) {
+					recarregarTabela();
+				}
+			}
+		});
+
+		getActionMap().put("atualizar", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent atalho_atualizar) {
+				btnReload.doClick();
+				fTxtPesquisa.setText(null);
+				recarregarTabela();
+			}
+		});
 	}
 }
