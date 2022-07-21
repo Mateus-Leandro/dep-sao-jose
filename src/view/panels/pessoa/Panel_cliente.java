@@ -130,7 +130,7 @@ public class Panel_cliente extends Panel_pessoa {
 		tabela = new JTable(modelo_tabela);
 
 		// Atalhos do teclado
-		tecla_pressionada(novo_cliente);
+		tecla_pressionada(novo_cliente, tabela);
 
 		lblTitulo = new JLabel("T\u00EDtulo da tela");
 		lblTitulo.setBounds(247, 11, 244, 29);
@@ -299,8 +299,8 @@ public class Panel_cliente extends Panel_pessoa {
 
 	// Teclas de atalho.
 	@Override
-	public void tecla_pressionada(Pessoa pessoa_atalho) {
-		super.tecla_pressionada(pessoa_atalho);
+	public void tecla_pressionada(Pessoa pessoa_atalho, JTable tabela) {
+		super.tecla_pressionada(pessoa_atalho, tabela);
 		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), "excluir");
 

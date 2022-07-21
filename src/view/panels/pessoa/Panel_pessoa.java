@@ -202,8 +202,8 @@ public class Panel_pessoa extends JPanel {
 		checkBoxJuridica.setEnabled(false);
 		add(checkBoxJuridica);
 
-		lblDocumento = new JLabel("Documento");
-		lblDocumento.setBounds(295, 156, 78, 17);
+		lblDocumento = new JLabel("CPF");
+		lblDocumento.setBounds(338, 156, 34, 17);
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblDocumento);
 
@@ -1192,7 +1192,7 @@ public class Panel_pessoa extends JPanel {
 	}
 
 	// Teclas de atalho
-	public void tecla_pressionada(Pessoa pessoa_atalho) {
+	public void tecla_pressionada(Pessoa pessoa_atalho, JTable tabela_passada) {
 		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "novo");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancelar");
@@ -1206,6 +1206,7 @@ public class Panel_pessoa extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent atalho_cancelar) {
 				cancelar_pessoa();
+				tabela_passada.clearSelection();
 			}
 		});
 
