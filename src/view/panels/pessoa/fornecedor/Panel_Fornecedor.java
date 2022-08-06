@@ -1,4 +1,4 @@
-package view.panels.pessoa;
+package view.panels.pessoa.fornecedor;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -33,6 +33,7 @@ import entities.pessoa.Pessoa;
 import tables.tableModels.ModeloTabelaFornecedores;
 import tables.tableRenders.Render_tabela_fornecedores;
 import tables.tableSorters.SorterData;
+import view.panels.pessoa.Panel_pessoa;
 
 public class Panel_Fornecedor extends Panel_pessoa {
 	private JLabel lblCadastroDeFornecedor;
@@ -48,6 +49,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
 
 	public Panel_Fornecedor() {
+		lblRecarregar.setLocation(491, 600);
 		tecla_pressionada(fornecedor);
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
@@ -77,7 +79,6 @@ public class Panel_Fornecedor extends Panel_pessoa {
 				}
 			}
 		});
-		lblRecarregar.setBounds(490, 629, 65, 14);
 		separador_3.setBounds(506, 437, 202, 9);
 		separador_2.setBounds(15, 437, 208, 9);
 		fTxtPesquisa.setBounds(211, 456, 454, 20);
@@ -176,7 +177,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		});
 
 		scrollPane = new JScrollPane(tabela);
-		scrollPane.setBounds(16, 487, 693, 136);
+		scrollPane.setBounds(16, 487, 693, 110);
 		add(scrollPane);
 
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -221,7 +222,16 @@ public class Panel_Fornecedor extends Panel_pessoa {
 				}
 			}
 		});
-
+		lblEsc.setBounds(16, 600, 30, 14);
+		lblCancelar.setBounds(42, 600, 53, 14);
+		lblF1.setBounds(170, 600, 21, 14);
+		lblNovo.setBounds(187, 600, 35, 14);
+		lblF5.setBounds(473, 600, 21, 14);
+		lblF3.setBounds(320, 600, 21, 14);
+		lblEditar.setBounds(338, 600, 35, 14);
+		lblF12.setBounds(639, 600, 26, 14);
+		lblExcluir.setBounds(664, 600, 42, 14);
+		
 	}
 
 	public void alimentarListaFornecedores() {
