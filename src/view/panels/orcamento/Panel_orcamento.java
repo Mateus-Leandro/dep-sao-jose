@@ -1649,9 +1649,11 @@ public class Panel_orcamento extends JPanel {
 				limpar_campos();
 				desativar_campos();
 			} else {
-				tabbedPane.setSelectedComponent(cliente);
-				fTxtNomeCliente.setText(null);
-				fTxtNomeCliente.requestFocus();
+				if(cliente_selecionado == null) {
+					tabbedPane.setSelectedComponent(cliente);
+					fTxtNomeCliente.setText(null);
+					fTxtNomeCliente.requestFocus();
+				}
 			}
 
 		} else {
