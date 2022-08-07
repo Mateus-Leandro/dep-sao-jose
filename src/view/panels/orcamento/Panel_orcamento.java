@@ -1120,7 +1120,7 @@ public class Panel_orcamento extends JPanel {
 		lblCliente = new JLabel("Informa\u00E7\u00F5es do Cliente");
 		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblCliente.setBounds(345, 11, 225, 29);
+		lblCliente.setBounds(388, 11, 225, 29);
 		cliente.add(lblCliente);
 
 		separadorInformacoesDoCliente = new JSeparator();
@@ -1317,7 +1317,7 @@ public class Panel_orcamento extends JPanel {
 		lblResumoFinanceiro = new JLabel("Resumo Financeiro");
 		lblResumoFinanceiro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResumoFinanceiro.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblResumoFinanceiro.setBounds(358, 239, 225, 29);
+		lblResumoFinanceiro.setBounds(388, 239, 225, 29);
 		cliente.add(lblResumoFinanceiro);
 
 		separadorResumoFinanceiro = new JSeparator();

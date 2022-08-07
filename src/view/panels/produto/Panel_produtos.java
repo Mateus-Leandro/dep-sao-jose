@@ -412,7 +412,7 @@ public class Panel_produtos extends JPanel {
 			public void valueChanged(ListSelectionEvent selecaoLinhaTabela) {
 
 				ListSelectionModel lsm = (ListSelectionModel) selecaoLinhaTabela.getSource();
-				if (!lsm.isSelectionEmpty() && btnNovo.isVisible()) {
+				if (!lsm.isSelectionEmpty() && btnNovo.isEnabled()) {
 
 					int linha_selecionada = tabelaProdutos.getSelectedRow();
 
@@ -715,6 +715,7 @@ public class Panel_produtos extends JPanel {
 		fTxtCodigoBarras.setText(null);
 		fTxtMargem.setText(null);
 		fTxtNomeProduto.setValue(null);
+		fTxtNomeProduto.setText(null);
 		fTxtPrecoCusto.setText(null);
 		fTxtPrecoVenda.setText(null);
 		fTxtPrecoSugerido.setText(null);
@@ -726,29 +727,31 @@ public class Panel_produtos extends JPanel {
 	}
 
 	public void novo_item() {
-		alimenta_setores();
-		limparCampos();
-		ativarCampos();
-		btnNovo.setVisible(false);
-		btnEditar.setVisible(false);
-		btnExcluir.setVisible(false);
-		btnCancelar.setVisible(true);
-		btnSalvar.setVisible(true);
-		btnCancelar.setEnabled(true);
-		btnSalvar.setEnabled(true);
-		chckbxProdutoBloqueado.setEnabled(true);
-		fTxtNomeProduto.requestFocus();
+		if (btnNovo.isEnabled()) {
+			alimenta_setores();
+			limparCampos();
+			ativarCampos();
+			btnNovo.setEnabled(false);
+			btnEditar.setEnabled(false);
+			btnExcluir.setEnabled(false);
+			btnCancelar.setVisible(true);
+			btnSalvar.setVisible(true);
+			btnCancelar.setEnabled(true);
+			btnSalvar.setEnabled(true);
+			chckbxProdutoBloqueado.setEnabled(true);
+			fTxtNomeProduto.requestFocus();
+		}
 	}
 
 	public void cancelar_item() {
-		if (!btnNovo.isVisible()) {
+		if (!btnNovo.isEnabled()) {
 			desativarCampos();
 			limparCampos();
-			btnNovo.setVisible(true);
+			btnNovo.setEnabled(true);
 			btnSalvar.setVisible(false);
 			btnCancelar.setVisible(false);
-			btnEditar.setVisible(true);
-			btnExcluir.setVisible(true);
+			btnEditar.setEnabled(true);
+			btnExcluir.setEnabled(true);
 			chckbxProdutoBloqueado.setEnabled(false);
 			btnNovo.requestFocus();
 		}
@@ -757,9 +760,9 @@ public class Panel_produtos extends JPanel {
 	public void editar_item() {
 		if (btnEditar.isEnabled()) {
 			ativarCampos();
-			btnEditar.setVisible(false);
-			btnNovo.setVisible(false);
-			btnExcluir.setVisible(false);
+			btnEditar.setEnabled(false);
+			btnNovo.setEnabled(false);
+			btnExcluir.setEnabled(false);
 			btnSalvar.setVisible(true);
 			btnCancelar.setVisible(true);
 			fTxtNomeProduto.requestFocus();
@@ -768,7 +771,7 @@ public class Panel_produtos extends JPanel {
 	}
 
 	public void excluir_item() {
-		if (tabelaProdutos.getSelectedRow() != -1) {
+		if (tabelaProdutos.getSelectedRow() != -1 && btnExcluir.isEnabled()) {
 			try {
 				ProdutoDAO produto_dao = new ProdutoDAO();
 				boolean flag;
