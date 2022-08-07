@@ -446,6 +446,7 @@ public class Panel_produtos extends JPanel {
 					btnEditar.setEnabled(false);
 					btnExcluir.setEnabled(false);
 					btnMaisBarras.setEnabled(false);
+					tabelaProdutos.clearSelection();
 				}
 			}
 		});
@@ -750,8 +751,6 @@ public class Panel_produtos extends JPanel {
 			btnNovo.setEnabled(true);
 			btnSalvar.setVisible(false);
 			btnCancelar.setVisible(false);
-			btnEditar.setEnabled(true);
-			btnExcluir.setEnabled(true);
 			chckbxProdutoBloqueado.setEnabled(false);
 			btnNovo.requestFocus();
 		}

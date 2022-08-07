@@ -873,11 +873,8 @@ public class Panel_pessoa extends JPanel {
 		}
 
 		if (salvo) {
-			JOptionPane
-					.showMessageDialog(
-							null, tipo_pessoa + " salvo corretamente." + "\nCódigo: " + pessoa.getId()
-									+ "\nNome: " + pessoa.getNome(),
-							"Cadastro de " + tipo_pessoa, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, tipo_pessoa + " salvo corretamente." + "\nCódigo: " + pessoa.getId()
+					+ "\nNome: " + pessoa.getNome(), "Cadastro de " + tipo_pessoa, JOptionPane.WARNING_MESSAGE);
 			cancelar_pessoa();
 			return true;
 		} else {
@@ -1088,14 +1085,16 @@ public class Panel_pessoa extends JPanel {
 	}
 
 	public void editar_pessoa() {
-		ativar_campos();
-		btnEditar.setEnabled(false);
-		btnEditar.setEnabled(false);
-		btnNovo.setEnabled(false);
-		btnExcluir.setEnabled(false);
-		btnSalvar.setVisible(true);
-		btnCancelar.setVisible(true);
-		fTxtDocumento.requestFocus();
+		if (btnEditar.isEnabled()) {
+			ativar_campos();
+			btnEditar.setEnabled(false);
+			btnEditar.setEnabled(false);
+			btnNovo.setEnabled(false);
+			btnExcluir.setEnabled(false);
+			btnSalvar.setVisible(true);
+			btnCancelar.setVisible(true);
+			fTxtDocumento.requestFocus();
+		}
 	}
 
 	public void buscaCep(String cep) {
@@ -1215,7 +1214,7 @@ public class Panel_pessoa extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent atalho_novo) {
-				ativar_campos();
+				nova_pessoa(tabela_passada);
 			}
 		});
 
