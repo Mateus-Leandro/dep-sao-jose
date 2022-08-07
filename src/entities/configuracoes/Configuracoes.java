@@ -6,7 +6,6 @@ public class Configuracoes {
 	private String nome_empresa;
 	private String responsavel;
 	private String CNPJ;
-	private String inscricao_estadual;
 	private String tel_fixo;
 	private String celular;
 	private String email;
@@ -21,13 +20,12 @@ public class Configuracoes {
 	public Configuracoes() {
 	}
 
-	public Configuracoes(String nome_empresa, String responsavel, String CNPJ, String inscricao_estadual,
-			String tel_fixo, String celular, String email, String endereco, String salva_parc_dif, String altera_orc,
-			String gera_PDF, String vincula_barras, Cliente consumidor_final) {
+	public Configuracoes(String nome_empresa, String responsavel, String CNPJ, String tel_fixo, String celular,
+			String email, String endereco, String salva_parc_dif, String altera_orc, String gera_PDF,
+			String vincula_barras, Cliente consumidor_final) {
 		this.nome_empresa = nome_empresa;
 		this.responsavel = responsavel;
 		this.CNPJ = CNPJ;
-		this.inscricao_estadual = inscricao_estadual;
 		this.tel_fixo = tel_fixo;
 		this.celular = celular;
 		this.email = email;
@@ -61,14 +59,6 @@ public class Configuracoes {
 
 	public void setCNPJ(String cNPJ) {
 		CNPJ = cNPJ;
-	}
-
-	public String getInscricao_estadual() {
-		return inscricao_estadual;
-	}
-
-	public void setInscricao_estadual(String inscricao_estadual) {
-		this.inscricao_estadual = inscricao_estadual;
 	}
 
 	public String getTel_fixo() {
@@ -150,5 +140,5 @@ public class Configuracoes {
 	public void setSo_orcamento(Boolean so_orcamento) {
 		this.so_orcamento = so_orcamento;
 	}
-	
+
 }

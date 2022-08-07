@@ -83,8 +83,6 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblApelido;
 	private JLabel lblDocumento;
 	private JTextField txtDocumento;
-	private JLabel lblIe;
-	private JTextField txtIe;
 	private JLabel lblOrcamento;
 	private JSeparator separador_Orc_Vend;
 	private Icones icones = new Icones();
@@ -151,7 +149,6 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblFrete;
 	private JFormattedTextField fTxtFrete;
 	private JFormattedTextField fTxtValorDescFinal;
-	private JLabel lblDescontoGeral;
 	private JPanel panelValorTotal;
 	private JFormattedTextField fTxtTotalOrcamento;
 	private JLabel lblValorTotalOrcamento;
@@ -214,7 +211,6 @@ public class Panel_orcamento extends JPanel {
 	private Boolean editando_produto = false;
 	private Checkbox checkboxLeitorBarras;
 	private JPanel panelTotalItem_1;
-	private JLabel lblTotalItem;
 	private JFormattedTextField fTxtTotalItem;
 	private DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
 	private JLabel lblTotalDescontoProduto;
@@ -224,6 +220,8 @@ public class Panel_orcamento extends JPanel {
 	private Gera_pdf gera_pdf = new Gera_pdf();
 	private Boolean cliente_vazio = true;
 	private Produto_orcamento produto_editado = new Produto_orcamento();
+	private JLabel lblDescontoGeral;
+	private JLabel lblTotalItem;
 
 	/**
 	 * Create the panel.
@@ -249,14 +247,14 @@ public class Panel_orcamento extends JPanel {
 			}
 		});
 		btnImprimir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnImprimir.setBounds(471, 70, 123, 29);
+		btnImprimir.setBounds(768, 70, 123, 29);
 		btnImprimir.setIcon(icones.getIcone_impressora());
 		btnImprimir.setVisible(false);
 		add(btnImprimir);
 
 		panelNumeroOrcamento.setLayout(null);
 		panelNumeroOrcamento.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelNumeroOrcamento.setBounds(490, 10, 227, 29);
+		panelNumeroOrcamento.setBounds(787, 10, 227, 29);
 		add(panelNumeroOrcamento);
 
 		fTxtNumeroOrcamento = new JFormattedTextField();
@@ -275,9 +273,60 @@ public class Panel_orcamento extends JPanel {
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setEnabled(false);
-		tabbedPane.setBounds(3, 110, 720, 541);
+		tabbedPane.setBounds(3, 110, 1019, 541);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(tabbedPane);
+		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
+		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6, "inteiro");
+		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14, "inteiro");
+
+		btnNovo = new JButton("Novo");
+		btnNovo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickNovoOrcamento) {
+				novo_orcamento();
+			}
+		});
+		btnNovo.setBounds(10, 70, 89, 29);
+		btnNovo.setIcon(icones.getIcone_mais());
+		add(btnNovo);
+		btnNovo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		lblOrcamento = new JLabel("Or\u00E7amentos");
+		lblOrcamento.setBounds(347, 10, 300, 29);
+		lblOrcamento.setHorizontalAlignment(SwingConstants.CENTER);
+		lblOrcamento.setFont(new Font("Tahoma", Font.BOLD, 24));
+		add(lblOrcamento);
+
+		separador_Orc_Vend = new JSeparator();
+		separador_Orc_Vend.setBounds(10, 50, 1004, 9);
+		add(separador_Orc_Vend);
+
+		btnSalvar = new JButton("Salvar");
+		btnSalvar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickSalvarOrcamento) {
+				salvar_orcamento();
+			}
+		});
+		btnSalvar.setIcon(icones.getIcone_salvar());
+		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnSalvar.setBounds(663, 70, 95, 29);
+		btnSalvar.setVisible(false);
+		add(btnSalvar);
+
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickCancelar) {
+				cancelar_orcamento();
+			}
+		});
+		btnCancelar.setIcon(icones.getIcone_cancelar());
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCancelar.setBounds(900, 70, 114, 29);
+		btnCancelar.setVisible(false);
+		add(btnCancelar);
 
 		produtos = new JPanel();
 		tabbedPane.addTab("Produtos", produtos);
@@ -293,41 +342,35 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnCancelar_editado.setIcon(icones.getIcone_cancelar());
 		btnCancelar_editado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar_editado.setBounds(585, 196, 120, 29);
+		btnCancelar_editado.setBounds(884, 164, 120, 29);
 		btnCancelar_editado.setVisible(false);
+		
+				ltProdutos = new JList<Produto_cadastro>();
+				ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				ltProdutos.setVisibleRowCount(10);
+				ltProdutos.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent clickListaProduto) {
+						produto_selecionado = ltProdutos.getSelectedValue();
 
-		ltProdutos = new JList<Produto_cadastro>();
-		ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		ltProdutos.setVisibleRowCount(10);
-		ltProdutos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickListaProduto) {
-				produto_selecionado = ltProdutos.getSelectedValue();
-
-				if (!produto_bloqueado()) {
-					if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
-						limpar_dados_produto();
-						fTxtNomeProduto.requestFocus();
-					} else {
-						scrollPaneListaProdutos.setVisible(false);
-						exibe_dados_produto_selecionado();
-						fTxtQuantidade.requestFocus();
+						if (!produto_bloqueado()) {
+							if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
+								limpar_dados_produto();
+								fTxtNomeProduto.requestFocus();
+							} else {
+								scrollPaneListaProdutos.setVisible(false);
+								exibe_dados_produto_selecionado();
+								fTxtQuantidade.requestFocus();
+							}
+						}
 					}
-				}
-			}
-		});
-
-		lblTotalItem = new JLabel("Total R$");
-		lblTotalItem.setForeground(Color.BLUE);
-		lblTotalItem.setBounds(529, 128, 62, 19);
-		produtos.add(lblTotalItem);
-		lblTotalItem.setFont(new Font("Tahoma", Font.BOLD, 14));
-
-		ltProdutos.setBounds(438, 77, 267, 79);
-		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-		scrollPaneListaProdutos.setBounds(199, 74, 307, 111);
-		produtos.add(scrollPaneListaProdutos);
-		scrollPaneListaProdutos.setVisible(false);
+				});
+				
+						ltProdutos.setBounds(438, 77, 267, 79);
+						scrollPaneListaProdutos = new JScrollPane(ltProdutos);
+						scrollPaneListaProdutos.setBounds(274, 72, 402, 111);
+						produtos.add(scrollPaneListaProdutos);
+						scrollPaneListaProdutos.setVisible(false);
 		produtos.add(btnCancelar_editado);
 
 		btnSalvar_editado = new JButton("Salvar");
@@ -340,14 +383,14 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnSalvar_editado.setIcon(icones.getIcone_salvar());
 		btnSalvar_editado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar_editado.setBounds(455, 196, 120, 29);
+		btnSalvar_editado.setBounds(754, 164, 120, 29);
 		produtos.add(btnSalvar_editado);
 		btnSalvar_editado.setVisible(false);
 
 		panelTotalItem = new JPanel();
 		panelTotalItem.setLayout(null);
 		panelTotalItem.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelTotalItem.setBounds(417, 156, 288, 29);
+		panelTotalItem.setBounds(716, 119, 288, 29);
 		produtos.add(panelTotalItem);
 
 		fTxtTotalItemComDesconto = new JFormattedTextField();
@@ -356,7 +399,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItemComDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalItemComDesconto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalItemComDesconto.setColumns(10);
-		fTxtTotalItemComDesconto.setBounds(173, 4, 105, 20);
+		fTxtTotalItemComDesconto.setBounds(179, 4, 104, 20);
 		panelTotalItem.add(fTxtTotalItemComDesconto);
 
 		lblTotalComDesconto = new JLabel("Total com desconto R$");
@@ -368,7 +411,7 @@ public class Panel_orcamento extends JPanel {
 		panelValorTotal = new JPanel();
 		panelValorTotal.setLayout(null);
 		panelValorTotal.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelValorTotal.setBounds(464, 460, 241, 39);
+		panelValorTotal.setBounds(763, 461, 241, 39);
 		produtos.add(panelValorTotal);
 
 		fTxtTotalOrcamento = new JFormattedTextField();
@@ -381,13 +424,14 @@ public class Panel_orcamento extends JPanel {
 		panelValorTotal.add(fTxtTotalOrcamento);
 
 		lblValorTotalOrcamento = new JLabel("Valor total");
+		lblValorTotalOrcamento.setForeground(new Color(0, 128, 0));
 		lblValorTotalOrcamento.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblValorTotalOrcamento.setBounds(7, 11, 82, 19);
 		panelValorTotal.add(lblValorTotalOrcamento);
 
 		panelDesconto = new JPanel();
 		panelDesconto.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelDesconto.setBounds(10, 156, 284, 29);
+		panelDesconto.setBounds(10, 131, 284, 29);
 		produtos.add(panelDesconto);
 		panelDesconto.setLayout(null);
 
@@ -467,13 +511,12 @@ public class Panel_orcamento extends JPanel {
 		panelDesconto.add(lblPorcentagemDesconto);
 		lblPorcentagemDesconto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		lblNomeProduto = new JLabel("Prod.");
+		lblNomeProduto = new JLabel("Nome");
 		lblNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeProduto.setBounds(163, 56, 37, 19);
+		lblNomeProduto.setBounds(234, 56, 37, 19);
 		produtos.add(lblNomeProduto);
 
 		fTxtNomeProduto = new JFormattedTextField();
-		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
 		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
@@ -513,27 +556,27 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setColumns(10);
-		fTxtNomeProduto.setBounds(199, 55, 307, 20);
+		fTxtNomeProduto.setBounds(274, 55, 402, 20);
 		produtos.add(fTxtNomeProduto);
 
 		lblInclusãoDeProdutos = new JLabel("Inclus\u00E3o de produtos");
 		lblInclusãoDeProdutos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInclusãoDeProdutos.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblInclusãoDeProdutos.setBounds(234, 11, 213, 29);
+		lblInclusãoDeProdutos.setBounds(381, 11, 213, 29);
 		produtos.add(lblInclusãoDeProdutos);
 
 		separadorInformacoesDoCliente_1 = new JSeparator();
-		separadorInformacoesDoCliente_1.setBounds(10, 41, 695, 9);
+		separadorInformacoesDoCliente_1.setBounds(10, 41, 994, 9);
 		produtos.add(separadorInformacoesDoCliente_1);
 
-		lblCodigoProduto = new JLabel("C\u00F3d.");
+		lblCodigoProduto = new JLabel("C\u00F3digo");
 		lblCodigoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodigoProduto.setBounds(11, 56, 30, 19);
+		lblCodigoProduto.setBounds(11, 56, 49, 19);
 		produtos.add(lblCodigoProduto);
 
 		lblFatorVenda = new JLabel("Fator de venda");
 		lblFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFatorVenda.setBounds(10, 98, 97, 19);
+		lblFatorVenda.setBounds(234, 92, 97, 19);
 		produtos.add(lblFatorVenda);
 
 		cbxFatorVenda = new JComboBox<>();
@@ -555,17 +598,17 @@ public class Panel_orcamento extends JPanel {
 		cbxFatorVenda
 				.setModel(new DefaultComboBoxModel(new String[] { "UN", "PAR", "MT", "KG", "L", "CX", "FD", "PCT" }));
 		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxFatorVenda.setBounds(107, 98, 57, 22);
+		cbxFatorVenda.setBounds(331, 92, 57, 22);
 		produtos.add(cbxFatorVenda);
 
 		lblQuantidade = new JLabel("Quantidade");
 		lblQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblQuantidade.setBounds(306, 98, 70, 19);
+		lblQuantidade.setBounds(10, 95, 70, 19);
 		produtos.add(lblQuantidade);
 
 		lblPrecoUnitario = new JLabel("Pre\u00E7o unit\u00E1rio");
 		lblPrecoUnitario.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrecoUnitario.setBounds(519, 98, 86, 19);
+		lblPrecoUnitario.setBounds(495, 95, 86, 19);
 		produtos.add(lblPrecoUnitario);
 
 		fTxtPrecoUnitario = new JFormattedTextField();
@@ -587,7 +630,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtPrecoUnitario.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoUnitario.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoUnitario.setColumns(10);
-		fTxtPrecoUnitario.setBounds(607, 94, 97, 20);
+		fTxtPrecoUnitario.setBounds(580, 92, 97, 20);
 		produtos.add(fTxtPrecoUnitario);
 
 		btnIncluir = new JButton("Incluir");
@@ -602,7 +645,7 @@ public class Panel_orcamento extends JPanel {
 		btnIncluir.setEnabled(false);
 		btnIncluir.setIcon(icones.getIcone_mais());
 		btnIncluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnIncluir.setBounds(375, 191, 104, 29);
+		btnIncluir.setBounds(674, 159, 104, 29);
 		produtos.add(btnIncluir);
 
 		btnEditar = new JButton("Editar");
@@ -618,7 +661,7 @@ public class Panel_orcamento extends JPanel {
 		btnEditar.setEnabled(false);
 		btnEditar.setIcon(icones.getIcone_editar());
 		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditar.setBounds(489, 191, 104, 29);
+		btnEditar.setBounds(788, 159, 104, 29);
 		produtos.add(btnEditar);
 
 		btnExcluir = new JButton("Excluir");
@@ -633,7 +676,7 @@ public class Panel_orcamento extends JPanel {
 							.replaceAll("\\.", "").replace(",", ".").replace("R$ ", ""));
 
 					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 0).toString(), valor)) {
-						JOptionPane.showMessageDialog(lblQuantidade, "Produto removido corretamente do orçamento.",
+						JOptionPane.showMessageDialog(null, "Produto removido corretamente do orçamento.",
 								"Produto removido.", JOptionPane.NO_OPTION);
 						quantidade_de_produtos = modelo_tabela.getRowCount();
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
@@ -654,13 +697,13 @@ public class Panel_orcamento extends JPanel {
 		btnExcluir.setEnabled(false);
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluir.setBounds(601, 191, 104, 29);
+		btnExcluir.setBounds(900, 159, 104, 29);
 		produtos.add(btnExcluir);
 
 		lblProdutosInclusos = new JLabel("Produtos Inclusos");
 		lblProdutosInclusos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProdutosInclusos.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblProdutosInclusos.setBounds(10, 203, 163, 29);
+		lblProdutosInclusos.setBounds(10, 198, 163, 29);
 		produtos.add(lblProdutosInclusos);
 
 		tabelaProdutosInclusos = new JTable(modelo_tabela);
@@ -684,7 +727,7 @@ public class Panel_orcamento extends JPanel {
 		});
 
 		scrollPaneTabelaProdutosInclusos = new JScrollPane(tabelaProdutosInclusos);
-		scrollPaneTabelaProdutosInclusos.setBounds(10, 236, 695, 152);
+		scrollPaneTabelaProdutosInclusos.setBounds(10, 238, 994, 150);
 		produtos.add(scrollPaneTabelaProdutosInclusos);
 
 		lblTotais = new JLabel("Totais");
@@ -693,10 +736,10 @@ public class Panel_orcamento extends JPanel {
 		lblTotais.setBounds(10, 393, 57, 27);
 		produtos.add(lblTotais);
 
-		lblTotalMercadoriasLiquido = new JLabel("Tot. merc.(L\u00EDquido)");
+		lblTotalMercadoriasLiquido = new JLabel("Total mercadorias(L\u00EDquido)");
 		lblTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTotalMercadoriasLiquido.setForeground(new Color(0, 128, 0));
-		lblTotalMercadoriasLiquido.setBounds(10, 481, 127, 19);
+		lblTotalMercadoriasLiquido.setBounds(269, 428, 161, 19);
 		produtos.add(lblTotalMercadoriasLiquido);
 
 		fTxtTotalMercadoriasLiquido = new JFormattedTextField();
@@ -705,13 +748,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasLiquido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasLiquido.setColumns(10);
-		fTxtTotalMercadoriasLiquido.setBounds(129, 480, 105, 20);
+		fTxtTotalMercadoriasLiquido.setBounds(433, 428, 105, 20);
 		produtos.add(fTxtTotalMercadoriasLiquido);
 
-		lblTotalMercadoriasBruto = new JLabel("Tot. merc. (Bruto)");
+		lblTotalMercadoriasBruto = new JLabel("Total mercadorias(Bruto)");
 		lblTotalMercadoriasBruto.setForeground(Color.BLUE);
 		lblTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalMercadoriasBruto.setBounds(10, 451, 120, 19);
+		lblTotalMercadoriasBruto.setBounds(577, 428, 152, 19);
 		produtos.add(lblTotalMercadoriasBruto);
 
 		fTxtTotalMercadoriasBruto = new JFormattedTextField();
@@ -720,12 +763,12 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasBruto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasBruto.setColumns(10);
-		fTxtTotalMercadoriasBruto.setBounds(125, 450, 109, 20);
+		fTxtTotalMercadoriasBruto.setBounds(733, 427, 109, 20);
 		produtos.add(fTxtTotalMercadoriasBruto);
 
 		lblFrete = new JLabel("Frete");
 		lblFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFrete.setBounds(328, 480, 37, 19);
+		lblFrete.setBounds(877, 428, 36, 19);
 		produtos.add(lblFrete);
 
 		fTxtFrete = new JFormattedTextField();
@@ -748,17 +791,12 @@ public class Panel_orcamento extends JPanel {
 		fTxtFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtFrete.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtFrete.setColumns(10);
-		fTxtFrete.setBounds(365, 477, 89, 20);
+		fTxtFrete.setBounds(915, 427, 89, 20);
 		produtos.add(fTxtFrete);
 
-		lblDescontoGeral = new JLabel("Desc. final");
-		lblDescontoGeral.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDescontoGeral.setBounds(417, 417, 68, 19);
-		produtos.add(lblDescontoGeral);
-
-		lblQuantidadeProdutos = new JLabel("Quantidade de produtos");
-		lblQuantidadeProdutos.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblQuantidadeProdutos.setBounds(10, 424, 154, 19);
+		lblQuantidadeProdutos = new JLabel("N\u00BA de produtos");
+		lblQuantidadeProdutos.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblQuantidadeProdutos.setBounds(795, 208, 112, 19);
 		produtos.add(lblQuantidadeProdutos);
 
 		fTxtQuantidadeTotal = new JFormattedTextField();
@@ -767,11 +805,10 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidadeTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtQuantidadeTotal.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtQuantidadeTotal.setColumns(10);
-		fTxtQuantidadeTotal.setBounds(161, 421, 96, 20);
+		fTxtQuantidadeTotal.setBounds(908, 205, 96, 20);
 		produtos.add(fTxtQuantidadeTotal);
 
 		fTxtCodigoProduto = new JFormattedTextField();
-		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6, "inteiro");
 		fTxtCodigoProduto.setDocument(limitDocument_codigoProduto);
 		fTxtCodigoProduto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -809,7 +846,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoProduto.setColumns(10);
-		fTxtCodigoProduto.setBounds(43, 55, 67, 20);
+		fTxtCodigoProduto.setBounds(58, 52, 64, 20);
 		produtos.add(fTxtCodigoProduto);
 
 		btnLimpaDadosProduto = new JButton();
@@ -834,16 +871,15 @@ public class Panel_orcamento extends JPanel {
 		});
 		btnLimpaDadosProduto.setEnabled(false);
 		btnLimpaDadosProduto.setIcon(icones.getIcone_limpar());
-		btnLimpaDadosProduto.setBounds(115, 56, 27, 19);
+		btnLimpaDadosProduto.setBounds(127, 53, 27, 19);
 		produtos.add(btnLimpaDadosProduto);
 
 		lblCodBarra = new JLabel("Cod.Barra");
 		lblCodBarra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodBarra.setBounds(519, 55, 63, 19);
+		lblCodBarra.setBounds(818, 56, 63, 19);
 		produtos.add(lblCodBarra);
 
 		fTxtCodigoBarra = new JFormattedTextField();
-		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14, "inteiro");
 		fTxtCodigoBarra.setDocument(limitDocument_codigoBarra);
 		fTxtCodigoBarra.addMouseListener(new MouseAdapter() {
 			@Override
@@ -892,25 +928,25 @@ public class Panel_orcamento extends JPanel {
 		fTxtCodigoBarra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtCodigoBarra.setEnabled(false);
 		fTxtCodigoBarra.setColumns(10);
-		fTxtCodigoBarra.setBounds(585, 54, 120, 20);
+		fTxtCodigoBarra.setBounds(884, 55, 120, 20);
 		produtos.add(fTxtCodigoBarra);
 
 		lblObg_produto = new JLabel("*");
 		lblObg_produto.setForeground(Color.RED);
 		lblObg_produto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_produto.setBounds(507, 67, 20, 15);
+		lblObg_produto.setBounds(677, 64, 20, 15);
 		produtos.add(lblObg_produto);
 
 		lblObg_produto_1 = new JLabel("*");
 		lblObg_produto_1.setForeground(Color.RED);
 		lblObg_produto_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_produto_1.setBounds(704, 106, 20, 15);
+		lblObg_produto_1.setBounds(677, 99, 20, 15);
 		produtos.add(lblObg_produto_1);
 
 		lblObg_quantidade = new JLabel("*");
 		lblObg_quantidade.setForeground(Color.RED);
 		lblObg_quantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_quantidade.setBounds(465, 108, 20, 15);
+		lblObg_quantidade.setBounds(169, 105, 20, 15);
 		produtos.add(lblObg_quantidade);
 
 		fTxtQuantidade = new JFormattedTextField();
@@ -937,22 +973,23 @@ public class Panel_orcamento extends JPanel {
 		fTxtQuantidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtQuantidade.setColumns(10);
-		fTxtQuantidade.setBounds(379, 95, 86, 20);
+		fTxtQuantidade.setBounds(83, 92, 86, 20);
 		produtos.add(fTxtQuantidade);
 
 		panelDescontoFinal = new JPanel();
 		panelDescontoFinal.setLayout(null);
 		panelDescontoFinal.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelDescontoFinal.setBounds(410, 412, 295, 31);
+		panelDescontoFinal.setBounds(340, 466, 413, 34);
 		produtos.add(panelDescontoFinal);
 
 		lblPorcentagemDesconto_1 = new JLabel("%");
-		lblPorcentagemDesconto_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPorcentagemDesconto_1.setBounds(76, 6, 18, 19);
+		lblPorcentagemDesconto_1.setForeground(new Color(128, 128, 128));
+		lblPorcentagemDesconto_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblPorcentagemDesconto_1.setBounds(171, 8, 18, 19);
 		panelDescontoFinal.add(lblPorcentagemDesconto_1);
 
 		fTxtValorDescFinal = new JFormattedTextField();
-		fTxtValorDescFinal.setBounds(194, 5, 91, 20);
+		fTxtValorDescFinal.setBounds(312, 8, 91, 20);
 		panelDescontoFinal.add(fTxtValorDescFinal);
 		fTxtValorDescFinal.setHorizontalAlignment(SwingConstants.RIGHT);
 		fTxtValorDescFinal.setEditable(false);
@@ -987,13 +1024,20 @@ public class Panel_orcamento extends JPanel {
 		fTxtPorcentDescFinal.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPorcentDescFinal.setEditable(false);
 		fTxtPorcentDescFinal.setColumns(10);
-		fTxtPorcentDescFinal.setBounds(93, 5, 51, 20);
+		fTxtPorcentDescFinal.setBounds(192, 7, 51, 20);
 		panelDescontoFinal.add(fTxtPorcentDescFinal);
 
 		lblValorDescontoFinal = new JLabel("R$");
-		lblValorDescontoFinal.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorDescontoFinal.setBounds(169, 6, 20, 19);
+		lblValorDescontoFinal.setForeground(new Color(128, 128, 128));
+		lblValorDescontoFinal.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblValorDescontoFinal.setBounds(288, 8, 20, 19);
 		panelDescontoFinal.add(lblValorDescontoFinal);
+
+		lblDescontoGeral = new JLabel("Desconto sobre total");
+		lblDescontoGeral.setForeground(new Color(128, 128, 128));
+		lblDescontoGeral.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDescontoGeral.setBounds(10, 8, 151, 19);
+		panelDescontoFinal.add(lblDescontoGeral);
 
 		checkboxLeitorBarras = new Checkbox("Leitor Cod. Barras (F2)");
 		checkboxLeitorBarras.setForeground(new Color(139, 0, 0));
@@ -1017,7 +1061,7 @@ public class Panel_orcamento extends JPanel {
 		panelTotalItem_1 = new JPanel();
 		panelTotalItem_1.setLayout(null);
 		panelTotalItem_1.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelTotalItem_1.setBounds(523, 122, 182, 29);
+		panelTotalItem_1.setBounds(818, 82, 185, 29);
 		produtos.add(panelTotalItem_1);
 
 		fTxtTotalItem = new JFormattedTextField();
@@ -1026,17 +1070,23 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalItem.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalItem.setEditable(false);
 		fTxtTotalItem.setColumns(10);
-		fTxtTotalItem.setBounds(67, 5, 105, 20);
+		fTxtTotalItem.setBounds(76, 4, 104, 20);
 		panelTotalItem_1.add(fTxtTotalItem);
 
-		lblTotalDescontoProduto = new JLabel("Tot. Desc. Merc.");
+		lblTotalItem = new JLabel("Total R$");
+		lblTotalItem.setForeground(Color.BLUE);
+		lblTotalItem.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTotalItem.setBounds(10, 5, 62, 19);
+		panelTotalItem_1.add(lblTotalItem);
+
+		lblTotalDescontoProduto = new JLabel("Desconto mercadorias");
 		lblTotalDescontoProduto.setForeground(new Color(255, 69, 0));
 		lblTotalDescontoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalDescontoProduto.setBounds(244, 452, 103, 19);
+		lblTotalDescontoProduto.setBounds(9, 430, 142, 19);
 		produtos.add(lblTotalDescontoProduto);
 
 		separadorInformacoesDoCliente_2 = new JSeparator();
-		separadorInformacoesDoCliente_2.setBounds(67, 407, 639, 9);
+		separadorInformacoesDoCliente_2.setBounds(67, 407, 937, 9);
 		produtos.add(separadorInformacoesDoCliente_2);
 
 		fTxtTotalDescontoProduto = new JFormattedTextField();
@@ -1045,84 +1095,36 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalDescontoProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalDescontoProduto.setEditable(false);
 		fTxtTotalDescontoProduto.setColumns(10);
-		fTxtTotalDescontoProduto.setBounds(347, 449, 107, 20);
+		fTxtTotalDescontoProduto.setBounds(148, 427, 107, 20);
 		produtos.add(fTxtTotalDescontoProduto);
-
-		btnNovo = new JButton("Novo");
-		btnNovo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickNovoOrcamento) {
-				novo_orcamento();
-			}
-		});
-		btnNovo.setBounds(10, 70, 89, 29);
-		btnNovo.setIcon(icones.getIcone_mais());
-		add(btnNovo);
-		btnNovo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
-		lblOrcamento = new JLabel("Cadastro de or\u00E7amentos");
-		lblOrcamento.setBounds(180, 10, 300, 29);
-		lblOrcamento.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOrcamento.setFont(new Font("Tahoma", Font.BOLD, 24));
-		add(lblOrcamento);
-
-		separador_Orc_Vend = new JSeparator();
-		separador_Orc_Vend.setBounds(10, 50, 707, 9);
-		add(separador_Orc_Vend);
-
-		btnSalvar = new JButton("Salvar");
-		btnSalvar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickSalvarOrcamento) {
-				salvar_orcamento();
-			}
-		});
-		btnSalvar.setIcon(icones.getIcone_salvar());
-		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(366, 70, 95, 29);
-		btnSalvar.setVisible(false);
-		add(btnSalvar);
-
-		btnCancelar = new JButton("Cancelar");
-		btnCancelar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickCancelar) {
-				cancelar_orcamento();
-			}
-		});
-		btnCancelar.setIcon(icones.getIcone_cancelar());
-		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(603, 70, 114, 29);
-		btnCancelar.setVisible(false);
-		add(btnCancelar);
 
 		cliente = new JPanel();
 		tabbedPane.addTab("Cliente", cliente);
 		cliente.setLayout(null);
-
-		ltClientes = new JList<Cliente>();
-		ltClientes.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent clickListaClientes) {
-				cliente_selecionado = ltClientes.getSelectedValue();
-				seleciona_cliente();
-			}
-		});
-		ltClientes.setBounds(48, 79, 267, 66);
-
-		scrollPaneListaClientes = new JScrollPane(ltClientes);
-		scrollPaneListaClientes.setBounds(48, 79, 320, 119);
-		scrollPaneListaClientes.setVisible(false);
-		cliente.add(scrollPaneListaClientes);
+		
+				ltClientes = new JList<Cliente>();
+				ltClientes.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent clickListaClientes) {
+						cliente_selecionado = ltClientes.getSelectedValue();
+						seleciona_cliente();
+					}
+				});
+				ltClientes.setBounds(48, 79, 267, 66);
+				
+						scrollPaneListaClientes = new JScrollPane(ltClientes);
+						scrollPaneListaClientes.setBounds(48, 80, 320, 119);
+						cliente.add(scrollPaneListaClientes);
+						scrollPaneListaClientes.setVisible(false);
 
 		lblCliente = new JLabel("Informa\u00E7\u00F5es do Cliente");
 		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblCliente.setBounds(236, 11, 225, 29);
+		lblCliente.setBounds(345, 11, 225, 29);
 		cliente.add(lblCliente);
 
 		separadorInformacoesDoCliente = new JSeparator();
-		separadorInformacoesDoCliente.setBounds(10, 41, 715, 9);
+		separadorInformacoesDoCliente.setBounds(10, 41, 994, 9);
 		cliente.add(separadorInformacoesDoCliente);
 
 		lblNomeCliente = new JLabel("Nome");
@@ -1175,7 +1177,7 @@ public class Panel_orcamento extends JPanel {
 
 		lblDocumento = new JLabel("Documento");
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDocumento.setBounds(10, 93, 78, 19);
+		lblDocumento.setBounds(793, 61, 78, 19);
 		cliente.add(lblDocumento);
 
 		txtDocumento = new JTextField();
@@ -1183,26 +1185,13 @@ public class Panel_orcamento extends JPanel {
 		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDocumento.setEditable(false);
 		txtDocumento.setColumns(10);
-		txtDocumento.setBounds(88, 91, 133, 20);
+		txtDocumento.setBounds(871, 59, 133, 20);
 		cliente.add(txtDocumento);
-
-		lblIe = new JLabel("I.E.");
-		lblIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblIe.setBounds(544, 93, 27, 19);
-		cliente.add(lblIe);
-
-		txtIe = new JTextField();
-		txtIe.setEnabled(false);
-		txtIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtIe.setEditable(false);
-		txtIe.setColumns(10);
-		txtIe.setBounds(570, 91, 133, 20);
-		cliente.add(txtIe);
 
 		lblCep = new JLabel("Cep");
 		lblCep.setToolTipText("");
 		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCep.setBounds(10, 125, 28, 20);
+		lblCep.setBounds(8, 102, 28, 20);
 		cliente.add(lblCep);
 
 		fTxtCep = new JFormattedTextField();
@@ -1210,13 +1199,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtCep.setEnabled(false);
 		fTxtCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCep.setBounds(40, 127, 78, 20);
+		fTxtCep.setBounds(38, 104, 78, 20);
 		cliente.add(fTxtCep);
 
 		lblCidade = new JLabel("Cidade");
 		lblCidade.setToolTipText("");
 		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCidade.setBounds(205, 129, 44, 20);
+		lblCidade.setBounds(131, 104, 44, 20);
 		cliente.add(lblCidade);
 
 		fTxtCidade = new JFormattedTextField();
@@ -1224,13 +1213,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtCidade.setEnabled(false);
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCidade.setBounds(256, 127, 239, 20);
+		fTxtCidade.setBounds(182, 102, 239, 20);
 		cliente.add(fTxtCidade);
 
 		lblEndereco = new JLabel("Endereco");
 		lblEndereco.setToolTipText("");
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEndereco.setBounds(10, 165, 65, 20);
+		lblEndereco.setBounds(453, 102, 65, 20);
 		cliente.add(lblEndereco);
 
 		fTxtEndereco = new JFormattedTextField();
@@ -1238,13 +1227,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtEndereco.setEnabled(false);
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEndereco.setBounds(73, 163, 348, 20);
+		fTxtEndereco.setBounds(516, 102, 320, 20);
 		cliente.add(fTxtEndereco);
 
 		lblReferencia = new JLabel("Referencia");
 		lblReferencia.setToolTipText("");
 		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblReferencia.setBounds(9, 198, 65, 20);
+		lblReferencia.setBounds(10, 145, 65, 20);
 		cliente.add(lblReferencia);
 
 		fTxtReferencia = new JFormattedTextField();
@@ -1252,13 +1241,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtReferencia.setEnabled(false);
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtReferencia.setBounds(79, 196, 342, 20);
+		fTxtReferencia.setBounds(80, 143, 342, 20);
 		cliente.add(fTxtReferencia);
 
 		lblNumero = new JLabel("N\u00B0");
 		lblNumero.setToolTipText("");
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNumero.setBounds(463, 165, 16, 20);
+		lblNumero.setBounds(896, 103, 16, 20);
 		cliente.add(lblNumero);
 
 		fTxtNumero = new JFormattedTextField();
@@ -1266,13 +1255,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtNumero.setEnabled(false);
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNumero.setBounds(481, 164, 90, 20);
+		fTxtNumero.setBounds(914, 102, 90, 20);
 		cliente.add(fTxtNumero);
 
 		lblBairro = new JLabel("Bairro");
 		lblBairro.setToolTipText("");
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblBairro.setBounds(437, 198, 40, 20);
+		lblBairro.setBounds(453, 145, 40, 20);
 		cliente.add(lblBairro);
 
 		fTxtBairro = new JFormattedTextField();
@@ -1280,13 +1269,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtBairro.setEnabled(false);
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(480, 197, 220, 20);
+		fTxtBairro.setBounds(491, 143, 220, 20);
 		cliente.add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
 		lblCelular.setToolTipText("");
 		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCelular.setBounds(9, 231, 46, 20);
+		lblCelular.setBounds(10, 185, 46, 20);
 		cliente.add(lblCelular);
 
 		fTxtCelular = new JFormattedTextField();
@@ -1294,13 +1283,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtCelular.setEnabled(false);
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCelular.setBounds(55, 231, 110, 20);
+		fTxtCelular.setBounds(56, 185, 110, 20);
 		cliente.add(fTxtCelular);
 
 		lblTelFixo = new JLabel("Tel. Fixo");
 		lblTelFixo.setToolTipText("");
 		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTelFixo.setBounds(187, 232, 50, 20);
+		lblTelFixo.setBounds(198, 185, 50, 20);
 		cliente.add(lblTelFixo);
 
 		fTxtTelFixo = new JFormattedTextField();
@@ -1308,13 +1297,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtTelFixo.setEnabled(false);
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtTelFixo.setBounds(244, 231, 104, 20);
+		fTxtTelFixo.setBounds(252, 185, 104, 20);
 		cliente.add(fTxtTelFixo);
 
 		lblEmai = new JLabel("Email");
 		lblEmai.setToolTipText("");
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEmai.setBounds(365, 233, 40, 20);
+		lblEmai.setBounds(378, 185, 40, 20);
 		cliente.add(lblEmai);
 
 		fTxtEmail = new JFormattedTextField();
@@ -1322,23 +1311,23 @@ public class Panel_orcamento extends JPanel {
 		fTxtEmail.setEnabled(false);
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEmail.setBounds(405, 232, 297, 20);
+		fTxtEmail.setBounds(413, 184, 297, 20);
 		cliente.add(fTxtEmail);
 
 		lblResumoFinanceiro = new JLabel("Resumo Financeiro");
 		lblResumoFinanceiro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblResumoFinanceiro.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblResumoFinanceiro.setBounds(236, 268, 225, 29);
+		lblResumoFinanceiro.setBounds(358, 239, 225, 29);
 		cliente.add(lblResumoFinanceiro);
 
 		separadorResumoFinanceiro = new JSeparator();
-		separadorResumoFinanceiro.setBounds(10, 302, 715, 9);
+		separadorResumoFinanceiro.setBounds(10, 274, 994, 9);
 		cliente.add(separadorResumoFinanceiro);
 
 		lblValorComprado = new JLabel("Total j\u00E1 vendido");
 		lblValorComprado.setToolTipText("");
 		lblValorComprado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorComprado.setBounds(10, 364, 104, 20);
+		lblValorComprado.setBounds(10, 349, 104, 20);
 		cliente.add(lblValorComprado);
 
 		fTxtTotalVendido = new JFormattedTextField();
@@ -1348,13 +1337,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalVendido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalVendido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalVendido.setEnabled(false);
-		fTxtTotalVendido.setBounds(115, 364, 100, 20);
+		fTxtTotalVendido.setBounds(115, 349, 100, 20);
 		cliente.add(fTxtTotalVendido);
 
 		lblValorEmAberto = new JLabel("Valor em aberto");
 		lblValorEmAberto.setToolTipText("");
 		lblValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorEmAberto.setBounds(10, 330, 104, 20);
+		lblValorEmAberto.setBounds(10, 307, 104, 20);
 		cliente.add(lblValorEmAberto);
 
 		fTxtValorEmAberto = new JFormattedTextField();
@@ -1364,13 +1353,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtValorEmAberto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtValorEmAberto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtValorEmAberto.setEnabled(false);
-		fTxtValorEmAberto.setBounds(116, 328, 99, 20);
+		fTxtValorEmAberto.setBounds(116, 305, 99, 20);
 		cliente.add(fTxtValorEmAberto);
 
 		lblPrimeiraCompra = new JLabel("Data da primeira compra");
 		lblPrimeiraCompra.setToolTipText("");
 		lblPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrimeiraCompra.setBounds(438, 331, 151, 20);
+		lblPrimeiraCompra.setBounds(438, 307, 151, 20);
 		cliente.add(lblPrimeiraCompra);
 
 		fTxtPrimeiraCompra = new JFormattedTextField();
@@ -1380,13 +1369,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtPrimeiraCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrimeiraCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrimeiraCompra.setEnabled(false);
-		fTxtPrimeiraCompra.setBounds(599, 329, 104, 20);
+		fTxtPrimeiraCompra.setBounds(593, 305, 104, 20);
 		cliente.add(fTxtPrimeiraCompra);
 
 		lblUltimaCompra = new JLabel("Data da \u00FAltima compra");
 		lblUltimaCompra.setToolTipText("");
 		lblUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUltimaCompra.setBounds(448, 364, 145, 20);
+		lblUltimaCompra.setBounds(758, 306, 141, 20);
 		cliente.add(lblUltimaCompra);
 
 		fTxtUltimaCompra = new JFormattedTextField();
@@ -1396,13 +1385,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtUltimaCompra.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtUltimaCompra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtUltimaCompra.setEnabled(false);
-		fTxtUltimaCompra.setBounds(599, 362, 104, 20);
+		fTxtUltimaCompra.setBounds(900, 305, 104, 20);
 		cliente.add(fTxtUltimaCompra);
 
 		lblValorDaMaior = new JLabel("Valor da maior compra");
 		lblValorDaMaior.setToolTipText("");
 		lblValorDaMaior.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValorDaMaior.setBounds(10, 397, 141, 20);
+		lblValorDaMaior.setBounds(10, 395, 141, 20);
 		cliente.add(lblValorDaMaior);
 
 		fTxtMaiorCompra = new JFormattedTextField();
@@ -1452,7 +1441,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtApelido.setEnabled(false);
 		fTxtApelido.setColumns(10);
-		fTxtApelido.setBounds(463, 61, 240, 20);
+		fTxtApelido.setBounds(463, 61, 291, 20);
 		cliente.add(fTxtApelido);
 
 		lblTextoObservacao = new JLabel(
@@ -1546,24 +1535,6 @@ public class Panel_orcamento extends JPanel {
 		fTxtCelular.setText(cliente_selecionado.getCelular());
 		fTxtTelFixo.setText(cliente_selecionado.getTelefone());
 
-		if (cliente_selecionado.getCpf_cnpj() != null) {
-
-			if (cliente_selecionado.getCpf_cnpj().length() > 14) {
-				lblIe.setVisible(true);
-				txtIe.setText(cliente_selecionado.getInscricao_estadual());
-				txtIe.setVisible(true);
-			} else {
-				lblIe.setVisible(false);
-				txtIe.setText(null);
-				txtIe.setVisible(false);
-			}
-		} else {
-			lblIe.setVisible(false);
-			txtIe.setText(null);
-			txtIe.setVisible(false);
-
-		}
-
 		exibir_resumo_financeiro();
 	}
 
@@ -1595,14 +1566,14 @@ public class Panel_orcamento extends JPanel {
 	public void salvar_orcamento() {
 
 		if (quantidade_de_produtos > 0) {
-			int opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Deseja confirmar o orçamento?\n",
+			int opcao = JOptionPane.showConfirmDialog(null, "Deseja confirmar o orçamento?\n",
 					"Confirmar orçamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
 			if (flag) {
 				if (cliente_vazio()) {
 					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando configurações.
-					opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Nenhum cliente foi informado!\n"
+					opcao = JOptionPane.showConfirmDialog(null, "Nenhum cliente foi informado!\n"
 							+ "Caso confirmar o orçamento será gravado utilizando o cliente configurado como consumidor final:"
 							+ "\n\nConsumidor final" + "\nCódigo: "
 							+ configuracoes_do_sistema.getConsumidor_final().getId().toString() + "\nNome: "
@@ -1627,7 +1598,7 @@ public class Panel_orcamento extends JPanel {
 				}
 				if (orcamento.getId_orcamento() != null) {
 					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
-					JOptionPane.showMessageDialog(lblQuantidade,
+					JOptionPane.showMessageDialog(null,
 							"Orçamento Nº " + orcamento.getId_orcamento() + " salvo corretamente.",
 							"Confirmar orçamento.", JOptionPane.NO_OPTION);
 
@@ -1644,7 +1615,7 @@ public class Panel_orcamento extends JPanel {
 						}
 					}
 					if (!flag) {
-						opcao = JOptionPane.showConfirmDialog(lblQuantidade,
+						opcao = JOptionPane.showConfirmDialog(null,
 								"Deseja prosseguir para a manutenção das parcelas?", "Manutenção das parcelas.",
 								JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 						flag = opcao == JOptionPane.YES_OPTION;
@@ -1663,7 +1634,7 @@ public class Panel_orcamento extends JPanel {
 						flag = true;
 						break;
 					case "PERGUNTAR":
-						opcao = JOptionPane.showConfirmDialog(lblQuantidade, "Deseja emitir o orçamento salvo?",
+						opcao = JOptionPane.showConfirmDialog(null, "Deseja emitir o orçamento salvo?",
 								"Impressao do orçamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 						flag = opcao == JOptionPane.YES_OPTION;
 						break;
@@ -1684,7 +1655,7 @@ public class Panel_orcamento extends JPanel {
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(lblQuantidade,
+			JOptionPane.showMessageDialog(null,
 					"Necessário informar pelo menos 1 item para criar o orçamento.", "Orçamento sem itens.",
 					JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
@@ -1695,7 +1666,7 @@ public class Panel_orcamento extends JPanel {
 
 		Boolean flag = true;
 		if (quantidade_de_produtos > 0) {
-			int opcao = JOptionPane.showConfirmDialog(lblQuantidade,
+			int opcao = JOptionPane.showConfirmDialog(null,
 					"ATENÇÃO!\nDeseja sair do orçamento atual?\nTODAS AS ALTERAÇÕES REALIZADAS NÃO SERÃO SALVAS.",
 					"Sair do orçamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 			flag = opcao == JOptionPane.YES_OPTION;
@@ -1914,7 +1885,6 @@ public class Panel_orcamento extends JPanel {
 		fTxtApelido.setText(null);
 		fTxtNomeCliente.setText(null);
 		txtDocumento.setText(null);
-		txtIe.setText(null);
 		fTxtEndereco.setText(null);
 		fTxtNumero.setText(null);
 		fTxtReferencia.setText(null);
@@ -1937,7 +1907,7 @@ public class Panel_orcamento extends JPanel {
 		for (Produto_orcamento produto_orcamento : produtos_inclusos) {
 			if (produto_orcamento.getIdProduto().equals(codigo)
 					&& !produto_orcamento.getDescricao().substring(0, 3).equals("*__")) {
-				JOptionPane.showMessageDialog(lblQuantidade, "O produto selecionado já está presente no orçamento.",
+				JOptionPane.showMessageDialog(null, "O produto selecionado já está presente no orçamento.",
 						"Produto já incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
 				produto_selecionado = null;
 				return true;
@@ -1953,7 +1923,7 @@ public class Panel_orcamento extends JPanel {
 			fTxtCodigoProduto.setText(null);
 			fTxtNomeProduto.setText(null);
 			fTxtCodigoBarra.setText(null);
-			JOptionPane.showMessageDialog(lblQuantidade,
+			JOptionPane.showMessageDialog(null,
 					"O produto selecionado está bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orçamento.",
 					"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
 			return true;
@@ -2000,7 +1970,7 @@ public class Panel_orcamento extends JPanel {
 		if (porcent_desc_final > 99.99) {
 			fTxtPorcentDescFinal.setText(nf.format(0.00));
 			fTxtValorDescFinal.setText(nf.format(0.00));
-			JOptionPane.showMessageDialog(lblQuantidade,
+			JOptionPane.showMessageDialog(null,
 					"O valor de desconto informado é igual ou maior ao total do orçamento.",
 					"Valor de desconto inválido.", JOptionPane.WARNING_MESSAGE);
 		} else {
@@ -2155,7 +2125,6 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeCliente.setEnabled(true);
 		fTxtApelido.setEnabled(true);
 		txtDocumento.setEnabled(true);
-		txtIe.setEnabled(true);
 		fTxtCep.setEnabled(true);
 		fTxtCidade.setEnabled(true);
 		fTxtEndereco.setEnabled(true);
@@ -2204,7 +2173,6 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeCliente.setEnabled(false);
 		fTxtApelido.setEnabled(false);
 		txtDocumento.setEnabled(false);
-		txtIe.setEnabled(false);
 		fTxtCep.setEnabled(false);
 		fTxtCidade.setEnabled(false);
 		fTxtEndereco.setEnabled(false);
@@ -2310,7 +2278,7 @@ public class Panel_orcamento extends JPanel {
 		btnSalvar_editado.setEnabled(true);
 		btnCancelar_editado.setEnabled(true);
 		fTxtQuantidade.requestFocus();
-		
+
 		novo_produto(produto_editado, editando_produto); // Pegando informações do item selecionado.
 	}
 
@@ -2319,13 +2287,14 @@ public class Panel_orcamento extends JPanel {
 
 		if (novo_produto(produto, true)) {
 			for (Produto_orcamento produto_ed : lista_produtos_inclusos) {
-				if (produto_ed.equals(produto_editado)) { // Compara o produto da lista com o produto que foi selecionado para edição.
+				if (produto_ed.equals(produto_editado)) { // Compara o produto da lista com o produto que foi
+															// selecionado para edição.
 					lista_produtos_inclusos.set(lista_produtos_inclusos.indexOf(produto_ed), produto);
 				}
 			}
 			modelo_tabela.fireTableDataChanged();
 			cancelar_edicao();
-			JOptionPane.showMessageDialog(lblQuantidade, "Produto alterado com sucesso!", " Alteração de produto.",
+			JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", " Alteração de produto.",
 					JOptionPane.NO_OPTION);
 			calcula_total_mercadorias();
 			btnLimpaDadosProduto.setEnabled(true);
@@ -2376,7 +2345,7 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public Boolean excluir_produto(String codigo, Double valor) {
-		int opcao = JOptionPane.showConfirmDialog(lblQuantidade,
+		int opcao = JOptionPane.showConfirmDialog(null,
 				"Deseja remover o seguinte produto do orçamento?\n" + "Cod = "
 						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0) + "\n"
 						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1)
@@ -2477,13 +2446,13 @@ public class Panel_orcamento extends JPanel {
 
 	public void ConfiguraLarguraColunaTabela(JTable tabela_produtos_inclusos) {
 		tabela_produtos_inclusos.getColumnModel().getColumn(0).setPreferredWidth(55); // Código
-		tabela_produtos_inclusos.getColumnModel().getColumn(1).setPreferredWidth(165); // Nome
+		tabela_produtos_inclusos.getColumnModel().getColumn(1).setPreferredWidth(270); // Nome
 		tabela_produtos_inclusos.getColumnModel().getColumn(2).setPreferredWidth(95); // barras
 		tabela_produtos_inclusos.getColumnModel().getColumn(3).setPreferredWidth(53); // Unid
 		tabela_produtos_inclusos.getColumnModel().getColumn(4).setPreferredWidth(68); // Quantidade
-		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(80); // Preço Unit.
-		tabela_produtos_inclusos.getColumnModel().getColumn(6).setPreferredWidth(80); // Desconto
-		tabela_produtos_inclusos.getColumnModel().getColumn(7).setPreferredWidth(96); // Total produto
+		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(150); // Preço Unit.
+		tabela_produtos_inclusos.getColumnModel().getColumn(6).setPreferredWidth(150); // Desconto
+		tabela_produtos_inclusos.getColumnModel().getColumn(7).setPreferredWidth(150); // Total produto
 
 		// Alinhamento das colunas.
 		esquerda.setHorizontalAlignment(SwingConstants.LEFT);
@@ -2491,6 +2460,8 @@ public class Panel_orcamento extends JPanel {
 		tabela_produtos_inclusos.getColumnModel().getColumn(5).setCellRenderer(esquerda); // Preco Unit
 		tabela_produtos_inclusos.getColumnModel().getColumn(6).setCellRenderer(esquerda); // Desconto
 		tabela_produtos_inclusos.getColumnModel().getColumn(7).setCellRenderer(esquerda); // Total
+		
+		tabela_produtos_inclusos.getTableHeader().setResizingAllowed(false);
 	}
 
 	public void lista_produtos_do_orcamento_selecionado(Orcamento orcamento_selecionado) {
@@ -2545,7 +2516,7 @@ public class Panel_orcamento extends JPanel {
 	public void seleciona_cliente() {
 		Boolean flag = true;
 		if (cliente_selecionado.getBloqueado()) {
-			int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+			int opcao = JOptionPane.showConfirmDialog(null,
 					"ATENÇÃO!\nO cliente selecionado está bloqueado.\nDeseja utilizá-lo no orçamento mesmo assim?\n",
 					"Cliente bloqueado.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 			flag = opcao == JOptionPane.YES_OPTION;

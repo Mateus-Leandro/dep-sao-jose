@@ -58,12 +58,22 @@ public class Panel_cliente extends Panel_pessoa {
 	 * Create the panel.
 	 */
 	public Panel_cliente() {
-		separador_3.setBounds(469, 437, 239, 9);
-		separador_2.setBounds(15, 437, 234, 9);
+		fTxtPesquisa.setBounds(211, 411, 748, 20);
+		btnReload.setLocation(969, 409);
+		lblNovo.setLocation(228, 629);
+		lblF1.setLocation(211, 629);
+		lblEditar.setLocation(456, 629);
+		lblF3.setLocation(438, 629);
+		lblRecarregar.setLocation(694, 629);
+		lblF5.setLocation(677, 629);
+		lblExcluir.setLocation(961, 629);
+		lblF12.setLocation(936, 629);
+		separador_3.setBounds(629, 392, 374, 9);
+		separador_2.setBounds(16, 392, 379, 9);
 		checkBoxBloqueado = new JCheckBox("Cliente Bloqueado");
 		checkBoxBloqueado.setEnabled(false);
 		checkBoxBloqueado.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		checkBoxBloqueado.setBounds(550, 75, 159, 23);
+		checkBoxBloqueado.setBounds(844, 73, 159, 23);
 		add(checkBoxBloqueado);
 		checkBoxBloqueado.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickClienteBloqueado) {
@@ -81,10 +91,10 @@ public class Panel_cliente extends Panel_pessoa {
 				recarregarTabela();
 			}
 		});
-		fTxtTelFixo.addKeyListener(new KeyAdapter() {
+		fTxtEmail.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent enterTelFixo) {
-				if (enterTelFixo.getKeyCode() == enterTelFixo.VK_ENTER) {
+			public void keyReleased(KeyEvent enterEmail) {
+				if (enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
 					if (valida_documento("cliente")) {
 						novo_cliente = new Cliente();
 						if (valida_pessoa(novo_cliente)) {
@@ -133,7 +143,7 @@ public class Panel_cliente extends Panel_pessoa {
 		tecla_pressionada(novo_cliente, tabela);
 
 		lblTitulo = new JLabel("T\u00EDtulo da tela");
-		lblTitulo.setBounds(247, 11, 244, 29);
+		lblTitulo.setBounds(393, 11, 244, 29);
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 24));
 		add(lblTitulo);
@@ -143,7 +153,7 @@ public class Panel_cliente extends Panel_pessoa {
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel<String>(new String[] { "Nome", "Apelido", "C\u00F3digo" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
-		cbxTipoPesquisa.setBounds(105, 453, 96, 25);
+		cbxTipoPesquisa.setBounds(105, 408, 96, 25);
 		add(cbxTipoPesquisa);
 
 		setBorder(null);
@@ -198,13 +208,13 @@ public class Panel_cliente extends Panel_pessoa {
 		ConfiguraLarguraColunaTabela(tabela);
 
 		scrollPaneTabela = new JScrollPane(tabela);
-		scrollPaneTabela.setBounds(16, 487, 693, 136);
+		scrollPaneTabela.setBounds(16, 442, 987, 181);
 		add(scrollPaneTabela);
 
 		lblClientesCadastrados = new JLabel("Clientes Cadastrados");
 		lblClientesCadastrados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClientesCadastrados.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblClientesCadastrados.setBounds(250, 421, 214, 29);
+		lblClientesCadastrados.setBounds(405, 378, 214, 29);
 		add(lblClientesCadastrados);
 
 		tabela.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

@@ -17,9 +17,9 @@ public class Panel_fornedor_pedido extends JPanel {
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		tabbedPane.addTab("Fornecedores", panel_fornecedor);
+		tabbedPane.addTab("Cadastro", panel_fornecedor);
 		tabbedPane.addTab("Pedidos de Compra", panel_pedido);
-		tabbedPane.setBounds(10, 0, 716, 644);
+		tabbedPane.setBounds(2, 0, 1023, 645);
 		add(tabbedPane);
 
 	}

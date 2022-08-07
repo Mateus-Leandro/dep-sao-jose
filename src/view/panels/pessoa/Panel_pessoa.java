@@ -129,13 +129,13 @@ public class Panel_pessoa extends JPanel {
 		btnEditar = new JButton("Editar");
 		btnEditar.setEnabled(false);
 		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditar.setBounds(16, 393, 101, 29);
+		btnEditar.setBounds(16, 349, 101, 29);
 		btnEditar.setIcon(icones.getIcone_editar());
 		add(btnEditar);
 
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluir.setBounds(132, 393, 104, 29);
+		btnExcluir.setBounds(132, 349, 104, 29);
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setEnabled(false);
 		add(btnExcluir);
@@ -153,7 +153,7 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		fTxtPesquisa.setBounds(211, 456, 454, 20);
+		fTxtPesquisa.setBounds(211, 411, 753, 20);
 		add(fTxtPesquisa);
 
 		txtCodigo = new JTextField();
@@ -203,7 +203,7 @@ public class Panel_pessoa extends JPanel {
 		add(checkBoxJuridica);
 
 		lblDocumento = new JLabel("CPF");
-		lblDocumento.setBounds(338, 156, 34, 17);
+		lblDocumento.setBounds(440, 156, 34, 17);
 		lblDocumento.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblDocumento);
 
@@ -223,7 +223,7 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtDocumento.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtDocumento.setEditable(false);
-		fTxtDocumento.setBounds(376, 152, 125, 20);
+		fTxtDocumento.setBounds(478, 152, 125, 20);
 		fTxtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtDocumento.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		add(fTxtDocumento);
@@ -242,7 +242,7 @@ public class Panel_pessoa extends JPanel {
 		});
 
 		lblIe = new JLabel("I. E.");
-		lblIe.setBounds(550, 155, 24, 17);
+		lblIe.setBounds(271, 155, 24, 17);
 		lblIe.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblIe.setVisible(false);
 		add(lblIe);
@@ -271,18 +271,18 @@ public class Panel_pessoa extends JPanel {
 				fTxtIe.setCaretPosition(0);
 			}
 		});
-		fTxtIe.setBounds(580, 152, 129, 20);
+		fTxtIe.setBounds(301, 152, 129, 20);
 		fTxtIe.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtIe.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtIe.setVisible(false);
 		add(fTxtIe);
 
 		separador_titulo = new JSeparator();
-		separador_titulo.setBounds(10, 50, 698, 9);
+		separador_titulo.setBounds(10, 50, 998, 9);
 		add(separador_titulo);
 
 		lblNome = new JLabel("Nome");
-		lblNome.setBounds(15, 188, 40, 20);
+		lblNome.setBounds(653, 154, 40, 20);
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNome);
 
@@ -306,11 +306,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtNomePessoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNomePessoa.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNomePessoa.setBounds(57, 186, 317, 20);
+		fTxtNomePessoa.setBounds(705, 152, 303, 20);
 		add(fTxtNomePessoa);
 
 		lblApelido = new JLabel("Apelido");
-		lblApelido.setBounds(398, 189, 46, 20);
+		lblApelido.setBounds(653, 185, 44, 20);
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblApelido);
 
@@ -334,11 +334,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtApelido.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtApelido.setBounds(444, 186, 265, 20);
+		fTxtApelido.setBounds(705, 183, 303, 20);
 		add(fTxtApelido);
 
 		lblCep = new JLabel("Cep");
-		lblCep.setBounds(16, 255, 28, 20);
+		lblCep.setBounds(15, 241, 28, 20);
 		lblCep.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCep);
 
@@ -383,12 +383,12 @@ public class Panel_pessoa extends JPanel {
 			}
 		});
 		fTxtCep.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCep.setBounds(46, 257, 78, 20);
+		fTxtCep.setBounds(42, 242, 89, 20);
 		add(fTxtCep);
 
 		btnLimpaCep = new JButton();
 		btnLimpaCep.setVisible(false);
-		btnLimpaCep.setBounds(132, 256, 24, 19);
+		btnLimpaCep.setBounds(142, 242, 24, 19);
 		btnLimpaCep.setIcon(icones.getIcone_limpar());
 		btnLimpaCep.addMouseListener(new MouseAdapter() {
 			@Override
@@ -406,7 +406,7 @@ public class Panel_pessoa extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent enterCidade) {
 				if (enterCidade.getKeyCode() == enterCidade.VK_ENTER) {
-					fTxtNumero.requestFocus();
+					fTxtEndereco.requestFocus();
 				}
 			}
 		});
@@ -419,16 +419,16 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCidade.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCidade.setBounds(262, 257, 239, 20);
+		fTxtCidade.setBounds(256, 241, 238, 20);
 		add(fTxtCidade);
 
 		lblCidade = new JLabel("Cidade");
-		lblCidade.setBounds(211, 259, 44, 20);
+		lblCidade.setBounds(211, 241, 44, 20);
 		lblCidade.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCidade);
 
 		lblEndereco = new JLabel("Endereco");
-		lblEndereco.setBounds(16, 295, 65, 20);
+		lblEndereco.setBounds(504, 241, 65, 20);
 		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEndereco);
 
@@ -439,7 +439,7 @@ public class Panel_pessoa extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent enterEndereco) {
 				if (enterEndereco.getKeyCode() == enterEndereco.VK_ENTER) {
-					fTxtBairro.requestFocus();
+					fTxtNumero.requestFocus();
 				}
 			}
 		});
@@ -452,11 +452,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEndereco.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEndereco.setBounds(79, 293, 332, 20);
+		fTxtEndereco.setBounds(566, 240, 333, 20);
 		add(fTxtEndereco);
 
 		lblNumero = new JLabel("N\u00B0");
-		lblNumero.setBounds(525, 257, 16, 20);
+		lblNumero.setBounds(924, 241, 16, 20);
 		lblNumero.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNumero);
 
@@ -467,7 +467,7 @@ public class Panel_pessoa extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent enterNumero) {
 				if (enterNumero.getKeyCode() == enterNumero.VK_ENTER) {
-					fTxtEndereco.requestFocus();
+					fTxtBairro.requestFocus();
 				}
 			}
 		});
@@ -480,11 +480,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtNumero.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNumero.setBounds(543, 256, 70, 20);
+		fTxtNumero.setBounds(942, 240, 66, 20);
 		add(fTxtNumero);
 
 		lblReferencia = new JLabel("Referencia");
-		lblReferencia.setBounds(16, 328, 65, 20);
+		lblReferencia.setBounds(504, 274, 65, 20);
 		lblReferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblReferencia);
 
@@ -495,7 +495,7 @@ public class Panel_pessoa extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent enterReferencia) {
 				if (enterReferencia.getKeyCode() == enterReferencia.VK_ENTER) {
-					fTxtEmail.requestFocus();
+					fTxtCelular.requestFocus();
 				}
 			}
 		});
@@ -509,11 +509,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtReferencia.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtReferencia.setBounds(86, 326, 325, 20);
+		fTxtReferencia.setBounds(574, 272, 325, 20);
 		add(fTxtReferencia);
 
 		lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(425, 288, 40, 20);
+		lblBairro.setBounds(16, 274, 40, 20);
 		lblBairro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblBairro);
 
@@ -537,11 +537,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtBairro.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtBairro.setBounds(466, 288, 243, 20);
+		fTxtBairro.setBounds(55, 275, 234, 20);
 		add(fTxtBairro);
 
 		lblCelular = new JLabel("Celular");
-		lblCelular.setBounds(16, 361, 46, 20);
+		lblCelular.setBounds(16, 307, 46, 20);
 		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblCelular);
 
@@ -571,11 +571,11 @@ public class Panel_pessoa extends JPanel {
 		});
 		fTxtCelular.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtCelular.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCelular.setBounds(62, 361, 104, 20);
+		fTxtCelular.setBounds(60, 307, 102, 20);
 		add(fTxtCelular);
 
 		lblTelFixo = new JLabel("Tel. Fixo");
-		lblTelFixo.setBounds(194, 362, 50, 20);
+		lblTelFixo.setBounds(202, 308, 50, 20);
 		lblTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblTelFixo);
 
@@ -587,6 +587,14 @@ public class Panel_pessoa extends JPanel {
 		}
 
 		fTxtTelFixo = new JFormattedTextField(mascara_telefone);
+		fTxtTelFixo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterTelefone) {
+				if (enterTelefone.getKeyCode() == enterTelefone.VK_ENTER) {
+					fTxtEmail.requestFocus();
+				}
+			}
+		});
 		fTxtTelFixo.setEditable(false);
 		fTxtTelFixo.addMouseListener(new MouseAdapter() {
 			@Override
@@ -597,25 +605,17 @@ public class Panel_pessoa extends JPanel {
 
 		fTxtTelFixo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtTelFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtTelFixo.setBounds(251, 361, 104, 20);
+		fTxtTelFixo.setBounds(256, 307, 117, 20);
 		add(fTxtTelFixo);
 
 		lblEmai = new JLabel("Email");
-		lblEmai.setBounds(426, 326, 34, 20);
+		lblEmai.setBounds(396, 307, 34, 20);
 		lblEmai.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblEmai);
 
 		fTxtEmail = new JFormattedTextField();
 		JTextFieldLimit limitDocument_email = new JTextFieldLimit(40, "texto");
 		fTxtEmail.setDocument(limitDocument_email);
-		fTxtEmail.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent enterEmail) {
-				if (enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
-					fTxtCelular.requestFocus();
-				}
-			}
-		});
 		fTxtEmail.setEditable(false);
 		fTxtEmail.addMouseListener(new MouseAdapter() {
 			@Override
@@ -626,33 +626,33 @@ public class Panel_pessoa extends JPanel {
 
 		fTxtEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtEmail.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtEmail.setBounds(466, 325, 243, 20);
+		fTxtEmail.setBounds(432, 308, 243, 20);
 		add(fTxtEmail);
 
 		btnSalvar = new JButton("Salvar");
 		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(482, 393, 108, 29);
+		btnSalvar.setBounds(776, 349, 108, 29);
 		btnSalvar.setIcon(icones.getIcone_salvar());
 		btnSalvar.setVisible(false);
 		add(btnSalvar);
 
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(595, 393, 114, 29);
+		btnCancelar.setBounds(894, 349, 114, 29);
 		btnCancelar.setIcon(icones.getIcone_cancelar());
 		btnCancelar.setVisible(false);
 		add(btnCancelar);
 
 		lblPesquisarPor = new JLabel("Pesquisar por");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPesquisarPor.setBounds(16, 456, 89, 20);
+		lblPesquisarPor.setBounds(16, 411, 89, 20);
 		add(lblPesquisarPor);
 
 		separador_2 = new JSeparator();
-		separador_2.setBounds(15, 437, 239, 9);
+		separador_2.setBounds(16, 389, 239, 9);
 		add(separador_2);
 
 		separador_3 = new JSeparator();
-		separador_3.setBounds(476, 437, 232, 9);
+		separador_3.setBounds(478, 389, 525, 9);
 		add(separador_3);
 
 		btnLimpaDocumento = new JButton();
@@ -662,7 +662,7 @@ public class Panel_pessoa extends JPanel {
 				limpar_campos();
 			}
 		});
-		btnLimpaDocumento.setBounds(511, 154, 24, 19);
+		btnLimpaDocumento.setBounds(613, 153, 24, 19);
 		btnLimpaDocumento.setIcon(icones.getIcone_limpar());
 		btnLimpaDocumento.setVisible(false);
 		add(btnLimpaDocumento);
@@ -674,34 +674,34 @@ public class Panel_pessoa extends JPanel {
 		add(lblInformacoesBasicas);
 
 		separador_1 = new JSeparator();
-		separador_1.setBounds(207, 127, 502, 9);
+		separador_1.setBounds(207, 127, 801, 9);
 		add(separador_1);
 
 		lblInfoEndereco = new JLabel("Endere\u00E7o e Contato");
 		lblInfoEndereco.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInfoEndereco.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblInfoEndereco.setBounds(10, 215, 184, 29);
+		lblInfoEndereco.setBounds(10, 201, 184, 29);
 		add(lblInfoEndereco);
 
 		separador_clientes_4 = new JSeparator();
-		separador_clientes_4.setBounds(194, 234, 516, 9);
+		separador_clientes_4.setBounds(194, 220, 814, 9);
 		add(separador_clientes_4);
 
 		btnReload = new JButton();
 		btnReload.setIcon(icones.getIcone_reload());
-		btnReload.setBounds(675, 454, 34, 22);
+		btnReload.setBounds(974, 409, 34, 22);
 		add(btnReload);
 
 		lblObg_nome = new JLabel("*");
 		lblObg_nome.setForeground(Color.RED);
 		lblObg_nome.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_nome.setBounds(375, 196, 20, 15);
+		lblObg_nome.setBounds(1010, 163, 16, 15);
 		add(lblObg_nome);
 
 		lblObg_celular = new JLabel("*");
 		lblObg_celular.setForeground(Color.RED);
 		lblObg_celular.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_celular.setBounds(166, 371, 20, 15);
+		lblObg_celular.setBounds(166, 317, 20, 15);
 		add(lblObg_celular);
 
 		lblEsc = new JLabel("Esc:");
@@ -875,7 +875,7 @@ public class Panel_pessoa extends JPanel {
 		if (salvo) {
 			JOptionPane
 					.showMessageDialog(
-							fTxtCidade, tipo_pessoa + " salvo corretamente." + "\nCódigo: " + pessoa.getId()
+							null, tipo_pessoa + " salvo corretamente." + "\nCódigo: " + pessoa.getId()
 									+ "\nNome: " + pessoa.getNome(),
 							"Cadastro de " + tipo_pessoa, JOptionPane.WARNING_MESSAGE);
 			cancelar_pessoa();
@@ -923,21 +923,21 @@ public class Panel_pessoa extends JPanel {
 				tipo_pessoa = "cliente";
 
 				if (cliente_dao.cliente_com_orcamento(pessoa.getId().toString())) {
-					JOptionPane.showMessageDialog(fTxtCidade,
+					JOptionPane.showMessageDialog(null,
 							"Impossível excluir cliente.\nO cliente selecionado possui pelo menos 1 orçamento salvo em seu nome.",
 							"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 
 				if (pessoa.getId().equals(configuracoes.getConsumidor_final().getId())) {
-					JOptionPane.showMessageDialog(fTxtCidade,
+					JOptionPane.showMessageDialog(null,
 							"Impossível excluir cliente.\nO cliente selecionado está sendo usado como consumidor final nas configurações do sistema.",
 							"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 			}
 
-			int opcao = JOptionPane.showConfirmDialog(fTxtCidade,
+			int opcao = JOptionPane.showConfirmDialog(null,
 					"Deseja excluir o " + tipo_pessoa + " abaixo?\n" + "Código: " + pessoa.getId() + "\n" + "Nome: "
 							+ pessoa.getNome(),
 					"Exclusão de " + tipo_pessoa, JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -955,7 +955,7 @@ public class Panel_pessoa extends JPanel {
 					break;
 				}
 				if (excluido) {
-					JOptionPane.showMessageDialog(fTxtCidade, tipo_pessoa + " excluído com sucesso.",
+					JOptionPane.showMessageDialog(null, tipo_pessoa + " excluído com sucesso.",
 							"Exclusão de " + tipo_pessoa + ".", JOptionPane.NO_OPTION);
 					fTxtPesquisa.setText(null);
 					limpar_campos();
@@ -1071,14 +1071,14 @@ public class Panel_pessoa extends JPanel {
 		if (fTxtNomePessoa.getText().isBlank() || fTxtCelular.getText().equals("(  )     -    ")) {
 			if (fTxtNomePessoa.getText().isBlank()) {
 				fTxtNomePessoa.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(fTxtNomePessoa, "Necessário informar o nome do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(null, "Necessário informar o nome do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem nome.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}
 
 			if (fTxtCelular.getText().equals("(  )     -    ")) {
 				fTxtCelular.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(fTxtCelular, "Necessário informar o celular do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(null, "Necessário informar o celular do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem celular.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}
@@ -1144,7 +1144,7 @@ public class Panel_pessoa extends JPanel {
 
 			if (nome_pessoa != null) {
 				fTxtDocumento.requestFocus();
-				JOptionPane.showMessageDialog(fTxtCidade,
+				JOptionPane.showMessageDialog(null,
 						"Documento ja informado para o " + tipo_pessoa + " abaixo:" + "\n" + nome_pessoa,
 						"Documento ja utilizado.", JOptionPane.WARNING_MESSAGE);
 				return false;

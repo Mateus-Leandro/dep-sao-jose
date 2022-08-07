@@ -67,14 +67,14 @@ public class Panel_bkp extends JPanel {
 	public Panel_bkp() {
 		le_log();
 		setLayout(null);
-		lblBackupSistema = new JLabel("Configura\u00E7\u00F5es de Backup do Sistema");
+		lblBackupSistema = new JLabel("Backup do Sistema");
 		lblBackupSistema.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBackupSistema.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblBackupSistema.setBounds(143, 11, 439, 29);
+		lblBackupSistema.setBounds(268, 11, 439, 29);
 		add(lblBackupSistema);
 
 		backup_sistema = new JSeparator();
-		backup_sistema.setBounds(10, 50, 702, 9);
+		backup_sistema.setBounds(10, 50, 1011, 9);
 		add(backup_sistema);
 
 		lblDiretorioDestino = new JLabel("Pasta padr\u00E3o para o backup");
@@ -92,12 +92,12 @@ public class Panel_bkp extends JPanel {
 
 		lblDataUltimoBackup = new JLabel("Data do \u00FAltimo backup");
 		lblDataUltimoBackup.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDataUltimoBackup.setBounds(10, 143, 144, 19);
+		lblDataUltimoBackup.setBounds(780, 107, 144, 19);
 		add(lblDataUltimoBackup);
 
 		txtDataUltimoBackup.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDataUltimoBackup.setEditable(false);
-		txtDataUltimoBackup.setBounds(155, 142, 96, 20);
+		txtDataUltimoBackup.setBounds(925, 106, 96, 20);
 		add(txtDataUltimoBackup);
 		txtDataUltimoBackup.setColumns(10);
 
@@ -108,28 +108,28 @@ public class Panel_bkp extends JPanel {
 		add(lblInformacoesBasicas);
 
 		separador_infoBasicas = new JSeparator();
-		separador_infoBasicas.setBounds(202, 87, 510, 9);
+		separador_infoBasicas.setBounds(202, 87, 819, 9);
 		add(separador_infoBasicas);
 
 		lblTempoGasto = new JLabel("Tempo gasto no \u00FAltimo backup");
 		lblTempoGasto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTempoGasto.setBounds(10, 205, 196, 19);
+		lblTempoGasto.setBounds(619, 148, 196, 19);
 		add(lblTempoGasto);
 
 		txtTempoGasto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtTempoGasto.setEditable(false);
-		txtTempoGasto.setBounds(216, 204, 196, 20);
+		txtTempoGasto.setBounds(825, 147, 196, 20);
 		add(txtTempoGasto);
 		txtTempoGasto.setColumns(10);
 
-		lblNovoBackup = new JLabel("Novo Backup");
+		lblNovoBackup = new JLabel("Backup Manual");
 		lblNovoBackup.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNovoBackup.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNovoBackup.setBounds(10, 235, 124, 29);
+		lblNovoBackup.setBounds(10, 210, 144, 29);
 		add(lblNovoBackup);
 
 		separador_infoBasicas_1 = new JSeparator();
-		separador_infoBasicas_1.setBounds(135, 252, 577, 9);
+		separador_infoBasicas_1.setBounds(157, 227, 864, 9);
 		add(separador_infoBasicas_1);
 
 		btnRealizarBackup = new JButton("Realizar backup");
@@ -151,20 +151,20 @@ public class Panel_bkp extends JPanel {
 		});
 		btnRealizarBackup.setEnabled(false);
 		btnRealizarBackup.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnRealizarBackup.setBounds(531, 337, 181, 29);
+		btnRealizarBackup.setBounds(840, 312, 181, 29);
 		btnRealizarBackup.setIcon(icones.getIcone_backup());
 		add(btnRealizarBackup);
 
 		lblTamanhoAtualBanco = new JLabel("Tamanho do banco de dados");
 		lblTamanhoAtualBanco.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTamanhoAtualBanco.setBounds(10, 174, 188, 19);
+		lblTamanhoAtualBanco.setBounds(10, 148, 188, 19);
 		add(lblTamanhoAtualBanco);
 
 		txtTamanhoBanco = new JTextField();
 		txtTamanhoBanco.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtTamanhoBanco.setEditable(false);
 		txtTamanhoBanco.setColumns(10);
-		txtTamanhoBanco.setBounds(203, 173, 209, 20);
+		txtTamanhoBanco.setBounds(195, 147, 209, 20);
 		add(txtTamanhoBanco);
 
 		long tamanho = (long) (pega_tamanho_banco() / 1048576.0);
@@ -173,19 +173,19 @@ public class Panel_bkp extends JPanel {
 		lblTamanhoAproximado = new JLabel("* Tamanho aproximado.");
 		lblTamanhoAproximado.setForeground(Color.BLUE);
 		lblTamanhoAproximado.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblTamanhoAproximado.setBounds(419, 175, 135, 19);
+		lblTamanhoAproximado.setBounds(414, 149, 135, 19);
 		add(lblTamanhoAproximado);
 
 		lblPastaDestino = new JLabel("Pasta de destino");
 		lblPastaDestino.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPastaDestino.setBounds(10, 305, 109, 19);
+		lblPastaDestino.setBounds(10, 280, 109, 19);
 		add(lblPastaDestino);
 
 		txtDestinoBkp = new JTextField();
 		txtDestinoBkp.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtDestinoBkp.setEditable(false);
 		txtDestinoBkp.setColumns(10);
-		txtDestinoBkp.setBounds(185, 306, 527, 20);
+		txtDestinoBkp.setBounds(185, 281, 836, 20);
 		add(txtDestinoBkp);
 
 		btnPastaDestino = new JButton();
@@ -205,21 +205,21 @@ public class Panel_bkp extends JPanel {
 				}
 			}
 		});
-		btnPastaDestino.setBounds(116, 305, 35, 22);
+		btnPastaDestino.setBounds(116, 280, 35, 22);
 		btnPastaDestino.setIcon(icones.getIcone_pasta());
 		add(btnPastaDestino);
 
 		lblInformacaoBkp = new JLabel(
 				"* Para realizar um novo Backup do sistema, selecione a pasta de destino e click em \"Realizar backup\".");
-		lblInformacaoBkp.setForeground(Color.BLUE);
+		lblInformacaoBkp.setForeground(new Color(0, 128, 0));
 		lblInformacaoBkp.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblInformacaoBkp.setBounds(10, 275, 631, 19);
+		lblInformacaoBkp.setBounds(10, 250, 631, 19);
 		add(lblInformacaoBkp);
 
 		panelValorTotal = new JPanel();
 		panelValorTotal.setLayout(null);
 		panelValorTotal.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelValorTotal.setBounds(10, 527, 702, 125);
+		panelValorTotal.setBounds(10, 527, 1011, 114);
 		add(panelValorTotal);
 
 		lblAtencao = new JLabel("Aten\u00E7\u00E3o");
@@ -234,11 +234,11 @@ public class Panel_bkp extends JPanel {
 		txtpnARealizaoDo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnARealizaoDo.setText(
 				"A realiza\u00E7\u00E3o do backup pode demorar um longo tempo caso houver um grande volume de dados. Ap\u00F3s iniciar o backup n\u00E3o ser\u00E1 poss\u00EDvel cancelar a opera\u00E7\u00E3o.");
-		txtpnARealizaoDo.setBounds(10, 56, 685, 58);
+		txtpnARealizaoDo.setBounds(8, 46, 991, 58);
 		panelValorTotal.add(txtpnARealizaoDo);
 
 		separator = new JSeparator();
-		separator.setBounds(10, 43, 685, 2);
+		separator.setBounds(10, 39, 991, 10);
 		panelValorTotal.add(separator);
 
 		btnLimpaPastaSelecionada = new JButton();
@@ -253,7 +253,7 @@ public class Panel_bkp extends JPanel {
 		});
 		btnLimpaPastaSelecionada.setToolTipText("Limpar item escolhido.");
 		btnLimpaPastaSelecionada.setEnabled(false);
-		btnLimpaPastaSelecionada.setBounds(155, 305, 27, 21);
+		btnLimpaPastaSelecionada.setBounds(155, 280, 27, 21);
 		btnLimpaPastaSelecionada.setIcon(icones.getIcone_limpar());
 		add(btnLimpaPastaSelecionada);
 	}

@@ -82,13 +82,13 @@ public class Panel_pedido extends JPanel {
 		setLayout(null);
 
 		separador_titulo = new JSeparator();
-		separador_titulo.setBounds(10, 50, 698, 9);
+		separador_titulo.setBounds(10, 50, 999, 9);
 		add(separador_titulo);
 
 		lblPedidosDeCompra = new JLabel("Pedido de Compra");
 		lblPedidosDeCompra.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPedidosDeCompra.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblPedidosDeCompra.setBounds(247, 11, 244, 29);
+		lblPedidosDeCompra.setBounds(393, 11, 244, 29);
 		add(lblPedidosDeCompra);
 
 		lblFornecedor = new JLabel("Fornecedor");
@@ -98,7 +98,7 @@ public class Panel_pedido extends JPanel {
 		add(lblFornecedor);
 
 		separador_fornecedor = new JSeparator();
-		separador_fornecedor.setBounds(119, 137, 589, 9);
+		separador_fornecedor.setBounds(119, 137, 890, 9);
 		add(separador_fornecedor);
 
 		lblCodigoFornecedor = new JLabel("C\u00F3digo");
@@ -109,14 +109,14 @@ public class Panel_pedido extends JPanel {
 
 		lblNomeFornecedor = new JLabel("Nome");
 		lblNomeFornecedor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeFornecedor.setBounds(10, 189, 40, 20);
+		lblNomeFornecedor.setBounds(675, 155, 40, 20);
 		add(lblNomeFornecedor);
 
 		fTxtNomeFornecedor = new JFormattedTextField();
 		fTxtNomeFornecedor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeFornecedor.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeFornecedor.setEditable(false);
-		fTxtNomeFornecedor.setBounds(52, 187, 317, 20);
+		fTxtNomeFornecedor.setBounds(716, 155, 293, 20);
 		add(fTxtNomeFornecedor);
 
 		lblDocumento = new JLabel("Documento");
@@ -133,24 +133,24 @@ public class Panel_pedido extends JPanel {
 
 		lblNomeFantasia = new JLabel("Nome Fant.");
 		lblNomeFantasia.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeFantasia.setBounds(379, 189, 78, 20);
+		lblNomeFantasia.setBounds(678, 185, 78, 20);
 		add(lblNomeFantasia);
 
 		fTxtNomeFantasia = new JFormattedTextField();
 		fTxtNomeFantasia.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeFantasia.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeFantasia.setEditable(false);
-		fTxtNomeFantasia.setBounds(456, 187, 252, 20);
+		fTxtNomeFantasia.setBounds(757, 185, 252, 20);
 		add(fTxtNomeFantasia);
 
 		lblProdutos = new JLabel("Produto");
 		lblProdutos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProdutos.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblProdutos.setBounds(10, 220, 72, 29);
+		lblProdutos.setBounds(10, 199, 72, 29);
 		add(lblProdutos);
 
 		separador_produto = new JSeparator();
-		separador_produto.setBounds(85, 237, 623, 9);
+		separador_produto.setBounds(85, 216, 924, 9);
 		add(separador_produto);
 
 		lblCodigoProduto = new JLabel("C\u00F3digo");
@@ -161,14 +161,14 @@ public class Panel_pedido extends JPanel {
 
 		lblNomeProduto = new JLabel("Nome");
 		lblNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNomeProduto.setBounds(163, 259, 40, 20);
+		lblNomeProduto.setBounds(194, 259, 40, 20);
 		add(lblNomeProduto);
 
 		fTxtNomeProduto = new JFormattedTextField();
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeProduto.setEditable(false);
-		fTxtNomeProduto.setBounds(201, 257, 317, 20);
+		fTxtNomeProduto.setBounds(238, 256, 390, 20);
 		add(fTxtNomeProduto);
 
 		lblQuantidade = new JLabel("Quantidade");
@@ -177,17 +177,17 @@ public class Panel_pedido extends JPanel {
 		lblQuantidade.setBounds(163, 300, 72, 20);
 		add(lblQuantidade);
 
-		lblBarras = new JLabel("Barras");
+		lblBarras = new JLabel("C\u00F3digo de barras");
 		lblBarras.setToolTipText("Gerado Autom\u00E1ticamente");
 		lblBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblBarras.setBounds(546, 259, 40, 20);
+		lblBarras.setBounds(774, 259, 112, 20);
 		add(lblBarras);
 
 		txtBarras = new JTextField();
 		txtBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtBarras.setEditable(false);
 		txtBarras.setColumns(10);
-		txtBarras.setBounds(586, 257, 122, 20);
+		txtBarras.setBounds(887, 256, 122, 20);
 		add(txtBarras);
 
 		fTxtCodigoFornecedor = new JFormattedTextField();
@@ -214,19 +214,19 @@ public class Panel_pedido extends JPanel {
 		btnIncluir = new JButton("Incluir");
 		btnIncluir.setIcon(icones.getIcone_mais());
 		btnIncluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnIncluir.setBounds(395, 300, 93, 29);
+		btnIncluir.setBounds(696, 301, 93, 29);
 		add(btnIncluir);
 
 		btnEditar = new JButton("Editar");
 		btnEditar.setIcon(icones.getIcone_editar());
 		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditar.setBounds(498, 300, 93, 29);
+		btnEditar.setBounds(799, 301, 93, 29);
 		add(btnEditar);
 
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluir.setBounds(601, 299, 107, 29);
+		btnExcluir.setBounds(902, 300, 107, 29);
 		add(btnExcluir);
 
 		lblFator = new JLabel("Fator");
@@ -245,7 +245,7 @@ public class Panel_pedido extends JPanel {
 		panelNumeroOrcamento = new JPanel();
 		panelNumeroOrcamento.setLayout(null);
 		panelNumeroOrcamento.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelNumeroOrcamento.setBounds(510, 70, 198, 29);
+		panelNumeroOrcamento.setBounds(811, 70, 198, 29);
 		add(panelNumeroOrcamento);
 
 		txtNumeroPedido = new JTextField();
@@ -269,11 +269,11 @@ public class Panel_pedido extends JPanel {
 		add(lblProdutosInclusos);
 		
 		scrollPaneTabelaProdutosInclusos = new JScrollPane((Component) null);
-		scrollPaneTabelaProdutosInclusos.setBounds(10, 403, 698, 142);
+		scrollPaneTabelaProdutosInclusos.setBounds(10, 403, 999, 142);
 		add(scrollPaneTabelaProdutosInclusos);
 		
 		separador_produto_1 = new JSeparator();
-		separador_produto_1.setBounds(181, 379, 527, 9);
+		separador_produto_1.setBounds(181, 379, 828, 9);
 		add(separador_produto_1);
 		
 		btnNovo = new JButton("Novo");
@@ -291,13 +291,13 @@ public class Panel_pedido extends JPanel {
 		btnSalvar = new JButton("Salvar Pedido");
 		btnSalvar.setIcon(icones.getIcone_salvar());
 		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(442, 556, 144, 35);
+		btnSalvar.setBounds(743, 556, 144, 35);
 		add(btnSalvar);
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setIcon(icones.getIcone_cancelar());
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(593, 556, 115, 35);
+		btnCancelar.setBounds(894, 556, 115, 35);
 		add(btnCancelar);
 		
 		lblEsc = new JLabel("Esc:");
@@ -313,63 +313,63 @@ public class Panel_pedido extends JPanel {
 		
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(122, 597, 21, 14);
+		lblF1.setBounds(182, 597, 21, 14);
 		add(lblF1);
 		
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(139, 597, 35, 14);
+		lblNovo.setBounds(199, 597, 35, 14);
 		add(lblNovo);
 		
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(210, 597, 21, 14);
+		lblF3.setBounds(325, 597, 21, 14);
 		add(lblF3);
 		
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(228, 597, 35, 14);
+		lblEditar.setBounds(343, 597, 35, 14);
 		add(lblEditar);
 		
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(316, 597, 21, 14);
+		lblF5.setBounds(489, 597, 21, 14);
 		add(lblF5);
 		
 		lblPesquisarPedidos = new JLabel("Pesquisar Pedidos");
 		lblPesquisarPedidos.setForeground(new Color(0, 128, 0));
 		lblPesquisarPedidos.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblPesquisarPedidos.setBounds(333, 597, 108, 14);
+		lblPesquisarPedidos.setBounds(506, 597, 108, 14);
 		add(lblPesquisarPedidos);
 		
 		lblF7 = new JLabel("F7:");
 		lblF7.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF7.setBounds(462, 597, 21, 14);
+		lblF7.setBounds(696, 597, 21, 14);
 		add(lblF7);
 		
 		lblAlterarFornecedor = new JLabel("Alterar Fornecedor");
 		lblAlterarFornecedor.setForeground(new Color(255, 140, 0));
 		lblAlterarFornecedor.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblAlterarFornecedor.setBounds(481, 597, 119, 14);
+		lblAlterarFornecedor.setBounds(715, 597, 119, 14);
 		add(lblAlterarFornecedor);
 		
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(636, 597, 26, 14);
+		lblF12.setBounds(942, 597, 26, 14);
 		add(lblF12);
 		
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(Color.RED);
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(661, 597, 42, 14);
+		lblExcluir.setBounds(967, 597, 42, 14);
 		add(lblExcluir);
 		
 		panelTotalItem = new JPanel();
 		panelTotalItem.setLayout(null);
 		panelTotalItem.setBorder(UIManager.getBorder("DesktopIcon.border"));
-		panelTotalItem.setBounds(288, 339, 420, 29);
+		panelTotalItem.setBounds(589, 339, 420, 29);
 		add(panelTotalItem);
 		
 		fTxtTotalItem = new JFormattedTextField();

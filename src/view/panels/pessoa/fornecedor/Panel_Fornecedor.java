@@ -49,7 +49,16 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
 
 	public Panel_Fornecedor() {
-		lblRecarregar.setLocation(491, 600);
+		fTxtEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent enterEmail) {
+				if(enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
+					salvar_fornecedor();
+				}
+			}
+		});
+		btnReload.setLocation(969, 411);
+		lblRecarregar.setLocation(735, 600);
 		tecla_pressionada(fornecedor);
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
@@ -79,26 +88,26 @@ public class Panel_Fornecedor extends Panel_pessoa {
 				}
 			}
 		});
-		separador_3.setBounds(506, 437, 202, 9);
-		separador_2.setBounds(15, 437, 208, 9);
-		fTxtPesquisa.setBounds(211, 456, 454, 20);
+		separador_3.setBounds(664, 392, 339, 9);
+		separador_2.setBounds(16, 392, 375, 9);
+		fTxtPesquisa.setBounds(211, 413, 748, 20);
 		setLayout(null);
 
 		lblCadastroDeFornecedor = new JLabel("Cadastro de Fornecedores");
-		lblCadastroDeFornecedor.setBounds(211, 11, 324, 29);
+		lblCadastroDeFornecedor.setBounds(375, 11, 324, 29);
 		lblCadastroDeFornecedor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCadastroDeFornecedor.setFont(new Font("Tahoma", Font.BOLD, 24));
 		add(lblCadastroDeFornecedor);
 
 		cbxTipoPesquisa = new JComboBox<String>();
-		cbxTipoPesquisa.setBounds(105, 453, 96, 25);
+		cbxTipoPesquisa.setBounds(105, 411, 96, 25);
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "Nome", "Nome Fant.", "Cod." }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(cbxTipoPesquisa);
 
 		checkBoxBloqueadoPedido = new JCheckBox("Bloqueado p/ pedido");
-		checkBoxBloqueadoPedido.setBounds(318, 73, 183, 23);
+		checkBoxBloqueadoPedido.setBounds(617, 76, 183, 23);
 		checkBoxBloqueadoPedido.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickBloqueadoPedido) {
 				if (checkBoxBloqueadoPedido.isSelected()) {
@@ -119,7 +128,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		add(checkBoxBloqueadoPedido);
 
 		checkBoxBloqueadoCotacao = new JCheckBox("Bloqueado p/ cota\u00E7\u00E3o");
-		checkBoxBloqueadoCotacao.setBounds(526, 73, 183, 23);
+		checkBoxBloqueadoCotacao.setBounds(825, 76, 183, 23);
 		checkBoxBloqueadoCotacao.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickBloqueadoCotacao) {
 				if (checkBoxBloqueadoCotacao.isSelected()) {
@@ -134,7 +143,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		add(checkBoxBloqueadoCotacao);
 
 		lblFornecedoresCadastrados = new JLabel("Fornecedores Cadastrados");
-		lblFornecedoresCadastrados.setBounds(227, 422, 274, 29);
+		lblFornecedoresCadastrados.setBounds(391, 376, 274, 29);
 		lblFornecedoresCadastrados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFornecedoresCadastrados.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(lblFornecedoresCadastrados);
@@ -177,7 +186,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		});
 
 		scrollPane = new JScrollPane(tabela);
-		scrollPane.setBounds(16, 487, 693, 110);
+		scrollPane.setBounds(16, 444, 987, 153);
 		add(scrollPane);
 
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -224,13 +233,13 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		});
 		lblEsc.setBounds(16, 600, 30, 14);
 		lblCancelar.setBounds(42, 600, 53, 14);
-		lblF1.setBounds(170, 600, 21, 14);
-		lblNovo.setBounds(187, 600, 35, 14);
-		lblF5.setBounds(473, 600, 21, 14);
-		lblF3.setBounds(320, 600, 21, 14);
-		lblEditar.setBounds(338, 600, 35, 14);
-		lblF12.setBounds(639, 600, 26, 14);
-		lblExcluir.setBounds(664, 600, 42, 14);
+		lblF1.setBounds(237, 600, 21, 14);
+		lblNovo.setBounds(254, 600, 35, 14);
+		lblF5.setBounds(717, 600, 21, 14);
+		lblF3.setBounds(441, 600, 21, 14);
+		lblEditar.setBounds(459, 600, 35, 14);
+		lblF12.setBounds(936, 600, 26, 14);
+		lblExcluir.setBounds(961, 600, 42, 14);
 		
 	}
 
@@ -320,6 +329,26 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		tabela.getColumnModel().getColumn(0).setCellRenderer(render);
 	}
 
+	public boolean salvar_fornecedor() {
+		fornecedor = (Fornecedor) monta_pessoa(fornecedor);
+		fornecedor.setBloqueado_cotacao(checkBoxBloqueadoCotacao.isSelected());
+		fornecedor.setBloqueado(checkBoxBloqueadoPedido.isSelected());
+
+		if (valida_pessoa(fornecedor)) {
+			if (salvar_pessoa(fornecedor)) {
+				checkBoxBloqueadoCotacao.setEnabled(false);
+				checkBoxBloqueadoPedido.setEnabled(false);
+
+				checkBoxBloqueadoCotacao.setSelected(false);
+				checkBoxBloqueadoPedido.setSelected(false);
+
+				recarregarTabela();
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	// Teclas de atalho
 	public void tecla_pressionada(Pessoa pessoa_atalho) {
 		super.tecla_pressionada(pessoa_atalho, tabela);

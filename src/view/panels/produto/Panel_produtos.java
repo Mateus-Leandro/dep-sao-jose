@@ -143,7 +143,7 @@ public class Panel_produtos extends JPanel {
 
 		lblNome = new JLabel("Nome");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNome.setBounds(325, 153, 38, 19);
+		lblNome.setBounds(150, 153, 38, 19);
 		add(lblNome);
 
 		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
@@ -167,17 +167,17 @@ public class Panel_produtos extends JPanel {
 		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNomeProduto.setBounds(365, 152, 344, 20);
+		fTxtNomeProduto.setBounds(190, 152, 344, 20);
 		add(fTxtNomeProduto);
 
 		lblSetor = new JLabel("Setor");
 		lblSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSetor.setBounds(16, 188, 33, 19);
+		lblSetor.setBounds(560, 153, 33, 19);
 		add(lblSetor);
 
-		lblCodigoBarras = new JLabel("C\u00F3digo de barras");
+		lblCodigoBarras = new JLabel("Barras");
 		lblCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodigoBarras.setBounds(447, 188, 104, 19);
+		lblCodigoBarras.setBounds(862, 153, 38, 19);
 		add(lblCodigoBarras);
 
 		MaskFormatter mascara_barras = null;
@@ -201,7 +201,7 @@ public class Panel_produtos extends JPanel {
 		fTxtCodigoBarras.setEditable(false);
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCodigoBarras.setBounds(557, 187, 117, 20);
+		fTxtCodigoBarras.setBounds(903, 152, 117, 20);
 		add(fTxtCodigoBarras);
 
 		btnMaisSetor = new JButton();
@@ -214,7 +214,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		btnMaisSetor.setIcon(icones.getIcone_mais());
-		btnMaisSetor.setBounds(272, 188, 26, 22);
+		btnMaisSetor.setBounds(806, 150, 26, 22);
 		add(btnMaisSetor);
 
 		btnMaisBarras = new JButton();
@@ -231,13 +231,13 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		btnMaisBarras.setIcon(icones.getIcone_mais());
-		btnMaisBarras.setBounds(684, 188, 25, 19);
+		btnMaisBarras.setBounds(1129, 155, 25, 19);
 		add(btnMaisBarras);
 
 		lblPrecoCusto = new JLabel("Pr. Custo");
 		lblPrecoCusto.setForeground(new Color(255, 0, 0));
 		lblPrecoCusto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrecoCusto.setBounds(20, 301, 57, 19);
+		lblPrecoCusto.setBounds(20, 254, 57, 19);
 		add(lblPrecoCusto);
 
 		fTxtPrecoCusto = new JFormattedTextField();
@@ -256,13 +256,13 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoCusto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoCusto.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoCusto.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPrecoCusto.setBounds(80, 300, 77, 20);
+		fTxtPrecoCusto.setBounds(80, 253, 77, 20);
 		add(fTxtPrecoCusto);
 
 		lblMargem = new JLabel("Margem%");
 		lblMargem.setForeground(new Color(0, 0, 128));
 		lblMargem.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblMargem.setBounds(191, 301, 67, 19);
+		lblMargem.setBounds(191, 254, 67, 19);
 		add(lblMargem);
 
 		fTxtMargem = new JFormattedTextField();
@@ -280,13 +280,13 @@ public class Panel_produtos extends JPanel {
 		fTxtMargem.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtMargem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtMargem.setDocument(new FormataNumeral(6, 2));
-		fTxtMargem.setBounds(259, 300, 57, 20);
+		fTxtMargem.setBounds(259, 253, 57, 20);
 		add(fTxtMargem);
 
 		lblPrecoSugerido = new JLabel("Pr. Sugerido");
 		lblPrecoSugerido.setForeground(new Color(255, 140, 0));
 		lblPrecoSugerido.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrecoSugerido.setBounds(353, 301, 77, 19);
+		lblPrecoSugerido.setBounds(353, 256, 77, 19);
 		add(lblPrecoSugerido);
 
 		fTxtPrecoSugerido = new JFormattedTextField();
@@ -294,13 +294,13 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoSugerido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtPrecoSugerido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoSugerido.setDocument(new FormataNumeral(9, 2));
-		fTxtPrecoSugerido.setBounds(432, 299, 77, 20);
+		fTxtPrecoSugerido.setBounds(432, 254, 77, 20);
 		add(fTxtPrecoSugerido);
 
 		lblPrVenda = new JLabel("Pr. Venda");
 		lblPrVenda.setForeground(new Color(0, 100, 0));
 		lblPrVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPrVenda.setBounds(549, 301, 67, 19);
+		lblPrVenda.setBounds(595, 256, 67, 19);
 		add(lblPrVenda);
 
 		fTxtPrecoVenda = new JFormattedTextField();
@@ -318,35 +318,35 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtPrecoVenda.setDocument(new FormataNumeral(9, 2));
 		fTxtPrecoVenda.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPrecoVenda.setBounds(612, 299, 97, 20);
+		fTxtPrecoVenda.setBounds(658, 254, 97, 20);
 		add(fTxtPrecoVenda);
 
 		lblMargemPraticada = new JLabel("Margem% Praticada");
 		lblMargemPraticada.setForeground(Color.BLUE);
 		lblMargemPraticada.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblMargemPraticada.setBounds(514, 338, 128, 19);
+		lblMargemPraticada.setBounds(825, 254, 128, 19);
 		add(lblMargemPraticada);
 
 		fTxtMargemPraticada = new JFormattedTextField();
 		fTxtMargemPraticada.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtMargemPraticada.setEditable(false);
 		fTxtMargemPraticada.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtMargemPraticada.setBounds(642, 337, 67, 20);
+		fTxtMargemPraticada.setBounds(953, 253, 67, 20);
 		add(fTxtMargemPraticada);
 
 		lblPrecos = new JLabel("Pre\u00E7os");
 		lblPrecos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrecos.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblPrecos.setBounds(10, 261, 80, 29);
+		lblPrecos.setBounds(10, 213, 80, 29);
 		add(lblPrecos);
 
 		separador_precos = new JSeparator();
-		separador_precos.setBounds(87, 278, 622, 9);
+		separador_precos.setBounds(87, 230, 933, 9);
 		add(separador_precos);
 
 		lblFatorVenda = new JLabel("Fator de venda");
 		lblFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFatorVenda.setBounds(16, 231, 97, 19);
+		lblFatorVenda.setBounds(16, 183, 97, 19);
 		add(lblFatorVenda);
 
 		lblInformacoesBasicas = new JLabel("Informa\u00E7\u00F5es B\u00E1sicas");
@@ -356,7 +356,7 @@ public class Panel_produtos extends JPanel {
 		add(lblInformacoesBasicas);
 
 		separador_infoBasicas = new JSeparator();
-		separador_infoBasicas.setBounds(207, 127, 502, 9);
+		separador_infoBasicas.setBounds(207, 127, 813, 9);
 		add(separador_infoBasicas);
 
 		btnNovo = new JButton("Novo");
@@ -374,25 +374,25 @@ public class Panel_produtos extends JPanel {
 		lblCadastroDeProdutos = new JLabel("Cadastro de Produtos");
 		lblCadastroDeProdutos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCadastroDeProdutos.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblCadastroDeProdutos.setBounds(247, 11, 262, 29);
+		lblCadastroDeProdutos.setBounds(393, 11, 257, 29);
 		add(lblCadastroDeProdutos);
 
 		separador_produtos = new JSeparator();
-		separador_produtos.setBounds(10, 50, 698, 9);
+		separador_produtos.setBounds(10, 50, 1010, 9);
 		add(separador_produtos);
 
 		separador_clientes_cadastrados = new JSeparator();
-		separador_clientes_cadastrados.setBounds(16, 427, 238, 9);
+		separador_clientes_cadastrados.setBounds(17, 355, 378, 9);
 		add(separador_clientes_cadastrados);
 
 		lblProdutosCadastrados = new JLabel("Produtos Cadastrados");
 		lblProdutosCadastrados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProdutosCadastrados.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblProdutosCadastrados.setBounds(255, 412, 225, 29);
+		lblProdutosCadastrados.setBounds(397, 338, 225, 29);
 		add(lblProdutosCadastrados);
 
 		separador_clientes_cadastrados_2 = new JSeparator();
-		separador_clientes_cadastrados_2.setBounds(481, 427, 228, 9);
+		separador_clientes_cadastrados_2.setBounds(623, 355, 398, 9);
 		add(separador_clientes_cadastrados_2);
 
 		tabelaProdutos = new JTable(modelo);
@@ -401,7 +401,7 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getTableHeader().setReorderingAllowed(false);
 		tabelaProdutos.setAutoResizeMode(tabelaProdutos.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(tabelaProdutos);
-		scrollPane.setBounds(16, 483, 693, 140);
+		scrollPane.setBounds(16, 408, 1004, 215);
 		add(scrollPane);
 
 		recarregarTabela();
@@ -453,7 +453,7 @@ public class Panel_produtos extends JPanel {
 		lblPesquisarPor = new JLabel("Pesquisar por");
 		lblPesquisarPor.setToolTipText("");
 		lblPesquisarPor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPesquisarPor.setBounds(16, 452, 89, 20);
+		lblPesquisarPor.setBounds(16, 377, 89, 20);
 		add(lblPesquisarPor);
 
 		cbxTipoPesquisa = new JComboBox<String>();
@@ -461,7 +461,7 @@ public class Panel_produtos extends JPanel {
 		cbxTipoPesquisa.setModel(new DefaultComboBoxModel(new String[] { "C\u00F3digo", "Nome", "Cod. Barras" }));
 		cbxTipoPesquisa.setSelectedIndex(0);
 		cbxTipoPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxTipoPesquisa.setBounds(105, 450, 96, 26);
+		cbxTipoPesquisa.setBounds(105, 375, 96, 26);
 		add(cbxTipoPesquisa);
 		fTxtPesquisa.addFocusListener(new FocusAdapter() {
 			@Override
@@ -478,7 +478,7 @@ public class Panel_produtos extends JPanel {
 
 		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPesquisa.setBounds(211, 452, 454, 20);
+		fTxtPesquisa.setBounds(211, 377, 765, 20);
 		add(fTxtPesquisa);
 		btnReload.addMouseListener(new MouseAdapter() {
 			@Override
@@ -488,7 +488,7 @@ public class Panel_produtos extends JPanel {
 		});
 
 		btnReload.setIcon(icones.getIcone_reload());
-		btnReload.setBounds(675, 450, 34, 22);
+		btnReload.setBounds(986, 375, 34, 22);
 		add(btnReload);
 
 		btnEditar = new JButton("Editar");
@@ -501,7 +501,7 @@ public class Panel_produtos extends JPanel {
 		btnEditar.setEnabled(false);
 		btnEditar.setIcon(icones.getIcone_editar());
 		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnEditar.setBounds(15, 378, 97, 29);
+		btnEditar.setBounds(16, 306, 97, 29);
 		add(btnEditar);
 
 		btnExcluir = new JButton("Excluir");
@@ -526,7 +526,7 @@ public class Panel_produtos extends JPanel {
 		btnExcluir.setEnabled(false);
 		btnExcluir.setIcon(icones.getIcone_excluir());
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExcluir.setBounds(122, 378, 97, 29);
+		btnExcluir.setBounds(123, 306, 97, 29);
 		add(btnExcluir);
 
 		btnSalvar = new JButton("Salvar");
@@ -541,7 +541,7 @@ public class Panel_produtos extends JPanel {
 		btnSalvar.setVisible(false);
 		btnSalvar.setIcon(icones.getIcone_salvar());
 		btnSalvar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSalvar.setBounds(481, 378, 104, 29);
+		btnSalvar.setBounds(794, 306, 104, 29);
 		add(btnSalvar);
 
 		btnCancelar = new JButton("Cancelar");
@@ -554,7 +554,7 @@ public class Panel_produtos extends JPanel {
 		btnCancelar.setVisible(false);
 		btnCancelar.setIcon(icones.getIcone_cancelar());
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnCancelar.setBounds(595, 378, 113, 29);
+		btnCancelar.setBounds(908, 306, 113, 29);
 		add(btnCancelar);
 
 		cbxFatorVenda = new JComboBox<String>();
@@ -570,7 +570,7 @@ public class Panel_produtos extends JPanel {
 		cbxFatorVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxFatorVenda
 				.setModel(new DefaultComboBoxModel(new String[] { "UN", "PAR", "MT", "KG", "L", "CX", "FD", "PCT" }));
-		cbxFatorVenda.setBounds(113, 231, 57, 22);
+		cbxFatorVenda.setBounds(113, 183, 57, 22);
 		add(cbxFatorVenda);
 		cbxSetor.addKeyListener(new KeyAdapter() {
 			@Override
@@ -596,48 +596,48 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxSetor.setBounds(59, 189, 210, 20);
+		cbxSetor.setBounds(594, 152, 210, 20);
 		add(cbxSetor);
 
 		lblObg_nomeProduto = new JLabel("*");
 		lblObg_nomeProduto.setForeground(Color.RED);
 		lblObg_nomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_nomeProduto.setBounds(710, 163, 20, 15);
+		lblObg_nomeProduto.setBounds(537, 164, 20, 15);
 		add(lblObg_nomeProduto);
 
 		lblObg_precoVenda = new JLabel("*");
 		lblObg_precoVenda.setForeground(Color.RED);
 		lblObg_precoVenda.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_precoVenda.setBounds(709, 309, 20, 15);
+		lblObg_precoVenda.setBounds(755, 264, 20, 15);
 		add(lblObg_precoVenda);
 
 		chckbxProdutoBloqueado = new JCheckBox("Produto Bloqueado");
 		chckbxProdutoBloqueado.setEnabled(false);
 		chckbxProdutoBloqueado.setForeground(Color.BLACK);
 		chckbxProdutoBloqueado.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		chckbxProdutoBloqueado.setBounds(537, 76, 172, 23);
+		chckbxProdutoBloqueado.setBounds(852, 73, 172, 23);
 		add(chckbxProdutoBloqueado);
 
 		lblF1 = new JLabel("F1:");
 		lblF1.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF1.setBounds(128, 629, 21, 14);
+		lblF1.setBounds(168, 629, 21, 14);
 		add(lblF1);
 
 		lblNovo = new JLabel("Novo");
 		lblNovo.setForeground(Color.BLUE);
 		lblNovo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNovo.setBounds(145, 629, 35, 14);
+		lblNovo.setBounds(185, 629, 35, 14);
 		add(lblNovo);
 
 		lblF12 = new JLabel("F12:");
 		lblF12.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF12.setBounds(642, 629, 26, 14);
+		lblF12.setBounds(953, 629, 26, 14);
 		add(lblF12);
 
 		lblExcluir = new JLabel("Excluir");
 		lblExcluir.setForeground(new Color(255, 0, 0));
 		lblExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblExcluir.setBounds(667, 629, 42, 14);
+		lblExcluir.setBounds(978, 629, 42, 14);
 		add(lblExcluir);
 
 		lblEsc = new JLabel("Esc:");
@@ -653,35 +653,35 @@ public class Panel_produtos extends JPanel {
 
 		lblF3 = new JLabel("F3:");
 		lblF3.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF3.setBounds(216, 629, 21, 14);
+		lblF3.setBounds(315, 629, 21, 14);
 		add(lblF3);
 
 		lblEditar = new JLabel("Editar");
 		lblEditar.setForeground(new Color(139, 69, 19));
 		lblEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEditar.setBounds(234, 629, 35, 14);
+		lblEditar.setBounds(333, 629, 35, 14);
 		add(lblEditar);
 
 		lblF5 = new JLabel("F5:");
 		lblF5.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF5.setBounds(322, 629, 21, 14);
+		lblF5.setBounds(505, 629, 21, 14);
 		add(lblF5);
 
 		lblRecarregar = new JLabel("Recarregar Produtos");
 		lblRecarregar.setForeground(new Color(0, 128, 0));
 		lblRecarregar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblRecarregar.setBounds(339, 629, 128, 14);
+		lblRecarregar.setBounds(522, 629, 128, 14);
 		add(lblRecarregar);
 
 		lblF7 = new JLabel("F7:");
 		lblF7.setFont(new Font("Arial", Font.BOLD, 12));
-		lblF7.setBounds(519, 629, 21, 14);
+		lblF7.setBounds(766, 629, 21, 14);
 		add(lblF7);
 
 		lblSetores = new JLabel("Setores");
 		lblSetores.setForeground(new Color(255, 140, 0));
 		lblSetores.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblSetores.setBounds(537, 629, 48, 14);
+		lblSetores.setBounds(784, 629, 48, 14);
 		add(lblSetores);
 
 	}
@@ -1055,7 +1055,7 @@ public class Panel_produtos extends JPanel {
 		SorterMonetario spv = new SorterMonetario();
 		SorterData sorter_data = new SorterData();
 		tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(40); // Código
-		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(160); // Nome
+		tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(237); // Nome
 		tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(45); // Fator
 		tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(115); // Setor
 		tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(70); // Preco Custo
