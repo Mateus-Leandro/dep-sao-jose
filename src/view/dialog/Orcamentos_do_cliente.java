@@ -397,12 +397,12 @@ public class Orcamentos_do_cliente extends JDialog {
 				if (btnExcluirOrcamento.isEnabled()) {
 
 					int opcao = JOptionPane.showConfirmDialog(btnExcluirOrcamento,
-							"Deseja realmente excluir o orÁamento abaixo?" + "\n\nOrÁamento N∫:  "
+							"Deseja realmente excluir o or√ßamento abaixo?" + "\n\nOr√ßamento N¬∫:  "
 									+ orcamento_selecionado.getId_orcamento() + "\nCliente: "
 									+ orcamento_selecionado.getCliente().getNome() + "\nValor: "
 									+ nf.format(orcamento_selecionado.getValor_total())
-									+ "\n\nCASO EXCLUÕDO N√O SER¡ POSSÕVEL RECUPER¡-LO E TODOS OS DADOS DO OR«AMENTO SER√O REMOVIDOS PERMANENTIMENTE!",
-							"Exclus„o de orÁamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+									+ "\n\nCASO EXCLU√çDO N√ÉO SER√Å POSS√çVEL RECUPER√Å-LO E TODOS OS DADOS DO OR√áAMENTO SER√ÉO REMOVIDOS PERMANENTIMENTE!",
+							"Exclus√£o de or√ßamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					Boolean flag = opcao == JOptionPane.YES_OPTION;
 
@@ -410,8 +410,8 @@ public class Orcamentos_do_cliente extends JDialog {
 						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 						if (orcamento_dao.excluir_orcamento(orcamento_selecionado.getId_orcamento())) {
 							JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
-									"OrÁamento " + orcamento_selecionado.getId_orcamento() + " " + "excluÌdo.",
-									"Exclus„o de orÁamento", JOptionPane.ERROR_MESSAGE);
+									"Or√ßamento " + orcamento_selecionado.getId_orcamento() + " " + "exclu√≠do.",
+									"Exclus√£o de or√ßamento", JOptionPane.ERROR_MESSAGE);
 							orcamentos_cliente.remove(orcamento_selecionado);
 							orcamento_selecionado = null;
 							modelo_tabela_orcamentos.fireTableDataChanged();
@@ -436,28 +436,28 @@ public class Orcamentos_do_cliente extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickEditar) {
 				if (btnEditarOrcamento.isEnabled()) {
-					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando novamente as ocnfiguraÁıes do
+					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando novamente as ocnfigura√ß√µes do
 																				// sistema.
 					FaturamentoDAO faturamento_dao = new FaturamentoDAO();
 					orcamento_selecionado.setParcelas(faturamento_dao.lista_parcelas(orcamento_selecionado));
 					Boolean flag;
 
-					// Valida a configuraÁ„o de alteraÁ„o de orÁamentos que possuem parcelas
-					// lanÁadas
+					// Valida a configura√ß√£o de altera√ß√£o de or√ßamentos que possuem parcelas
+					// lan√ßadas
 					if (orcamento_selecionado.getParcelas().size() != 0) {
 						if (configuracoes_do_sistema.getAltera_orc().equals("SIM")) {
 							flag = true;
 						} else if (configuracoes_do_sistema.getAltera_orc().equals("PERGUNTAR")) {
 							int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
-									"O orÁamento selecionado j· possui parcelas lanÁadas, deseja alter·-lo?",
-									"OrÁamento com parcelas salvas.", JOptionPane.YES_OPTION,
+									"O or√ßamento selecionado j√° possui parcelas lan√ßadas, deseja alter√°-lo?",
+									"Or√ßamento com parcelas salvas.", JOptionPane.YES_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							flag = opcao == JOptionPane.YES_OPTION;
 						} else {
 							flag = false;
 							JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
-									"As configuraÁıes atuais n„o permitem alterar orÁamentos que j· possuem parcelas lanÁadas,\ncaso desejar alterar o orÁamento selecionado, altere primeiro as configuraÁıes do sistema na aba 'ConfiguraÁıes' e libere esse tipo de alteraÁ„o.",
-									"OrÁamento com parcelas salvas.", JOptionPane.WARNING_MESSAGE);
+									"As configura√ß√µes atuais n√£o permitem alterar or√ßamentos que j√° possuem parcelas lan√ßadas,\ncaso desejar alterar o or√ßamento selecionado, altere primeiro as configura√ß√µes do sistema na aba 'Configura√ß√µes' e libere esse tipo de altera√ß√£o.",
+									"Or√ßamento com parcelas salvas.", JOptionPane.WARNING_MESSAGE);
 						}
 					} else {
 						flag = true;
@@ -502,9 +502,9 @@ public class Orcamentos_do_cliente extends JDialog {
 				if (btnExcluirObservacao.isEnabled()) {
 
 					int opcao = JOptionPane.showConfirmDialog(lblOrcamentosDoCliente,
-							"Deseja remover a observaÁ„o do orÁamento N∫ " + orcamento_selecionado.getId_orcamento()
+							"Deseja remover a observa√ß√£o do or√ßamento N¬∫ " + orcamento_selecionado.getId_orcamento()
 									+ " ?",
-							"Exclus„o de observaÁ„o.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+							"Exclus√£o de observa√ß√£o.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					Boolean flag = opcao == JOptionPane.YES_OPTION;
 
@@ -512,9 +512,9 @@ public class Orcamentos_do_cliente extends JDialog {
 						OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 						if (orcamento_dao.deleta_observacao(orcamento_selecionado)) {
 							JOptionPane.showMessageDialog(
-									lblOrcamentosDoCliente, "A observaÁ„o do orÁamento N∞ "
+									lblOrcamentosDoCliente, "A observa√ß√£o do or√ßamento N¬∫ "
 											+ orcamento_selecionado.getId_orcamento() + " " + "foi removida.",
-									"Exclus„o de observaÁ„o.", JOptionPane.ERROR_MESSAGE);
+									"Exclus√£o de observa√ß√£o.", JOptionPane.ERROR_MESSAGE);
 							orcamento_selecionado.setObservacao(null);
 							tabelaOrcamentos.clearSelection();
 						}
@@ -542,16 +542,16 @@ public class Orcamentos_do_cliente extends JDialog {
 					OrcamentoDAO orcamento_dao = new OrcamentoDAO();
 					if (orcamento_dao.salva_observacao(orcamento_selecionado)) {
 						JOptionPane.showMessageDialog(lblOrcamentosDoCliente,
-								"ObservaÁ„o salva no orÁamento N∫ " + orcamento_selecionado.getId_orcamento() + ".",
-								"ObservaÁ„o do orÁamento.", JOptionPane.NO_OPTION);
+								"Observa√ß√£o salva no or√ßamento N¬∫ " + orcamento_selecionado.getId_orcamento() + ".",
+								"Observa√ß√£o do or√ßamento.", JOptionPane.NO_OPTION);
 						tabelaOrcamentos.clearSelection();
 						fTxtObservacao.setEditable(false);
 					}
 				} else {
 					JOptionPane.showMessageDialog(null,
-							"ImpossÌvel salvar a observaÁ„o! "
-									+ "\nCaso desejar removÍ-la, utilize o bot„o excluir observaÁ„o.",
-							"ObservaÁ„o vazia!", JOptionPane.WARNING_MESSAGE);
+							"Imposs√≠vel salvar a observa√ß√£o! "
+									+ "\nCaso desejar remov√©-la, utilize o bot√£o excluir observa√ß√£o.",
+							"Observa√ß√£o vazia!", JOptionPane.WARNING_MESSAGE);
 					fTxtObservacao.setText(orcamento_selecionado.getObservacao());
 					fTxtObservacao.setEditable(false);
 				}
@@ -660,9 +660,9 @@ public class Orcamentos_do_cliente extends JDialog {
 
 	}
 
-	// Configurando largura das colunas da tabela de orÁamentos
+	// Configurando largura das colunas da tabela de or√ßamentos
 	public void ConfiguraLarguraColunaTabelaOrcamento(JTable tabela) {
-		tabela.getColumnModel().getColumn(0).setPreferredWidth(42); // N˙mero do orÁamento.
+		tabela.getColumnModel().getColumn(0).setPreferredWidth(42); // N√∫mero do or√ßamento.
 		tabela.getColumnModel().getColumn(1).setPreferredWidth(150); // Nome do cliente
 		tabela.getColumnModel().getColumn(2).setPreferredWidth(60); // Quantidade de itens.
 		tabela.getColumnModel().getColumn(3).setPreferredWidth(90); // Total mercadorias.
@@ -672,7 +672,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		tabela.getColumnModel().getColumn(7).setPreferredWidth(90); // Valor total.
 		tabela.getColumnModel().getColumn(8).setPreferredWidth(68); // Status.
 		tabela.getColumnModel().getColumn(9).setPreferredWidth(55); // Quantidade de parcelas
-		tabela.getColumnModel().getColumn(10).setPreferredWidth(80); // Data inclus„o.
+		tabela.getColumnModel().getColumn(10).setPreferredWidth(80); // Data inclus√£o.
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela_orcamentos);
 		tabelaOrcamentos.setRowSorter(sorter);
@@ -724,7 +724,7 @@ public class Orcamentos_do_cliente extends JDialog {
 		
 		orcamentos_cliente.clear();
 
-		// Verifica se foi passado n˙mero do orÁamento.
+		// Verifica se foi passado n√∫mero do or√ßamento.
 		String numero_orcamento;
 		if (fTxtPesquisaOrcamento.getText().trim().isEmpty()) {
 			numero_orcamento = null;

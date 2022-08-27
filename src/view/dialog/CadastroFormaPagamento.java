@@ -318,9 +318,9 @@ public class CadastroFormaPagamento extends JDialog {
 		contentPanel.add(lblExcluir);
 	}
 
-	// ------ FunÁıes ------
+	// ------ Fun√ß√µes ------
 	public void ConfiguraLarguraColunaTabela() {
-		tabelaFormasPagamento.getColumnModel().getColumn(0).setPreferredWidth(60); // CÛdigo forma de pagamento
+		tabelaFormasPagamento.getColumnModel().getColumn(0).setPreferredWidth(60); // C√≥digo forma de pagamento
 		tabelaFormasPagamento.getColumnModel().getColumn(1).setPreferredWidth(351); // Nome
 	}
 
@@ -372,7 +372,7 @@ public class CadastroFormaPagamento extends JDialog {
 				if (forma.getCodigo() != null) {
 					JOptionPane.showMessageDialog(btnCancelarForma,
 							"Inclusa nova forma de pagamento.\n" + forma.getCodigo() + " - " + forma.getDescricao(),
-							"Inclus„o de forma de pagamento.", JOptionPane.NO_OPTION);
+							"Inclus√£o de forma de pagamento.", JOptionPane.NO_OPTION);
 					formas.add(forma);
 					modelo_tabela.fireTableDataChanged();
 					cancela_nova_forma();
@@ -414,16 +414,16 @@ public class CadastroFormaPagamento extends JDialog {
 			FormaPagamentoDAO forma_pagamento_dao = new FormaPagamentoDAO();
 
 			int opcao = JOptionPane.showConfirmDialog(btnEditarForma,
-					"Deseja excluir a forma de pagamento abaixo?\nCÛdigo: " + forma_selecionada.getCodigo() + "\nNome: "
+					"Deseja excluir a forma de pagamento abaixo?\nC√≥digo: " + forma_selecionada.getCodigo() + "\nNome: "
 							+ forma_selecionada.getDescricao(),
-					"Exclus„o de forma de pagamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					"Exclus√£o de forma de pagamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
 			if (flag) {
 				if (forma_pagamento_dao.excluir_forma_pagamento(forma_excluida)) {
 					formas.remove(forma_excluida);
-					JOptionPane.showMessageDialog(btnEditarForma, "Forma de pagamento excluÌda.",
-							"Exclus„o de forma de pagamento", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(btnEditarForma, "Forma de pagamento exclu√≠da.",
+							"Exclus√£o de forma de pagamento", JOptionPane.ERROR_MESSAGE);
 					modelo_tabela.fireTableDataChanged();
 					return true;
 				} else {

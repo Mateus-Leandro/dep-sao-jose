@@ -656,7 +656,7 @@ public class Panel_configuracoes extends JPanel {
 		btnReload = new JButton();
 		btnReload.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent clickRecarregarConfigurações) {
+			public void mousePressed(MouseEvent clickRecarregarConfiguracoes) {
 				if (btnReload.isEnabled()) {
 					configuracoes_do_sistema = conf_dao.busca_configuracoes();
 					exibe_configuracoes(configuracoes_do_sistema);
@@ -787,7 +787,7 @@ public class Panel_configuracoes extends JPanel {
 			if (consumidor_final != null) {
 				fTxtConsumidorFinal.setText(consumidor_final.getNome());
 			}
-			JOptionPane.showMessageDialog(null, "Nova configuração salva.", "Configurações", JOptionPane.NO_OPTION);
+			JOptionPane.showMessageDialog(null, "Nova configuraÃ§Ã£o salva.", "ConfiguraÃ§Ãµes", JOptionPane.NO_OPTION);
 			btnSalvar.setVisible(false);
 			btnCancelar.setVisible(false);
 			btnConfigurar.setEnabled(true);

@@ -2,6 +2,9 @@ package view.panels.pessoa.fornecedor;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import view.panels.pedido.Panel_pedido;
+
 import java.awt.Font;
 
 public class Panel_fornedor_pedido extends JPanel {

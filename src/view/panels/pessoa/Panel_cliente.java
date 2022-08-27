@@ -298,12 +298,12 @@ public class Panel_cliente extends Panel_pessoa {
 		tabela.getColumnModel().getColumn(14).setPreferredWidth(90); // Telefone
 		tabela.getColumnModel().getColumn(15).setPreferredWidth(70); // Data Cadastro
 
-		// Definindo o sorter da tabela para ordenaÁ„o das colunas.
+		// Definindo o sorter da tabela para ordena√ß√£o das colunas.
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modelo_tabela);
 		tabela.setRowSorter(sorter);
 		sorter.setComparator(15, sorter_data);
 		// Definindo o render da coluna para que seja pintada corretamente quando o
-		// cliente est· bloqueado.
+		// cliente est√° bloqueado.
 		tabela.getColumnModel().getColumn(0).setCellRenderer(render);
 	}
 

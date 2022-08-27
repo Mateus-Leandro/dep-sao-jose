@@ -269,7 +269,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		btnExcluir.setEnabled(true);
 
 		if (tabela.getValueAt(tabela.getSelectedRow(), 12) != null) {
-			// Verificando se o documento do cliente é um CPF ou CNPJ
+			// Verificando se o documento do cliente Ã© um CPF ou CNPJ
 			if (tabela.getValueAt(tabela.getSelectedRow(), 11).toString().length() > 14) {
 				checkBoxJuridica.setSelected(true);
 				fTxtIe.setVisible(true);

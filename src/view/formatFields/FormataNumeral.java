@@ -4,12 +4,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-/*
- * Classe para validar e formatar a entrada de um numero
- *
- * @author Luciano Cargnelutti
- * @version 1.0
-*/
 
 public class FormataNumeral extends PlainDocument {
 
@@ -18,19 +12,19 @@ public class FormataNumeral extends PlainDocument {
   private String sMil;
   private String sDec;
   
-  // Construtor para indicando apenas o tamanho m·ximo (incluindo o  ponto decimal), ser· assumido como padrao 2 decimais
+  // Construtor para indicando apenas o tamanho m√°ximo (incluindo o  ponto decimal), ser√° assumido como padrao 2 decimais
   public FormataNumeral(int maxLen)
   {
     this(maxLen, 2, '.', ',');
   }
   
-  // Construtor para indicando apenas o tamanho m·ximo (incluindo o  ponto decimal) e a quantidade de decimais
+  // Construtor para indicando apenas o tamanho m√°ximo (incluindo o  ponto decimal) e a quantidade de decimais
   public FormataNumeral(int maxLen, int qtdDec)
   {
     this(maxLen, qtdDec, '.', ',');
   }
   
-  // Construtor para indicando apenas o tamanho m·ximo (incluindo o  ponto decimal), a quantidade de decimais, o separador de milhares e dos decimais
+  // Construtor para indicando apenas o tamanho m√°ximo (incluindo o  ponto decimal), a quantidade de decimais, o separador de milhares e dos decimais
   public FormataNumeral(int maxLen, int qtdDec, char mil, char dec){
     super();
     
@@ -63,7 +57,7 @@ public class FormataNumeral extends PlainDocument {
     &&     ((texto.charAt(0) == '0') || (texto.charAt(0) == sDec.charAt(0))))
       texto = texto.substring(1);
     
-    // verificar se o que esta sendo digitado ou colado È um valor v·lido    
+    // verificar se o que esta sendo digitado ou colado um valor v√°lido    
     for (int i = 0; i < str.length(); i++) 
     {
       char c = str.charAt(i);
@@ -103,7 +97,7 @@ public class FormataNumeral extends PlainDocument {
       &&     (s.charAt(0) == '0'))
         s.deleteCharAt(0);
 
-      // Verificar o tamanho do conte˙do  (texto antigo + novo + separador decimal)  
+      // Verificar o tamanho do conte√∫do  (texto antigo + novo + separador decimal)  
       if (((s.length() + (iQtdDec==0?0:1)) > this.iMaxLength)
       &&  (this.iMaxLength != 0))
         return;

@@ -77,7 +77,7 @@ public class Panel_bkp extends JPanel {
 		backup_sistema.setBounds(10, 50, 1011, 9);
 		add(backup_sistema);
 
-		lblDiretorioDestino = new JLabel("Pasta padr\u00E3o para o backup");
+		lblDiretorioDestino = new JLabel("Pasta padrão para o backup");
 		lblDiretorioDestino.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblDiretorioDestino.setBounds(10, 107, 175, 19);
 		add(lblDiretorioDestino);
@@ -90,7 +90,7 @@ public class Panel_bkp extends JPanel {
 		txtPastaPadraoBkp.setText("C:\\dep\\backups\\");
 		add(txtPastaPadraoBkp);
 
-		lblDataUltimoBackup = new JLabel("Data do \u00FAltimo backup");
+		lblDataUltimoBackup = new JLabel("Data do ultimo backup");
 		lblDataUltimoBackup.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblDataUltimoBackup.setBounds(780, 107, 144, 19);
 		add(lblDataUltimoBackup);
@@ -101,7 +101,7 @@ public class Panel_bkp extends JPanel {
 		add(txtDataUltimoBackup);
 		txtDataUltimoBackup.setColumns(10);
 
-		lblInformacoesBasicas = new JLabel("Informa\u00E7\u00F5es B\u00E1sicas");
+		lblInformacoesBasicas = new JLabel("Informações Básicas");
 		lblInformacoesBasicas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInformacoesBasicas.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblInformacoesBasicas.setBounds(10, 70, 188, 29);
@@ -111,7 +111,7 @@ public class Panel_bkp extends JPanel {
 		separador_infoBasicas.setBounds(202, 87, 819, 9);
 		add(separador_infoBasicas);
 
-		lblTempoGasto = new JLabel("Tempo gasto no \u00FAltimo backup");
+		lblTempoGasto = new JLabel("Tempo gasto no último backup");
 		lblTempoGasto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTempoGasto.setBounds(619, 148, 196, 19);
 		add(lblTempoGasto);
@@ -222,7 +222,7 @@ public class Panel_bkp extends JPanel {
 		panelValorTotal.setBounds(10, 527, 1011, 114);
 		add(panelValorTotal);
 
-		lblAtencao = new JLabel("Aten\u00E7\u00E3o");
+		lblAtencao = new JLabel("Atenção");
 		lblAtencao.setForeground(Color.RED);
 		lblAtencao.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblAtencao.setBounds(10, 11, 91, 28);
@@ -233,7 +233,7 @@ public class Panel_bkp extends JPanel {
 		txtpnARealizaoDo.setEditable(false);
 		txtpnARealizaoDo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnARealizaoDo.setText(
-				"A realiza\u00E7\u00E3o do backup pode demorar um longo tempo caso houver um grande volume de dados. Ap\u00F3s iniciar o backup n\u00E3o ser\u00E1 poss\u00EDvel cancelar a opera\u00E7\u00E3o.");
+				"A realização do backup pode demorar um longo tempo caso houver um grande volume de dados. Após iniciar o backup não será possível cancelar a operação.");
 		txtpnARealizaoDo.setBounds(8, 46, 991, 58);
 		panelValorTotal.add(txtpnARealizaoDo);
 

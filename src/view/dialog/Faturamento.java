@@ -236,7 +236,7 @@ public class Faturamento extends JDialog {
 					if (orcamento.getValor_total().compareTo(total_parcelas) != 0
 							&& configuracoes_do_sistema.getSalva_parc_dif().equals("PERGUNTAR")) {
 						int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
-								"O total das parcelas est· diferente do total do orÁamento.\nDeseja salvar as parcelas?",
+								"O total das parcelas est√° diferente do total do or√ßamento.\nDeseja salvar as parcelas?",
 								"Total das parcelas", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 						flag = opcao == JOptionPane.YES_OPTION;
@@ -247,7 +247,7 @@ public class Faturamento extends JDialog {
 					if (flag) {
 						if (faturamento_dao.salvar_parcelas(orcamento)) {
 							JOptionPane.showMessageDialog(jdcDataVencimento, "Parcelas salvas corretamente.",
-									"Parcelas do orÁamento.", JOptionPane.NO_OPTION);
+									"Parcelas do or√ßamento.", JOptionPane.NO_OPTION);
 
 							if (orcamentos_do_cliente != null) {
 								orcamentos_do_cliente.alimentar_lista_orcamento();
@@ -331,13 +331,13 @@ public class Faturamento extends JDialog {
 			@Override
 			public void propertyChange(PropertyChangeEvent clickAlteraDataPagamento) {
 
-				// Verificando se È uma nova parcela ou a ediÁ„o de uma parcela existente.
+				// Verificando se √© uma nova parcela ou a edi√ß√£o de uma parcela existente.
 				if (fTxtNumeroParcela.getText().trim().isEmpty()) {
 
 					jdcDataVencimento.setMinSelectableDate(jdcDataPagamento.getDate());
 
 					if (jdcDataVencimento.getDate() != null && jdcDataPagamento.getDate() != null) {
-						// Testando se a data de vencimento È menor que a data de pagamento.
+						// Testando se a data de vencimento √© menor que a data de pagamento.
 						try {
 							if (sdf.parse(((JTextField) jdcDataVencimento.getDateEditor()).getText())
 									.before(sdf.parse(((JTextField) jdcDataPagamento.getDateEditor()).getText()))) {
@@ -581,7 +581,7 @@ public class Faturamento extends JDialog {
 
 					String pagamento = null;
 					if (parcela_selecionada.getData_pagamento() == null) {
-						pagamento = "Parcela n„o paga.";
+						pagamento = "Parcela n√£o paga.";
 					} else {
 						pagamento = sdf.format(parcela_selecionada.getData_pagamento());
 					}
@@ -591,9 +591,9 @@ public class Faturamento extends JDialog {
 							"Deseja excluir a parcela selecionada?" + "\nValor:  "
 									+ nf2.format(parcela_selecionada.getValor_parcela()) + "\nData de pagamento:  "
 									+ pagamento + "\nData de Vencimento: "
-									+ sdf.format(parcela_selecionada.getData_vencimento()) + "\n\nATEN«√O!"
-									+ "\nAo excluir a parcela n„o ser· possÌvel recuper·-la.",
-							"Exclus„o de parcelas.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+									+ sdf.format(parcela_selecionada.getData_vencimento()) + "\n\nATEN√á√ÉO!"
+									+ "\nAo excluir a parcela n√£o ser√° poss√≠vel recuper√°-la.",
+							"Exclus√£o de parcelas.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					Boolean flag = opcao == JOptionPane.YES_OPTION;
 
@@ -604,8 +604,8 @@ public class Faturamento extends JDialog {
 						fTxtValorParcela.setText(null);
 						jdcDataPagamento.setDate(null);
 						jdcDataVencimento.setDate(null);
-						JOptionPane.showMessageDialog(jdcDataVencimento, "Parcela removida do orÁamento.",
-								"Exclus„o de parcelas", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(jdcDataVencimento, "Parcela removida do or√ßamento.",
+								"Exclus√£o de parcelas", JOptionPane.ERROR_MESSAGE);
 					}
 
 				}
@@ -759,10 +759,10 @@ public class Faturamento extends JDialog {
 
 	}
 
-	// ------- FunÁıes ------
+	// ------- Fun√ß√µes ------
 
 	public void ConfiguraLarguraColunaTabela(JTable tabela_produtos_inclusos) {
-		tabelaParcelas.getColumnModel().getColumn(0).setPreferredWidth(80); // N˙mero da parcela
+		tabelaParcelas.getColumnModel().getColumn(0).setPreferredWidth(80); // N√∫mero da parcela
 		tabelaParcelas.getColumnModel().getColumn(1).setPreferredWidth(120); // Valor
 		tabelaParcelas.getColumnModel().getColumn(2).setPreferredWidth(200); // Forma de pagamento
 		tabelaParcelas.getColumnModel().getColumn(3).setPreferredWidth(120); // Data pagamento
@@ -777,7 +777,7 @@ public class Faturamento extends JDialog {
 			txtDataFaturamento.setText(sdf.format(orcamento.getData_faturamento()));
 		} else {
 			txtDataFaturamento.setForeground(Color.red);
-			txtDataFaturamento.setText("N√O FATURADO");
+			txtDataFaturamento.setText("N√ÉO FATURADO");
 		}
 		txtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 		txtTotalOrcamento.setText(nf2.format(orcamento.getValor_total()));
@@ -1008,7 +1008,7 @@ public class Faturamento extends JDialog {
 
 		valor_em_aberto = orcamento.getValor_total() - valor_pago;
 
-		// Verifica se o campo de valor da parcela est· vazio.
+		// Verifica se o campo de valor da parcela est√° vazio.
 		if (!fTxtValorParcela.getText().trim().isEmpty()) {
 			try {
 				valor_digitado = nf.parse(fTxtValorParcela.getText().trim()).doubleValue();
@@ -1023,7 +1023,7 @@ public class Faturamento extends JDialog {
 		} else {
 			txtTotalParcelas.setForeground(new Color(255, 69, 0));
 
-			if (configuracoes_do_sistema.getSalva_parc_dif().equals("N√O")) {
+			if (configuracoes_do_sistema.getSalva_parc_dif().equals("N√ÉO")) {
 				btnConfirmarFaturamento.setEnabled(false);
 			} else {
 				btnConfirmarFaturamento.setEnabled(true);
@@ -1054,7 +1054,7 @@ public class Faturamento extends JDialog {
 			}
 		}
 
-		// Testa se a data de vencimento da ultima parcela È menor que a data atual.
+		// Testa se a data de vencimento da ultima parcela √© menor que a data atual.
 		if (maior_data_vencimento.after(new Date())) {
 			return maior_data_vencimento;
 		} else {
@@ -1141,9 +1141,9 @@ public class Faturamento extends JDialog {
 	public void aviso_fecha_tela() {
 		Boolean flag = false;
 		int opcao = JOptionPane.showConfirmDialog(jdcDataVencimento,
-				"Deseja realmente cancelar as alteraÁıes realizadas?" + "\n\nATEN«√O!"
-						+ "\nTODAS AS ALTERA«’ES REALIZADAS NO PARCELAMENTO SER√O PERDIDAS.",
-				"Cancelar alteraÁıes.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+				"Deseja realmente cancelar as altera√ß√µes realizadas?" + "\n\nATEN√á√ÉO!"
+						+ "\nTODAS AS ALTERA√á√ïES REALIZADAS NO PARCELAMENTO SER√ÉO PERDIDAS.",
+				"Cancelar altera√ß√µes.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 		flag = opcao == JOptionPane.YES_OPTION;
 		if (flag) {
 			dispose();
@@ -1158,7 +1158,7 @@ public class Faturamento extends JDialog {
 		// Testa se existe formas de pagamento cadastradas.
 		if (formas_de_pagamento.size() == 0) {
 			JOptionPane.showMessageDialog(null,
-					"Nenhuma forma de pagamento cadastrada.\nNecess·rio cadastrar ao menos 1 forma de pagamento para utilizar a manutenÁ„o das parcelas.",
+					"Nenhuma forma de pagamento cadastrada.\nNecess√°rio cadastrar ao menos 1 forma de pagamento para utilizar a manuten√ß√£o das parcelas.",
 					"Formas de pagamento.", JOptionPane.WARNING_MESSAGE);
 			tela_faturamento.setVisible(false);
 

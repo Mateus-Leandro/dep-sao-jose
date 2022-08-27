@@ -873,7 +873,7 @@ public class Panel_pessoa extends JPanel {
 		}
 
 		if (salvo) {
-			JOptionPane.showMessageDialog(null, tipo_pessoa + " salvo corretamente." + "\nCódigo: " + pessoa.getId()
+			JOptionPane.showMessageDialog(null, tipo_pessoa + " salvo corretamente." + "\nCÃ³digo: " + pessoa.getId()
 					+ "\nNome: " + pessoa.getNome(), "Cadastro de " + tipo_pessoa, JOptionPane.WARNING_MESSAGE);
 			cancelar_pessoa();
 			return true;
@@ -921,23 +921,23 @@ public class Panel_pessoa extends JPanel {
 
 				if (cliente_dao.cliente_com_orcamento(pessoa.getId().toString())) {
 					JOptionPane.showMessageDialog(null,
-							"Impossível excluir cliente.\nO cliente selecionado possui pelo menos 1 orçamento salvo em seu nome.",
-							"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);
+							"ImpossÃ­vel excluir cliente.\nO cliente selecionado possui pelo menos 1 orÃ§amento salvo em seu nome.",
+							"ExclusÃ£o de clientes.", JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 
 				if (pessoa.getId().equals(configuracoes.getConsumidor_final().getId())) {
 					JOptionPane.showMessageDialog(null,
-							"Impossível excluir cliente.\nO cliente selecionado está sendo usado como consumidor final nas configurações do sistema.",
-							"Exclusão de clientes.", JOptionPane.WARNING_MESSAGE);
+							"ImpossÃ­vel excluir cliente.\nO cliente selecionado estÃ¡ sendo usado como consumidor final nas configuraÃ§Ãµes do sistema.",
+							"ExclusÃ£o de clientes.", JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 			}
 
 			int opcao = JOptionPane.showConfirmDialog(null,
-					"Deseja excluir o " + tipo_pessoa + " abaixo?\n" + "Código: " + pessoa.getId() + "\n" + "Nome: "
+					"Deseja excluir o " + tipo_pessoa + " abaixo?\n" + "CÃ³digo: " + pessoa.getId() + "\n" + "Nome: "
 							+ pessoa.getNome(),
-					"Exclusão de " + tipo_pessoa, JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					"ExclusÃ£o de " + tipo_pessoa, JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			flag = opcao == JOptionPane.YES_OPTION;
 			if (flag) {
@@ -952,8 +952,8 @@ public class Panel_pessoa extends JPanel {
 					break;
 				}
 				if (excluido) {
-					JOptionPane.showMessageDialog(null, tipo_pessoa + " excluído com sucesso.",
-							"Exclusão de " + tipo_pessoa + ".", JOptionPane.NO_OPTION);
+					JOptionPane.showMessageDialog(null, tipo_pessoa + " excluÃ­do com sucesso.",
+							"ExclusÃ£o de " + tipo_pessoa + ".", JOptionPane.NO_OPTION);
 					fTxtPesquisa.setText(null);
 					limpar_campos();
 					return true;
@@ -1068,14 +1068,14 @@ public class Panel_pessoa extends JPanel {
 		if (fTxtNomePessoa.getText().isBlank() || fTxtCelular.getText().equals("(  )     -    ")) {
 			if (fTxtNomePessoa.getText().isBlank()) {
 				fTxtNomePessoa.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(null, "Necessário informar o nome do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(null, "NecessÃ¡rio informar o nome do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem nome.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}
 
 			if (fTxtCelular.getText().equals("(  )     -    ")) {
 				fTxtCelular.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(null, "Necessário informar o celular do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(null, "NecessÃ¡rio informar o celular do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem celular.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}
@@ -1160,7 +1160,7 @@ public class Panel_pessoa extends JPanel {
 		btnExcluir.setEnabled(true);
 
 		if (tabela.getValueAt(tabela.getSelectedRow(), 11) != null) {
-			// Verificando se o documento do cliente é um CPF ou CNPJ
+			// Verificando se o documento do cliente Ã© um CPF ou CNPJ
 			if (tabela.getValueAt(tabela.getSelectedRow(), 11).toString().length() > 14) {
 				checkBoxJuridica.setSelected(true);
 				fTxtIe.setVisible(true);

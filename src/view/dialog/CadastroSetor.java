@@ -302,7 +302,7 @@ public class CadastroSetor extends JDialog {
 
 	}
 
-	// ---------FunÁıes------------
+	// ---------Fun√ß√µes------------
 	public ArrayList<Setor> alimenta_setores(ArrayList<Setor> lista_setor) {
 		SetorDAO setor_dao = new SetorDAO();
 		lista_setor = setor_dao.listarSetores(lista_setor);
@@ -336,7 +336,7 @@ public class CadastroSetor extends JDialog {
 		modelo.fireTableDataChanged();
 	}
 
-	// AÁ„o novo setor
+	//  novo setor
 	public void novo_setor() {
 		btnNovo.doClick();
 		btnEditar.setVisible(false);
@@ -352,7 +352,6 @@ public class CadastroSetor extends JDialog {
 		tabelaSetores.clearSelection();
 	}
 
-	// AÁ„o bot„o cancelar
 	public void cancela_setor() {
 		btnCancelar.doClick();
 		btnEditar.setEnabled(false);
@@ -370,7 +369,7 @@ public class CadastroSetor extends JDialog {
 		btnNovo.requestFocus();
 	}
 
-	// AÁ„o de salva_setor
+
 	public void salva_setor() {
 
 		btnSalvar.doClick();
@@ -379,7 +378,7 @@ public class CadastroSetor extends JDialog {
 		Setor setor = new Setor();
 
 		if (fTxtNomeSetor.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(btnSalvar, "Necess·rio informar nome do setor.", "Setor sem nome!",
+			JOptionPane.showMessageDialog(btnSalvar, "Necess√°rio informar nome do setor.", "Setor sem nome!",
 					JOptionPane.WARNING_MESSAGE);
 		} else {
 
@@ -390,13 +389,13 @@ public class CadastroSetor extends JDialog {
 
 				if (setor != null) {
 					modelo.addSetor(setor);
-					JOptionPane.showMessageDialog(null, "Setor adiconado!\n" + "cÛdigo: " + setor.getCodSetor() + " "
+					JOptionPane.showMessageDialog(null, "Setor adiconado!\n" + "c√≥digo: " + setor.getCodSetor() + " "
 							+ "\nNome: " + setor.getNome());
 				}
 
 			} else {
 				setor_dao.alterarSetor(setor);
-				JOptionPane.showMessageDialog(null, "Setor alterado!", "AlteraÁ„o de setores.", JOptionPane.NO_OPTION);
+				JOptionPane.showMessageDialog(null, "Setor alterado!", "Altera√ß√£o de setores.", JOptionPane.NO_OPTION);
 				recarregarTabela();
 			}
 			btnSalvar.setVisible(false);
@@ -435,13 +434,13 @@ public class CadastroSetor extends JDialog {
 			int opcao = JOptionPane.showConfirmDialog(null,
 					"Deseja excluir o setor abaixo?\n" + "Cod = " + codigo_setor + "\n" + "Nome = "
 							+ (tabelaSetores.getValueAt(tabelaSetores.getSelectedRow(), 1)),
-					"Exclus„o de setor", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					"Exclus√£o de setor", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			flag = opcao == JOptionPane.YES_OPTION;
 
 			if (flag) {
 				if (setor_dao.excluirSetor(codigo_setor)) {
-					JOptionPane.showMessageDialog(null, "Setor excluÌdo!", "Exclus„o de setor",
+					JOptionPane.showMessageDialog(null, "Setor exclu√≠do!", "Exclus√£o de setor",
 							JOptionPane.ERROR_MESSAGE);
 					modelo.removeSetor(tabelaSetores.getSelectedRow());
 					panel_produtos.alimenta_setores();

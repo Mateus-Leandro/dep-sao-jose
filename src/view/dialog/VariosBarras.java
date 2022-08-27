@@ -316,8 +316,8 @@ public class VariosBarras extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickTornarPrincipal) {
 				if (barras_dao.tornar_principal(cod, barras_selecionado)) {
-					JOptionPane.showMessageDialog(null, "CÛdigo de barras principal alterado com sucesso.",
-							"AlteraÁ„o do cÛdigo de barras principal", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "C√≥digo de barras principal alterado com sucesso.",
+							"Altera√ß√£o do c√≥digo de barras principal", JOptionPane.INFORMATION_MESSAGE);
 					txtCodigoBarrasPrincipal.setText(barras_selecionado);
 					lista = barras_dao.lista_barras(cod, lista);
 					modelo_tabela.fireTableDataChanged();
@@ -343,7 +343,7 @@ public class VariosBarras extends JDialog {
 		lblSalvar.setBounds(145, 275, 41, 14);
 		contentPane.add(lblSalvar);
 
-		// Alinhando cÛdigo de barras para esquerda.
+		// Alinhando c√≥digo de barras para esquerda.
 		DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
 		esquerda.setHorizontalAlignment(SwingConstants.LEFT);
 		tabelaVariosBarras.getColumnModel().getColumn(0).setCellRenderer(esquerda);
@@ -388,22 +388,22 @@ public class VariosBarras extends JDialog {
 			btnExcluir.doClick();
 
 			if ((boolean) tabelaVariosBarras.getValueAt(tabelaVariosBarras.getSelectedRow(), 2)) {
-				JOptionPane.showMessageDialog(null, "N„o È possÌvel realizar a exclus„o do cÛdigo principal!",
-						"CÛdigo principal.", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "N√£o √© poss√≠vel realizar a exclus√£o do c√≥digo principal!",
+						"C√≥digo principal.", JOptionPane.WARNING_MESSAGE);
 			} else {
 				boolean flag;
 
 				int opcao = JOptionPane.showConfirmDialog(null,
-						"Deseja excluir cÛdigo de barras abaixo?\n" + "Barras = " + barras_selecionado,
-						"Exclus„o de cÛdigo de barras", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+						"Deseja excluir c√≥digo de barras abaixo?\n" + "Barras = " + barras_selecionado,
+						"Exclus√£o de c√≥digo de barras", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 				flag = opcao == JOptionPane.YES_OPTION;
 
 				if (flag) {
 					int linha_removida = tabelaVariosBarras.getSelectedRow();
 					if (barras_dao.remove_barras(barras_selecionado)) {
-						JOptionPane.showMessageDialog(null, "CÛdigo de barras removido.",
-								"Exclus„o de cÛdigo de barras vinculado.", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "C√≥digo de barras removido.",
+								"Exclus√£o de c√≥digo de barras vinculado.", JOptionPane.WARNING_MESSAGE);
 						tabelaVariosBarras.clearSelection();
 					}
 					modelo_tabela.removeBarras(linha_removida);
@@ -422,10 +422,10 @@ public class VariosBarras extends JDialog {
 			Boolean principal = lista.size() == 0;
 			Produto_cadastro produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
 
-			// Se n„o encontrar nenhum item que ja possui este cÛdigo de barras
+			// Se n√£o encontrar nenhum item que ja possui este c√≥digo de barras
 			if (produto_encontrado == null) { 
-				JOptionPane.showMessageDialog(btnSalvar, "CÛdigo vinculado corretamente.",
-						"VinculaÁ„o de cÛdigo de barras", JOptionPane.NO_OPTION);
+				JOptionPane.showMessageDialog(btnSalvar, "C√≥digo vinculado corretamente.",
+						"Vincula√ß√£o de c√≥digo de barras", JOptionPane.NO_OPTION);
 				modelo_tabela.addBarras(
 						new Barras_Produto(principal, barras, new java.sql.Date(System.currentTimeMillis())));
 				btnSalvar.setVisible(false);
@@ -441,15 +441,15 @@ public class VariosBarras extends JDialog {
 				}
 			} else {
 				JOptionPane.showMessageDialog(btnSalvar,
-						"CÛdigo de barras ja utilizado no produto abaixo:\nCÛdigo: " + produto_encontrado.getIdProduto()
-								+ "\nDescriÁ„o: " + produto_encontrado.getDescricao(),
-						"VinculaÁ„o de cÛdigo de barras", JOptionPane.WARNING_MESSAGE);
+						"C√≥digo de barras ja utilizado no produto abaixo:\nC√≥digo: " + produto_encontrado.getIdProduto()
+								+ "\nDescri√ß√£o: " + produto_encontrado.getDescricao(),
+						"Vincula√ß√£o de c√≥digo de barras", JOptionPane.WARNING_MESSAGE);
 				fTxtCodigoVinculado.setText(null);
 			}
 		} else {
 			fTxtCodigoVinculado.setText(null);
 			fTxtCodigoVinculado.setValue(null);
-			JOptionPane.showMessageDialog(btnSalvar, "CÛdigo de barras inv·lido!", "VinculaÁ„o de cÛdigo de barras",
+			JOptionPane.showMessageDialog(btnSalvar, "C√≥digo de barras inv√°lido!", "Vincula√ß√£o de c√≥digo de barras",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}

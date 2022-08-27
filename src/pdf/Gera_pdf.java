@@ -31,20 +31,20 @@ public class Gera_pdf {
 	private Document documento;
 	private Boolean orcamento_nao_salvo;
 
-	// tabela título
+	// tabela tÃ­tulo
 	private float[] largura_colunas_titulo = { 18f, 25f };
 	private PdfPTable tabela_titulo = new PdfPTable(largura_colunas_titulo);
 	private PdfPCell cel_via_cliente;
 	private PdfPCell cel_titulo;
 
-	// tabela cabeçalho1
+	// tabela cabeÃ§alho
 	private float[] largura_colunas_cabecalho1 = { 23f, 25f, 10f };
 	private PdfPTable tabela_cabecalho1 = new PdfPTable(largura_colunas_cabecalho1);
 	private PdfPCell cel_data_hora;
 	private PdfPCell cel_nome_empresa;
 	private PdfPCell cel_celular;
 
-	// tabela cabeçalho2
+	// tabela cabeÃ§alho
 	private float[] largura_colunas_cabecalho2 = { 56f, 18f };
 	private PdfPTable tabela_cabecalho2 = new PdfPTable(largura_colunas_cabecalho2);
 	private PdfPCell cel_orcamento;
@@ -89,7 +89,7 @@ public class Gera_pdf {
 	private static Font negritoPequena = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
 	private static Font negritoPequenaVermelha = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.RED);
 
-	// Formatação
+	// FormataÃ§Ã£o
 	private SimpleDateFormat formata_data = new SimpleDateFormat("dd/MM/yyyy");
 	private SimpleDateFormat formata_hora = new SimpleDateFormat("HH:mm:ss");
 	private NumberFormat nf = new DecimalFormat(",##0.00");
@@ -105,15 +105,15 @@ public class Gera_pdf {
 			documento = new Document();
 			cria_pastas();
 
-			// Teste para verificar se está sendo impresso um orçamento sem salvar (Sem Id)
+			// Teste para verificar se estÃ¡ sendo impresso um orÃ§amento sem salvar (Sem Id)
 			orcamento_nao_salvo = orcamento.getId_orcamento() == null;
 
 			File arquivo;
 			if (!orcamento_nao_salvo) {
-				arquivo = new File("C:/dep/pdf/Orçamento_" + orcamento.getId_orcamento().toString() + ".pdf");
+				arquivo = new File("C:/dep/pdf/OrÃ§amento_" + orcamento.getId_orcamento().toString() + ".pdf");
 			} else {
 				String home_usuario = System.getProperty("user.home");
-				arquivo = new File(home_usuario + "/Desktop/" + "Orçamento.pdf");
+				arquivo = new File(home_usuario + "/Desktop/" + "OrÃ§amento.pdf");
 			}
 
 			PdfWriter.getInstance(documento, new FileOutputStream(arquivo));
@@ -160,7 +160,7 @@ public class Gera_pdf {
 			
 			p = new Paragraph();
 			p.setFont(fonteCabecalho);
-			p.add("ORÇAMENTO");
+			p.add("ORÃ‡AMENTO");
 			cel_titulo = new PdfPCell(p);
 
 			linha_invisivel_tabela_titulo();
@@ -203,10 +203,10 @@ public class Gera_pdf {
 			p = new Paragraph();
 			String numero_orcamento;
 			if (!orcamento_nao_salvo) {
-				numero_orcamento = "Orçamento Nº: " + String.format("%06d", orcamento.getId_orcamento());
+				numero_orcamento = "OrÃ§amento NÂº: " + String.format("%06d", orcamento.getId_orcamento());
 				p.add(numero_orcamento);
 			} else {
-				numero_orcamento = "Informações do cliente";
+				numero_orcamento = "InformaÃ§Ãµes do cliente";
 				p.setFont(new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD));
 				p.add(numero_orcamento);
 			}
@@ -237,7 +237,7 @@ public class Gera_pdf {
 			}
 
 			if (orcamento.getCliente().getNumero() != null) {
-				numero = ", Nº " + orcamento.getCliente().getNumero();
+				numero = ", NÂº " + orcamento.getCliente().getNumero();
 			}
 
 			if (orcamento.getCliente().getBairro() != null) {
@@ -247,7 +247,7 @@ public class Gera_pdf {
 				cidade = " - " + orcamento.getCliente().getCidade();
 			}
 
-			p = new Paragraph("Endereço: "
+			p = new Paragraph("EndereÃ§o: "
 					+ String.format("%-59.59s", String.format("%-28.28s", rua) + numero + bairro + cidade));
 			p.setFont(fontePadraoMedia);
 			cel_endereco = new PdfPCell(p);
@@ -277,7 +277,7 @@ public class Gera_pdf {
 			p = new Paragraph();
 			p.setLeading(10);
 			p.setFont(new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
-			p.add("CÓD." + gera_string(7, " ") + "DESCRIÇÃO" + gera_string(38, " ") + "UN" + gera_string(8, " ") + "QTD"
+			p.add("CÃ“D." + gera_string(7, " ") + "DESCRIÃ‡ÃƒO" + gera_string(38, " ") + "UN" + gera_string(8, " ") + "QTD"
 					+ gera_string(17, " ") + "PR.UNIT." + gera_string(10, " ") + "DESC.TOT." + gera_string(6, " ")
 					+ "PR.TOTAL");
 			documento.add(p);
@@ -402,7 +402,7 @@ public class Gera_pdf {
 			cel_frete = new PdfPCell(p);
 
 			p = new Paragraph();
-			p.add("Desc. Orç.: " + nf2.format(desconto_orcamento));
+			p.add("Desc. OrÃ§.: " + nf2.format(desconto_orcamento));
 			cel_desc_orc = new PdfPCell(p);
 
 			p = new Paragraph();
@@ -451,7 +451,7 @@ public class Gera_pdf {
 			
 			p = new Paragraph();
 			p.setFont(negritoPequenaVermelha);
-			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
+			p.add("OrÃ§amento vÃ¡lido por atÃ© 30 dias. ApÃ³s esse perÃ­odo os valores podem sofrer alteraÃ§Ãµes.");
 			documento.add(p);
 
 			if (via.equals("via loja") && orcamento.getProdutos_do_orcamento().size() < 12) {

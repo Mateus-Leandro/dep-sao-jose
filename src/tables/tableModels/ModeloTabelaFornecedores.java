@@ -18,7 +18,7 @@ public class ModeloTabelaFornecedores extends AbstractTableModel {
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
-	private String colunas[] = { "Cod", "Bloq. Ped.", "Bloq. Cot.", "Raz„o", "Nome Fant.", "Celular", "Endereco",
+	private String colunas[] = { "Cod", "Bloq. Ped.", "Bloq. Cot.", "Raz√£o", "Nome Fant.", "Celular", "Endereco",
 			"Numero", "Referencia", "Cidade", "Bairro", "Cep", "Documento", "I.E.", "Email", "Telefone", "Dt. Cad." };
 	private ArrayList<Fornecedor> fornecedores;
 	private final int COLUNA_CODIGO = 0;

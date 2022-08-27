@@ -29,7 +29,7 @@ public class DB {
 	private static BasicDataSource dataSource;
 	private static Log_tools log_tools = new Log_tools();
 	
-	// Busca conexão com o banco de dados.
+	// Busca conexÃ£o com o banco de dados.
 	public static Connection getConnection() {
 
 		File arquivo_db = new File("C:/dep/conf/db.properties");
@@ -49,15 +49,15 @@ public class DB {
 						props = carregarDados();
 						url = props.getProperty("dburl");
 
-						// Busca conexão do pool
+						// Busca conexÃ£o do pool
 						conn = getDataSource().getConnection();
 					} catch (SQLException e) {
 						e.printStackTrace();
-						log_tools.grava_log_error("DB.java", "getConnection" + " | [Erro de conexão]", e);
+						log_tools.grava_log_error("DB.java", "getConnection" + " | [Erro de conexÃ£o]", e);
 
 						int opcao = JOptionPane.showConfirmDialog(null,
-								"Erro na conexão com o banco dados.\nDeseja tentar reconectar?",
-								"Conexão com o banco de dados.", JOptionPane.YES_OPTION,
+								"Erro na conexÃ£o com o banco dados.\nDeseja tentar reconectar?",
+								"ConexÃ£o com o banco de dados.", JOptionPane.YES_OPTION,
 								JOptionPane.WARNING_MESSAGE);
 
 						reconectar = opcao == JOptionPane.YES_OPTION;
@@ -76,7 +76,7 @@ public class DB {
 		}
 	}
 
-	// Lê os dados de conexão do banco através de um arquivo.
+	// LÃª os dados de conexÃ£o do banco atravï¿½s de um arquivo.
 	private static Properties carregarDados() {
 		try (FileInputStream fs = new FileInputStream("C:/dep/conf/db.properties")) {
 			Properties props = new Properties();
@@ -107,7 +107,7 @@ public class DB {
 		}
 	}
 
-	// Fecha conexão com o banco.
+	// Fecha conexï¿½o com o banco.
 	public static void closeConnection(Connection conn) {
 		try {
 			if (conn != null || !conn.isClosed()) {
@@ -147,15 +147,15 @@ public class DB {
 		}
 
 		JOptionPane.showMessageDialog(null, "O arquivo C:/dep/conf/db.properties"
-				+ ", necessário para a conexão com o banco de dados, não foi encontrado ou está com as configurações inválidas."
-				+ "\nGentileza verificar as informações presentes dentro do arquivo.",
-				"Arquivo de conexão inválido ou não encontrado.", JOptionPane.WARNING_MESSAGE);
+				+ ", necessï¿½rio para a conexï¿½o com o banco de dados, nï¿½o foi encontrado ou estï¿½ com as configuraï¿½ï¿½es invï¿½lidas."
+				+ "\nGentileza verificar as informaï¿½ï¿½es presentes dentro do arquivo.",
+				"Arquivo de conexï¿½o invï¿½lido ou nï¿½o encontrado.", JOptionPane.WARNING_MESSAGE);
 
 		System.exit(0);
 	}
 	
 	
-	// pool para controle de conexões com o banco de dados.
+	// pool para controle de conexï¿½es com o banco de dados.
 	public static BasicDataSource getDataSource () {
 		if(dataSource == null) {
 			BasicDataSource ds = new BasicDataSource();

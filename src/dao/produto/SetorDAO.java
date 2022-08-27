@@ -88,7 +88,7 @@ public class SetorDAO {
 		} catch (SQLIntegrityConstraintViolationException setorComProduto) {
 			try {
 				JOptionPane.showMessageDialog(null, "Existem produto(s) que utilizam o setor selecionado.",
-						"Impossível excluir setor!", JOptionPane.WARNING_MESSAGE);
+						"ImpossÃ­vel excluir setor!", JOptionPane.WARNING_MESSAGE);
 				conn.rollback();
 				return false;
 			} catch (SQLException e) {

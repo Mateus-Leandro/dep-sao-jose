@@ -23,7 +23,6 @@ import dao.configuracoes.ConfiguracaoDAO;
 import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
-import tools.Jframe_tools;
 import view.panels.Panel_bkp;
 import view.panels.configuracoes.Panel_configuracoes;
 import view.panels.orcamento.Panel_orcamento;
@@ -49,9 +48,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	private Jframe_tools jframe_tools = new Jframe_tools();
 	public String versao = "v. 14.05.22";
-	
 
 	/**
 	 * Launch the application.
@@ -74,11 +71,11 @@ public class TelaPrincipal extends JFrame {
 	 */
 	public TelaPrincipal() {
 		UIManager.put("OptionPane.yesButtonText", "Sim");
-		UIManager.put("OptionPane.noButtonText", "N„o");
+		UIManager.put("OptionPane.noButtonText", "N√£o");
 
 		if (faz_bkp_diario) {
 			if (bkp_banco.bkp_diario()) {
-				JOptionPane.showMessageDialog(null, "Backup di·rio realizado.", "Backup di·rio.",
+				JOptionPane.showMessageDialog(null, "Backup di√°rio realizado.", "Backup di√°rio.",
 						JOptionPane.NO_OPTION);
 				panel_bkp.le_log();
 			}
@@ -111,17 +108,17 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.addTab("Clientes", clientes);
 		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
 		tabbedPane.addTab("Produtos", produtos);
-		tabbedPane.addTab("OrÁamentos", orcamentos);
+		tabbedPane.addTab("Or√ßamentos", orcamentos);
 
 		if (!configuracoes_do_sistema.getSo_orcamento()) {
-			tabbedPane.addTab("ConfiguraÁıes", configuracoes);
-			// Testa se a m·quina que o sistema est· executando faz backup.
+			tabbedPane.addTab("Configura√ßoes", configuracoes);
+			// Testa se a m√°quina que o sistema est√° executando faz backup.
 			if (faz_bkp) {
 				tabbedPane.addTab("Backup", panel_bkp);
 			}
 		}
 
-		// Verifica se existe configuraÁ„o e se existe nome para a empresa.
+		// Verifica se existe configura√ß√µes e se existe nome para a empresa.
 		if (configuracoes_do_sistema != null) {
 			so_orcamentos();
 			if (configuracoes_do_sistema.getNome_empresa() != null) {
@@ -136,8 +133,7 @@ public class TelaPrincipal extends JFrame {
 			ClienteDAO cliente_dao = new ClienteDAO();
 			ArrayList<Cliente> clientes_cadastrados = new ArrayList<Cliente>();
 			clientes_cadastrados = cliente_dao.listarClientes(clientes_cadastrados, null, null, 1);
-			// Testa se existe algum cliente cadastrado. Se n„o existir È cadastrado um
-			// consumidor final.
+
 			if (clientes_cadastrados.size() < 1) {
 				// Incluindo consumidor final
 				Cliente consumidor_final = new Cliente(null, "Consumidor final", null, false, null, null, null, null,
@@ -147,8 +143,8 @@ public class TelaPrincipal extends JFrame {
 			}
 
 			abas_configuracao_inicial(false);
-			JOptionPane.showMessageDialog(null, "Necess·rio realizar configuraÁ„o inicial do sistema.",
-					"ConfiguraÁ„o inicial", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Necess√°rio realizar configura√ß√£o inicial do sistema.",
+					"ConfiguraÔøΩÔøΩo inicial", JOptionPane.WARNING_MESSAGE);
 		}
 
 	}
@@ -159,8 +155,8 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane.setEnabledAt(2, ativada);
 	}
 
-	// Atalho para simplificar o sistema, n„o permitindo o controle financeiro,
-	// acesso a configuraÁıes e tela de backup.
+	// Atalho para simplificar o sistema, n√£o permitindo o controle financeiro,
+	// acesso a configura√ß√µes e tela de backup.
 	public void so_orcamentos() {
 		InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0), "so_orcamentos_sim");
@@ -188,7 +184,7 @@ public class TelaPrincipal extends JFrame {
 				configuracoes_do_sistema = conf_dao.busca_configuracoes();
 				setTitle(configuracoes_do_sistema.getNome_empresa() + " - " + versao);
 				conf_dao.so_orcamentos(false);
-				tabbedPane.addTab("ConfiguraÁıes", configuracoes);
+				tabbedPane.addTab("Configura√ß√µes", configuracoes);
 				if (faz_bkp) {
 					tabbedPane.addTab("Backup", panel_bkp);
 				}

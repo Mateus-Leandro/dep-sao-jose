@@ -50,7 +50,6 @@ import dao.configuracoes.ConfiguracaoDAO;
 import dao.financeiro.Resumo_financeiroDAO;
 import dao.orcamento.OrcamentoDAO;
 import dao.pessoa.ClienteDAO;
-import dao.produto.ProdutoDAO;
 import entities.configuracoes.Configuracoes;
 import entities.financeiro.Parcela;
 import entities.financeiro.Resumo_financeiro;
@@ -62,6 +61,7 @@ import icons.Icones;
 import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
 import tools.JTextFieldLimit;
+import tools.Jlist_tools;
 import tools.Jtext_tools;
 import view.dialog.Faturamento;
 import view.dialog.Orcamentos_do_cliente;
@@ -122,7 +122,7 @@ public class Panel_orcamento extends JPanel {
 	private JButton btnLimpaCliente;
 	private JLabel lblNomeProduto;
 	private JFormattedTextField fTxtNomeProduto;
-	private JLabel lblInclus„oDeProdutos;
+	private JLabel lblInclusaoDeProdutos;
 	private JSeparator separadorInformacoesDoCliente_1;
 	private JLabel lblCodigoProduto;
 	private JLabel lblFatorVenda;
@@ -222,13 +222,14 @@ public class Panel_orcamento extends JPanel {
 	private Produto_orcamento produto_editado = new Produto_orcamento();
 	private JLabel lblDescontoGeral;
 	private JLabel lblTotalItem;
+	private Jlist_tools jlist_tools = new Jlist_tools();
 
 	/**
 	 * Create the panel.
 	 */
 	public Panel_orcamento() {
 
-		// Truncar valores, e n„o arredondar.
+		// Truncar valores, e n√£o arredondar.
 		nf.setRoundingMode(RoundingMode.DOWN);
 		nf.setRoundingMode(RoundingMode.DOWN);
 		tecla_pressionada();
@@ -344,33 +345,33 @@ public class Panel_orcamento extends JPanel {
 		btnCancelar_editado.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnCancelar_editado.setBounds(884, 164, 120, 29);
 		btnCancelar_editado.setVisible(false);
-		
-				ltProdutos = new JList<Produto_cadastro>();
-				ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				ltProdutos.setVisibleRowCount(10);
-				ltProdutos.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent clickListaProduto) {
-						produto_selecionado = ltProdutos.getSelectedValue();
 
-						if (!produto_bloqueado()) {
-							if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
-								limpar_dados_produto();
-								fTxtNomeProduto.requestFocus();
-							} else {
-								scrollPaneListaProdutos.setVisible(false);
-								exibe_dados_produto_selecionado();
-								fTxtQuantidade.requestFocus();
-							}
-						}
-					}
-				});
-				
-						ltProdutos.setBounds(438, 77, 267, 79);
-						scrollPaneListaProdutos = new JScrollPane(ltProdutos);
-						scrollPaneListaProdutos.setBounds(274, 72, 402, 111);
-						produtos.add(scrollPaneListaProdutos);
+		ltProdutos = new JList<Produto_cadastro>();
+		ltProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ltProdutos.setVisibleRowCount(10);
+		ltProdutos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickListaProduto) {
+				produto_selecionado = ltProdutos.getSelectedValue();
+
+				if (!produto_bloqueado()) {
+					if (produto_ja_incluso(produto_selecionado.getIdProduto(), lista_produtos_inclusos)) {
+						limpar_dados_produto();
+						fTxtNomeProduto.requestFocus();
+					} else {
 						scrollPaneListaProdutos.setVisible(false);
+						exibe_dados_produto_selecionado();
+						fTxtQuantidade.requestFocus();
+					}
+				}
+			}
+		});
+
+		ltProdutos.setBounds(438, 77, 267, 79);
+		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
+		scrollPaneListaProdutos.setBounds(274, 72, 402, 111);
+		produtos.add(scrollPaneListaProdutos);
+		scrollPaneListaProdutos.setVisible(false);
 		produtos.add(btnCancelar_editado);
 
 		btnSalvar_editado = new JButton("Salvar");
@@ -533,9 +534,10 @@ public class Panel_orcamento extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				// Testa se est· editando o produto ou incluindo.
+				// Testa se estÔøΩ editando o produto ou incluindo.
 				if (btnEditar.isVisible() && fTxtNomeProduto.isEditable()) {
-					alimentar_lista_produtos("NOME", "%");
+					jlist_tools.alimentar_lista_produtos("NOME", "%", lista_produtos, list_model_produtos,
+							scrollPaneListaProdutos, ltProdutos, fTxtNomeProduto, fTxtCodigoProduto);
 				}
 			}
 		});
@@ -544,7 +546,9 @@ public class Panel_orcamento extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent digitaNomeProduto) {
 				if (digitaNomeProduto.getKeyCode() != digitaNomeProduto.VK_ENTER) {
-					alimentar_lista_produtos("NOME", fTxtNomeProduto.getText().trim());
+					jlist_tools.alimentar_lista_produtos("NOME", fTxtNomeProduto.getText().trim(), lista_produtos,
+							list_model_produtos, scrollPaneListaProdutos, ltProdutos, fTxtNomeProduto,
+							fTxtCodigoProduto);
 				} else {
 					if (!seleciona_produto()) {
 						lista_produtos.clear();
@@ -558,12 +562,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeProduto.setColumns(10);
 		fTxtNomeProduto.setBounds(274, 55, 402, 20);
 		produtos.add(fTxtNomeProduto);
+		
 
-		lblInclus„oDeProdutos = new JLabel("Inclus\u00E3o de produtos");
-		lblInclus„oDeProdutos.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInclus„oDeProdutos.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblInclus„oDeProdutos.setBounds(381, 11, 213, 29);
-		produtos.add(lblInclus„oDeProdutos);
+		lblInclusaoDeProdutos = new JLabel("Inclus\u00E3o de produtos");
+		lblInclusaoDeProdutos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInclusaoDeProdutos.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblInclusaoDeProdutos.setBounds(381, 11, 213, 29);
+		produtos.add(lblInclusaoDeProdutos);
 
 		separadorInformacoesDoCliente_1 = new JSeparator();
 		separadorInformacoesDoCliente_1.setBounds(10, 41, 994, 9);
@@ -676,14 +681,14 @@ public class Panel_orcamento extends JPanel {
 							.replaceAll("\\.", "").replace(",", ".").replace("R$ ", ""));
 
 					if (excluir_produto(tabelaProdutosInclusos.getValueAt(linha_selecionada, 0).toString(), valor)) {
-						JOptionPane.showMessageDialog(null, "Produto removido corretamente do orÁamento.",
+						JOptionPane.showMessageDialog(null, "Produto removido corretamente do or√°amento.",
 								"Produto removido.", JOptionPane.NO_OPTION);
 						quantidade_de_produtos = modelo_tabela.getRowCount();
 						fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 						calcula_total_mercadorias();
 
 						// Desativa os campos de frete, valor de desconto final, porcentagem de
-						// desconto final e bot„o imprimir, caso n„o exista produtos no orÁamento.
+						// desconto final e bot√£o imprimir, caso n√£o exista produtos no or√ßamento.
 						if (quantidade_de_produtos < 1) {
 							fTxtFrete.setEditable(false);
 							fTxtValorDescFinal.setEditable(false);
@@ -830,7 +835,9 @@ public class Panel_orcamento extends JPanel {
 
 				if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_F2) {
 					if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_ENTER) {
-						alimentar_lista_produtos("C”DIGO", fTxtCodigoProduto.getText().trim());
+						jlist_tools.alimentar_lista_produtos("C√≥DIGO", fTxtCodigoProduto.getText().trim(),
+								lista_produtos, list_model_produtos, scrollPaneListaProdutos, ltProdutos,
+								fTxtNomeProduto, fTxtCodigoProduto);
 					} else {
 						if (!fTxtCodigoProduto.getText().trim().isEmpty()) {
 							if (!seleciona_produto()) {
@@ -897,7 +904,9 @@ public class Panel_orcamento extends JPanel {
 			public void focusGained(FocusEvent ganhoFocoCodigoBarras) {
 				if (!fTxtNomeProduto.isEditable() && fTxtCodigoBarra.isEditable()
 						&& !fTxtCodigoBarra.getText().trim().isEmpty()) {
-					alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim());
+					jlist_tools.alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim(), lista_produtos,
+							list_model_produtos, scrollPaneListaProdutos, ltProdutos, fTxtNomeProduto,
+							fTxtCodigoProduto);
 				}
 			}
 		});
@@ -916,7 +925,9 @@ public class Panel_orcamento extends JPanel {
 					} else {
 						if (digitaCodigoBarras.getKeyCode() != digitaCodigoBarras.VK_F2
 								&& teclou_digito(digitaCodigoBarras.getKeyChar())) {
-							alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim());
+							jlist_tools.alimentar_lista_produtos("BARRAS", fTxtCodigoBarra.getText().trim(),
+									lista_produtos, list_model_produtos, scrollPaneListaProdutos, ltProdutos,
+									fTxtNomeProduto, fTxtCodigoProduto);
 						}
 					}
 				}
@@ -1101,21 +1112,21 @@ public class Panel_orcamento extends JPanel {
 		cliente = new JPanel();
 		tabbedPane.addTab("Cliente", cliente);
 		cliente.setLayout(null);
-		
-				ltClientes = new JList<Cliente>();
-				ltClientes.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent clickListaClientes) {
-						cliente_selecionado = ltClientes.getSelectedValue();
-						seleciona_cliente();
-					}
-				});
-				ltClientes.setBounds(48, 79, 267, 66);
-				
-						scrollPaneListaClientes = new JScrollPane(ltClientes);
-						scrollPaneListaClientes.setBounds(48, 80, 320, 119);
-						cliente.add(scrollPaneListaClientes);
-						scrollPaneListaClientes.setVisible(false);
+
+		ltClientes = new JList<Cliente>();
+		ltClientes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent clickListaClientes) {
+				cliente_selecionado = ltClientes.getSelectedValue();
+				seleciona_cliente();
+			}
+		});
+		ltClientes.setBounds(48, 79, 267, 66);
+
+		scrollPaneListaClientes = new JScrollPane(ltClientes);
+		scrollPaneListaClientes.setBounds(48, 80, 320, 119);
+		cliente.add(scrollPaneListaClientes);
+		scrollPaneListaClientes.setVisible(false);
 
 		lblCliente = new JLabel("Informa\u00E7\u00F5es do Cliente");
 		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1472,9 +1483,9 @@ public class Panel_orcamento extends JPanel {
 
 	}
 
-	// FunÁıes ------------------------------
+	// Fun√ß√µes ------------------------------
 
-	// retorna o panel de orÁamento.
+	// retorna o panel de or√ßamento.
 	public Panel_orcamento getPanelOrcamento() {
 		return this;
 	}
@@ -1492,7 +1503,7 @@ public class Panel_orcamento extends JPanel {
 				quantidade_de_produtos = modelo_tabela.getRowCount();
 				fTxtQuantidadeTotal.setText(Integer.toString(quantidade_de_produtos));
 
-				// Testa se est· utilizando leitor de cÛdigo de barras
+				// Testa se est√° utilizando leitor de c√≥digo de barras
 				if (checkboxLeitorBarras.getState()) {
 					fTxtCodigoBarra.setEditable(true);
 					fTxtCodigoBarra.requestFocus();
@@ -1500,8 +1511,8 @@ public class Panel_orcamento extends JPanel {
 					fTxtCodigoProduto.requestFocus();
 				}
 
-				// Ativa os campos de frete, desconto,porcentagem de desconto e bot„o imprimir,
-				// caso n„o
+				// Ativa os campos de frete, desconto,porcentagem de desconto e bot√£o imprimir,
+				// caso n√£o
 				// estejam ativos.
 				if (!fTxtFrete.isEditable()) {
 					fTxtFrete.setEditable(true);
@@ -1514,7 +1525,7 @@ public class Panel_orcamento extends JPanel {
 				lista_produtos.clear();
 			}
 		} else {
-			JOptionPane.showMessageDialog(lblQuantidade, "Necess·rio selecionar um produto.",
+			JOptionPane.showMessageDialog(lblQuantidade, "Necess√°rio selecionar um produto.",
 					"Nenhum produto selecionado", JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
 		}
@@ -1566,19 +1577,19 @@ public class Panel_orcamento extends JPanel {
 	public void salvar_orcamento() {
 
 		if (quantidade_de_produtos > 0) {
-			int opcao = JOptionPane.showConfirmDialog(null, "Deseja confirmar o orÁamento?\n",
-					"Confirmar orÁamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
+			int opcao = JOptionPane.showConfirmDialog(null, "Deseja confirmar o or√ßamento?\n", "Confirmar or√ßamento.",
+					JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			Boolean flag = opcao == JOptionPane.YES_OPTION;
 			if (flag) {
 				if (cliente_vazio()) {
-					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando configuraÁıes.
+					configuracoes_do_sistema = conf_dao.busca_configuracoes(); // Buscando configura√ß√µes.
 					opcao = JOptionPane.showConfirmDialog(null, "Nenhum cliente foi informado!\n"
-							+ "Caso confirmar o orÁamento ser· gravado utilizando o cliente configurado como consumidor final:"
-							+ "\n\nConsumidor final" + "\nCÛdigo: "
+							+ "Caso confirmar o or√ßamento ser√° gravado utilizando o cliente configurado como consumidor final:"
+							+ "\n\nConsumidor final" + "\nC√≥digo: "
 							+ configuracoes_do_sistema.getConsumidor_final().getId().toString() + "\nNome: "
 							+ configuracoes_do_sistema.getConsumidor_final().getNome()
-							+ "\n\nDeseja confirmar o orÁamento?", "Confirmar orÁamento.", JOptionPane.YES_OPTION,
+							+ "\n\nDeseja confirmar o or√ßamento?", "Confirmar or√ßamento.", JOptionPane.YES_OPTION,
 							JOptionPane.WARNING_MESSAGE);
 					flag = opcao == JOptionPane.YES_OPTION;
 				}
@@ -1599,10 +1610,10 @@ public class Panel_orcamento extends JPanel {
 				if (orcamento.getId_orcamento() != null) {
 					fTxtNumeroOrcamento.setText(orcamento.getId_orcamento().toString());
 					JOptionPane.showMessageDialog(null,
-							"OrÁamento N∫ " + orcamento.getId_orcamento() + " salvo corretamente.",
-							"Confirmar orÁamento.", JOptionPane.NO_OPTION);
+							"Or√ßamento N¬∫ " + orcamento.getId_orcamento() + " salvo corretamente.",
+							"Confirmar or√ßamento.", JOptionPane.NO_OPTION);
 
-					// Testa se o orÁamento foi editado e se seu valor original foi alterado.
+					// Testa se o or√ßamento foi editado e se seu valor original foi alterado.
 					flag = false;
 					Boolean valor_alterado = orcamento.getValor_total().compareTo(valor_original) != 0;
 					if (valor_alterado) {
@@ -1615,9 +1626,8 @@ public class Panel_orcamento extends JPanel {
 						}
 					}
 					if (!flag) {
-						opcao = JOptionPane.showConfirmDialog(null,
-								"Deseja prosseguir para a manutenÁ„o das parcelas?", "ManutenÁ„o das parcelas.",
-								JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
+						opcao = JOptionPane.showConfirmDialog(null, "Deseja prosseguir para a manuten√ß√£o das parcelas?",
+								"Manuten√ß√£o das parcelas.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 						flag = opcao == JOptionPane.YES_OPTION;
 					}
 
@@ -1626,7 +1636,7 @@ public class Panel_orcamento extends JPanel {
 						faturamento.abrir_faturamento(faturamento);
 					}
 
-					// Testa se apÛs salvar ser· gerado o pdf do orÁamento.
+					// Testa se ap√≥s salvar ser√° gerado o pdf do or√ßamento.
 					flag = false;
 					configuracoes_do_sistema = new ConfiguracaoDAO().busca_configuracoes();
 					switch (configuracoes_do_sistema.getGera_PDF()) {
@@ -1634,8 +1644,8 @@ public class Panel_orcamento extends JPanel {
 						flag = true;
 						break;
 					case "PERGUNTAR":
-						opcao = JOptionPane.showConfirmDialog(null, "Deseja emitir o orÁamento salvo?",
-								"Impressao do orÁamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
+						opcao = JOptionPane.showConfirmDialog(null, "Deseja emitir o or√ßamento salvo?",
+								"Impressao do or√ßamento.", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
 						flag = opcao == JOptionPane.YES_OPTION;
 						break;
 					}
@@ -1649,7 +1659,7 @@ public class Panel_orcamento extends JPanel {
 				limpar_campos();
 				desativar_campos();
 			} else {
-				if(cliente_selecionado == null) {
+				if (cliente_selecionado == null) {
 					tabbedPane.setSelectedComponent(cliente);
 					fTxtNomeCliente.setText(null);
 					fTxtNomeCliente.requestFocus();
@@ -1657,9 +1667,8 @@ public class Panel_orcamento extends JPanel {
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(null,
-					"Necess·rio informar pelo menos 1 item para criar o orÁamento.", "OrÁamento sem itens.",
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Necess√°rio informar pelo menos 1 item para criar o or√ßamento.",
+					"Or√ßamento sem itens.", JOptionPane.WARNING_MESSAGE);
 			fTxtNomeProduto.requestFocus();
 		}
 	}
@@ -1669,8 +1678,8 @@ public class Panel_orcamento extends JPanel {
 		Boolean flag = true;
 		if (quantidade_de_produtos > 0) {
 			int opcao = JOptionPane.showConfirmDialog(null,
-					"ATEN«√O!\nDeseja sair do orÁamento atual?\nTODAS AS ALTERA«’ES REALIZADAS N√O SER√O SALVAS.",
-					"Sair do orÁamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+					"ATEN√á√ÉO!\nDeseja sair do or√ßamento atual?\nTODAS AS ALTERA√áOES REALIZADAS N√ÉO SER√ÉO SALVAS.",
+					"Sair do or√ßamento.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 			flag = opcao == JOptionPane.YES_OPTION;
 		}
 		if (flag) {
@@ -1745,22 +1754,22 @@ public class Panel_orcamento extends JPanel {
 			return true;
 		} else {
 			if (quantidade <= 0.00) {
-				JOptionPane.showMessageDialog(lblQuantidade, "Necess·rio informar quantidade.", "Quantidade zerada.",
+				JOptionPane.showMessageDialog(lblQuantidade, "Necess√°rio informar quantidade.", "Quantidade zerada.",
 						JOptionPane.WARNING_MESSAGE);
 				fTxtQuantidade.setBorder(new LineBorder(Color.RED));
 				fTxtQuantidade.requestFocus();
 			}
 
 			if (preco_unitario <= 0.00) {
-				JOptionPane.showMessageDialog(lblPrecoUnitario, "Necess·rio informar preÁo unit·rio.",
-						"PreÁo unit·rio zerado!", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(lblPrecoUnitario, "Necess√°rio informar pre√ßo unit√°rio.",
+						"Pre√ßo unit√°rio zerado!", JOptionPane.WARNING_MESSAGE);
 				fTxtPrecoUnitario.setBorder(new LineBorder(Color.RED));
 				fTxtPrecoUnitario.requestFocus();
 			}
 
 			if (valor_desconto >= preco_unitario && preco_unitario != 0.00) {
 				JOptionPane.showMessageDialog(lblValorDesconto, "Valor de desconto maior ou igual ao total do produto.",
-						"Valor de desconto inv·lido!", JOptionPane.WARNING_MESSAGE);
+						"Valor de desconto inv√°lido!", JOptionPane.WARNING_MESSAGE);
 				fTxtValorEmAberto.setBorder(new LineBorder(Color.RED));
 				fTxtPorcentagemDesconto.requestFocus();
 			}
@@ -1786,38 +1795,6 @@ public class Panel_orcamento extends JPanel {
 		ltClientes.setModel(list_model);
 	}
 
-	public void alimentar_lista_produtos(String tipo_busca, String texto_buscado) {
-
-		list_model_produtos.clear();
-		lista_produtos.clear();
-		ProdutoDAO produto_dao = new ProdutoDAO();
-
-		switch (tipo_busca) {
-		case "NOME":
-			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%", 50);
-			break;
-		case "C”DIGO":
-			lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, fTxtCodigoProduto.getText().trim(), 50);
-			break;
-		case "BARRAS":
-			lista_produtos = produto_dao.listarProdutosBarras(lista_produtos, texto_buscado + "%", 50);
-			break;
-		default:
-			break;
-		}
-
-		for (Produto_cadastro produto : lista_produtos) {
-			list_model_produtos.addElement(produto);
-		}
-
-		ltProdutos.setModel(list_model_produtos);
-
-		if (!list_model_produtos.isEmpty()) {
-			scrollPaneListaProdutos.setVisible(true);
-		} else {
-			scrollPaneListaProdutos.setVisible(false);
-		}
-	}
 
 	public void limpar_campos() {
 		limpar_dados_cliente();
@@ -1909,8 +1886,8 @@ public class Panel_orcamento extends JPanel {
 		for (Produto_orcamento produto_orcamento : produtos_inclusos) {
 			if (produto_orcamento.getIdProduto().equals(codigo)
 					&& !produto_orcamento.getDescricao().substring(0, 3).equals("*__")) {
-				JOptionPane.showMessageDialog(null, "O produto selecionado j· est· presente no orÁamento.",
-						"Produto j· incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "O produto selecionado j√° est√° presente no or√ßamento.",
+						"Produto j√° incluso anteriormente.", JOptionPane.WARNING_MESSAGE);
 				produto_selecionado = null;
 				return true;
 			}
@@ -1926,7 +1903,7 @@ public class Panel_orcamento extends JPanel {
 			fTxtNomeProduto.setText(null);
 			fTxtCodigoBarra.setText(null);
 			JOptionPane.showMessageDialog(null,
-					"O produto selecionado est· bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no orÁamento.",
+					"O produto selecionado est√° bloqueado.\nAltere o cadastro e retire o bloqueio caso desejar inclui-lo no or√ßamento.",
 					"Produto Bloqueado", JOptionPane.WARNING_MESSAGE);
 			return true;
 		} else {
@@ -1972,9 +1949,8 @@ public class Panel_orcamento extends JPanel {
 		if (porcent_desc_final > 99.99) {
 			fTxtPorcentDescFinal.setText(nf.format(0.00));
 			fTxtValorDescFinal.setText(nf.format(0.00));
-			JOptionPane.showMessageDialog(null,
-					"O valor de desconto informado È igual ou maior ao total do orÁamento.",
-					"Valor de desconto inv·lido.", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "O valor de desconto informado √© igual ou maior ao total do or√ßamento.",
+					"Valor de desconto inv√°lido.", JOptionPane.WARNING_MESSAGE);
 		} else {
 			fTxtPorcentDescFinal.setText(nf.format(porcent_desc_final));
 		}
@@ -2092,7 +2068,7 @@ public class Panel_orcamento extends JPanel {
 		desconto = Math.round(desconto * 10000) / 10000d;
 		total_mercadorias_liquido = total_mercadorias_bruto - desconto;
 
-		// Sem considerar desconto dos itens, frete e desconto final do orÁamento.
+		// Sem considerar desconto dos itens, frete e desconto final do or√ßamento.
 		fTxtTotalMercadoriasBruto.setText(nf3.format(total_mercadorias_bruto));
 
 		// Considerando desconto dos itens
@@ -2227,7 +2203,7 @@ public class Panel_orcamento extends JPanel {
 		editando_produto = true;
 		checkboxLeitorBarras.setEnabled(false);
 
-		// Utiliza leitor, bloquear o campo durante ediÁ„o.
+		// Utiliza leitor, bloquear o campo durante edi√ß√£o.
 		if (checkboxLeitorBarras.getState()) {
 			fTxtCodigoBarra.setEditable(false);
 		}
@@ -2281,7 +2257,7 @@ public class Panel_orcamento extends JPanel {
 		btnCancelar_editado.setEnabled(true);
 		fTxtQuantidade.requestFocus();
 
-		novo_produto(produto_editado, editando_produto); // Pegando informaÁıes do item selecionado.
+		novo_produto(produto_editado, editando_produto); // Pegando informa√ß√µes do item selecionado.
 	}
 
 	public void salvar_edicao() {
@@ -2290,20 +2266,20 @@ public class Panel_orcamento extends JPanel {
 		if (novo_produto(produto, true)) {
 			for (Produto_orcamento produto_ed : lista_produtos_inclusos) {
 				if (produto_ed.equals(produto_editado)) { // Compara o produto da lista com o produto que foi
-															// selecionado para ediÁ„o.
+															// selecionado para edi√ß√£o.
 					lista_produtos_inclusos.set(lista_produtos_inclusos.indexOf(produto_ed), produto);
 				}
 			}
 			modelo_tabela.fireTableDataChanged();
 			cancelar_edicao();
-			JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", " AlteraÁ„o de produto.",
+			JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", " Altera√ß√£o de produto.",
 					JOptionPane.NO_OPTION);
 			calcula_total_mercadorias();
 			btnLimpaDadosProduto.setEnabled(true);
 
 			checkboxLeitorBarras.setEnabled(true);
 
-			// Se utiliza leitor, libera o campos apÛs ediÁ„o.
+			// Se utiliza leitor, libera o campos ap√≥s edi√ß√£o.
 			if (checkboxLeitorBarras.getState()) {
 				fTxtCodigoBarra.setEditable(true);
 				fTxtCodigoBarra.requestFocus();
@@ -2335,7 +2311,7 @@ public class Panel_orcamento extends JPanel {
 
 		checkboxLeitorBarras.setEnabled(true);
 
-		// se usa leitor, libera campo de cÛdigo de barras
+		// se usa leitor, libera campo de c√≥digo de barras
 		if (checkboxLeitorBarras.getState()) {
 			fTxtCodigoBarra.setEditable(true);
 			fTxtCodigoBarra.requestFocus();
@@ -2348,11 +2324,11 @@ public class Panel_orcamento extends JPanel {
 
 	public Boolean excluir_produto(String codigo, Double valor) {
 		int opcao = JOptionPane.showConfirmDialog(null,
-				"Deseja remover o seguinte produto do orÁamento?\n" + "Cod = "
+				"Deseja remover o seguinte produto do or√ßamento?\n" + "Cod = "
 						+ tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 0) + "\n"
 						+ "Nome = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 1)
 						+ "\nValor = " + tabelaProdutosInclusos.getValueAt(tabelaProdutosInclusos.getSelectedRow(), 7),
-				"RemoÁ„o de produtos", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
+				"Remo√ß√£o de produtos", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		Boolean flag = opcao == JOptionPane.YES_OPTION;
 
@@ -2447,12 +2423,12 @@ public class Panel_orcamento extends JPanel {
 	}
 
 	public void ConfiguraLarguraColunaTabela(JTable tabela_produtos_inclusos) {
-		tabela_produtos_inclusos.getColumnModel().getColumn(0).setPreferredWidth(55); // CÛdigo
+		tabela_produtos_inclusos.getColumnModel().getColumn(0).setPreferredWidth(55); // C√≥digo
 		tabela_produtos_inclusos.getColumnModel().getColumn(1).setPreferredWidth(270); // Nome
 		tabela_produtos_inclusos.getColumnModel().getColumn(2).setPreferredWidth(95); // barras
 		tabela_produtos_inclusos.getColumnModel().getColumn(3).setPreferredWidth(53); // Unid
 		tabela_produtos_inclusos.getColumnModel().getColumn(4).setPreferredWidth(68); // Quantidade
-		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(150); // PreÁo Unit.
+		tabela_produtos_inclusos.getColumnModel().getColumn(5).setPreferredWidth(150); // Pre√ßo Unit.
 		tabela_produtos_inclusos.getColumnModel().getColumn(6).setPreferredWidth(150); // Desconto
 		tabela_produtos_inclusos.getColumnModel().getColumn(7).setPreferredWidth(150); // Total produto
 
@@ -2462,7 +2438,7 @@ public class Panel_orcamento extends JPanel {
 		tabela_produtos_inclusos.getColumnModel().getColumn(5).setCellRenderer(esquerda); // Preco Unit
 		tabela_produtos_inclusos.getColumnModel().getColumn(6).setCellRenderer(esquerda); // Desconto
 		tabela_produtos_inclusos.getColumnModel().getColumn(7).setCellRenderer(esquerda); // Total
-		
+
 		tabela_produtos_inclusos.getTableHeader().setResizingAllowed(false);
 	}
 
@@ -2519,7 +2495,7 @@ public class Panel_orcamento extends JPanel {
 		Boolean flag = true;
 		if (cliente_selecionado.getBloqueado()) {
 			int opcao = JOptionPane.showConfirmDialog(null,
-					"ATEN«√O!\nO cliente selecionado est· bloqueado.\nDeseja utiliz·-lo no orÁamento mesmo assim?\n",
+					"ATEN√á√ÉO!\nO cliente selecionado est√° bloqueado.\nDeseja utiliz√°-lo no or√ßamento mesmo assim?\n",
 					"Cliente bloqueado.", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
 			flag = opcao == JOptionPane.YES_OPTION;
 		}
