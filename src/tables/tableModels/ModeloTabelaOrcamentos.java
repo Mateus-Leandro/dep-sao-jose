@@ -1,7 +1,6 @@
 package tables.tableModels;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -14,8 +13,8 @@ import entities.orcamento.Orcamento;
 public class ModeloTabelaOrcamentos extends AbstractTableModel {
 
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
-	private String colunas[] = { "Nº", "Cliente", "Qtd. Itens", "Total Merc", "Desc.Fin.", "Desc. Prd.", "Frete", "Valor Total",
-			"Status","Qtd.Par.", "Dt. Inclusão" };
+	private String colunas[] = { "NÂº", "Cliente", "Qtd. Itens", "Total Merc", "Desc.Fin.", "Desc. Prd.", "Frete",
+			"Valor Total", "Status", "Qtd.Par.", "Dt. InclusÃ£o" };
 	private ArrayList<Orcamento> orcamentos;
 	private final int COLUNA_NUMERO_ORCAMENTO = 0;
 	private final int COLUNA_CLIENTE = 1;
@@ -55,30 +54,30 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
-		case COLUNA_NUMERO_ORCAMENTO:
-			return Integer.class;
-		case COLUNA_CLIENTE:
-			return String.class;
-		case COLUNA_QUANTIDADE_ITENS:
-			return Integer.class;
-		case COLUNA_TOTAL_MERCADORIAS:
-			return BigDecimal.class;
-		case COLUNA_VALOR_DESCONTO:
-			return BigDecimal.class;
-		case COLUNA_VALOR_DESCONTO_PRODUTO:
-			return BigDecimal.class;
-		case COLUNA_VALOR_FRETE:
-			return BigDecimal.class;
-		case COLUNA_TOTAL_ORCAMENTO:
-			return BigDecimal.class;
-		case COLUNA_STATUS:
-			return String.class;
-		case COLUNA_QTD_PARCELAS:
-			return Integer.class;
-		case COLUNA_DATA_INCLUSAO:
-			return java.util.Date.class;
-		default:
-			return String.class;
+			case COLUNA_NUMERO_ORCAMENTO:
+				return Integer.class;
+			case COLUNA_CLIENTE:
+				return String.class;
+			case COLUNA_QUANTIDADE_ITENS:
+				return Integer.class;
+			case COLUNA_TOTAL_MERCADORIAS:
+				return BigDecimal.class;
+			case COLUNA_VALOR_DESCONTO:
+				return BigDecimal.class;
+			case COLUNA_VALOR_DESCONTO_PRODUTO:
+				return BigDecimal.class;
+			case COLUNA_VALOR_FRETE:
+				return BigDecimal.class;
+			case COLUNA_TOTAL_ORCAMENTO:
+				return BigDecimal.class;
+			case COLUNA_STATUS:
+				return String.class;
+			case COLUNA_QTD_PARCELAS:
+				return Integer.class;
+			case COLUNA_DATA_INCLUSAO:
+				return java.util.Date.class;
+			default:
+				return String.class;
 		}
 	}
 
@@ -87,28 +86,28 @@ public class ModeloTabelaOrcamentos extends AbstractTableModel {
 		Orcamento orcamento = this.orcamentos.get(rowIndex);
 
 		switch (columIndex) {
-		case COLUNA_NUMERO_ORCAMENTO:
-			return orcamento.getId_orcamento();
-		case COLUNA_CLIENTE:
-			return orcamento.getCliente().getNome();
-		case COLUNA_QUANTIDADE_ITENS:
-			return orcamento.getQuantidade_produtos();
-		case COLUNA_TOTAL_MERCADORIAS:
-			return nf.format(orcamento.getTotal_mercadorias_liquido());
-		case COLUNA_VALOR_DESCONTO:
-			return nf.format(orcamento.getDesconto_final());
-		case COLUNA_VALOR_DESCONTO_PRODUTO:
-			return nf.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido());
-		case COLUNA_VALOR_FRETE:
-			return nf.format(orcamento.getFrete());
-		case COLUNA_TOTAL_ORCAMENTO:
-			return nf.format(orcamento.getValor_total());
-		case COLUNA_STATUS:
-			return orcamento.getStatusPagamento(orcamento);
-		case COLUNA_QTD_PARCELAS:
-			return orcamento.getNumero_de_parcelas();
-		case COLUNA_DATA_INCLUSAO:
-			return orcamento.getData_inclusao();
+			case COLUNA_NUMERO_ORCAMENTO:
+				return orcamento.getId_orcamento();
+			case COLUNA_CLIENTE:
+				return orcamento.getCliente().getNome();
+			case COLUNA_QUANTIDADE_ITENS:
+				return orcamento.getQuantidade_produtos();
+			case COLUNA_TOTAL_MERCADORIAS:
+				return nf.format(orcamento.getTotal_mercadorias_liquido());
+			case COLUNA_VALOR_DESCONTO:
+				return nf.format(orcamento.getDesconto_final());
+			case COLUNA_VALOR_DESCONTO_PRODUTO:
+				return nf.format(orcamento.getTotal_mercadorias_bruto() - orcamento.getTotal_mercadorias_liquido());
+			case COLUNA_VALOR_FRETE:
+				return nf.format(orcamento.getFrete());
+			case COLUNA_TOTAL_ORCAMENTO:
+				return nf.format(orcamento.getValor_total());
+			case COLUNA_STATUS:
+				return orcamento.getStatusPagamento(orcamento);
+			case COLUNA_QTD_PARCELAS:
+				return orcamento.getNumero_de_parcelas();
+			case COLUNA_DATA_INCLUSAO:
+				return orcamento.getData_inclusao();
 		}
 		return null;
 	}
