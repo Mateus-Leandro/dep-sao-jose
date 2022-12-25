@@ -56,6 +56,8 @@ import tools.Jtext_tools;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
 import view.formatFields.FormataNumeral;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
@@ -122,6 +124,8 @@ public class Panel_produtos extends JPanel {
 	private JLabel lblRecarregar;
 	private JLabel lblF7;
 	private JLabel lblSetores;
+	private JLabel lblMaximoItens;
+	private JComboBox<String> cbxMaximoItens = new JComboBox<String>();
 
 	/**
 	 * Create the panel.
@@ -129,6 +133,17 @@ public class Panel_produtos extends JPanel {
 	public Panel_produtos() {
 		setLayout(null);
 		tecla_pressionada(); // Teclas de atalho.
+		cbxMaximoItens.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent alteraMaximo) {
+				if(alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
+					recarregarTabela();
+				}
+			}
+		});
+		cbxMaximoItens.setModel(new DefaultComboBoxModel(new String[] { "50", "100", "150", "200", "TODOS" }));
+		cbxMaximoItens.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbxMaximoItens.setBounds(940, 374, 80, 23);
+		add(cbxMaximoItens);
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
 		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -479,7 +494,7 @@ public class Panel_produtos extends JPanel {
 
 		fTxtPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		fTxtPesquisa.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtPesquisa.setBounds(211, 377, 765, 20);
+		fTxtPesquisa.setBounds(211, 377, 486, 20);
 		add(fTxtPesquisa);
 		btnReload.addMouseListener(new MouseAdapter() {
 			@Override
@@ -489,7 +504,7 @@ public class Panel_produtos extends JPanel {
 		});
 
 		btnReload.setIcon(icones.getIcone_reload());
-		btnReload.setBounds(986, 375, 34, 22);
+		btnReload.setBounds(707, 375, 34, 22);
 		add(btnReload);
 
 		btnEditar = new JButton("Editar");
@@ -685,9 +700,14 @@ public class Panel_produtos extends JPanel {
 		lblSetores.setBounds(784, 629, 48, 14);
 		add(lblSetores);
 
+		lblMaximoItens = new JLabel("Máximo de itens a exibir:");
+		lblMaximoItens.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMaximoItens.setBounds(765, 375, 172, 19);
+		add(lblMaximoItens);
+
 	}
 
-	// --------------Fun��es--------------
+	// --------------Funções--------------
 
 	public void ativarCampos() {
 		fTxtMargem.setEditable(true);
@@ -740,6 +760,7 @@ public class Panel_produtos extends JPanel {
 			btnCancelar.setEnabled(true);
 			btnSalvar.setEnabled(true);
 			chckbxProdutoBloqueado.setEnabled(true);
+			cbxMaximoItens.setEnabled(false);
 			fTxtNomeProduto.requestFocus();
 		}
 	}
@@ -752,6 +773,7 @@ public class Panel_produtos extends JPanel {
 			btnSalvar.setVisible(false);
 			btnCancelar.setVisible(false);
 			chckbxProdutoBloqueado.setEnabled(false);
+			cbxMaximoItens.setEnabled(true);
 			btnNovo.requestFocus();
 		}
 	}
@@ -765,6 +787,7 @@ public class Panel_produtos extends JPanel {
 			btnSalvar.setVisible(true);
 			btnCancelar.setVisible(true);
 			fTxtNomeProduto.requestFocus();
+			cbxMaximoItens.setEnabled(false);
 			chckbxProdutoBloqueado.setEnabled(true);
 		}
 	}
@@ -936,18 +959,19 @@ public class Panel_produtos extends JPanel {
 					configuracoes_do_sistema = conf_dao.busca_configuracoes();
 
 					switch (configuracoes_do_sistema.getVincula_barras()) {
-					case "SIM":
-						flag = true;
-						break;
-					case "N�O":
-						flag = false;
-						break;
-					case "PERGUNTAR":
-						int opcao = JOptionPane.showConfirmDialog(lblPrecoSugerido,
-								"Deseja vincular um c�digo de barras ao produto cadastrado?",
-								"Vinculação de código de barras", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE);
-						flag = opcao == JOptionPane.YES_OPTION;
-						break;
+						case "SIM":
+							flag = true;
+							break;
+						case "N�O":
+							flag = false;
+							break;
+						case "PERGUNTAR":
+							int opcao = JOptionPane.showConfirmDialog(lblPrecoSugerido,
+									"Deseja vincular um c�digo de barras ao produto cadastrado?",
+									"Vinculação de código de barras", JOptionPane.YES_OPTION,
+									JOptionPane.QUESTION_MESSAGE);
+							flag = opcao == JOptionPane.YES_OPTION;
+							break;
 					}
 
 					if (flag) {
@@ -1028,23 +1052,29 @@ public class Panel_produtos extends JPanel {
 
 	// Alimentar lista de produtos
 	public ArrayList<Produto_cadastro> alimentarListaProdutos(ArrayList<Produto_cadastro> produtos) {
-		ProdutoDAO produto_dao = new ProdutoDAO();
 
+		Integer LimiteProduto = null;
+
+		if (cbxMaximoItens.getSelectedItem().toString() != "TODOS") {
+			LimiteProduto = Integer.parseInt(cbxMaximoItens.getSelectedItem().toString());
+		}
+
+		ProdutoDAO produto_dao = new ProdutoDAO();
 		String pesquisado = fTxtPesquisa.getText().trim() + "%";
 
 		if (fTxtPesquisa.getText().trim().isEmpty()) {
-			produtos = produto_dao.listarTodosProdutos(produtos);
+			produtos = produto_dao.listarTodosProdutos(produtos, LimiteProduto);
 			return produtos;
 		} else {
 			switch (cbxTipoPesquisa.getSelectedItem().toString()) {
-			case "Nome":
-				produtos = produto_dao.listarProdutosNome(produtos, pesquisado, 50);
-				break;
-			case "Código":
-				produtos = produto_dao.listarProdutosCodigo(produtos, pesquisado, 50);
-				break;
-			case "Cod. Barras":
-				produtos = produto_dao.listarProdutosBarras(produtos, pesquisado, 50);
+				case "Nome":
+					produtos = produto_dao.listarProdutosNome(produtos, pesquisado, LimiteProduto);
+					break;
+				case "Código":
+					produtos = produto_dao.listarProdutosCodigo(produtos, pesquisado, LimiteProduto);
+					break;
+				case "Cod. Barras":
+					produtos = produto_dao.listarProdutosBarras(produtos, pesquisado, LimiteProduto);
 			}
 
 			return produtos;

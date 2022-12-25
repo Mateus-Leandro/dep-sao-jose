@@ -534,7 +534,7 @@ public class Panel_orcamento extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				// Testa se est� editando o produto ou incluindo.
+				// Testa se esta editando o produto ou incluindo.
 				if (btnEditar.isVisible() && fTxtNomeProduto.isEditable()) {
 					jlist_tools.alimentar_lista_produtos("NOME", "%", lista_produtos, list_model_produtos,
 							scrollPaneListaProdutos, ltProdutos, fTxtNomeProduto, fTxtCodigoProduto);
@@ -835,7 +835,7 @@ public class Panel_orcamento extends JPanel {
 
 				if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_F2) {
 					if (digitaCodigoProduto.getKeyCode() != digitaCodigoProduto.VK_ENTER) {
-						jlist_tools.alimentar_lista_produtos("CóDIGO", fTxtCodigoProduto.getText().trim(),
+						jlist_tools.alimentar_lista_produtos("CODIGO", fTxtCodigoProduto.getText().trim(),
 								lista_produtos, list_model_produtos, scrollPaneListaProdutos, ltProdutos,
 								fTxtNomeProduto, fTxtCodigoProduto);
 					} else {

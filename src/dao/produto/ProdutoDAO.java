@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import db.DB;
 import entities.produto.Produto_cadastro;
 import entities.produto.Setor;
@@ -158,16 +156,23 @@ public class ProdutoDAO {
 	}
 
 //---------Listar---------------
-	public ArrayList<Produto_cadastro> listarTodosProdutos(ArrayList<Produto_cadastro> produtos) {
+	public ArrayList<Produto_cadastro> listarTodosProdutos(ArrayList<Produto_cadastro> produtos, Integer limite) {
 		conn = DB.getConnection();
 
+		String query = "SELECT produto.idProduto, descricao, barras_produto.barras, "
+				+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
+				+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
+				+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
+				+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
+				+ "WHERE barras_produto.principal IS NOT FALSE " + "ORDER BY descricao";
+
 		try {
-			ps = conn.prepareStatement("SELECT produto.idProduto, descricao, barras_produto.barras, "
-					+ "produto.codSetor, setor.nome, unidadeVenda, prCusto, margem, prSugerido, "
-					+ "prVenda, margemPraticada,bloqueadoVenda, dataCadastro " + "FROM produto "
-					+ "LEFT JOIN setor ON produto.codSetor = setor.codSetor "
-					+ "LEFT JOIN barras_produto ON produto.idProduto = barras_produto.idProduto "
-					+ "WHERE barras_produto.principal IS NOT FALSE " + "ORDER BY descricao");
+			if (limite == null) {
+				ps = conn.prepareStatement(query);
+			} else {
+				ps = conn.prepareStatement(query + " " + "LIMIT ?");
+				ps.setInt(1, limite);
+			}
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -200,7 +205,8 @@ public class ProdutoDAO {
 	}
 
 	// -----Listar produto por nome-----
-	public ArrayList<Produto_cadastro> listarProdutosNome(ArrayList<Produto_cadastro> produtos, String nome, Integer limite) {
+	public ArrayList<Produto_cadastro> listarProdutosNome(ArrayList<Produto_cadastro> produtos, String nome,
+			Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
@@ -249,8 +255,9 @@ public class ProdutoDAO {
 		}
 	}
 
-	// -----Listar produto por código interno----
-	public ArrayList<Produto_cadastro> listarProdutosCodigo(ArrayList<Produto_cadastro> produtos, String codInterno, Integer limite) {
+	// -----Listar produto por cï¿½digo interno----
+	public ArrayList<Produto_cadastro> listarProdutosCodigo(ArrayList<Produto_cadastro> produtos, String codInterno,
+			Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, "
@@ -264,8 +271,7 @@ public class ProdutoDAO {
 			if (limite == null) {
 				ps = conn.prepareStatement(select);
 			} else {
-				ps = conn.prepareStatement(select + " LIMIT "
-						+ limite);
+				ps = conn.prepareStatement(select + " LIMIT " + limite);
 			}
 
 			ps.setString(1, codInterno);
@@ -301,8 +307,9 @@ public class ProdutoDAO {
 		}
 	}
 
-	// -----Listar produto por código de barras----
-	public ArrayList<Produto_cadastro> listarProdutosBarras(ArrayList<Produto_cadastro> produtos, String barras, Integer limite) {
+	// -----Listar produto por cï¿½digo de barras----
+	public ArrayList<Produto_cadastro> listarProdutosBarras(ArrayList<Produto_cadastro> produtos, String barras,
+			Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "
@@ -340,8 +347,8 @@ public class ProdutoDAO {
 				produto.setDataCadastro(sdf.parse(data_formatada));
 				produtos.add(produto);
 			}
-			
-			//Alimentando produtos através do código de barras vinculado.
+
+			// Alimentando produtos atravï¿½s do cï¿½digo de barras vinculado.
 			ArrayList<Produto_cadastro> barras_vinculados = new ArrayList<Produto_cadastro>();
 			barras_vinculados = listarProdutosBarrasVinculados(barras_vinculados, barras, 50);
 			for (Produto_cadastro prod : barras_vinculados) {
@@ -363,8 +370,8 @@ public class ProdutoDAO {
 	}
 
 	// Pesquisar barras vinculados
-	private ArrayList<Produto_cadastro> listarProdutosBarrasVinculados(ArrayList<Produto_cadastro> produtos, String barras,
-			Integer limite) {
+	private ArrayList<Produto_cadastro> listarProdutosBarrasVinculados(ArrayList<Produto_cadastro> produtos,
+			String barras, Integer limite) {
 		conn = DB.getConnection();
 
 		String select = "SELECT produto.idProduto, descricao, barras_produto.barras, produto.codSetor, "

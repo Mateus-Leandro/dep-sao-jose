@@ -24,7 +24,7 @@ public class Jlist_tools {
 		case "NOME":
 			lista_produtos = produto_dao.listarProdutosNome(lista_produtos, fTxtNomeProduto.getText().trim() + "%", 50);
 			break;
-		case "CÓDIGO":
+		case "CODIGO":
 			lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, fTxtCodigoProduto.getText().trim(), 50);
 			break;
 		case "BARRAS":
