@@ -150,35 +150,36 @@ public class ClienteDAO {
 	public ArrayList<Cliente> listarClientes(ArrayList<Cliente> clientes, String tipo_busca, String valor_buscado,
 			Integer limite) {
 		conn = DB.getConnection();
+		String query = "SELECT * FROM clientes";
 
 		try {
 			if (tipo_busca == null) {
 				if (limite == null) {
-					ps = conn.prepareStatement("SELECT * FROM clientes");
+					ps = conn.prepareStatement(query);
 				} else {
-					ps = conn.prepareStatement("SELECT * FROM clientes LIMIT " + limite);
+					ps = conn.prepareStatement(query + " LIMIT " + limite);
 				}
 			} else {
 				switch (tipo_busca.toUpperCase()) {
 				case "NOME":
 					if (limite == null) {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ?");
+						ps = conn.prepareStatement(query + " WHERE nome LIKE ?");
 					} else {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE nome LIKE ? LIMIT " + limite);
+						ps = conn.prepareStatement(query + " WHERE nome LIKE ? LIMIT " + limite);
 					}
 					break;
 				case "APELIDO":
 					if (limite == null) {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ?");
+						ps = conn.prepareStatement(query + " WHERE apelido LIKE ?");
 					} else {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE apelido LIKE ? LIMIT " + limite);
+						ps = conn.prepareStatement(query + " WHERE apelido LIKE ? LIMIT " + limite);
 					}
 					break;
-				case "CÓDIGO":
+				case "Cï¿½DIGO":
 					if (limite == null) {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ?");
+						ps = conn.prepareStatement(query + " WHERE idCliente LIKE ?");
 					} else {
-						ps = conn.prepareStatement("SELECT * FROM clientes WHERE idCliente LIKE ? LIMIT " + limite);
+						ps = conn.prepareStatement(query + " WHERE idCliente LIKE ? LIMIT " + limite);
 					}
 					break;
 				}
@@ -256,14 +257,14 @@ public class ClienteDAO {
 			}
 
 			if (rs.next()) {
-				return "Código: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
+				return "Cï¿½digo: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
 			} else {
 				ps = conn.prepareStatement("SELECT idCliente, nome FROM clientes WHERE documento = ?");
 				ps.setString(1, documento);
 				rs = ps.executeQuery();
 
 				if (rs.next()) {
-					return "Código: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
+					return "Cï¿½digo: " + rs.getString("idCliente") + "\nNome: " + rs.getString("nome");
 				} else {
 					return null;
 				}

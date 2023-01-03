@@ -53,13 +53,15 @@ public class Panel_cliente extends Panel_pessoa {
 	private JTable tabela;
 	private JCheckBox checkBoxBloqueado;
 	private JLabel lblClientesCadastrados;
+	private JLabel lblMaximoClientes;
+	private JComboBox<String> cbxMaximoClientes = new JComboBox<String>();
 
 	/**
 	 * Create the panel.
 	 */
 	public Panel_cliente() {
-		fTxtPesquisa.setBounds(211, 411, 748, 20);
-		btnReload.setLocation(969, 409);
+		fTxtPesquisa.setBounds(211, 411, 464, 20);
+		btnReload.setLocation(682, 411);
 		lblNovo.setLocation(228, 629);
 		lblF1.setLocation(211, 629);
 		lblEditar.setLocation(456, 629);
@@ -134,6 +136,23 @@ public class Panel_cliente extends Panel_pessoa {
 				nova_pessoa(tabela);
 			}
 		});
+		
+		lblMaximoClientes = new JLabel("Máximo de clientes a exibir:");
+		lblMaximoClientes.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMaximoClientes.setBounds(731, 412, 187, 19);
+		add(lblMaximoClientes);
+
+		cbxMaximoClientes.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent alteraMaximo) {
+				if (alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
+					recarregarTabela();
+				}
+			}
+		});
+		cbxMaximoClientes.setModel(new DefaultComboBoxModel(new String[] { "50", "100", "150", "200", "TODOS" }));
+		cbxMaximoClientes.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbxMaximoClientes.setBounds(923, 409, 80, 23);
+		add(cbxMaximoClientes);
 
 		alimentarListaClientes();
 		modelo_tabela = new ModeloTabelaClientes(lista_clientes);
@@ -242,13 +261,20 @@ public class Panel_cliente extends Panel_pessoa {
 
 	public void alimentarListaClientes() {
 		String pesquisado = null;
+		Integer limiteClientes = null;
+
+		if (cbxMaximoClientes.getSelectedItem().toString() != "TODOS") {
+			limiteClientes = Integer.parseInt(cbxMaximoClientes.getSelectedItem().toString());
+		}
+
 		lista_clientes.clear();
+		
 		if (fTxtPesquisa.getText().isBlank()) {
-			lista_clientes = cliente_dao.listarClientes(lista_clientes, null, null, 1000);
+			lista_clientes = cliente_dao.listarClientes(lista_clientes, null, null, limiteClientes);
 		} else {
 			pesquisado = fTxtPesquisa.getText().trim() + "%";
 			lista_clientes = cliente_dao.listarClientes(lista_clientes, cbxTipoPesquisa.getSelectedItem().toString(),
-					pesquisado, 50);
+					pesquisado, limiteClientes);
 		}
 	}
 
