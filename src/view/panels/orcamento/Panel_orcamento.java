@@ -1144,8 +1144,9 @@ public class Panel_orcamento extends JPanel {
 		lblNomeCliente.setBounds(10, 61, 48, 19);
 		cliente.add(lblNomeCliente);
 
-		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(35, "texto");
+		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(55, "texto");
 		fTxtNomeCliente = new JFormattedTextField();
+		fTxtNomeCliente.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtNomeCliente.setDocument(limitDocument_nomeCliente);
 		fTxtNomeCliente.addFocusListener(new FocusAdapter() {
 			@Override
@@ -1430,7 +1431,7 @@ public class Panel_orcamento extends JPanel {
 		cliente.add(btnLimpaCliente);
 
 		fTxtApelido = new JFormattedTextField();
-		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(45, "texto");
+		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(55, "texto");
 		fTxtApelido.setDocument(limitDocument_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
