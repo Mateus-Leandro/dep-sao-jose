@@ -175,7 +175,7 @@ public class ClienteDAO {
 						ps = conn.prepareStatement(query + " WHERE apelido LIKE ? LIMIT " + limite);
 					}
 					break;
-				case "C�DIGO":
+				case "CÓDIGO":
 					if (limite == null) {
 						ps = conn.prepareStatement(query + " WHERE idCliente LIKE ?");
 					} else {
