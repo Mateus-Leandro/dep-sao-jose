@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+import entities.credenciaisDb.CredenciaisDb;
 import tools.Props_tools;
 
 public class BkpBanco {
@@ -23,6 +24,7 @@ public class BkpBanco {
 	private Props_tools props_tools = new Props_tools();
 	private Properties prop;
 	private long inicio;
+	private CredenciaisDb credDb;
 	
 	public Boolean realiza_backup(String pasta_destino) {
 		inicio = System.currentTimeMillis();
@@ -32,7 +34,7 @@ public class BkpBanco {
 		File arquivo_bkp = new File(pasta_destino + "\\bkp_" + data_backup + ".sql");
 
 		try {
-			// Aguardando alguns milÈsimos para que seja verificado o tamanho do arquivo e
+			// Aguardando alguns mil√©simos para que seja verificado o tamanho do arquivo e
 			// se ele existe.
 			Thread.sleep(700);
 		} catch (InterruptedException e) {
@@ -65,19 +67,15 @@ public class BkpBanco {
 			try {
 				BufferedWriter saida = new BufferedWriter(new FileWriter(arquivo_conf_bkp));
 				String brs = "\\";
-
-				saida.write("faz_bkp=N√O");
+				
+				saida.write("NS=");
+				saida.newLine();
+				saida.write("faz_bkp=N√ÉO");
 				saida.newLine();
 				saida.write("mysql_path=C:\\" + brs + "Program Files\\" + brs + "MySQL\\" + brs + "MySQL Server 8.0\\"
 						+ brs + "bin\\" + brs);
 				saida.newLine();
-				saida.write("nome_banco=banco_deposito");
-				saida.newLine();
-				saida.write("usuario_banco=");
-				saida.newLine();
-				saida.write("senha_banco=");
-				saida.newLine();
-				saida.write("bkp_diario=N√O");
+				saida.write("bkp_diario=N√ÉO");
 				saida.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -91,10 +89,11 @@ public class BkpBanco {
 			if(props != null) {
 				String faz_bkp = props.getProperty("faz_bkp");
 				if (faz_bkp.toUpperCase().equals("SIM")) {
+					credDb = new CredenciaisDb(Integer.parseInt(props.getProperty("NS")));
 					String mysql_path = props.getProperty("mysql_path");
-					String usuario = props.getProperty("usuario_banco");
-					String senha = props.getProperty("senha_banco");
-					String nome_banco = props.getProperty("nome_banco");
+					String usuario = credDb.getUsuario();
+					String senha = credDb.getSenha();
+					String nome_banco = credDb.getNomeBanco();
 					String comando = mysql_path + "mysqldump.exe";
 
 					ProcessBuilder proc = new ProcessBuilder(comando, "--user=" + usuario, "--password=" + senha,

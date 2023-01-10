@@ -40,7 +40,7 @@ public class TelaPrincipal extends JFrame {
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	public Panel_cliente clientes = new Panel_cliente();
-	private Panel_fornedor_pedido fornecedor_pedidos = new Panel_fornedor_pedido();
+//	private Panel_fornedor_pedido fornecedor_pedidos = new Panel_fornedor_pedido();
 	private Panel_produtos produtos = new Panel_produtos();
 	private Panel_orcamento orcamentos = new Panel_orcamento();
 	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
@@ -48,7 +48,7 @@ public class TelaPrincipal extends JFrame {
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
-	public String versao = "v. 14.05.22";
+	public String versao = "v. 05.01.23";
 
 	/**
 	 * Launch the application.
@@ -106,7 +106,7 @@ public class TelaPrincipal extends JFrame {
 		orcamentos.setVisible(true);
 
 		tabbedPane.addTab("Clientes", clientes);
-		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
+//		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
 		tabbedPane.addTab("Produtos", produtos);
 		tabbedPane.addTab("Orçamentos", orcamentos);
 

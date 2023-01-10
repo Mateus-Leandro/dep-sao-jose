@@ -2,12 +2,27 @@ package pdf;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.ServiceUI;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.swing.JOptionPane;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -50,6 +65,7 @@ public class Gera_pdf {
 	private PdfPCell cel_orcamento;
 	private PdfPCell cel_data_criacao;
 	private PdfPCell cel_cliente;
+	private PdfPCell celular_cliente;
 	private PdfPCell cel_endereco;
 	private PdfPCell cel_quantidade_produtos;
 
@@ -71,9 +87,9 @@ public class Gera_pdf {
 	private PdfPCell cel_desc_prd;
 	private PdfPCell cel_desc_orc;
 	private PdfPCell cel_vlr_tot;
-	
-	// Tabela assinatura/vencimento 
-	private float[] largura_colunas_assinatura = {90f, 30f};
+
+	// Tabela assinatura/vencimento
+	private float[] largura_colunas_assinatura = { 90f, 30f };
 	private PdfPTable tabela_assinatura;
 	private PdfPCell cel_assinatura;
 	private PdfPCell cel_vencimento;
@@ -107,7 +123,6 @@ public class Gera_pdf {
 
 			// Teste para verificar se está sendo impresso um orçamento sem salvar (Sem Id)
 			orcamento_nao_salvo = orcamento.getId_orcamento() == null;
-
 			File arquivo;
 			if (!orcamento_nao_salvo) {
 				arquivo = new File("C:/dep/pdf/Orçamento_" + orcamento.getId_orcamento().toString() + ".pdf");
@@ -136,6 +151,7 @@ public class Gera_pdf {
 			}
 
 			documento.close();
+//			imprimir(arquivo.getAbsolutePath());
 			Desktop.getDesktop().open(arquivo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,7 +173,7 @@ public class Gera_pdf {
 			p.setFont(negritoPequena);
 			p.add("-" + via + "-");
 			cel_via_cliente = new PdfPCell(p);
-			
+
 			p = new Paragraph();
 			p.setFont(fonteCabecalho);
 			p.add("ORÇAMENTO");
@@ -227,6 +243,10 @@ public class Gera_pdf {
 			p.setFont(fontePadraoMedia);
 			cel_cliente = new PdfPCell(p);
 
+			p = new Paragraph("Cel: " + orcamento.getCliente().getCelular());
+			p.setFont(fontePadraoMedia);
+			celular_cliente = new PdfPCell(p);
+
 			String rua = "";
 			String numero = "";
 			String bairro = "";
@@ -248,7 +268,7 @@ public class Gera_pdf {
 			}
 
 			p = new Paragraph("Endereço: "
-					+ String.format("%-59.59s", String.format("%-28.28s", rua) + numero + bairro + cidade));
+					+ String.format("%-52.52s", String.format("%-28.28s", rua) + numero + bairro + cidade));
 			p.setFont(fontePadraoMedia);
 			cel_endereco = new PdfPCell(p);
 
@@ -262,7 +282,7 @@ public class Gera_pdf {
 			tabela_cabecalho2.addCell(cel_data_criacao);
 			tabela_cabecalho2.addCell(cel_cliente);
 
-			tabela_cabecalho2.addCell(cel_em_branco);
+			tabela_cabecalho2.addCell(celular_cliente);
 			tabela_cabecalho2.addCell(cel_endereco);
 			tabela_cabecalho2.addCell(cel_quantidade_produtos);
 
@@ -364,10 +384,10 @@ public class Gera_pdf {
 					linhas = 155;
 				} else {
 					linhas = 158;
-				} 
-			} else if(orcamento.getProdutos_do_orcamento().size() < 40) {
+				}
+			} else if (orcamento.getProdutos_do_orcamento().size() < 40) {
 				linhas = 548;
-			}else {
+			} else {
 				linhas = 1310;
 			}
 			tabela_produtos.setSpacingAfter(linhas - (orcamento.getProdutos_do_orcamento().size() * 14));
@@ -432,23 +452,23 @@ public class Gera_pdf {
 			tabela_assinatura = new PdfPTable(largura_colunas_assinatura);
 			p = new Paragraph();
 			p.setFont(fontePadraoMedia);
-			p.add("Assinatura do cliente:" + gera_string(38, "_")); 
-			
+			p.add("Assinatura do cliente:" + gera_string(38, "_"));
+
 			cel_assinatura = new PdfPCell(p);
 
 			p = new Paragraph();
 			p.setFont(fontePadraoMediaVermelha);
 			p.add("Vencimento:___/___/___");
 			cel_vencimento = new PdfPCell(p);
-			
+
 			linha_invisivel_tabela_assinatura();
 			tabela_assinatura.addCell(cel_assinatura);
 			tabela_assinatura.addCell(cel_vencimento);
 			tabela_assinatura.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tabela_assinatura.setWidthPercentage(100);
-			
+
 			documento.add(tabela_assinatura);
-			
+
 			p = new Paragraph();
 			p.setFont(negritoPequenaVermelha);
 			p.add("Orçamento válido por até 30 dias. Após esse período os valores podem sofrer alterações.");
@@ -500,6 +520,7 @@ public class Gera_pdf {
 		cel_orcamento.setBorderColor(BaseColor.WHITE);
 		cel_data_criacao.setBorderColor(BaseColor.WHITE);
 		cel_cliente.setBorderColor(BaseColor.WHITE);
+		celular_cliente.setBorderColor(BaseColor.WHITE);
 		cel_endereco.setBorderColor(BaseColor.WHITE);
 		cel_quantidade_produtos.setBorderColor(BaseColor.WHITE);
 		cel_em_branco.setBorderColor(BaseColor.WHITE);
@@ -511,9 +532,36 @@ public class Gera_pdf {
 		cel_desc_orc.setBorderColor(BaseColor.WHITE);
 		cel_vlr_tot.setBorderColor(BaseColor.WHITE);
 	}
-	
+
 	public void linha_invisivel_tabela_assinatura() {
 		cel_assinatura.setBorderColor(BaseColor.WHITE);
 		cel_vencimento.setBorderColor(BaseColor.WHITE);
+	}
+
+	public void imprimir(String arquivo) {
+		PrintService[] printService = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PDF, null);
+		PrintService impressoraPadrao = PrintServiceLookup.lookupDefaultPrintService();
+		DocFlavor docFlavor = DocFlavor.INPUT_STREAM.PDF;
+		HashDocAttributeSet hashDocAttributeSet = new HashDocAttributeSet();
+
+		try {
+			FileInputStream fileInputStream = new FileInputStream(arquivo);
+			Doc doc = new SimpleDoc(fileInputStream, docFlavor, hashDocAttributeSet);
+			PrintRequestAttributeSet printRequestAttributeSet = new HashPrintRequestAttributeSet();
+			
+			PrintService printServico = ServiceUI.printDialog(null, 300, 200, printService, impressoraPadrao, docFlavor,
+					printRequestAttributeSet);
+
+			if (impressoraPadrao != null) {
+				JOptionPane.showMessageDialog(null,
+						"Orçamento enviado para a impressora, aguarde a impressão....",
+						"Impressão do orçamento.", JOptionPane.NO_OPTION);
+				DocPrintJob docPrintJob = impressoraPadrao.createPrintJob();
+				docPrintJob.print(doc, printRequestAttributeSet);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import entities.credenciaisDb.CredenciaisDb;
 import tools.Log_tools;
 
 public class DB {
@@ -30,6 +31,8 @@ public class DB {
 	private static String ipBanco;
 	private static String nomeBanco;
 	private static String url;
+
+	private static CredenciaisDb credDb;
 
 	// Busca conexão com o banco de dados.
 	public static Connection getConnection() {
@@ -50,10 +53,10 @@ public class DB {
 					try {
 						props = carregarDados();
 						verifica_serie();
-						url = "jdbc:mysql://" + ipBanco + ":3306" + "/" + nomeBanco
+						url = "jdbc:mysql://" + ipBanco + ":3306" + "/" + credDb.getNomeBanco()
 								+ "?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=UTC";
 
-						conn = DriverManager.getConnection(url, usuario, senha);
+						conn = DriverManager.getConnection(url, credDb.getUsuario(), credDb.getSenha());
 
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -152,13 +155,11 @@ public class DB {
 		NS = Integer.parseInt(props.getProperty("NS"));
 		ipBanco = props.getProperty("ipBd");
 
-		switch (NS) {
-			case 1:
-				usuario = "dep";
-				nomeBanco = "banco_deposito";
-				senha = "dep@saojose";
-				break;
-		}
-
+		credDb = new CredenciaisDb(NS);
+	}
+	
+	
+	public Integer getSerie() {
+		return NS;
 	}
 }

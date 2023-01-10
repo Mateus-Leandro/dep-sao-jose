@@ -744,7 +744,7 @@ public class Panel_orcamento extends JPanel {
 		lblTotalMercadoriasLiquido = new JLabel("Total mercadorias(L\u00EDquido)");
 		lblTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTotalMercadoriasLiquido.setForeground(new Color(0, 128, 0));
-		lblTotalMercadoriasLiquido.setBounds(269, 428, 161, 19);
+		lblTotalMercadoriasLiquido.setBounds(731, 428, 161, 19);
 		produtos.add(lblTotalMercadoriasLiquido);
 
 		fTxtTotalMercadoriasLiquido = new JFormattedTextField();
@@ -753,13 +753,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasLiquido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasLiquido.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasLiquido.setColumns(10);
-		fTxtTotalMercadoriasLiquido.setBounds(433, 428, 105, 20);
+		fTxtTotalMercadoriasLiquido.setBounds(899, 427, 105, 20);
 		produtos.add(fTxtTotalMercadoriasLiquido);
 
 		lblTotalMercadoriasBruto = new JLabel("Total mercadorias(Bruto)");
 		lblTotalMercadoriasBruto.setForeground(Color.BLUE);
 		lblTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalMercadoriasBruto.setBounds(577, 428, 152, 19);
+		lblTotalMercadoriasBruto.setBounds(10, 428, 152, 19);
 		produtos.add(lblTotalMercadoriasBruto);
 
 		fTxtTotalMercadoriasBruto = new JFormattedTextField();
@@ -768,12 +768,13 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalMercadoriasBruto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtTotalMercadoriasBruto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalMercadoriasBruto.setColumns(10);
-		fTxtTotalMercadoriasBruto.setBounds(733, 427, 109, 20);
+		fTxtTotalMercadoriasBruto.setBounds(166, 427, 109, 20);
 		produtos.add(fTxtTotalMercadoriasBruto);
 
 		lblFrete = new JLabel("Frete");
+		lblFrete.setForeground(new Color(139, 69, 19));
 		lblFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFrete.setBounds(877, 428, 36, 19);
+		lblFrete.setBounds(571, 428, 36, 19);
 		produtos.add(lblFrete);
 
 		fTxtFrete = new JFormattedTextField();
@@ -796,7 +797,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtFrete.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtFrete.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtFrete.setColumns(10);
-		fTxtFrete.setBounds(915, 427, 89, 20);
+		fTxtFrete.setBounds(608, 427, 89, 20);
 		produtos.add(fTxtFrete);
 
 		lblQuantidadeProdutos = new JLabel("N\u00BA de produtos");
@@ -1093,7 +1094,7 @@ public class Panel_orcamento extends JPanel {
 		lblTotalDescontoProduto = new JLabel("Desconto mercadorias");
 		lblTotalDescontoProduto.setForeground(new Color(255, 69, 0));
 		lblTotalDescontoProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTotalDescontoProduto.setBounds(9, 430, 142, 19);
+		lblTotalDescontoProduto.setBounds(297, 428, 142, 19);
 		produtos.add(lblTotalDescontoProduto);
 
 		separadorInformacoesDoCliente_2 = new JSeparator();
@@ -1106,7 +1107,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtTotalDescontoProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtTotalDescontoProduto.setEditable(false);
 		fTxtTotalDescontoProduto.setColumns(10);
-		fTxtTotalDescontoProduto.setBounds(148, 427, 107, 20);
+		fTxtTotalDescontoProduto.setBounds(437, 427, 107, 20);
 		produtos.add(fTxtTotalDescontoProduto);
 
 		cliente = new JPanel();

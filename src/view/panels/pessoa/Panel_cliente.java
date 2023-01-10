@@ -77,6 +77,24 @@ public class Panel_cliente extends Panel_pessoa {
 		checkBoxBloqueado.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		checkBoxBloqueado.setBounds(844, 73, 159, 23);
 		add(checkBoxBloqueado);
+		
+		lblMaximoClientes = new JLabel("Máximo de clientes a exibir:");
+		lblMaximoClientes.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMaximoClientes.setBounds(731, 412, 187, 19);
+		add(lblMaximoClientes);
+
+		cbxMaximoClientes.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent alteraMaximo) {
+				if (alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
+					recarregarTabela();
+				}
+			}
+		});
+		cbxMaximoClientes.setModel(new DefaultComboBoxModel(new String[] { "50", "100", "150", "200", "TODOS" }));
+		cbxMaximoClientes.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbxMaximoClientes.setBounds(923, 409, 80, 23);
+		add(cbxMaximoClientes);
+		
 		checkBoxBloqueado.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickClienteBloqueado) {
 				if (checkBoxBloqueado.isSelected()) {
@@ -137,22 +155,6 @@ public class Panel_cliente extends Panel_pessoa {
 			}
 		});
 		
-		lblMaximoClientes = new JLabel("Máximo de clientes a exibir:");
-		lblMaximoClientes.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblMaximoClientes.setBounds(731, 412, 187, 19);
-		add(lblMaximoClientes);
-
-		cbxMaximoClientes.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent alteraMaximo) {
-				if (alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
-					recarregarTabela();
-				}
-			}
-		});
-		cbxMaximoClientes.setModel(new DefaultComboBoxModel(new String[] { "50", "100", "150", "200", "TODOS" }));
-		cbxMaximoClientes.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxMaximoClientes.setBounds(923, 409, 80, 23);
-		add(cbxMaximoClientes);
 
 		alimentarListaClientes();
 		modelo_tabela = new ModeloTabelaClientes(lista_clientes);
