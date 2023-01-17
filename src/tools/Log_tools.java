@@ -34,7 +34,7 @@ public class Log_tools {
 
             // Escreve a mensagem de erro no arquivo
             log.addHandler(fh);
-            log.logp(Level.WARNING, sourceClass, sourceMethod, msg.toString() + "\n");
+            log.logp(Level.WARNING, sourceClass, sourceMethod, "\n" + msg.toString() + "\n\n=============================\n" );
             fh.close();
 
         } catch (IOException | SecurityException ex) {
