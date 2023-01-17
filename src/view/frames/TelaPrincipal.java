@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import bkp.BkpBanco;
 import dao.configuracoes.ConfiguracaoDAO;
 import dao.pessoa.ClienteDAO;
+import db.DbCriaTabelas;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
 import view.panels.Panel_bkp;
@@ -37,14 +38,15 @@ public class TelaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ConfiguracaoDAO conf_dao = new ConfiguracaoDAO();
 	private Configuracoes configuracoes_do_sistema = conf_dao.busca_configuracoes();
+	private DbCriaTabelas dbCriaTabelas = new DbCriaTabelas();
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	public Panel_cliente clientes = new Panel_cliente();
-//	private Panel_fornedor_pedido fornecedor_pedidos = new Panel_fornedor_pedido();
-	private Panel_produtos produtos = new Panel_produtos();
-	private Panel_orcamento orcamentos = new Panel_orcamento();
-	private Panel_configuracoes configuracoes = new Panel_configuracoes(this);
-	private Panel_bkp panel_bkp = new Panel_bkp();
+	public Panel_cliente clientes;
+	private Panel_fornedor_pedido fornecedor_pedidos;
+	private Panel_produtos produtos;
+	private Panel_orcamento orcamentos;
+	private Panel_configuracoes configuracoes;
+	private Panel_bkp panel_bkp;
 	private BkpBanco bkp_banco = new BkpBanco();
 	private Boolean faz_bkp = bkp_banco.faz_bkp();
 	private Boolean faz_bkp_diario = bkp_banco.faz_bkp_diario();
@@ -81,13 +83,11 @@ public class TelaPrincipal extends JFrame {
 			}
 		}
 
+		dbCriaTabelas.gera_tabelas();
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/ferramentas.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		jframe_tools.setDimensaoTela(this);
-//		this.setBounds(jframe_tools.left,jframe_tools.top,jframe_tools.width,jframe_tools.height);
-//		this.setExtendedState(this.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1060, 734);
-//		setMinimumSize(jframe_tools.getDimension());
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,17 +96,23 @@ public class TelaPrincipal extends JFrame {
 
 		tabbedPane.setBorder(UIManager.getBorder("CheckBoxMenuItem.border"));
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
-//		tabbedPane.setBounds(jframe_tools.left + 10,jframe_tools.top + 10,jframe_tools.width - 30,jframe_tools.height - 40);
 		tabbedPane.setBounds(5, 5, 1035, 679);
 		contentPane.add(tabbedPane);
 		setLocationRelativeTo(null);
+
+		produtos = new Panel_produtos();
+		clientes = new Panel_cliente();
+		fornecedor_pedidos = new Panel_fornedor_pedido();
+		orcamentos = new Panel_orcamento();
+		configuracoes = new Panel_configuracoes(this);
+		panel_bkp = new Panel_bkp();
 
 		clientes.setVisible(true);
 		produtos.setVisible(true);
 		orcamentos.setVisible(true);
 
 		tabbedPane.addTab("Clientes", clientes);
-//		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
+		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
 		tabbedPane.addTab("Produtos", produtos);
 		tabbedPane.addTab("Orçamentos", orcamentos);
 
