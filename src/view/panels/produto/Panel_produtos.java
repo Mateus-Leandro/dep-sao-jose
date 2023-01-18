@@ -182,17 +182,17 @@ public class Panel_produtos extends JPanel {
 		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtNomeProduto.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNomeProduto.setBounds(190, 152, 344, 20);
+		fTxtNomeProduto.setBounds(190, 152, 333, 20);
 		add(fTxtNomeProduto);
 
 		lblSetor = new JLabel("Setor");
 		lblSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSetor.setBounds(560, 153, 33, 19);
+		lblSetor.setBounds(547, 153, 33, 19);
 		add(lblSetor);
 
 		lblCodigoBarras = new JLabel("Barras");
 		lblCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodigoBarras.setBounds(862, 153, 38, 19);
+		lblCodigoBarras.setBounds(833, 153, 38, 19);
 		add(lblCodigoBarras);
 
 		MaskFormatter mascara_barras = null;
@@ -216,7 +216,7 @@ public class Panel_produtos extends JPanel {
 		fTxtCodigoBarras.setEditable(false);
 		fTxtCodigoBarras.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fTxtCodigoBarras.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtCodigoBarras.setBounds(903, 152, 117, 20);
+		fTxtCodigoBarras.setBounds(874, 152, 117, 20);
 		add(fTxtCodigoBarras);
 
 		btnMaisSetor = new JButton();
@@ -229,7 +229,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		btnMaisSetor.setIcon(icones.getIcone_mais());
-		btnMaisSetor.setBounds(806, 150, 26, 22);
+		btnMaisSetor.setBounds(796, 150, 26, 22);
 		add(btnMaisSetor);
 
 		btnMaisBarras = new JButton();
@@ -246,7 +246,7 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		btnMaisBarras.setIcon(icones.getIcone_mais());
-		btnMaisBarras.setBounds(1129, 155, 25, 19);
+		btnMaisBarras.setBounds(995, 150, 26, 22);
 		add(btnMaisBarras);
 
 		lblPrecoCusto = new JLabel("Pr. Custo");
@@ -612,13 +612,13 @@ public class Panel_produtos extends JPanel {
 			}
 		});
 		cbxSetor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbxSetor.setBounds(594, 152, 210, 20);
+		cbxSetor.setBounds(581, 152, 210, 20);
 		add(cbxSetor);
 
 		lblObg_nomeProduto = new JLabel("*");
 		lblObg_nomeProduto.setForeground(Color.RED);
 		lblObg_nomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblObg_nomeProduto.setBounds(537, 164, 20, 15);
+		lblObg_nomeProduto.setBounds(525, 164, 20, 15);
 		add(lblObg_nomeProduto);
 
 		lblObg_precoVenda = new JLabel("*");
