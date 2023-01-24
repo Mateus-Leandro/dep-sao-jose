@@ -2,7 +2,7 @@ package tools;
 
 import javax.swing.JFormattedTextField;
 
-public class Jtext_tools {
+public class Move_cursor_inicio {
 	
 	public void move_cursor_inicio(JFormattedTextField nome_campo) {
 		if(nome_campo.getText().trim().isEmpty()) {

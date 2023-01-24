@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class Log_tools {
+public class Grava_log {
 
 	
 	public void grava_log_error(String sourceClass, String sourceMethod, Exception msg){

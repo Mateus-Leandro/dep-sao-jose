@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -51,13 +53,11 @@ import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterData;
 import tables.tableSorters.SorterMonetario;
-import tools.JTextFieldLimit;
-import tools.Jtext_tools;
+import tools.Limita_text_field;
+import tools.Move_cursor_inicio;
 import view.dialog.CadastroSetor;
 import view.dialog.VariosBarras;
 import view.formatFields.FormataNumeral;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class Panel_produtos extends JPanel {
 	private JTextField txtCodigo;
@@ -105,7 +105,7 @@ public class Panel_produtos extends JPanel {
 	private JFormattedTextField fTxtMargemPraticada;
 	private JComboBox<String> cbxFatorVenda;
 	private JComboBox<Setor> cbxSetor = new JComboBox<Setor>();
-	private Jtext_tools text_tools = new Jtext_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 	private JLabel lblObg_nomeProduto;
 	private JLabel lblObg_precoVenda;
 	private JCheckBox chckbxProdutoBloqueado;
@@ -135,7 +135,7 @@ public class Panel_produtos extends JPanel {
 		tecla_pressionada(); // Teclas de atalho.
 		cbxMaximoItens.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent alteraMaximo) {
-				if(alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
+				if (alteraMaximo.getStateChange() == ItemEvent.SELECTED) {
 					recarregarTabela();
 				}
 			}
@@ -161,8 +161,8 @@ public class Panel_produtos extends JPanel {
 		lblNome.setBounds(150, 153, 38, 19);
 		add(lblNome);
 
-		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
-		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
+		Limita_text_field limita_text_field_Document_nomeProduto = new Limita_text_field(49, "texto");
+		fTxtNomeProduto.setDocument(limita_text_field_Document_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addKeyListener(new KeyAdapter() {
 			@Override
@@ -177,7 +177,7 @@ public class Panel_produtos extends JPanel {
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeProduto) {
-				text_tools.move_cursor_inicio(fTxtNomeProduto);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomeProduto);
 			}
 		});
 		fTxtNomeProduto.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -294,7 +294,7 @@ public class Panel_produtos extends JPanel {
 		});
 		fTxtMargem.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		fTxtMargem.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		fTxtMargem.setDocument(new FormataNumeral(6, 2));
+		fTxtMargem.setDocument(new FormataNumeral(3, 0));
 		fTxtMargem.setBounds(259, 253, 57, 20);
 		add(fTxtMargem);
 
@@ -482,7 +482,7 @@ public class Panel_produtos extends JPanel {
 		fTxtPesquisa.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent ganhoFocoPesquisa) {
-				text_tools.move_cursor_inicio(fTxtPesquisa);
+				move_cursor_inicio.move_cursor_inicio(fTxtPesquisa);
 			}
 		});
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
@@ -938,7 +938,7 @@ public class Panel_produtos extends JPanel {
 		}
 
 		Produto_cadastro produto = new Produto_cadastro(null, descricao, (Setor) setor, unidadeVenda, precoVenda,
-				codigo_barra, dataCadastro, precoCusto, margem, prSugerido, margemPraticada, bloqueadoVenda);
+				margem, codigo_barra, dataCadastro, precoCusto, prSugerido, margemPraticada, bloqueadoVenda);
 
 		fTxtPrecoVenda.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		fTxtNomeProduto.setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -1117,7 +1117,7 @@ public class Panel_produtos extends JPanel {
 
 	public void calcula_sugerido() {
 
-		// Testa se margem e custo est�o vazios.
+		// Testa se margem e custo estão vazios.
 		if (!fTxtPrecoCusto.getText().trim().isEmpty() && !fTxtMargem.getText().trim().isEmpty()) {
 			DecimalFormat formata_sugestao = new DecimalFormat("#,###0.00");
 

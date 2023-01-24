@@ -28,7 +28,7 @@ import dao.pessoa.ClienteDAO;
 import entities.configuracoes.Configuracoes;
 import entities.pessoa.Cliente;
 import icons.Icones;
-import tools.Jtext_tools;
+import tools.Move_cursor_inicio;
 import view.frames.TelaPrincipal;
 
 public class Panel_configuracoes extends JPanel {
@@ -76,7 +76,7 @@ public class Panel_configuracoes extends JPanel {
 	private JLabel lblObg_celular;
 	private JLabel lblObg_consumidor;
 	private JLabel lblObg_nomeEmpresa;
-	private Jtext_tools text_tools = new Jtext_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 	private JLabel lblObsConsumidor;
 	private JLabel lblConfiguracoes_faturamento_1;
 	private JSeparator separador_configuracoes_produtos;
@@ -138,7 +138,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtNomeEmpresa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeEmpresa) {
-				text_tools.move_cursor_inicio(fTxtNomeEmpresa);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomeEmpresa);
 			}
 		});
 		fTxtNomeEmpresa.setToolTipText("Nome mostrado na impress\u00E3o do or\u00E7amento");
@@ -325,7 +325,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEndereco.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEndereco) {
-				text_tools.move_cursor_inicio(fTxtEndereco);
+				move_cursor_inicio.move_cursor_inicio(fTxtEndereco);
 			}
 		});
 		fTxtEndereco.setBounds(74, 216, 363, 20);
@@ -353,7 +353,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtNomeResponsavel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeResponsavel) {
-				text_tools.move_cursor_inicio(fTxtNomeEmpresa);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomeEmpresa);
 			}
 		});
 		fTxtNomeResponsavel.setBounds(561, 185, 252, 20);
@@ -424,7 +424,7 @@ public class Panel_configuracoes extends JPanel {
 		fTxtEmail.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEmail) {
-				text_tools.move_cursor_inicio(fTxtEmail);
+				move_cursor_inicio.move_cursor_inicio(fTxtEmail);
 			}
 		});
 		fTxtEmail.setBounds(550, 248, 285, 20);
@@ -534,7 +534,7 @@ public class Panel_configuracoes extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent clickConsumidorFinal) {
 				if (!btnConfigurar.isEnabled()) {
-					text_tools.move_cursor_inicio(fTxtConsumidorFinal);
+					move_cursor_inicio.move_cursor_inicio(fTxtConsumidorFinal);
 					alimentar_lista_consumidor_final("NOME", "%");
 				}
 			}

@@ -4,7 +4,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-public class JTextFieldLimit extends PlainDocument {
+public class Limita_text_field extends PlainDocument {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class JTextFieldLimit extends PlainDocument {
 	private char c;
 	private byte n;
 
-	public JTextFieldLimit(int limite, String formato) {
+	public Limita_text_field(int limite, String formato) {
 		super();
 		this.limite = limite;
 		this.formato = formato;

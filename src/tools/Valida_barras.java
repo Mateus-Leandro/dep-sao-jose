@@ -1,6 +1,6 @@
 package tools;
 
-public class Prod_tools {
+public class Valida_barras {
 
 	public Boolean valida_barras(String barras) {
 		int digito;

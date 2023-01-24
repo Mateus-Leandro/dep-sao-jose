@@ -34,7 +34,7 @@ import javax.swing.text.MaskFormatter;
 import dao.produto.SetorDAO;
 import entities.produto.Setor;
 import tables.tableModels.ModeloTabelaSetores;
-import tools.Jtext_tools;
+import tools.Move_cursor_inicio;
 import view.panels.produto.Panel_produtos;
 
 import java.awt.Color;
@@ -62,7 +62,7 @@ public class CadastroSetor extends JDialog {
 	ArrayList<Setor> setores = new ArrayList<Setor>();
 	ModeloTabelaSetores modelo = new ModeloTabelaSetores(setores);
 	private Panel_produtos panel_produtos;
-	private Jtext_tools text_tools = new Jtext_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 
 	/**
 	 * Launch the application.
@@ -120,7 +120,7 @@ public class CadastroSetor extends JDialog {
 			fTxtNomeSetor.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent clickNomeSetor) {
-					text_tools.move_cursor_inicio(fTxtNomeSetor);
+					move_cursor_inicio.move_cursor_inicio(fTxtNomeSetor);
 				}
 			});
 			fTxtNomeSetor.setBounds(179, 13, 225, 20);

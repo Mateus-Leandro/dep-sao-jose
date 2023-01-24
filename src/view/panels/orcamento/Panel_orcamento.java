@@ -60,9 +60,9 @@ import entities.produto.Produto_orcamento;
 import icons.Icones;
 import pdf.Gera_pdf;
 import tables.tableModels.ModeloTabelaProdutos_Orcamento;
-import tools.JTextFieldLimit;
 import tools.Jlist_tools;
-import tools.Jtext_tools;
+import tools.Limita_text_field;
+import tools.Move_cursor_inicio;
 import view.dialog.Faturamento;
 import view.dialog.Orcamentos_do_cliente;
 import view.formatFields.FormataNumeral;
@@ -174,7 +174,7 @@ public class Panel_orcamento extends JPanel {
 	private JLabel lblCodBarra;
 	private JFormattedTextField fTxtCodigoBarra;
 	private Produto_cadastro produto_selecionado;
-	private Jtext_tools text_tools = new Jtext_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 	private JButton btnSalvar_editado;
 	private JButton btnCancelar_editado;
 	private Double total_mercadorias_bruto = 0.00;
@@ -277,9 +277,9 @@ public class Panel_orcamento extends JPanel {
 		tabbedPane.setBounds(3, 110, 1019, 541);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(tabbedPane);
-		JTextFieldLimit limitDocument_nomeProduto = new JTextFieldLimit(49, "texto");
-		JTextFieldLimit limitDocument_codigoProduto = new JTextFieldLimit(6, "inteiro");
-		JTextFieldLimit limitDocument_codigoBarra = new JTextFieldLimit(14, "inteiro");
+		Limita_text_field limita_text_field_nomeProduto = new Limita_text_field(49, "texto");
+		Limita_text_field limita_text_field_codigoProduto = new Limita_text_field(6, "inteiro");
+		Limita_text_field limita_text_field_codigoBarra = new Limita_text_field(14, "inteiro");
 
 		btnNovo = new JButton("Novo");
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -440,7 +440,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtPorcentagemDesconto.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent ganhoFocoPorcentagemDesconto) {
-				text_tools.move_cursor_inicio(fTxtPorcentagemDesconto);
+				move_cursor_inicio.move_cursor_inicio(fTxtPorcentagemDesconto);
 			}
 		});
 		fTxtPorcentagemDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -467,7 +467,7 @@ public class Panel_orcamento extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoValorDesconto) {
-				text_tools.move_cursor_inicio(fTxtValorDesconto);
+				move_cursor_inicio.move_cursor_inicio(fTxtValorDesconto);
 			}
 		});
 		fTxtValorDesconto.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -518,12 +518,12 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(lblNomeProduto);
 
 		fTxtNomeProduto = new JFormattedTextField();
-		fTxtNomeProduto.setDocument(limitDocument_nomeProduto);
+		fTxtNomeProduto.setDocument(limita_text_field_nomeProduto);
 		fTxtNomeProduto.setHorizontalAlignment(SwingConstants.LEFT);
 		fTxtNomeProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeProduto) {
-				text_tools.move_cursor_inicio(fTxtNomeProduto);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomeProduto);
 			}
 		});
 		fTxtNomeProduto.addFocusListener(new FocusAdapter() {
@@ -815,11 +815,11 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(fTxtQuantidadeTotal);
 
 		fTxtCodigoProduto = new JFormattedTextField();
-		fTxtCodigoProduto.setDocument(limitDocument_codigoProduto);
+		fTxtCodigoProduto.setDocument(limita_text_field_codigoProduto);
 		fTxtCodigoProduto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCodigoProduto) {
-				text_tools.move_cursor_inicio(fTxtCodigoProduto);
+				move_cursor_inicio.move_cursor_inicio(fTxtCodigoProduto);
 			}
 		});
 		fTxtCodigoProduto.setHorizontalAlignment(SwingConstants.LEFT);
@@ -888,11 +888,11 @@ public class Panel_orcamento extends JPanel {
 		produtos.add(lblCodBarra);
 
 		fTxtCodigoBarra = new JFormattedTextField();
-		fTxtCodigoBarra.setDocument(limitDocument_codigoBarra);
+		fTxtCodigoBarra.setDocument(limita_text_field_codigoBarra);
 		fTxtCodigoBarra.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCodigoBarras) {
-				text_tools.move_cursor_inicio(fTxtCodigoBarra);
+				move_cursor_inicio.move_cursor_inicio(fTxtCodigoBarra);
 			}
 		});
 		fTxtCodigoBarra.addFocusListener(new FocusAdapter() {
@@ -1144,10 +1144,10 @@ public class Panel_orcamento extends JPanel {
 		lblNomeCliente.setBounds(10, 61, 48, 19);
 		cliente.add(lblNomeCliente);
 
-		JTextFieldLimit limitDocument_nomeCliente = new JTextFieldLimit(55, "texto");
+		Limita_text_field limita_text_field_nomeCliente = new Limita_text_field(55, "texto");
 		fTxtNomeCliente = new JFormattedTextField();
 		fTxtNomeCliente.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		fTxtNomeCliente.setDocument(limitDocument_nomeCliente);
+		fTxtNomeCliente.setDocument(limita_text_field_nomeCliente);
 		fTxtNomeCliente.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent perdaFocoNomeCliente) {
@@ -1157,7 +1157,7 @@ public class Panel_orcamento extends JPanel {
 		fTxtNomeCliente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeCliente) {
-				text_tools.move_cursor_inicio(fTxtNomeCliente);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomeCliente);
 			}
 		});
 		fTxtNomeCliente.setEnabled(false);
@@ -1431,8 +1431,8 @@ public class Panel_orcamento extends JPanel {
 		cliente.add(btnLimpaCliente);
 
 		fTxtApelido = new JFormattedTextField();
-		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(55, "texto");
-		fTxtApelido.setDocument(limitDocument_apelido);
+		Limita_text_field limita_text_field_apelido = new Limita_text_field(55, "texto");
+		fTxtApelido.setDocument(limita_text_field_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaApelidoCliente) {

@@ -42,8 +42,8 @@ import entities.pessoa.Fornecedor;
 import entities.pessoa.Pessoa;
 import icons.Icones;
 import tables.tableRenders.Render_tabela_clientes;
-import tools.JTextFieldLimit;
-import tools.Jtext_tools;
+import tools.Limita_text_field;
+import tools.Move_cursor_inicio;
 
 public class Panel_pessoa extends JPanel {
 	protected JTextField txtCodigo;
@@ -95,7 +95,7 @@ public class Panel_pessoa extends JPanel {
 	private JLabel lblInfoEndereco;
 	private JSeparator separador_clientes_4;
 	protected JButton btnReload;
-	private Jtext_tools text_tools = new Jtext_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 	private JLabel lblObg_nome;
 	private JLabel lblObg_celular;
 	private ClienteDAO cliente_dao = new ClienteDAO();
@@ -141,8 +141,8 @@ public class Panel_pessoa extends JPanel {
 		add(btnExcluir);
 
 		fTxtPesquisa = new JFormattedTextField();
-		JTextFieldLimit limitDocument_pesquisa = new JTextFieldLimit(30, "texto");
-		fTxtPesquisa.setDocument(limitDocument_pesquisa);
+		Limita_text_field limita_text_field_Document_pesquisa = new Limita_text_field(30, "texto");
+		fTxtPesquisa.setDocument(limita_text_field_Document_pesquisa);
 		fTxtPesquisa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -287,8 +287,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblNome);
 
 		fTxtNomePessoa = new JFormattedTextField();
-		JTextFieldLimit limitDocument_nome = new JTextFieldLimit(45, "texto");
-		fTxtNomePessoa.setDocument(limitDocument_nome);
+		Limita_text_field limita_text_field_Document_nome = new Limita_text_field(45, "texto");
+		fTxtNomePessoa.setDocument(limita_text_field_Document_nome);
 		fTxtNomePessoa.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNome) {
@@ -301,7 +301,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtNomePessoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNomeCliente) {
-				text_tools.move_cursor_inicio(fTxtNomePessoa);
+				move_cursor_inicio.move_cursor_inicio(fTxtNomePessoa);
 			}
 		});
 		fTxtNomePessoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -315,8 +315,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblApelido);
 
 		fTxtApelido = new JFormattedTextField();
-		JTextFieldLimit limitDocument_apelido = new JTextFieldLimit(40, "texto");
-		fTxtApelido.setDocument(limitDocument_apelido);
+		Limita_text_field limita_text_field_Document_apelido = new Limita_text_field(40, "texto");
+		fTxtApelido.setDocument(limita_text_field_Document_apelido);
 		fTxtApelido.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterApelido) {
@@ -329,7 +329,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtApelido.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickApelido) {
-				text_tools.move_cursor_inicio(fTxtApelido);
+				move_cursor_inicio.move_cursor_inicio(fTxtApelido);
 			}
 		});
 		fTxtApelido.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -400,8 +400,8 @@ public class Panel_pessoa extends JPanel {
 		add(btnLimpaCep);
 
 		fTxtCidade = new JFormattedTextField();
-		JTextFieldLimit limitDocument_cidade = new JTextFieldLimit(30, "texto");
-		fTxtCidade.setDocument(limitDocument_cidade);
+		Limita_text_field limita_text_field_Document_cidade = new Limita_text_field(30, "texto");
+		fTxtCidade.setDocument(limita_text_field_Document_cidade);
 		fTxtCidade.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterCidade) {
@@ -414,7 +414,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtCidade.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickCidade) {
-				text_tools.move_cursor_inicio(fTxtCidade);
+				move_cursor_inicio.move_cursor_inicio(fTxtCidade);
 			}
 		});
 		fTxtCidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -433,8 +433,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblEndereco);
 
 		fTxtEndereco = new JFormattedTextField();
-		JTextFieldLimit limitDocument_endereco = new JTextFieldLimit(49, "texto");
-		fTxtEndereco.setDocument(limitDocument_endereco);
+		Limita_text_field limita_text_field_Document_endereco = new Limita_text_field(49, "texto");
+		fTxtEndereco.setDocument(limita_text_field_Document_endereco);
 		fTxtEndereco.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEndereco) {
@@ -447,7 +447,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtEndereco.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEndereco) {
-				text_tools.move_cursor_inicio(fTxtEndereco);
+				move_cursor_inicio.move_cursor_inicio(fTxtEndereco);
 			}
 		});
 		fTxtEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -461,8 +461,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblNumero);
 
 		fTxtNumero = new JFormattedTextField();
-		JTextFieldLimit limitDocument_numero = new JTextFieldLimit(8, "texto");
-		fTxtNumero.setDocument(limitDocument_numero);
+		Limita_text_field limita_text_field_Document_numero = new Limita_text_field(8, "texto");
+		fTxtNumero.setDocument(limita_text_field_Document_numero);
 		fTxtNumero.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterNumero) {
@@ -475,7 +475,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtNumero.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickNumero) {
-				text_tools.move_cursor_inicio(fTxtNumero);
+				move_cursor_inicio.move_cursor_inicio(fTxtNumero);
 			}
 		});
 		fTxtNumero.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -489,8 +489,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblReferencia);
 
 		fTxtReferencia = new JFormattedTextField();
-		JTextFieldLimit limitDocument_referencia = new JTextFieldLimit(49, "texto");
-		fTxtReferencia.setDocument(limitDocument_referencia);
+		Limita_text_field limita_text_field_Document_referencia = new Limita_text_field(49, "texto");
+		fTxtReferencia.setDocument(limita_text_field_Document_referencia);
 		fTxtReferencia.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterReferencia) {
@@ -504,7 +504,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtReferencia.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickReferencia) {
-				text_tools.move_cursor_inicio(fTxtReferencia);
+				move_cursor_inicio.move_cursor_inicio(fTxtReferencia);
 			}
 		});
 		fTxtReferencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -518,8 +518,8 @@ public class Panel_pessoa extends JPanel {
 		add(lblBairro);
 
 		fTxtBairro = new JFormattedTextField();
-		JTextFieldLimit limitDocument_bairro = new JTextFieldLimit(30, "texto");
-		fTxtBairro.setDocument(limitDocument_bairro);
+		Limita_text_field limita_text_field_Document_bairro = new Limita_text_field(30, "texto");
+		fTxtBairro.setDocument(limita_text_field_Document_bairro);
 		fTxtBairro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterBairro) {
@@ -532,7 +532,7 @@ public class Panel_pessoa extends JPanel {
 		fTxtBairro.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickBairro) {
-				text_tools.move_cursor_inicio(fTxtBairro);
+				move_cursor_inicio.move_cursor_inicio(fTxtBairro);
 			}
 		});
 		fTxtBairro.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -614,13 +614,13 @@ public class Panel_pessoa extends JPanel {
 		add(lblEmai);
 
 		fTxtEmail = new JFormattedTextField();
-		JTextFieldLimit limitDocument_email = new JTextFieldLimit(40, "texto");
-		fTxtEmail.setDocument(limitDocument_email);
+		Limita_text_field limita_text_field_Document_email = new Limita_text_field(40, "texto");
+		fTxtEmail.setDocument(limita_text_field_Document_email);
 		fTxtEmail.setEditable(false);
 		fTxtEmail.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent clickEmail) {
-				text_tools.move_cursor_inicio(fTxtEmail);
+				move_cursor_inicio.move_cursor_inicio(fTxtEmail);
 			}
 		});
 

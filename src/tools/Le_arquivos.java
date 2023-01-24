@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Props_tools {
+public class Le_arquivos {
 	
 	public Properties le_arquivo(File caminho) {
 		FileInputStream fs;

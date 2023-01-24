@@ -36,13 +36,13 @@ import entities.pessoa.Pessoa;
 import tables.tableModels.ModeloTabelaClientes;
 import tables.tableRenders.Render_tabela_clientes;
 import tables.tableSorters.SorterData;
-import tools.Jtext_tools;
+import tools.Move_cursor_inicio;
 
 public class Panel_cliente extends Panel_pessoa {
 	protected JLabel lblTitulo;
 	protected JComboBox<String> cbxTipoPesquisa;
 	protected ArrayList<Cliente> lista_clientes = new ArrayList<Cliente>();
-	protected Jtext_tools text_tools = new Jtext_tools();
+	protected Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
 	protected ClienteDAO cliente_dao = new ClienteDAO();
 	protected Cliente cliente = new Cliente();
 	protected Render_tabela_clientes render = new Render_tabela_clientes();
@@ -77,7 +77,7 @@ public class Panel_cliente extends Panel_pessoa {
 		checkBoxBloqueado.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		checkBoxBloqueado.setBounds(844, 73, 159, 23);
 		add(checkBoxBloqueado);
-		
+
 		lblMaximoClientes = new JLabel("Máximo de clientes a exibir:");
 		lblMaximoClientes.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblMaximoClientes.setBounds(731, 412, 187, 19);
@@ -94,7 +94,7 @@ public class Panel_cliente extends Panel_pessoa {
 		cbxMaximoClientes.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cbxMaximoClientes.setBounds(923, 409, 80, 23);
 		add(cbxMaximoClientes);
-		
+
 		checkBoxBloqueado.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent clickClienteBloqueado) {
 				if (checkBoxBloqueado.isSelected()) {
@@ -154,7 +154,6 @@ public class Panel_cliente extends Panel_pessoa {
 				nova_pessoa(tabela);
 			}
 		});
-		
 
 		alimentarListaClientes();
 		modelo_tabela = new ModeloTabelaClientes(lista_clientes);
@@ -229,7 +228,7 @@ public class Panel_cliente extends Panel_pessoa {
 		ConfiguraLarguraColunaTabela(tabela);
 
 		scrollPaneTabela = new JScrollPane(tabela);
-		scrollPaneTabela.setBounds(16, 442, 987, 181);
+		scrollPaneTabela.setBounds(16, 444, 987, 181);
 		add(scrollPaneTabela);
 
 		lblClientesCadastrados = new JLabel("Clientes Cadastrados");
@@ -270,7 +269,7 @@ public class Panel_cliente extends Panel_pessoa {
 		}
 
 		lista_clientes.clear();
-		
+
 		if (fTxtPesquisa.getText().isBlank()) {
 			lista_clientes = cliente_dao.listarClientes(lista_clientes, null, null, limiteClientes);
 		} else {

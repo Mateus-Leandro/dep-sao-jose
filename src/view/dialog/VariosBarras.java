@@ -40,8 +40,8 @@ import dao.produto.BarrasDAO;
 import entities.produto.Barras_Produto;
 import entities.produto.Produto_cadastro;
 import tables.tableModels.ModeloTabelaBarras;
-import tools.Jtext_tools;
-import tools.Prod_tools;
+import tools.Move_cursor_inicio;
+import tools.Valida_barras;
 
 public class VariosBarras extends JDialog {
 
@@ -73,8 +73,8 @@ public class VariosBarras extends JDialog {
 	BarrasDAO barras_dao = new BarrasDAO();
 	ArrayList<Barras_Produto> lista = new ArrayList<Barras_Produto>();
 	ModeloTabelaBarras modelo_tabela = new ModeloTabelaBarras(lista);
-	private Jtext_tools text_tool = new Jtext_tools();
-	Prod_tools prod_tools = new Prod_tools();
+	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
+	Valida_barras valida_barras = new Valida_barras();
 
 	/**
 	 * Launch the application.
@@ -265,7 +265,7 @@ public class VariosBarras extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent clickBarras) {
 
-				text_tool.move_cursor_inicio(fTxtCodigoVinculado);
+				move_cursor_inicio.move_cursor_inicio(fTxtCodigoVinculado);
 			}
 		});
 		fTxtCodigoVinculado.setFocusLostBehavior(JFormattedTextField.PERSIST);
@@ -418,7 +418,7 @@ public class VariosBarras extends JDialog {
 		btnSalvar.doClick();
 		String barras = fTxtCodigoVinculado.getText().trim();
 
-		if (prod_tools.valida_barras(barras)) {
+		if (valida_barras.valida_barras(barras)) {
 			Boolean principal = lista.size() == 0;
 			Produto_cadastro produto_encontrado = barras_dao.novo_barras(txtCodigoProduto.getText().trim(), barras, principal);
 

@@ -24,7 +24,7 @@ import javax.swing.UIManager;
 
 import bkp.BkpBanco;
 import icons.Icones;
-import tools.Props_tools;
+import tools.Le_arquivos;
 
 public class Panel_bkp extends JPanel {
 	private JLabel lblBackupSistema;
@@ -48,8 +48,8 @@ public class Panel_bkp extends JPanel {
 	private Properties log = null;
 	private JLabel lblTamanhoAproximado;
 	private BkpBanco bkp_banco = new BkpBanco();
-	private Props_tools props_tools = new Props_tools();
-	private Properties props_bkp = props_tools.le_arquivo(new File("C:\\dep\\conf\\bkp.properties"));
+	private Le_arquivos le_arquivos = new Le_arquivos();
+	private Properties props_bkp = le_arquivos.le_arquivo(new File("C:\\dep\\conf\\bkp.properties"));
 	private JLabel lblPastaDestino;
 	private JTextField txtDestinoBkp;
 	private JButton btnPastaDestino;
@@ -277,7 +277,7 @@ public class Panel_bkp extends JPanel {
 	
 	public void le_log() {
 		if(log_bkp.exists()) {
-			log = props_tools.le_arquivo(log_bkp);
+			log = le_arquivos.le_arquivo(log_bkp);
 			if(log.getProperty("tempo") != null) {
 				Double tempo_gasto = Double.parseDouble(log.getProperty("tempo"));
 				tempo_gasto = tempo_gasto / 1000;
