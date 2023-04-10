@@ -16,14 +16,14 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import entities.credenciaisDb.CredenciaisDb;
-import tools.Log_tools;
+import tools.Grava_log;
 
 public class DB {
 
 	private static Connection conn = null;
 	private static Boolean reconectar;
 	private static Properties props;
-	private static Log_tools log_tools = new Log_tools();
+	private static Grava_log log_tools = new Grava_log();
 
 	private static String usuario;
 	private static String senha;

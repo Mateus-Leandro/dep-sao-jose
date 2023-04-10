@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import entities.credenciaisDb.CredenciaisDb;
-import tools.Props_tools;
+import tools.Le_arquivos;
 
 public class BkpBanco {
 
@@ -21,7 +21,7 @@ public class BkpBanco {
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	private String data_backup = sdf.format(new Date());
 	private String arquivo_bkp = "/bkp_" + data_backup + ".sql";
-	private Props_tools props_tools = new Props_tools();
+	private Le_arquivos props_tools = new Le_arquivos();
 	private Properties prop;
 	private long inicio;
 	private CredenciaisDb credDb;

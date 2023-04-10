@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import tools.Log_tools;
+import tools.Grava_log;
 
 public class DbCriaTabelas {
 	public String texto_lido;
@@ -16,7 +16,7 @@ public class DbCriaTabelas {
 	private Path caminho = Paths.get(arquivo.getAbsolutePath());
 	private Connection conn;
 	private PreparedStatement ps;
-	private static Log_tools log_tools = new Log_tools();
+	private static Grava_log log_tools = new Grava_log();
 
 	
 	public void gera_tabelas() {
