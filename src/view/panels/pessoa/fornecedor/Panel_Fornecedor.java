@@ -32,7 +32,6 @@ import javax.swing.table.TableRowSorter;
 
 import entities.pessoa.Fornecedor;
 import entities.pessoa.Pessoa;
-import entities.produto.Produto_cadastro;
 import tables.tableModels.ModeloTabelaFornecedores;
 import tables.tableRenders.Render_tabela_fornecedores;
 import tables.tableSorters.SorterData;
@@ -53,7 +52,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
 	private Jlist_tools jlist_tools = new Jlist_tools();
 	private DefaultListModel<Fornecedor> list_model_fornecedores = new DefaultListModel<Fornecedor>();
-	private JList<Fornecedor> ltFornecedores;
+	private JList<Fornecedor> ltFornecedores = new JList<Fornecedor>();
 
 	public Panel_Fornecedor() {
 		fTxtEmail.addKeyListener(new KeyAdapter() {

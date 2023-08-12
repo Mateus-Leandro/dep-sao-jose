@@ -32,6 +32,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import entities.pessoa.Fornecedor;
 import entities.produto.Produto_cadastro;
 import entities.produto.Produto_pedido;
 import icons.Icones;
@@ -112,6 +113,8 @@ public class Panel_pedido extends JPanel {
 	private JList<Produto_cadastro> ltProdutos;
 	private DefaultListModel<Produto_cadastro> list_model_produtos = new DefaultListModel<Produto_cadastro>();
 	private ArrayList<Produto_cadastro> lista_produtos = new ArrayList<Produto_cadastro>();
+	private DefaultListModel<Fornecedor> list_model_fornecedores = new DefaultListModel<Fornecedor>();
+	private ArrayList<Fornecedor> lista_fornecedores = new ArrayList<Fornecedor>();
 	private ArrayList<Produto_pedido> produtos_inclusos = new ArrayList<Produto_pedido>();
 	private Jlist_tools jlist_tools = new Jlist_tools();
 	private Move_cursor_inicio move_cursor_inicio = new Move_cursor_inicio();
@@ -132,6 +135,8 @@ public class Panel_pedido extends JPanel {
 	private JSeparator separador_produto_1;
 	private JButton btnLimpaDadosProduto;
 	private Calcula_sug_prvenda calcula_sug_prvenda = new Calcula_sug_prvenda();
+	private JScrollPane scrollPaneListaFornecedores;
+	private JList ltFornecedores;
 
 	/**
 	 * Create the panel.
@@ -158,6 +163,14 @@ public class Panel_pedido extends JPanel {
 		scrollPaneListaProdutos = new JScrollPane(ltProdutos);
 		scrollPaneListaProdutos.setBounds(238, 247, 371, 117);
 		scrollPaneListaProdutos.setVisible(false);
+
+		ltFornecedores = new JList();
+		ltFornecedores.setBounds(207, 175, 273, 117);
+		scrollPaneListaFornecedores = new JScrollPane(ltFornecedores);
+		scrollPaneListaFornecedores.setBounds(207, 175, 273, 117);
+		scrollPaneListaFornecedores.setVisible(false);
+
+		add(scrollPaneListaFornecedores);
 		add(scrollPaneListaProdutos);
 
 		separador_titulo = new JSeparator();
@@ -191,6 +204,25 @@ public class Panel_pedido extends JPanel {
 		add(lblNomeFornecedor);
 
 		fTxtNomeFornecedor = new JFormattedTextField();
+		fTxtNomeFornecedor.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent ganhoFocoNomeForn) {
+				jlist_tools.alimentar_lista_fornecedores("NOME", "%", lista_fornecedores, list_model_fornecedores,
+						scrollPaneListaFornecedores, ltFornecedores);
+			}
+
+			@Override
+			public void focusLost(FocusEvent perdaFocoNomeForn) {
+				scrollPaneListaFornecedores.setVisible(false);
+			}
+		});
+		fTxtNomeFornecedor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaNomeForn) {
+				jlist_tools.alimentar_lista_fornecedores("NOME", fTxtNomeFornecedor.getText().trim(),
+						lista_fornecedores, list_model_fornecedores, scrollPaneListaFornecedores, ltFornecedores);
+			}
+		});
 		fTxtNomeFornecedor.setBounds(207, 155, 273, 20);
 		Limita_text_field limita_text_field_Nome_fornecedor = new Limita_text_field(32, "texto");
 		fTxtNomeFornecedor.setDocument(limita_text_field_Nome_fornecedor);
@@ -217,6 +249,25 @@ public class Panel_pedido extends JPanel {
 		add(lblNomeFantasia);
 
 		fTxtNomeFantasia = new JFormattedTextField();
+		fTxtNomeFantasia.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent ganhoFocoNomeFant) {
+				jlist_tools.alimentar_lista_fornecedores("NOME FANT.", "%", lista_fornecedores, list_model_fornecedores,
+						scrollPaneListaFornecedores, ltFornecedores);
+			}
+
+			@Override
+			public void focusLost(FocusEvent perdaFocoNomeFant) {
+				scrollPaneListaFornecedores.setVisible(false);
+			}
+		});
+		fTxtNomeFantasia.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaNomeFantasia) {
+				jlist_tools.alimentar_lista_fornecedores("NOME FANT.", fTxtNomeFantasia.getText().trim(),
+						lista_fornecedores, list_model_fornecedores, scrollPaneListaFornecedores, ltFornecedores);
+			}
+		});
 		fTxtNomeFantasia.setBounds(582, 155, 202, 20);
 		Limita_text_field limita_text_field_Fantasia_fornecedor = new Limita_text_field(23, "texto");
 		fTxtNomeFantasia.setDocument(limita_text_field_Fantasia_fornecedor);
@@ -267,7 +318,6 @@ public class Panel_pedido extends JPanel {
 
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeProduto) {
-				// Testa se est� editando o produto ou incluindo.
 				if (btnEditar.isVisible() && fTxtNomeProduto.isEditable()) {
 					jlist_tools.alimentar_lista_produtos("NOME", "%", lista_produtos, list_model_produtos,
 							scrollPaneListaProdutos, ltProdutos);
@@ -293,6 +343,21 @@ public class Panel_pedido extends JPanel {
 		add(lblBarras);
 
 		fTxtCodigoFornecedor = new JFormattedTextField();
+		fTxtCodigoFornecedor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent digitaCodForn) {
+				if (digitaCodForn.getKeyCode() != digitaCodForn.VK_ENTER) {
+					jlist_tools.alimentar_lista_fornecedores("CODIGO", fTxtCodigoFornecedor.getText().trim(),
+							lista_fornecedores, list_model_fornecedores, scrollPaneListaFornecedores, ltFornecedores);
+				}
+			}
+		});
+		fTxtCodigoFornecedor.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent perdaFocoCodForn) {
+				scrollPaneListaFornecedores.setVisible(false);
+			}
+		});
 		fTxtCodigoFornecedor.setBounds(58, 155, 85, 20);
 		Limita_text_field limita_text_field_Document_fornecedor = new Limita_text_field(6, "inteiro");
 		fTxtCodigoFornecedor.setDocument(limita_text_field_Document_fornecedor);

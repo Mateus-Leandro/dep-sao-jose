@@ -182,7 +182,7 @@ public class FornecedorDAO {
 								"SELECT * FROM fornecedores WHERE nomeFantasia LIKE ? LIMIT " + limite);
 					}
 					break;
-				case "COD.":
+				case "CODIGO":
 					if (limite == null) {
 						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE id LIKE ?");
 					} else {

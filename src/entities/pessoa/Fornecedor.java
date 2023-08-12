@@ -45,4 +45,9 @@ public class Fornecedor extends Pessoa {
 	public void setUltimo_pedido(Integer ultimo_pedido) {
 		this.ultimo_pedido = ultimo_pedido;
 	}
+
+	@Override
+	public String toString() {
+		return super.getNome();
+	}
 }

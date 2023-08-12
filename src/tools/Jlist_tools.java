@@ -23,12 +23,10 @@ public class Jlist_tools {
 
 		switch (tipo_busca) {
 			case "NOME":
-				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, texto_buscado + "%",
-						50);
+				lista_produtos = produto_dao.listarProdutosNome(lista_produtos, texto_buscado + "%", 50);
 				break;
 			case "CODIGO":
-				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, texto_buscado,
-						50);
+				lista_produtos = produto_dao.listarProdutosCodigo(lista_produtos, texto_buscado, 50);
 				break;
 			case "BARRAS":
 				lista_produtos = produto_dao.listarProdutosBarras(lista_produtos, texto_buscado + "%", 50);
@@ -64,8 +62,8 @@ public class Jlist_tools {
 						texto_buscado + "%", 50);
 				break;
 			case "CODIGO":
-				lista_fornecedores = fornecedor_dao.listarFornecedores(lista_fornecedores, tipo_busca,
-						texto_buscado + "%", 50);
+				lista_fornecedores = fornecedor_dao.listarFornecedores(lista_fornecedores, tipo_busca, texto_buscado,
+						50);
 				break;
 			case "NOME FANT.":
 				lista_fornecedores = fornecedor_dao.listarFornecedores(lista_fornecedores, tipo_busca,
