@@ -207,8 +207,8 @@ public class Panel_pedido extends JPanel {
 		fTxtNomeFornecedor.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeForn) {
-				jlist_tools.alimentar_lista_fornecedores("NOME", "%", lista_fornecedores, list_model_fornecedores,
-						scrollPaneListaFornecedores, ltFornecedores);
+				jlist_tools.alimentar_lista_fornecedores("NOME", fTxtNomeFornecedor.getText().trim(),
+						lista_fornecedores, list_model_fornecedores, scrollPaneListaFornecedores, ltFornecedores);
 			}
 
 			@Override
@@ -252,8 +252,8 @@ public class Panel_pedido extends JPanel {
 		fTxtNomeFantasia.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent ganhoFocoNomeFant) {
-				jlist_tools.alimentar_lista_fornecedores("NOME FANT.", "%", lista_fornecedores, list_model_fornecedores,
-						scrollPaneListaFornecedores, ltFornecedores);
+				jlist_tools.alimentar_lista_fornecedores("NOME FANT.", fTxtNomeFantasia.getText().trim(),
+						lista_fornecedores, list_model_fornecedores, scrollPaneListaFornecedores, ltFornecedores);
 			}
 
 			@Override
@@ -893,6 +893,7 @@ public class Panel_pedido extends JPanel {
 		btnSalvar.setVisible(false);
 		btnCancelar.setVisible(false);
 		scrollPaneListaProdutos.setVisible(false);
+		scrollPaneListaFornecedores.setVisible(false);
 		btnLimpaDadosProduto.setEnabled(false);
 		btnIncluir.setEnabled(false);
 	}
