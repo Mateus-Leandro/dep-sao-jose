@@ -309,8 +309,8 @@ public class Panel_pessoa extends JPanel {
 		fTxtNomePessoa.setBounds(705, 152, 303, 20);
 		add(fTxtNomePessoa);
 
-		lblApelido = new JLabel("Apelido");
-		lblApelido.setBounds(653, 185, 44, 20);
+		lblApelido = new JLabel("Apelido/Nome Fant.");
+		lblApelido.setBounds(568, 183, 125, 20);
 		lblApelido.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblApelido);
 
