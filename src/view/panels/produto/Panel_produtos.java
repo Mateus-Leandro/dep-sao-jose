@@ -53,6 +53,7 @@ import tables.tableModels.ModeloTabelaProdutos;
 import tables.tableRenders.Render_tabela_produtos;
 import tables.tableSorters.SorterData;
 import tables.tableSorters.SorterMonetario;
+import tools.Calcula_sug_prvenda;
 import tools.Limita_text_field;
 import tools.Move_cursor_inicio;
 import view.dialog.CadastroSetor;
@@ -126,6 +127,7 @@ public class Panel_produtos extends JPanel {
 	private JLabel lblSetores;
 	private JLabel lblMaximoItens;
 	private JComboBox<String> cbxMaximoItens = new JComboBox<String>();
+	private Calcula_sug_prvenda calcula_sug_prvenda = new Calcula_sug_prvenda();
 
 	/**
 	 * Create the panel.
@@ -260,8 +262,8 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoCusto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaCusto) {
-				calcula_sugerido();
-				calcula_margem_praticada();
+				calcula_sug_prvenda.calcula_sugestao_prvenda(fTxtPrecoCusto, fTxtMargem, fTxtPrecoSugerido,
+						fTxtPrecoVenda, fTxtMargemPraticada);
 
 				if (digitaCusto.getKeyCode() == digitaCusto.VK_ENTER) {
 					fTxtMargem.requestFocus();
@@ -285,7 +287,8 @@ public class Panel_produtos extends JPanel {
 		fTxtMargem.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaMargem) {
-				calcula_sugerido();
+				calcula_sug_prvenda.calcula_sugestao_prvenda(fTxtPrecoCusto, fTxtMargem, fTxtPrecoSugerido,
+						fTxtPrecoVenda, fTxtMargemPraticada);
 
 				if (digitaMargem.getKeyCode() == digitaMargem.VK_ENTER) {
 					fTxtPrecoVenda.requestFocus();
@@ -323,7 +326,8 @@ public class Panel_produtos extends JPanel {
 		fTxtPrecoVenda.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent digitaPrecoVenda) {
-				calcula_margem_praticada();
+				calcula_sug_prvenda.calcula_sugestao_prvenda(fTxtPrecoCusto, fTxtMargem, fTxtPrecoSugerido,
+						fTxtPrecoVenda, fTxtMargemPraticada);
 
 				if (digitaPrecoVenda.getKeyCode() == digitaPrecoVenda.VK_ENTER) {
 					salvar_produto();
@@ -1115,53 +1119,32 @@ public class Panel_produtos extends JPanel {
 		tabelaProdutos.getColumnModel().getColumn(8).setCellRenderer(render);
 	}
 
-	public void calcula_sugerido() {
-
-		// Testa se margem e custo estão vazios.
-		if (!fTxtPrecoCusto.getText().trim().isEmpty() && !fTxtMargem.getText().trim().isEmpty()) {
-			DecimalFormat formata_sugestao = new DecimalFormat("#,###0.00");
-
-			Double preco_custo = null;
-			Double margem = null;
-			try {
-				preco_custo = formata_sugestao.parse(fTxtPrecoCusto.getText()).doubleValue();
-				margem = formata_sugestao.parse(fTxtMargem.getText()).doubleValue();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-			Double preco_sugerido = preco_custo * (1 + (margem / 100));
-
-			fTxtPrecoSugerido.setText(formata_sugestao.format(preco_sugerido));
-		}
-	}
-
-	public void calcula_margem_praticada() {
-		if (!btnNovo.isVisible()) {
-			if (!fTxtPrecoVenda.getText().trim().isEmpty()) {
-				DecimalFormat formata_numero = new DecimalFormat("#,###0.00");
-
-				Double preco_custo = null;
-				Double preco_venda = null;
-				Double margem_praticada = 100.00;
-
-				if (!fTxtPrecoCusto.getText().trim().isEmpty()) {
-					try {
-						preco_custo = formata_numero.parse(fTxtPrecoCusto.getText()).doubleValue();
-						preco_venda = formata_numero.parse(fTxtPrecoVenda.getText()).doubleValue();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-
-					if (preco_custo != 0.0) {
-						margem_praticada = ((preco_venda - preco_custo) / preco_custo) * 100;
-					}
-					fTxtMargemPraticada.setText(formata_numero.format(margem_praticada));
-				}
-
-			}
-		}
-	}
+//	public void calcula_margem_praticada() {
+//		if (!btnNovo.isVisible()) {
+//			if (!fTxtPrecoVenda.getText().trim().isEmpty()) {
+//				DecimalFormat formata_numero = new DecimalFormat("#,###0.00");
+//
+//				Double preco_custo = null;
+//				Double preco_venda = null;
+//				Double margem_praticada = 100.00;
+//
+//				if (!fTxtPrecoCusto.getText().trim().isEmpty()) {
+//					try {
+//						preco_custo = formata_numero.parse(fTxtPrecoCusto.getText()).doubleValue();
+//						preco_venda = formata_numero.parse(fTxtPrecoVenda.getText()).doubleValue();
+//					} catch (ParseException e) {
+//						e.printStackTrace();
+//					}
+//
+//					if (preco_custo != 0.0) {
+//						margem_praticada = ((preco_venda - preco_custo) / preco_custo) * 100;
+//					}
+//					fTxtMargemPraticada.setText(formata_numero.format(margem_praticada));
+//				}
+//
+//			}
+//		}
+//	}
 
 	// Teclas de atalho
 	public void tecla_pressionada() {

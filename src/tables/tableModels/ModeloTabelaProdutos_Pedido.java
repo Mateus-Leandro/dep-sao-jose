@@ -20,16 +20,15 @@ public class ModeloTabelaProdutos_Pedido extends AbstractTableModel {
 	private NumberFormat nf = new DecimalFormat("R$ ,##0.00");
 	private NumberFormat nf2 = new DecimalFormat(",##0.00");
 
-	private String colunas[] = { "Cod.", "Nome", "Unid.", "Qtd. Pedida", "Qtd. Entregue", "Custo Unit.",
+	private String colunas[] = { "Cod.", "Nome", "Unid.", "Qtd. Pedida", "Custo Unit.",
 			"Custo Total" };
 	private ArrayList<Produto_pedido> produtos_pedido;
 	private final int COLUNA_CODIGO = 0;
 	private final int COLUNA_NOME = 1;
 	private final int COLUNA_UNID = 2;
 	private final int COLUNA_QUANTIDADE_PEDIDA = 3;
-	private final int COLUNA_QUANTIDADE_ENTREGUE = 4;
-	private final int COLUNA_CUSTO_UNIT = 5;
-	private final int COLUNA_CUSTO_TOTAL = 6;
+	private final int COLUNA_CUSTO_UNIT = 4;
+	private final int COLUNA_CUSTO_TOTAL = 5;
 
 	public ModeloTabelaProdutos_Pedido(ArrayList<Produto_pedido> produtos_pedido) {
 		this.produtos_pedido = produtos_pedido;
@@ -64,8 +63,6 @@ public class ModeloTabelaProdutos_Pedido extends AbstractTableModel {
 		case COLUNA_UNID:
 			return String.class;
 		case COLUNA_QUANTIDADE_PEDIDA:
-			return BigDecimal.class;
-		case COLUNA_QUANTIDADE_ENTREGUE:
 			return BigDecimal.class;
 		case COLUNA_CUSTO_UNIT:
 			return BigDecimal.class;

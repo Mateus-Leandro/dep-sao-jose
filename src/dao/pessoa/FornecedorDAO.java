@@ -189,7 +189,14 @@ public class FornecedorDAO {
 						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE id LIKE ? LIMIT " + limite);
 					}
 					break;
-				}
+				case "DOCUMENTO":
+					if (limite == null) {
+						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE documento LIKE ?");
+					} else {
+						ps = conn.prepareStatement("SELECT * FROM fornecedores WHERE documento LIKE ? LIMIT " + limite);
+					}
+					break;
+			}
 
 				if (valor_buscado != null) {
 					ps.setString(1, valor_buscado);
@@ -257,14 +264,14 @@ public class FornecedorDAO {
 			}
 
 			if (rs.next()) {
-				return "Código: " + rs.getString("id") + "\nNome: " + rs.getString("razao");
+				return "Codigo: " + rs.getString("id") + "\nNome: " + rs.getString("razao");
 			} else {
 				ps = conn.prepareStatement(query + "WHERE documento = ?");
 				ps.setString(1, documento);
 				rs = ps.executeQuery();
 
 				if (rs.next()) {
-					return "Código: " + rs.getString("id") + "\nNome: " + rs.getString("razao");
+					return "Codigo: " + rs.getString("id") + "\nNome: " + rs.getString("razao");
 				} else {
 					return null;
 				}

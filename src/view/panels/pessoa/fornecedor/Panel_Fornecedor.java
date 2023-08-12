@@ -13,11 +13,13 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -30,9 +32,11 @@ import javax.swing.table.TableRowSorter;
 
 import entities.pessoa.Fornecedor;
 import entities.pessoa.Pessoa;
+import entities.produto.Produto_cadastro;
 import tables.tableModels.ModeloTabelaFornecedores;
 import tables.tableRenders.Render_tabela_fornecedores;
 import tables.tableSorters.SorterData;
+import tools.Jlist_tools;
 import view.panels.pessoa.Panel_pessoa;
 
 public class Panel_Fornecedor extends Panel_pessoa {
@@ -47,18 +51,21 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	private JTable tabela = new JTable(modelo_tabela);
 	private Fornecedor fornecedor = new Fornecedor();
 	protected Render_tabela_fornecedores render = new Render_tabela_fornecedores();
+	private Jlist_tools jlist_tools = new Jlist_tools();
+	private DefaultListModel<Fornecedor> list_model_fornecedores = new DefaultListModel<Fornecedor>();
+	private JList<Fornecedor> ltFornecedores;
 
 	public Panel_Fornecedor() {
 		fTxtEmail.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent enterEmail) {
-				if(enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
+				if (enterEmail.getKeyCode() == enterEmail.VK_ENTER) {
 					salvar_fornecedor();
 				}
 			}
 		});
 		btnReload.setLocation(969, 411);
-		lblRecarregar.setLocation(735, 600);
+		lblRecarregar.setLocation(735, 629);
 		tecla_pressionada(fornecedor);
 		fTxtPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
@@ -186,7 +193,7 @@ public class Panel_Fornecedor extends Panel_pessoa {
 		});
 
 		scrollPane = new JScrollPane(tabela);
-		scrollPane.setBounds(16, 444, 987, 153);
+		scrollPane.setBounds(16, 444, 987, 181);
 		add(scrollPane);
 
 		btnNovo.addMouseListener(new MouseAdapter() {
@@ -231,16 +238,16 @@ public class Panel_Fornecedor extends Panel_pessoa {
 				}
 			}
 		});
-		lblEsc.setBounds(16, 600, 30, 14);
-		lblCancelar.setBounds(42, 600, 53, 14);
-		lblF1.setBounds(237, 600, 21, 14);
-		lblNovo.setBounds(254, 600, 35, 14);
-		lblF5.setBounds(717, 600, 21, 14);
-		lblF3.setBounds(441, 600, 21, 14);
-		lblEditar.setBounds(459, 600, 35, 14);
-		lblF12.setBounds(936, 600, 26, 14);
-		lblExcluir.setBounds(961, 600, 42, 14);
-		
+		lblEsc.setBounds(16, 629, 30, 14);
+		lblCancelar.setBounds(42, 629, 53, 14);
+		lblF1.setBounds(237, 629, 21, 14);
+		lblNovo.setBounds(254, 629, 35, 14);
+		lblF5.setBounds(717, 629, 21, 14);
+		lblF3.setBounds(441, 629, 21, 14);
+		lblEditar.setBounds(459, 629, 35, 14);
+		lblF12.setBounds(936, 629, 26, 14);
+		lblExcluir.setBounds(961, 629, 42, 14);
+
 	}
 
 	public void alimentarListaFornecedores() {
@@ -256,9 +263,8 @@ public class Panel_Fornecedor extends Panel_pessoa {
 	}
 
 	public void recarregarTabela() {
-		alimentarListaFornecedores();
-		modelo_tabela = new ModeloTabelaFornecedores(lista_fornecedores);
-		tabela.setModel(modelo_tabela);
+		jlist_tools.alimentar_lista_fornecedores(cbxTipoPesquisa.getSelectedItem().toString(),
+				fTxtPesquisa.getText().trim(), lista_fornecedores, list_model_fornecedores, scrollPane, ltFornecedores);
 		ConfiguraLarguraColunaTabela(tabela);
 		modelo_tabela.fireTableDataChanged();
 	}
@@ -346,9 +352,10 @@ public class Panel_Fornecedor extends Panel_pessoa {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
+
 	// Teclas de atalho
 	public void tecla_pressionada(Pessoa pessoa_atalho) {
 		super.tecla_pressionada(pessoa_atalho, tabela);

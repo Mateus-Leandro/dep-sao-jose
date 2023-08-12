@@ -27,8 +27,9 @@ import entities.pessoa.Cliente;
 import view.panels.Panel_bkp;
 import view.panels.configuracoes.Panel_configuracoes;
 import view.panels.orcamento.Panel_orcamento;
+import view.panels.pedido.Panel_pedido;
 import view.panels.pessoa.Panel_cliente;
-import view.panels.pessoa.fornecedor.Panel_fornedor_pedido;
+import view.panels.pessoa.fornecedor.Panel_Fornecedor;
 import view.panels.produto.Panel_produtos;
 
 public class TelaPrincipal extends JFrame {
@@ -42,9 +43,10 @@ public class TelaPrincipal extends JFrame {
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	public Panel_cliente clientes;
-	private Panel_fornedor_pedido fornecedor_pedidos;
+	private Panel_Fornecedor fornecedores;
 	private Panel_produtos produtos;
 	private Panel_orcamento orcamentos;
+	private Panel_pedido pedidos;
 	private Panel_configuracoes configuracoes;
 	private Panel_bkp panel_bkp;
 	private BkpBanco bkp_banco = new BkpBanco();
@@ -75,13 +77,6 @@ public class TelaPrincipal extends JFrame {
 		UIManager.put("OptionPane.yesButtonText", "Sim");
 		UIManager.put("OptionPane.noButtonText", "Não");
 
-		if (faz_bkp_diario) {
-			if (bkp_banco.bkp_diario()) {
-				JOptionPane.showMessageDialog(null, "Backup diário realizado.", "Backup diário.",
-						JOptionPane.NO_OPTION);
-				panel_bkp.le_log();
-			}
-		}
 
 		dbCriaTabelas.gera_tabelas();
 
@@ -102,19 +97,30 @@ public class TelaPrincipal extends JFrame {
 
 		produtos = new Panel_produtos();
 		clientes = new Panel_cliente();
-		fornecedor_pedidos = new Panel_fornedor_pedido();
+//		fornecedor_pedidos = new Panel_fornedor_pedido();
+		fornecedores = new Panel_Fornecedor();
 		orcamentos = new Panel_orcamento();
+		pedidos = new Panel_pedido();
 		configuracoes = new Panel_configuracoes(this);
 		panel_bkp = new Panel_bkp();
+
+		if (faz_bkp_diario) {
+			if (bkp_banco.bkp_diario()) {
+				JOptionPane.showMessageDialog(null, "Backup diário realizado.", "Backup diário.",
+						JOptionPane.NO_OPTION);
+				panel_bkp.le_log();
+			}
+		}
 
 		clientes.setVisible(true);
 		produtos.setVisible(true);
 		orcamentos.setVisible(true);
 
 		tabbedPane.addTab("Clientes", clientes);
-		tabbedPane.addTab("Fornecedores", fornecedor_pedidos);
+		tabbedPane.addTab("Fornecedores", fornecedores);
 		tabbedPane.addTab("Produtos", produtos);
 		tabbedPane.addTab("Orçamentos", orcamentos);
+		tabbedPane.addTab("Pedidos de compra", pedidos);
 
 		if (!configuracoes_do_sistema.getSo_orcamento()) {
 			tabbedPane.addTab("Configuraçoes", configuracoes);

@@ -1068,14 +1068,14 @@ public class Panel_pessoa extends JPanel {
 		if (fTxtNomePessoa.getText().isBlank() || fTxtCelular.getText().equals("(  )     -    ")) {
 			if (fTxtNomePessoa.getText().isBlank()) {
 				fTxtNomePessoa.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(null, "Necessário informar o nome do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(lblNome, "Necessário informar o nome do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem nome.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}
 
 			if (fTxtCelular.getText().equals("(  )     -    ")) {
 				fTxtCelular.setBorder(new LineBorder(Color.RED));
-				JOptionPane.showMessageDialog(null, "Necessário informar o celular do " + tipo_pessoa + ".",
+				JOptionPane.showMessageDialog(lblCelular, "Necessário informar o celular do " + tipo_pessoa + ".",
 						tipo_pessoa + " sem celular.", JOptionPane.WARNING_MESSAGE);
 				valido = false;
 			}

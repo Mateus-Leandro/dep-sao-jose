@@ -8,20 +8,24 @@ public abstract class Produto {
 	private Setor setor;
 	private String unidadeVenda;
 	private Double prVenda;
+	private Double margem;
 	private String codigo_barra;
+	private boolean bloqueadoVenda;
 	private Date dataCadastro;
 
 	public Produto() {
 	}
 
-	public Produto(Integer idProduto, String descricao, Setor setor, String unidadeVenda, Double prVenda,
-			String codigo_barra, Date dataCadastro) {
+	public Produto(Integer idProduto, String descricao, Setor setor, String unidadeVenda, Double prVenda, Double margem,
+			String codigo_barra, boolean bloqueadoVenda, Date dataCadastro) {
 		this.idProduto = idProduto;
 		this.descricao = descricao;
 		this.setor = setor;
 		this.unidadeVenda = unidadeVenda;
 		this.prVenda = prVenda;
+		this.margem = margem;
 		this.codigo_barra = codigo_barra;
+		this.bloqueadoVenda = bloqueadoVenda;
 		this.dataCadastro = dataCadastro;
 	}
 
@@ -65,6 +69,31 @@ public abstract class Produto {
 		this.prVenda = prVenda;
 	}
 
+	public Double getMargem() {
+		return margem;
+	}
+
+	public void setMargem(Double margem) {
+		this.margem = margem;
+	}
+
+	public String getCodigo_barra() {
+		return codigo_barra;
+	}
+	
+	public void setCodigo_barra(String codigo_barra) {
+		this.codigo_barra = codigo_barra;
+	}
+	
+
+	public boolean isBloqueadoVenda() {
+		return bloqueadoVenda;
+	}
+
+	public void setBloqueadoVenda(boolean bloqueadoVenda) {
+		this.bloqueadoVenda = bloqueadoVenda;
+	}
+
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -73,13 +102,6 @@ public abstract class Produto {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public String getCodigo_barra() {
-		return codigo_barra;
-	}
-
-	public void setCodigo_barra(String codigo_barra) {
-		this.codigo_barra = codigo_barra;
-	}
 
 	@Override
 	public int hashCode() {

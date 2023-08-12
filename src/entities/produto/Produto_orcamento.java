@@ -13,9 +13,9 @@ public class Produto_orcamento extends Produto {
 	}
 
 	public Produto_orcamento(Integer idProduto, String descricao, Setor setor, String unidadeVenda, Double prVenda,
-			String codigo_barra, Date dataCadastro, Double quantidade, Double preco_unitario, Double valor_desconto,
-			Double valor_total) {
-		super(idProduto, descricao, setor, unidadeVenda, prVenda, codigo_barra, dataCadastro);
+			Double margem, String codigo_barra, boolean bloqueadoVenda, Date dataCadastro, Double quantidade,
+			Double preco_unitario, Double valor_desconto, Double valor_total) {
+		super(idProduto, descricao, setor, unidadeVenda, prVenda, margem, codigo_barra, bloqueadoVenda, dataCadastro);
 		this.quantidade = quantidade;
 		this.preco_unitario = preco_unitario;
 		this.valor_desconto = valor_desconto;
@@ -71,10 +71,10 @@ public class Produto_orcamento extends Produto {
 		if (getClass() != obj.getClass())
 			return false;
 		Produto_orcamento other = (Produto_orcamento) obj;
-		if(other.getIdProduto()!= null) {
-			if(!super.getIdProduto().equals(other.getIdProduto()))
+		if (other.getIdProduto() != null) {
+			if (!super.getIdProduto().equals(other.getIdProduto()))
 				return false;
-		}else
+		} else
 			return false;
 		if (valor_total == null) {
 			if (other.valor_total != null)
@@ -84,5 +84,4 @@ public class Produto_orcamento extends Produto {
 		return true;
 	}
 
-	
 }

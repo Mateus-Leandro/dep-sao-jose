@@ -3,15 +3,16 @@ package entities.produto;
 public class Produto_pedido extends Produto{
 	private Double preco_fornecedor;
 	private Double quantidade_pedida;
-	private Double quantidade_entregue;
 	private Double custo_atual;
+	
+	public Produto_pedido() {
+	}
 	
 	public Produto_pedido(Double preco_fornecedor, Double quantidade_pedida, Double quantidade_entregue,
 			Double custo_atual) {
 		super();
 		this.preco_fornecedor = preco_fornecedor;
 		this.quantidade_pedida = quantidade_pedida;
-		this.quantidade_entregue = quantidade_entregue;
 		this.custo_atual = custo_atual;
 	}
 
@@ -29,14 +30,6 @@ public class Produto_pedido extends Produto{
 
 	public void setQuantidade_pedida(Double quantidade_pedida) {
 		this.quantidade_pedida = quantidade_pedida;
-	}
-
-	public Double getQuantidade_entregue() {
-		return quantidade_entregue;
-	}
-
-	public void setQuantidade_entregue(Double quantidade_entregue) {
-		this.quantidade_entregue = quantidade_entregue;
 	}
 
 	public Double getCusto_atual() {
