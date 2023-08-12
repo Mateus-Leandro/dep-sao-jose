@@ -854,6 +854,7 @@ public class Panel_pedido extends JPanel {
 		if (btnCancelar.isVisible()) {
 			limpar_campos();
 			desativar_campos();
+			btnNovo.requestFocus();
 		}
 	}
 
